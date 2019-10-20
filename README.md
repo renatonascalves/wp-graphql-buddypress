@@ -1,0 +1,20 @@
+# WP GraphQL BuddyPress
+
+Bringing the power of GraphQL to BuddyPress.
+
+## System Requirements
+
+* PHP >= 5.6
+* WP >= 4.9
+* WPGraphQL >= latest
+* BuddyPress >= latest
+
+## Quick Install
+1. Install & activate [BuddyPress](https://buddypress.org/)
+2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
+3. (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
+4. Clone or download the zip of this repository into your WordPress plugin directory & activate the **WP GraphQL BuddyPress** plugin
+
+## Changelog
+
+* This is a working in progress.

@@ -1,0 +1,67 @@
+{
+  "name": "wp-graphql/wp-graphql-buddypress",
+  "type": "wordpress-plugin",
+  "description": "Adds BuddyPress functionality to WPGraphQL schema.",
+  "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
+  "keywords": [
+    "wordpress",
+    "graphql",
+    "api",
+    "wp-graphql",
+    "wp-graphql-extension",
+    "buddypress-extension",
+    "buddypress",
+    "community",
+    "bp",
+    "rest"
+  ],
+  "license": "GPL-3.0+",
+  "version": "0.0.1-alpha",
+  "authors": [
+    {
+      "name": "Renato Alves",
+      "email": "contato@ralv.es",
+      "role": "Lead developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/wp-graphql/wp-graphql-buddypress/issues",
+    "source": "https://github.com/wp-graphql/wp-graphql-buddypress"
+  },
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "require-dev": {
+    "lucatume/wp-browser": ">=2.2.1 <2.2.8",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+    "wp-coding-standards/wpcs": "^2.1",
+    "phpcompatibility/phpcompatibility-wp": "^2.0"
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+        "WPGraphQL\\Extensions\\BuddyPress\\": "src/"
+    },
+    "classmap": [
+        "src/"
+    ]
+  },
+  "scripts": {
+    "install-wp-tests": "bash bin/install-wp-tests.sh",
+    "test": "vendor/bin/codecept run",
+    "functional-test": "vendor/bin/codecept run functional",
+    "acceptance-test": "vendor/bin/codecept run acceptance",
+    "wpunit-test": "vendor/bin/codecept run wpunit",
+    "phpcs-i": [
+      "@php ./vendor/bin/phpcs -i"
+    ],
+    "check-cs": [
+      "@php ./vendor/bin/phpcs"
+    ],
+    "fix-cs": [
+      "@php ./vendor/bin/phpcbf"
+    ]
+  }
+}

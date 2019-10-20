@@ -1,0 +1,134 @@
+# Copyright (C) 2019 Renato Alves
+# This file is distributed under the same license as the WP GraphQL BuddyPress plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP GraphQL BuddyPress 0.0.1-alpha\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-graphql-buddypress\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2019-10-20T19:28:37+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.2.0\n"
+"X-Domain: wp-graphql-buddypress\n"
+
+#. Plugin Name of the plugin
+#: wp-graphql-buddypress.php:193
+#: wp-graphql-buddypress.php:208
+msgid "WP GraphQL BuddyPress"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/wp-graphql/wp-graphql-buddypress"
+msgstr ""
+
+#. Description of the plugin
+msgid "Adds BuddyPress functionality to WPGraphQL schema."
+msgstr ""
+
+#. Author of the plugin
+msgid "Renato Alves"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://ralv.es"
+msgstr ""
+
+#: wp-graphql-buddypress.php:86
+msgid "The WP_GraphQL_BuddyPress class should not be cloned."
+msgstr ""
+
+#: wp-graphql-buddypress.php:105
+msgid "De-serializing instances of the WP_GraphQL_BuddyPress class is not allowed"
+msgstr ""
+
+#: wp-graphql-buddypress.php:193
+msgid "depends on the lastest version of Buddypress to work!"
+msgstr ""
+
+#: wp-graphql-buddypress.php:208
+msgid "depends on the lastest version of WPGraphQL to work!"
+msgstr ""
+
+#: src/type/enum/class-group-enums.php:23
+msgid "The format of group description field."
+msgstr ""
+
+#: src/type/enum/class-group-enums.php:27
+msgid "Provide the field value directly from database"
+msgstr ""
+
+#: src/type/enum/class-group-enums.php:32
+msgid "Apply the default WordPress rendering"
+msgstr ""
+
+#: src/type/object/class-group-type.php:39
+msgid "Info about a BuddyPress group"
+msgstr ""
+
+#: src/type/object/class-group-type.php:44
+msgid "The globally unique identifier for the group."
+msgstr ""
+
+#: src/type/object/class-group-type.php:51
+msgid "The id field that matches the BP_Groups_Group->id field."
+msgstr ""
+
+#: src/type/object/class-group-type.php:58
+msgid "Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID."
+msgstr ""
+
+#: src/type/object/class-group-type.php:67
+msgid "Group name"
+msgstr ""
+
+#: src/type/object/class-group-type.php:74
+msgid "The creator of the group"
+msgstr ""
+
+#: src/type/object/class-group-type.php:85
+msgid "The slug of the group."
+msgstr ""
+
+#: src/type/object/class-group-type.php:92
+msgid "The description of the group."
+msgstr ""
+
+#: src/type/object/class-group-type.php:113
+msgid "The link of the group."
+msgstr ""
+
+#: src/type/object/class-group-type.php:120
+msgid "Whether the group has a forum or not"
+msgstr ""
+
+#: src/type/object/class-group-type.php:127
+msgid "Count of all group members."
+msgstr ""
+
+#: src/type/object/class-group-type.php:141
+msgid "The date the group was last active"
+msgstr ""
+
+#: src/type/object/class-group-type.php:153
+msgid "The date the group was created."
+msgstr ""
+
+#: src/type/object/class-group-type.php:160
+msgid "The status of the group."
+msgstr ""
+
+#: src/type/object/class-group-type.php:188
+msgid "A BuddyPress Group object"
+msgstr ""
+
+#: src/data/class-factory.php:38
+msgid "The Groups component is not active."
+msgstr ""
+
+#. translators: group ID.
+#: src/data/class-factory.php:47
+msgid "No group was found with the ID: %d"
+msgstr ""
