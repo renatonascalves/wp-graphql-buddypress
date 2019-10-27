@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\WPEnum;
 
 /**
- * Class Group Enums
+ * GroupEnums Class
  */
 class GroupEnums {
 

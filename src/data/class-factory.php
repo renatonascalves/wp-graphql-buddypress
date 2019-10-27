@@ -22,32 +22,19 @@ class Factory {
 	 * Returns a Group object.
 	 *
 	 * @throws UserError Error Exception.
-	 * @param int        $id      Group ID.
+	 *
+	 * @param int|null   $id      Group ID or null.
 	 * @param AppContext $context AppContext object.
 	 *
-	 * @return BP_Groups_Group object
+	 * @return \BP_Groups_Group
 	 */
 	public static function resolve_group_object( $id, AppContext $context ) {
 
-		// Bail early.
-		if ( empty( $id ) || ! absint( $id ) ) {
-			return null;
-		}
-
-		if ( ! bp_is_active( 'groups' ) ) {
-			throw new UserError( __( 'The Groups component is not active.', 'wp-graphql-buddypress' ) );
-		}
-
-		$group = groups_get_group( $id );
+		// Get group.
+		$group = groups_get_group( absint( $id ) );
 
 		if ( empty( $group ) || empty( $group->id ) ) {
-			throw new UserError(
-				sprintf(
-					// translators: group ID.
-					__( 'No group was found with the ID: %d', 'wp-graphql-buddypress' ),
-					absint( $id )
-				)
-			);
+			throw new UserError( __( 'No group was found.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $group;

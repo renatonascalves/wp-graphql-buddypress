@@ -10,7 +10,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
 
-use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Error\UserError;
+use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
 use WPGraphQL\Type\WPObjectType;
@@ -39,55 +40,55 @@ class Group_Type {
 				'description'       => __( 'Info about a BuddyPress group', 'wp-graphql-buddypress' ),
 				'interfaces'        => array( WPObjectType::node_interface() ),
 				'fields'            => array(
-					'id'               => array(
-						'type'        => array( 'non_null' => 'ID' ),
+					'id'               => [
+						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
-							return ( ! empty( $group->id ) ) ? $group->id : null;
-						},
-					),
-					'groupId'          => array(
-						'type'        => array( 'non_null' => 'ID' ),
-						'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return ! empty( $group->id ) ? $group->id : null;
 						},
-					),
-					'parent'           => array(
+					],
+					'groupId'          => [
+						'type'        => 'Int',
+						'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( \BP_Groups_Group $group ) {
+							return ! empty( $group->id ) ? absint( $group->id ) : null;
+						},
+					],
+					'parent'           => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
 							return ! empty( $group->parent_id )
 								? Factory::resolve_group_object( $group->parent_id, $context )
 								: null;
 						},
-					),
-					'name'             => array(
+					],
+					'name'             => [
 						'type'        => 'String',
 						'description' => __( 'Group name', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return bp_get_group_name( $group );
 						},
-					),
-					'creatorId'        => array(
+					],
+					'creatorId'        => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the group', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
 							$creator_id = ! empty( $group->creator_id ) ? $group->creator_id : null;
 
 							return ! empty( $creator_id )
 								? DataSource::resolve_user( $creator_id, $context )
 								: null;
 						},
-					),
-					'slug'             => array(
+					],
+					'slug'             => [
 						'type'        => 'String',
 						'description' => __( 'The slug of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return bp_get_group_slug( $group );
 						},
-					),
-					'description'      => array(
+					],
+					'description'      => [
 						'type'        => 'String',
 						'description' => __( 'The description of the group.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -96,7 +97,7 @@ class Group_Type {
 								'description' => __( 'Format of the field output', 'wp-graphql' ),
 							],
 						],
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group, $args ) {
 							if ( empty( $group->description ) ) {
 								return null;
 							}
@@ -107,25 +108,25 @@ class Group_Type {
 
 							return bp_get_group_description( $group );
 						},
-					),
-					'link'             => array(
+					],
+					'link'             => [
 						'type'        => 'String',
 						'description' => __( 'The link of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return bp_get_group_permalink( $group );
 						},
-					),
-					'enableForum'      => array(
+					],
+					'enableForum'      => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the group has a forum or not', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return bp_group_is_forum_enabled( $group );
 						},
-					),
-					'totalMemberCount' => array(
+					],
+					'totalMemberCount' => [
 						'type'        => 'Int',
 						'description' => __( 'Count of all group members.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
 							// Context aware.
 							if ( 'edit' !== $context ) {
 								return null;
@@ -135,11 +136,11 @@ class Group_Type {
 
 							return absint( $count );
 						},
-					),
-					'lastActivity'     => array(
+					],
+					'lastActivity'     => [
 						'type'        => 'String',
 						'description' => __( 'The date the group was last active', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
 							// Context aware.
 							if ( 'edit' !== $context ) {
 								return null;
@@ -147,21 +148,21 @@ class Group_Type {
 
 							return Types::prepare_date_response( groups_get_groupmeta( $group->id, 'last_activity' ) );
 						},
-					),
-					'dateCreated'      => array(
+					],
+					'dateCreated'      => [
 						'type'        => 'String',
 						'description' => __( 'The date the group was created.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return Types::prepare_date_response( $group->date_created );
 						},
-					),
-					'status'           => array(
+					],
+					'status'           => [
 						'type'        => 'String',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context, ResolveInfo $info ) {
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return bp_get_group_status( $group );
 						},
-					),
+					],
 				),
 				'resolve_node'      => function( $node, $id, $type, $context ) {
 					if ( self::$type_name === $type ) {
@@ -182,21 +183,74 @@ class Group_Type {
 
 		register_graphql_field(
 			'RootQuery',
-			'groupBy',
-			array(
+			'group',
+			[
 				'type'        => self::$type_name,
 				'description' => __( 'A BuddyPress Group object', 'wp-graphql-buddypress' ),
-				'args'        => array(
-					'id' => array(
-						'type' => array(
-							'non_null' => 'ID',
-						),
-					),
-				),
-				'resolve'     => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-					return Factory::resolve_group_object( $args['id'], $context );
+				'args'        => [
+					'id' => [
+						'type' => [ 'non_null' => 'ID' ],
+					],
+				],
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
+					$id_components = Relay::fromGlobalId( $args['id'] );
+
+					if ( ! isset( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+						throw new UserError( __( 'The "id" is invalid', 'wp-graphql-buddypress' ) );
+					}
+
+					return Factory::resolve_group_object( absint( $id_components['id'] ), $context );
 				},
-			)
+
+			]
+		);
+
+		register_graphql_field(
+			'RootQuery',
+			'groupBy',
+			[
+				'type'        => self::$type_name,
+				'description' => __( 'A BuddyPress Group object', 'wp-graphql-buddypress' ),
+				'args'        => [
+					'id'           => [
+						'type'        => [ 'non_null' => 'ID' ],
+						'description' => __( 'Get the object by its global ID', 'wp-graphql-buddypress' ),
+					],
+					'groupId'      => [
+						'type'        => 'Int',
+						'description' => __( 'Get the object by its database ID', 'wp-graphql-buddypress' ),
+					],
+					'slug'         => [
+						'type'        => 'String',
+						'description' => __( 'Get the object by its current slug', 'wp-graphql-buddypress' ),
+					],
+					'previousSlug' => [
+						'type'        => 'String',
+						'description' => __( 'Get the object by its previous slug', 'wp-graphql-buddypress' ),
+					],
+				],
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
+					$group_id = 0;
+
+					if ( ! empty( $args['id'] ) ) {
+						$id_components = Relay::fromGlobalId( $args['id'] );
+
+						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+							throw new UserError( __( 'The "id" is invalid', 'wp-graphql-buddypress' ) );
+						}
+
+						$group_id = absint( $id_components['id'] );
+					} elseif ( ! empty( $args['slug'] ) ) {
+						$group_id = groups_get_id( esc_html( $args['slug'] ) );
+					} elseif ( ! empty( $args['previousSlug'] ) ) {
+						$group_id = groups_get_id_by_previous_slug( esc_html( $args['previousSlug'] ) );
+					} elseif ( ! empty( $args['groupId'] ) ) {
+						$group_id = absint( $args['groupId'] );
+					}
+
+					return Factory::resolve_group_object( $group_id, $context );
+				},
+			]
 		);
 	}
 }

@@ -21,22 +21,23 @@ class Type_Registry {
 	}
 
 	/**
-	 * Registers BuddyPress types, connection, and mutations to GraphQL schema
+	 * Registers BuddyPress types, connection, and mutations to GraphQL schema.
 	 */
 	public static function graphql_register_types() {
 
-		// Enumerations.
-		\WPGraphQL\Extensions\BuddyPress\Type\WPEnum\GroupEnums::register();
+		// Groups component.
+		if ( bp_is_active( 'groups' ) ) {
+
+			// Enumerations.
+			\WPGraphQL\Extensions\BuddyPress\Type\WPEnum\GroupEnums::register();
+
+			// Objects.
+			\WPGraphQL\Extensions\BuddyPress\Type\WPObject\Group_Type::register();
+		}
 
 		// InputObjects.
-
-		// Objects.
-		\WPGraphQL\Extensions\BuddyPress\Type\WPObject\Group_Type::register();
-
 		// Object fields.
-
 		// Connections.
-
 		// Mutations.
 	}
 }
