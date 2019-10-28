@@ -1,11 +1,9 @@
 <?php
 /**
- * WPObject Type - Group_Type
- *
- * Registers Group WPObject type and queries
+ * Registers Group type and queries
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\WPObject
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
@@ -19,9 +17,9 @@ use WPGraphQL\Types;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
- * Class Group_Type
+ * Class GroupType
  */
-class Group_Type {
+class GroupType {
 
 	/**
 	 * Name of the type.
@@ -201,7 +199,6 @@ class Group_Type {
 
 					return Factory::resolve_group_object( absint( $id_components['id'] ), $context );
 				},
-
 			]
 		);
 
@@ -213,7 +210,7 @@ class Group_Type {
 				'description' => __( 'A BuddyPress Group object', 'wp-graphql-buddypress' ),
 				'args'        => [
 					'id'           => [
-						'type'        => [ 'non_null' => 'ID' ],
+						'type'        => 'ID',
 						'description' => __( 'Get the object by its global ID', 'wp-graphql-buddypress' ),
 					],
 					'groupId'      => [

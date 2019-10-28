@@ -221,7 +221,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			/**
 			 * Setup actions
 			 */
-			\WPGraphQL\Extensions\BuddyPress\Type_Registry::add_actions();
+			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_actions();
 		}
 
 		/**

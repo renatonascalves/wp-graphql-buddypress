@@ -3,7 +3,7 @@
  * Group Enums.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\WPEnum
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\WPEnum;

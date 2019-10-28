@@ -9,9 +9,9 @@
 namespace WPGraphQL\Extensions\BuddyPress;
 
 /**
- * Class Type_Registry
+ * Class TypeRegistry
  */
-class Type_Registry {
+class TypeRegistry {
 
 	/**
 	 * Registers actions related to type registry.
@@ -32,7 +32,10 @@ class Type_Registry {
 			\WPGraphQL\Extensions\BuddyPress\Type\WPEnum\GroupEnums::register();
 
 			// Objects.
-			\WPGraphQL\Extensions\BuddyPress\Type\WPObject\Group_Type::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\WPObject\GroupType::register();
+
+			// Connections.
+			\WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection::register_connections();
 		}
 
 		// InputObjects.
