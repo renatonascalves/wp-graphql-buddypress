@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Groups Connections
+ * Registers Group Connection
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -80,9 +80,17 @@ class GroupConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the Group has a forum enabled or not.', 'wp-graphql-buddypress' ),
 			],
+			'type'       => [
+				'type'        => 'GroupOrderTypeEnum',
+				'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
+			],
 			'order'       => [
 				'type'        => 'OrderEnum',
 				'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
+			],
+			'orderBy'       => [
+				'type'        => 'GroupOrderByEnum',
+				'description' => __( 'Order groups by attribute.', 'wp-graphql-buddypress' ),
 			],
 			'parent'      => [
 				'type'        => 'Int',
@@ -93,16 +101,30 @@ class GroupConnection {
 				'description' => __( 'Search term(s) to retrieve matching groups for.', 'wp-graphql-buddypress' ),
 			],
 			'status'      => [
-				'type'        => 'String',
+				'type'        => [
+					'list_of' => 'GroupStatusEnum',
+				],
 				'description' => __( 'Group statuses to limit results to.', 'wp-graphql-buddypress' ),
 			],
 			'groupType'   => [
-				'type'        => 'String',
+				'type'        => 'GroupTypeEnum',
 				'description' => __( 'Include groups of a given type.', 'wp-graphql-buddypress' ),
 			],
 			'userId'      => [
 				'type'        => 'Int',
 				'description' => __( 'Include groups that this user is a member of.', 'wp-graphql-buddypress' ),
+			],
+			'exclude'      => [
+				'type'        => [
+					'list_of' => 'Int',
+				],
+				'description' => __( 'Ensure result set excludes Groups with specific IDs.', 'wp-graphql-buddypress' ),
+			],
+			'include'      => [
+				'type'        => [
+					'list_of' => 'Int',
+				],
+				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}

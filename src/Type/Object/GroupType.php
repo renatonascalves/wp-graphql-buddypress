@@ -124,26 +124,14 @@ class GroupType {
 					'totalMemberCount' => [
 						'type'        => 'Int',
 						'description' => __( 'Count of all group members.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
-							// Context aware.
-							if ( 'edit' !== $context ) {
-								return null;
-							}
-
-							$count = groups_get_groupmeta( $group->id, 'total_member_count' );
-
-							return absint( $count );
+						'resolve'     => function( \BP_Groups_Group $group ) {
+							return absint( groups_get_groupmeta( $group->id, 'total_member_count' ) );
 						},
 					],
 					'lastActivity'     => [
 						'type'        => 'String',
 						'description' => __( 'The date the group was last active', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
-							// Context aware.
-							if ( 'edit' !== $context ) {
-								return null;
-							}
-
+						'resolve'     => function( \BP_Groups_Group $group ) {
 							return Types::prepare_date_response( groups_get_groupmeta( $group->id, 'last_activity' ) );
 						},
 					],

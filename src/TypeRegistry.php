@@ -28,7 +28,7 @@ class TypeRegistry {
 		// Groups component.
 		if ( bp_is_active( 'groups' ) ) {
 
-			// Enumerations.
+			// Enums.
 			\WPGraphQL\Extensions\BuddyPress\Type\WPEnum\GroupEnums::register();
 
 			// Objects.
