@@ -2,7 +2,7 @@
 /**
  * Factory Class
  *
- * This class serves as a factory for all the resolvers of queries and mutations.
+ * This class serves as a factory for all the resolvers.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha

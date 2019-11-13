@@ -110,7 +110,7 @@ class GroupEnums {
 			]
 		);
 
-		// Group Stati
+		// Group Stati.
 		self::group_stati();
 
 		// Group Types.
@@ -139,7 +139,11 @@ class GroupEnums {
 			 */
 			foreach ( $group_stati as $status ) {
 				$group_status_enum_values[ WPEnumType::get_safe_name( $status ) ] = [
-					'description' => sprintf( __( 'Objects with the %1$s status', 'wp-graphql-buddypress' ), $status ),
+					'description' => sprintf(
+						/* translators: group status */
+						__( 'Objects with the %1$s status', 'wp-graphql-buddypress' ),
+						$status
+					),
 					'value'       => $status,
 				];
 			}
@@ -172,8 +176,12 @@ class GroupEnums {
 			 */
 			foreach ( $group_types as $type ) {
 				$group_types_enum_values[ WPEnumType::get_safe_name( $type ) ] = [
-					'description' => sprintf( __( 'Objects with the %1$s type', 'wp-graphql-buddypress' ), $type ),
-					'value'       => $type,
+					'description' => sprintf(
+						/* translators: group type */
+						__( 'Objects with the %1$s type', 'wp-graphql-buddypress' ),
+						$type
+					),
+					'value' => $type,
 				];
 			}
 		}

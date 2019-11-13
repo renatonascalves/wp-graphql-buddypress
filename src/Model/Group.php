@@ -27,6 +27,8 @@ use WPGraphQL\Types;
  * @property string $lastActivity
  * @property string $dateCreated
  * @property string $status
+ * @property string $admins
+ * @property string $mods
  */
 class Group extends Model {
 
@@ -119,7 +121,7 @@ class Group extends Model {
 				],
 				'lastActivity'        => [
 					'callback'   => function() {
-						Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
+						return Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
 					},
 					'capability' => 'bp_moderate',
 				],

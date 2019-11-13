@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
 
+use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
@@ -60,6 +61,76 @@ class GroupType {
 							return ! empty( $group->creator )
 								? DataSource::resolve_user( $group->creator, $context )
 								: null;
+						},
+					],
+					'admins'         => [
+						'type'        => [
+							'list_of' => 'User',
+						],
+						'description' => esc_html__( 'Administrators of the group.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+							$admins     = [];
+							$admin_mods = groups_get_group_members(
+								array(
+									'group_id'   => $group->id,
+									'group_role' => array(
+										'admin',
+									),
+								)
+							);
+
+							foreach ( (array) $admin_mods['members'] as $admin ) {
+								if ( ! empty( $admin->is_admin ) ) {
+									$admins[] = $admin->ID;
+								}
+							}
+
+							if ( empty( $admins ) || ! is_array( $admins ) ) {
+								return null;
+							}
+
+							$context->getLoader( 'user' )->buffer( $admins );
+							return new Deferred(
+								function() use ( $context, $admins ) {
+									// @codingStandardsIgnoreLine.
+									return $context->getLoader( 'user' )->loadMany( $admins );
+								}
+							);
+						},
+					],
+					'mods'         => [
+						'type'        => [
+							'list_of' => 'User',
+						],
+						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+							$mods       = [];
+							$admin_mods = groups_get_group_members(
+								array(
+									'group_id'   => $group->id,
+									'group_role' => array(
+										'admin',
+									),
+								)
+							);
+
+							foreach ( (array) $admin_mods['members'] as $mod ) {
+								if ( empty( $mod->is_admin ) ) {
+									$mods[] = $mod->ID;
+								}
+							}
+
+							if ( empty( $mods ) || ! is_array( $mods ) ) {
+								return null;
+							}
+
+							$context->getLoader( 'user' )->buffer( $mods );
+							return new Deferred(
+								function() use ( $context, $mods ) {
+									// @codingStandardsIgnoreLine.
+									return $context->getLoader( 'user' )->loadMany( $mods );
+								}
+							);
 						},
 					],
 					'name'             => [
