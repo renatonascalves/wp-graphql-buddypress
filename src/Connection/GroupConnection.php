@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Group Connection
+ * Registers Groups Connections
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -66,7 +66,7 @@ class GroupConnection {
 	}
 
 	/**
-	 * This returns the connection args for the Group connection
+	 * This returns the connection args for the Groups connection
 	 *
 	 * @return array
 	 */
@@ -76,11 +76,11 @@ class GroupConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether results should include hidden Groups.', 'wp-graphql-buddypress' ),
 			],
-			'enableForum' => [
+			'hasForum'   => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the Group has a forum enabled or not.', 'wp-graphql-buddypress' ),
 			],
-			'type'       => [
+			'type'        => [
 				'type'        => 'GroupOrderTypeEnum',
 				'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
 			],
@@ -88,7 +88,7 @@ class GroupConnection {
 				'type'        => 'OrderEnum',
 				'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 			],
-			'orderBy'       => [
+			'orderBy'     => [
 				'type'        => 'GroupOrderByEnum',
 				'description' => __( 'Order groups by attribute.', 'wp-graphql-buddypress' ),
 			],
@@ -99,6 +99,12 @@ class GroupConnection {
 			'search'      => [
 				'type'        => 'String',
 				'description' => __( 'Search term(s) to retrieve matching groups for.', 'wp-graphql-buddypress' ),
+			],
+			'slug'        => [
+				'type'        => [
+					'list_of' => 'String',
+				],
+				'description' => __( 'Search group or groups by its slug.', 'wp-graphql-buddypress' ),
 			],
 			'status'      => [
 				'type'        => [
@@ -111,18 +117,18 @@ class GroupConnection {
 				'description' => __( 'Include groups of a given type.', 'wp-graphql-buddypress' ),
 			],
 			'userId'      => [
-				'type'        => 'Int',
+				'type'        => 'Id',
 				'description' => __( 'Include groups that this user is a member of.', 'wp-graphql-buddypress' ),
 			],
-			'exclude'      => [
+			'exclude'     => [
 				'type'        => [
-					'list_of' => 'Int',
+					'list_of' => 'ID',
 				],
 				'description' => __( 'Ensure result set excludes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
-			'include'      => [
+			'include'     => [
 				'type'        => [
-					'list_of' => 'Int',
+					'list_of' => 'ID',
 				],
 				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],

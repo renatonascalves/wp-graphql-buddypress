@@ -235,7 +235,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			/**
 			 * Setup filters
 			 */
-			// \WPGraphQL\Extensions\BuddyPress\Core_Schema_Filters::add_filters();
+			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_filters();
 		}
 	}
 

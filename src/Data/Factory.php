@@ -10,7 +10,7 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
-use GraphQL\Error\UserError;
+use GraphQL\Deferred;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
@@ -23,23 +23,24 @@ class Factory {
 	/**
 	 * Returns a Group object.
 	 *
-	 * @throws UserError Error Exception.
-	 *
 	 * @param int|null   $id      Group ID or null.
 	 * @param AppContext $context AppContext object.
 	 *
-	 * @return \BP_Groups_Group
+	 * @return Deferred|null
 	 */
 	public static function resolve_group_object( $id, AppContext $context ) {
-
-		// Get group.
-		$group = groups_get_group( absint( $id ) );
-
-		if ( empty( $group ) || empty( $group->id ) ) {
-			throw new UserError( __( 'No group was found.', 'wp-graphql-buddypress' ) );
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
 		}
 
-		return $group;
+		$group_id = absint( $id );
+		$context->getLoader( 'group_object' )->buffer( [ $group_id ] );
+
+		return new Deferred(
+			function () use ( $group_id, $context ) {
+				return $context->getLoader( 'group_object' )->load( $group_id );
+			}
+		);
 	}
 
 	/**

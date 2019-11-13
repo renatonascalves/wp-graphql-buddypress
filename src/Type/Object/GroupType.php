@@ -11,10 +11,8 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
-use WPGraphQL\Data\DataSource;
-use WPGraphQL\Type\WPObjectType;
-use WPGraphQL\Types;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
  * Class GroupType
@@ -34,44 +32,30 @@ class GroupType {
 	public static function register() {
 		register_graphql_object_type(
 			self::$type_name,
-			array(
-				'description'       => __( 'Info about a BuddyPress group', 'wp-graphql-buddypress' ),
-				'interfaces'        => array( WPObjectType::node_interface() ),
-				'fields'            => array(
+			[
+				'description'       => __( 'Info about a BuddyPress group.', 'wp-graphql-buddypress' ),
+				'fields'            => [
 					'id'               => [
 						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return ! empty( $group->id ) ? $group->id : null;
-						},
 					],
 					'groupId'          => [
 						'type'        => 'Int',
 						'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return ! empty( $group->id ) ? absint( $group->id ) : null;
-						},
 					],
 					'parent'           => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
+						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							return ! empty( $group->parent_id )
 								? Factory::resolve_group_object( $group->parent_id, $context )
 								: null;
 						},
 					],
-					'name'             => [
-						'type'        => 'String',
-						'description' => __( 'Group name', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return bp_get_group_name( $group );
-						},
-					],
 					'creatorId'        => [
 						'type'        => 'User',
-						'description' => __( 'The creator of the group', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group, $args, AppContext $context ) {
+						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							$creator_id = ! empty( $group->creator_id ) ? $group->creator_id : null;
 
 							return ! empty( $creator_id )
@@ -79,12 +63,13 @@ class GroupType {
 								: null;
 						},
 					],
+					'name'             => [
+						'type'        => 'String',
+						'description' => __( 'Group name', 'wp-graphql-buddypress' ),
+					],
 					'slug'             => [
 						'type'        => 'String',
 						'description' => __( 'The slug of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return bp_get_group_slug( $group );
-						},
 					],
 					'description'      => [
 						'type'        => 'String',
@@ -95,7 +80,7 @@ class GroupType {
 								'description' => __( 'Format of the field output', 'wp-graphql' ),
 							],
 						],
-						'resolve'     => function( \BP_Groups_Group $group, $args ) {
+						'resolve'     => function( Group $group, array $args ) {
 							if ( empty( $group->description ) ) {
 								return null;
 							}
@@ -110,46 +95,28 @@ class GroupType {
 					'link'             => [
 						'type'        => 'String',
 						'description' => __( 'The link of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return bp_get_group_permalink( $group );
-						},
 					],
-					'enableForum'      => [
+					'hasForum'         => [
 						'type'        => 'Boolean',
-						'description' => __( 'Whether the group has a forum or not', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return bp_group_is_forum_enabled( $group );
-						},
+						'description' => __( 'Whether forums are enabled for the group.', 'wp-graphql-buddypress' ),
 					],
 					'totalMemberCount' => [
 						'type'        => 'Int',
 						'description' => __( 'Count of all group members.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return absint( groups_get_groupmeta( $group->id, 'total_member_count' ) );
-						},
 					],
 					'lastActivity'     => [
 						'type'        => 'String',
-						'description' => __( 'The date the group was last active', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return Types::prepare_date_response( groups_get_groupmeta( $group->id, 'last_activity' ) );
-						},
+						'description' => __( 'The date the group was last active.', 'wp-graphql-buddypress' ),
 					],
 					'dateCreated'      => [
 						'type'        => 'String',
 						'description' => __( 'The date the group was created.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return Types::prepare_date_response( $group->date_created );
-						},
 					],
 					'status'           => [
-						'type'        => 'String',
+						'type'        => 'GroupStatusEnum',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( \BP_Groups_Group $group ) {
-							return bp_get_group_status( $group );
-						},
 					],
-				),
+				],
 				'resolve_node'      => function( $node, $id, $type, $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_group_object( $id, $context );
@@ -158,13 +125,13 @@ class GroupType {
 					return $node;
 				},
 				'resolve_node_type' => function( $type, $node ) {
-					if ( $node instanceof \BP_Groups_Group ) {
+					if ( $node instanceof Group ) {
 						$type = self::$type_name;
 					}
 
 					return $type;
 				},
-			)
+			]
 		);
 
 		register_graphql_field(
@@ -178,7 +145,7 @@ class GroupType {
 						'type' => [ 'non_null' => 'ID' ],
 					],
 				],
-				'resolve'     => function ( $source, array $args, AppContext $context ) {
+				'resolve'     => function ( $group, array $args, AppContext $context ) {
 					$id_components = Relay::fromGlobalId( $args['id'] );
 
 					if ( ! isset( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
@@ -214,7 +181,7 @@ class GroupType {
 						'description' => __( 'Get the object by its previous slug', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( $source, array $args, AppContext $context ) {
+				'resolve'     => function ( $group, array $args, AppContext $context ) {
 					$group_id = 0;
 
 					if ( ! empty( $args['id'] ) ) {

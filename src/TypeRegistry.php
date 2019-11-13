@@ -8,16 +8,26 @@
 
 namespace WPGraphQL\Extensions\BuddyPress;
 
+use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+
 /**
  * Class TypeRegistry
  */
 class TypeRegistry {
 
 	/**
-	 * Registers actions related to type registry.
+	 * Registers actions related to the type registry.
 	 */
 	public static function add_actions() {
-		add_action( 'graphql_register_types', array( __CLASS__, 'graphql_register_types' ), 10 );
+		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 10 );
+	}
+
+	/**
+	 * Registers filters related to the type registry.
+	 */
+	public static function add_filters() {
+		add_filter( 'graphql_data_loaders', [ __CLASS__, 'graphql_register_autoloaders' ], 10, 2 );
 	}
 
 	/**
@@ -42,5 +52,21 @@ class TypeRegistry {
 		// Object fields.
 		// Connections.
 		// Mutations.
+	}
+
+	/**
+	 * Registers custom autoloaders.
+	 *
+	 * @param array      $loaders Autoloaders.
+	 * @param AppContext $context Context.
+	 * @return array
+	 */
+	public static function graphql_register_autoloaders( array $loaders, AppContext $context ) {
+		return array_merge(
+			$loaders,
+			[
+				'group_object' => new GroupObjectLoader( $context ),
+			]
+		);
 	}
 }

@@ -26,8 +26,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args() {
 		$query_args = [
-			'fields'  => 'ids',
-			'status' => array(),
+			'fields' => 'ids',
 		];
 
 		/**
@@ -53,6 +52,17 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 */
 		if ( empty( $query_args['order'] ) ) {
 			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
+		}
+
+		if ( empty( $query_args['type'] ) ) {
+			$query_args['type'] = 'active';
+		}
+
+		// Show hidden groups.
+		$query_args['show_hidden'] = $this->can_see_hidden_groups( $query_args );
+
+		if ( ! is_user_logged_in() && empty( $query_args['status'] ) ) {
+			$query_args['status'] = 'public';
 		}
 
 		/**
@@ -133,14 +143,19 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ) {
 		$arg_mapping = [
-			'showHidden'  => 'show_hidden',
-			'enableForum' => 'enable_forum',
-			'order'       => 'order',
-			'search'      => 'search_terms',
-			'status'      => 'status',
-			'parent'      => 'parent_id',
-			'groupType'   => 'group_type',
-			'userId'      => 'user_id',
+			'showHidden' => 'show_hidden',
+			'hasForum'   => 'enable_forum',
+			'type'       => 'type',
+			'order'      => 'order',
+			'orderBy'    => 'orderby',
+			'parent'     => 'parent_id',
+			'search'     => 'search_terms',
+			'slug'       => 'slug',
+			'status'     => 'status',
+			'userId'     => 'user_id',
+			'groupType'  => 'group_type',
+			'include'    => 'include',
+			'exclude'    => 'exclude',
 		];
 
 		/**
@@ -166,5 +181,29 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		return $query_args;
+	}
+
+	/**
+	 * Can see hidden groups.
+	 *
+	 * @param array $query_args Query arguments.
+	 *
+	 * @return bool
+	 */
+	protected function can_see_hidden_groups( $query_args ) {
+		if ( isset( $query_args['show_hidden'] ) && $query_args['show_hidden'] ) {
+
+			if ( bp_current_user_can( 'bp_moderate' ) ) {
+				return true;
+			}
+
+			if ( is_user_logged_in() && isset( $query_args['user_id'] ) && absint( $query_args['user_id'] ) === bp_loggedin_user_id() ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
 	}
 }
