@@ -8,7 +8,6 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;
 
-use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
 use WPGraphQL\Types;
 
@@ -18,7 +17,7 @@ use WPGraphQL\Types;
  * @property string $id
  * @property string $groupId
  * @property string $parent
- * @property string $creatorId
+ * @property string $creator
  * @property string $name
  * @property string $slug
  * @property string $link
@@ -45,24 +44,7 @@ class Group extends Model {
 	 */
 	public function __construct( \BP_Groups_Group $group ) {
 		$this->data = $group;
-
-		$allowed_restricted_fields = [
-			'id',
-			'groupId',
-			'parent',
-			'creatorId',
-			'name',
-			'slug',
-			'link',
-			'description',
-			'hasForum',
-			'totalMemberCount',
-			'lastActivity',
-			'dateCreated',
-			'status',
-		];
-
-		parent::__construct( 'bp_moderate', $allowed_restricted_fields, $group->creator_id );
+		parent::__construct();
 	}
 
 	/**
@@ -77,17 +59,17 @@ class Group extends Model {
 			return false;
 		}
 
-		// Moderators.
+		// If the group is not public, check if current user is a moderator/admin.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
 			return false;
 		}
 
-		// Group owners.
+		// Now check if the user is the group creator.
 		if ( true === $this->owner_matches_current_user() ) {
 			return false;
 		}
 
-		// User is a member of the group.
+		// Now check if the user is a member of the group.
 		if ( groups_is_user_member( bp_loggedin_user_id(), $this->data->id ) ) {
 			return false;
 		}
@@ -102,16 +84,16 @@ class Group extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'               => function() {
-					return ! empty( $this->data->id ) ? Relay::toGlobalId( 'group', $this->data->id ) : null;
+					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
 				'groupId'          => function() {
-					return ! empty( $this->data->id ) ? $this->data->id : 0;
+					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
 				'parent'           => function() {
-					return ! empty( $this->data->parent_id ) ? $this->data->parent_id : 0;
+					return ! empty( $this->data->parent_id ) ? $this->data->parent_id : null;
 				},
-				'creatorId'        => function() {
-					return ! empty( $this->data->creator_id ) ? $this->data->creator_id : 0;
+				'creator'          => function() {
+					return ! empty( $this->data->creator_id ) ? $this->data->creator_id : null;
 				},
 				'name'             => function() {
 					return ! empty( $this->data->name ) ? $this->data->name : null;
@@ -127,14 +109,20 @@ class Group extends Model {
 					return ! empty( $link ) ? $link : null;
 				},
 				'hasForum'         => function() {
-					return bp_group_is_forum_enabled( $this->data );
+					return $this->data->enable_forum;
 				},
-				'totalMemberCount' => function() {
-					return groups_get_groupmeta( $this->data->id, 'total_member_count' );
-				},
-				'lastActivity'     => function() {
-					return Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
-				},
+				'totalMemberCount'        => [
+					'callback'   => function() {
+						return groups_get_groupmeta( $this->data->id, 'total_member_count' );
+					},
+					'capability' => 'bp_moderate',
+				],
+				'lastActivity'        => [
+					'callback'   => function() {
+						Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
+					},
+					'capability' => 'bp_moderate',
+				],
 				'dateCreated'      => function() {
 					return Types::prepare_date_response( $this->data->date_created );
 				},

@@ -65,6 +65,11 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args['status'] = 'public';
 		}
 
+		// Adding correct value for the parent_id.
+		if ( empty( $query_args['parent_id'] ) ) {
+			$query_args['parent_id'] = null;
+		}
+
 		/**
 		 * Set the graphql_cursor_offset
 		 */
@@ -144,7 +149,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	public function sanitize_input_fields( array $args ) {
 		$arg_mapping = [
 			'showHidden' => 'show_hidden',
-			'hasForum'   => 'enable_forum',
 			'type'       => 'type',
 			'order'      => 'order',
 			'orderBy'    => 'orderby',

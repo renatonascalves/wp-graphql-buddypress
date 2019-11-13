@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
+use WPGraphQL\Data\DataSource;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
@@ -47,8 +48,8 @@ class GroupType {
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
-							return ! empty( $group->parent_id )
-								? Factory::resolve_group_object( $group->parent_id, $context )
+							return ! empty( $group->parent )
+								? Factory::resolve_group_object( $group->parent, $context )
 								: null;
 						},
 					],
@@ -56,10 +57,8 @@ class GroupType {
 						'type'        => 'User',
 						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
-							$creator_id = ! empty( $group->creator_id ) ? $group->creator_id : null;
-
-							return ! empty( $creator_id )
-								? DataSource::resolve_user( $creator_id, $context )
+							return ! empty( $group->creator )
+								? DataSource::resolve_user( $group->creator, $context )
 								: null;
 						},
 					],
@@ -145,7 +144,7 @@ class GroupType {
 						'type' => [ 'non_null' => 'ID' ],
 					],
 				],
-				'resolve'     => function ( $group, array $args, AppContext $context ) {
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$id_components = Relay::fromGlobalId( $args['id'] );
 
 					if ( ! isset( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
@@ -181,14 +180,14 @@ class GroupType {
 						'description' => __( 'Get the object by its previous slug', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( $group, array $args, AppContext $context ) {
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$group_id = 0;
 
 					if ( ! empty( $args['id'] ) ) {
 						$id_components = Relay::fromGlobalId( $args['id'] );
 
 						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid', 'wp-graphql-buddypress' ) );
+							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
 						}
 
 						$group_id = absint( $id_components['id'] );
