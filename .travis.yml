@@ -3,114 +3,121 @@ dist: trusty
 
 language: php
 
-services:
-	- docker
-
 notifications:
-	email:
-		on_success: never
-		on_failure: never
+  email:
+    on_success: never
+    on_failure: change
 
 branches:
-	only:
-		- master
+  only:
+    - master
 
 cache:
-	apt: true
-	directories:
-		- $HOME/.composer/cache
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+env:
+  global:
+    PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
 
 matrix:
-	include:
-		- php: 7.3
-			env: PHP_VERSION=7.3 WP_VERSION=5.2 COVERAGE=1
-		- php: 7.3
-			env: PHP_VERSION=7.3 PHPCS=1
-		- php: 7.2
-			env: PHP_VERSION=7.2 WP_VERSION=5.2
-		- php: 7.2
-			env: PHP_VERSION=7.2 WP_VERSION=4.9
-		- php: 7.1
-			env: PHP_VERSION=7.1 WP_VERSION=5.2
-		- php: 7.1
-			env: PHP_VERSION=7.1 WP_VERSION=4.9
-		- php: 7.0
-			env: PHP_VERSION=7.0 WP_VERSION=5.0
-		- php: 7.0
-			env: PHP_VERSION=7.0 WP_VERSION=4.9
-		- php: 5.6
-			env: PHP_VERSION=5.6 WP_VERSION=5.0
-		- php: 5.6
-			env: PHP_VERSION=5.6 WP_VERSION=4.9
-	allow_failures:
-		- env: PHP_VERSION=5.6 WP_VERSION=5.0
-		- env: PHP_VERSION=5.6 WP_VERSION=4.9
+  include:
+    - php: 7.3
+      env: WP_VERSION=master PHPCS=1
+    - php: 7.3
+      env: WP_VERSION=5.0
+    - php: 7.2
+      env: WP_VERSION=master
+    - php: 7.2
+      env: WP_VERSION=5.1
+    - php: 7.2
+      env: WP_VERSION=5.0
+    - php: 7.2
+      env: WP_VERSION=4.9
+    - php: 7.2
+      env: WP_VERSION=4.8
+    - php: 7.2
+      env: WP_VERSION=4.7
+    - php: 7.1
+      env: WP_VERSION=master
+    - php: 7.0
+      env: WP_VERSION=master
+    - php: 5.6
+      env: WP_VERSION=master
+    - php: 5.6
+      env: WP_VERSION=5.1
+    - php: 5.6
+      env: WP_VERSION=5.0
+    - php: 5.6
+      env: WP_VERSION=4.9
+    - php: 5.6
+      env: WP_VERSION=4.8
+    - php: 5.6
+      env: WP_VERSION=4.7
 
 before_install:
-	- sudo rm /usr/local/bin/docker-compose
-	- curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > docker-compose
-	- chmod +x docker-compose
-	- sudo mv docker-compose /usr/local/bin
-	- |
-		# Remove Xdebug for a huge performance increase:
-		if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-			phpenv config-rm xdebug.ini
-		else
-			echo "xdebug.ini does not exist"
-		fi
-
-install:
-	- |
-		cd $TRAVIS_BUILD_DIR
-		curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-		chmod +x wp-cli.phar
-		sudo mv wp-cli.phar /usr/local/bin/wp
+  - |
+    # Remove Xdebug for a huge performance increase:
+    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+      phpenv config-rm xdebug.ini
+    else
+      echo "xdebug.ini does not exist"
+    fi
 
 before_script:
-	- |
-		if [ ! -z "$WP_VERSION" ]; then
-			# Build images.
-			docker-compose build \
-				--build-arg DESIRED_PHP_VERSION=${PHP_VERSION} \
-				--build-arg DESIRED_WP_VERSION=${WP_VERSION} \
-				testing
-		fi
+  - |
+    if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then
+      composer require --dev phpunit/phpunit ^5;
+      composer install
+    else
+      composer require --dev phpunit/phpunit ^6;
+      composer install;
+    fi
 
-	# Install PHP CodeSniffer and WPCS.
-	- |
-		if [ "$PHPCS" == "1" ]; then
-			COMPOSER_MEMORY_LIMIT=-1 travis_retry composer require \
-				squizlabs/php_codesniffer \
-				phpcompatibility/phpcompatibility-wp wp-coding-standards/wpcs \
-				dealerdirect/phpcodesniffer-composer-installer
-			COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --no-dev
-		fi
+  # Install PHP CodeSniffer and WPCS.
+  - |
+    if [[ "$PHPCS" == "1" ]]; then
+      composer require squizlabs/php_codesniffer
+      composer require phpcompatibility/phpcompatibility-wp
+      composer require wp-coding-standards/wpcs
+      composer dealerdirect/phpcodesniffer-composer-installer
+      composer install
+
+      phpenv rehash
+
+      ./vendor/bin/phpcs --config-set installed_paths '../../wimg/php-compatibility/,../../wp-coding-standards/wpcs/'
+      ./vendor/bin/phpcs --config-set default_standard WordPress
+    fi
+
+install:
+  # Set up WP + BP installation
+  - export WP_DEVELOP_DIR=/tmp/wordpress/
+  - export WP_TESTS_DIR=$WP_DEVELOP_DIR/tests/phpunit
+  - mkdir -p $WP_DEVELOP_DIR
+  - git clone --depth=1 --branch="$WP_VERSION" git://develop.git.wordpress.org/ $WP_DEVELOP_DIR
+  - plugin_slug=$(basename $(pwd))
+  - plugin_dir=$WP_DEVELOP_DIR/src/wp-content/plugins/$plugin_slug
+  - cd ..
+  - mv $plugin_slug $plugin_dir
+  - svn co --ignore-externals https://buddypress.svn.wordpress.org/trunk $WP_DEVELOP_DIR/src/wp-content/plugins/buddypress
+  - git clone --depth=1 --branch="develop" https://github.com/wp-graphql/wp-graphql.git $WP_DEVELOP_DIR/src/wp-content/plugins/wp-graphql
+
+  # set up tests config
+  - cd $WP_DEVELOP_DIR
+  - echo $WP_DEVELOP_DIR
+  - cp wp-tests-config-sample.php wp-tests-config.php
+  - sed -i "s/youremptytestdbnamehere/wordpress_test/" wp-tests-config.php
+  - sed -i "s/yourusernamehere/root/" wp-tests-config.php
+  - sed -i "s/yourpasswordhere//" wp-tests-config.php
+
+  # set up database
+  - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+
+  - cd $plugin_dir
 
 script:
-	# Execute unit tests with coverage if specified, otherwise without coverage
-	- |
-		if [ ! -z "$WP_VERSION" ]; then
-			docker-compose run --rm \
-				-e SUITES='acceptance;functional;wpunit' \
-				-e COVERAGE=${COVERAGE:-0} \
-				-e DEBUG=${DEBUG:-0} \
-				testing --scale app=0
-		fi
-
-	- |
-		if [ "$PHPCS" == "1" ]; then
-			vendor/bin/phpcs \
-				wp-graphql-buddypress.php \
-				src/*.php --standard=WordPress
-		fi
-after_success:
-	# Download and run Coveralls.io client
-	- |
-		if [ "$COVERAGE" == "1" ]; then
-			wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-			chmod +x php-coveralls.phar
-
-			sed -i 's/\/var\/www\/html\/wp-content\/plugins\/wp-graphql-buddypress\///g' tests/_output/coverage.xml
-			travis_retry php php-coveralls.phar -v
-		fi
-	
+  - ./vendor/bin/phpunit;
+  - ./vendor/bin/phpunit -c tests/multisite.xml;
+  - find includes -type "f" -iname "*.php" | xargs -L "1" php -l;
+  - if [[ "$PHPCS" == "1" ]]; then ./vendor/bin/phpcs includes/*.php --standard=WordPress; fi

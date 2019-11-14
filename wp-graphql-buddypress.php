@@ -249,7 +249,9 @@ endif;
 function wp_graphql_buddypress_init() {
 
 	/**
-	 * Return an instance of the action
+	 * Return an instance of the action.
+	 *
+	 * @since 0.0.1-alpha
 	 */
 	return \WP_GraphQL_BuddyPress::instance();
 }
