@@ -54,7 +54,7 @@ before_script:
     fi
 
 script:
-  # - ./run-docker-tests.sh 'wpunit'
-  # - ./run-docker-tests.sh 'functional'
+  - ./run-docker-tests.sh 'wpunit'
+  - ./run-docker-tests.sh 'functional'
   - ./run-docker-tests.sh 'acceptance'
   - if [[ "$PHPCS" == "true" ]]; then composer check-cs; fi
