@@ -117,18 +117,18 @@ class GroupConnection {
 				'description' => __( 'Include groups of a given type.', 'wp-graphql-buddypress' ),
 			],
 			'userId'      => [
-				'type'        => 'Id',
+				'type'        => 'Int',
 				'description' => __( 'Include groups that this user is a member of.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
 				'type'        => [
-					'list_of' => 'ID',
+					'list_of' => 'Int',
 				],
 				'description' => __( 'Ensure result set excludes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 			'include'     => [
 				'type'        => [
-					'list_of' => 'ID',
+					'list_of' => 'Int',
 				],
 				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],

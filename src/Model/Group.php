@@ -33,7 +33,7 @@ use WPGraphQL\Types;
 class Group extends Model {
 
 	/**
-	 * Stores the BP_Groups_Group object for the incoming data
+	 * Stores the BP_Groups_Group object for the incoming data.
 	 *
 	 * @var \BP_Groups_Group $data
 	 */

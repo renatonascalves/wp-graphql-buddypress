@@ -38,16 +38,17 @@ class GroupObjectLoader extends AbstractDataLoader {
 		}
 
 		$loaded = [];
-		$args   = [
-			'include'  => $keys,
-			'per_page' => count( $keys ),
-			'fields'   => 'ids',
-		];
 
 		/**
-		 * Execute the query.
+		 * Execute the query, and prune the cache.
 		 */
-		groups_get_groups( $args );
+		groups_get_groups(
+			[
+				'include'  => $keys,
+				'per_page' => count( $keys ),
+				'fields'   => 'ids',
+			]
+		);
 
 		/**
 		 * Loop over the keys and return an array of loaded_groups, where the key is the ID and the value

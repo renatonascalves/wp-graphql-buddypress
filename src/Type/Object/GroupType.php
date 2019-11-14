@@ -71,12 +71,10 @@ class GroupType {
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							$admins     = [];
 							$admin_mods = groups_get_group_members(
-								array(
+								[
 									'group_id'   => $group->id,
-									'group_role' => array(
-										'admin',
-									),
-								)
+									'group_role' => [ 'admin' ],
+								]
 							);
 
 							foreach ( (array) $admin_mods['members'] as $admin ) {
@@ -106,12 +104,10 @@ class GroupType {
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							$mods       = [];
 							$admin_mods = groups_get_group_members(
-								array(
+								[
 									'group_id'   => $group->id,
-									'group_role' => array(
-										'admin',
-									),
-								)
+									'group_role' => [ 'mod' ],
+								]
 							);
 
 							foreach ( (array) $admin_mods['members'] as $mod ) {

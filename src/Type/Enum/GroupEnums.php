@@ -40,7 +40,7 @@ class GroupEnums {
 			]
 		);
 
-		// Group Order by.
+		// Group Order By.
 		register_graphql_enum_type(
 			'GroupOrderByEnum',
 			[
@@ -162,7 +162,7 @@ class GroupEnums {
 	 * Registers group types enum.
 	 */
 	public static function group_types() {
-		$group_types_enum_values = array();
+		$group_types_enum_values = [];
 		$group_types             = bp_groups_get_group_types();
 
 		if ( ! empty( $group_types ) && is_array( $group_types ) ) {

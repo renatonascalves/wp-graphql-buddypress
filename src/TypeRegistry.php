@@ -59,6 +59,7 @@ class TypeRegistry {
 	 *
 	 * @param array      $loaders Autoloaders.
 	 * @param AppContext $context Context.
+	 *
 	 * @return array
 	 */
 	public static function graphql_register_autoloaders( array $loaders, AppContext $context ) {
