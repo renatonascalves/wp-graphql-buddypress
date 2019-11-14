@@ -1,4 +1,4 @@
-# WP GraphQL BuddyPress
+# WPGraphQL BuddyPress
 
 Bringing the power of GraphQL to BuddyPress.
 
@@ -13,7 +13,7 @@ Bringing the power of GraphQL to BuddyPress.
 1. Install & activate [BuddyPress](https://buddypress.org/)
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
 3. (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
-4. Clone or download the zip of this repository into your WordPress plugin directory & activate the **WP GraphQL BuddyPress** plugin
+4. Clone or download the zip of this repository into your WordPress plugin directory & activate the **WPGraphQL BuddyPress** plugin
 
 ## Changelog
 

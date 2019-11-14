@@ -1,15 +1,15 @@
 <?php
 /**
- * WP GraphQL BuddyPress
+ * WPGraphQL BuddyPress
  *
  * @package      WPGraphQL\Extensions\BuddyPress
  * @author       Renato Alves
  * @license      GPLv3
  *
  * @wordpress-plugin
- * Plugin Name:       WP GraphQL BuddyPress
+ * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
- * Description:       Adds BuddyPress functionality to WPGraphQL schema.
+ * Description:       Bringing the power of the graphql to BuddyPress.
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
  * Author URI:        https://ralv.es

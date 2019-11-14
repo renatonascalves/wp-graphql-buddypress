@@ -13,7 +13,5 @@ return array(
     'Oxymel' => array($vendorDir . '/nb/oxymel'),
     'Mustache' => array($vendorDir . '/mustache/mustache/src'),
     'Hautelook' => array($vendorDir . '/hautelook/phpass/src'),
-    'Handlebars' => array($vendorDir . '/xamin/handlebars.php/src'),
     'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
-    'BaconStringUtils' => array($vendorDir . '/bacon/bacon-string-utils/src'),
 );

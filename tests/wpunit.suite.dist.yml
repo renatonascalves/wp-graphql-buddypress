@@ -7,6 +7,17 @@ modules:
     enabled:
         - WPLoader
         - \Helper\Wpunit
-    disabled:
-        - WPDb
-        - WPBrowser
+    config:
+        WPLoader:
+            wpRootFolder: "/tmp/wordpress"
+            dbName: "wpgraphql_test"
+            dbHost: "127.0.0.1"
+            dbUser: "root"
+            dbPassword: "root"
+            tablePrefix: "wp_"
+            domain: "wpgraphql.test"
+            adminEmail: "admin@wpgraphql.test"
+            title: "Test"
+            plugins: ['wp-graphql-buddypress/tests/_bootstrap/bootstrap.php','wp-graphql-buddypress/wp-graphql-buddypress.php']
+            activatePlugins: ['wp-graphql-buddypress/tests/_bootstrap/bootstrap.php','wp-graphql-buddypress/wp-graphql-buddypress.php']
+            configFile: "tests/_data/config.php"

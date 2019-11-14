@@ -1,46 +1,21 @@
 #!/usr/bin/env bash
 
-source .env
-
-print_usage_instruction() {
-	echo "Ensure that .env file exist in project root directory exists."
-	echo "And run the following 'composer install-wp-tests' in the project root directory"
+if [ $# -lt 3 ]; then
+	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version] [skip-database-creation]"
 	exit 1
-}
-
-if [[ -z "$TEST_DB_NAME" ]]; then
-	echo "TEST_DB_NAME not found"
-	print_usage_instruction
-else
-	DB_NAME=$TEST_DB_NAME
-fi
-if [[ -z "$TEST_DB_USER" ]]; then 
-	echo "TEST_DB_USER not found"
-	print_usage_instruction
-else
-	DB_USER=$TEST_DB_USER
-fi
-if [[ -z "$TEST_DB_PASSWORD" ]]; then 
-	DB_PASS=""
-else
-	DB_PASS=$TEST_DB_PASSWORD
-fi
-if [[ -z "$TEST_DB_HOST" ]]; then 
-	DB_HOST=localhost
-else
-	DB_HOST=$TEST_DB_HOST
-fi
-if [ -z "$SKIP_DB_CREATE" ]; then 
-	SKIP_DB_CREATE=false
 fi
 
-WP_VERSION=${WP_VERSION-latest}
-TMPDIR=${TMPDIR-/tmp}
-TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
-WP_TESTS_DIR=${WP_TESTS_DIR-$TMPDIR/wordpress-tests-lib}
-WP_CORE_DIR=${WP_CORE_DIR-$TMPDIR/wordpress/}
+DB_NAME=$1
+DB_USER=$2
+DB_PASS=$3
+DB_HOST=${4-localhost}
+WP_VERSION=${5-latest}
+SKIP_DB_CREATE=${6-false}
+
 PLUGIN_DIR=$(pwd)
-DB_SERVE_NAME=${DB_SERVE_NAME-bp_graphql_serve}
+WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
+WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
+DB_SERVE_NAME=${DB_SERVE_NAME-wpgraphql_serve}
 
 download() {
     if [ `which curl` ]; then
@@ -50,19 +25,8 @@ download() {
     fi
 }
 
-if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\-(beta|RC)[0-9]+$ ]]; then
-	WP_BRANCH=${WP_VERSION%\-*}
-	WP_TESTS_TAG="branches/$WP_BRANCH"
-
-elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
-	WP_TESTS_TAG="branches/$WP_VERSION"
-elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-	if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
-		# version x.x.0 means the first release of the major version, so strip off the .0 and download version x.x
-		WP_TESTS_TAG="tags/${WP_VERSION%??}"
-	else
-		WP_TESTS_TAG="tags/$WP_VERSION"
-	fi
+if [[ $WP_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
+	WP_TESTS_TAG="tags/$WP_VERSION"
 elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 	WP_TESTS_TAG="trunk"
 else
@@ -76,6 +40,7 @@ else
 	fi
 	WP_TESTS_TAG="tags/$LATEST_VERSION"
 fi
+
 set -ex
 
 install_wp() {
@@ -87,34 +52,18 @@ install_wp() {
 	mkdir -p $WP_CORE_DIR
 
 	if [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
-		mkdir -p $TMPDIR/wordpress-nightly
-		download https://wordpress.org/nightly-builds/wordpress-latest.zip  $TMPDIR/wordpress-nightly/wordpress-nightly.zip
-		unzip -q $TMPDIR/wordpress-nightly/wordpress-nightly.zip -d $TMPDIR/wordpress-nightly/
-		mv $TMPDIR/wordpress-nightly/wordpress/* $WP_CORE_DIR
+		mkdir -p /tmp/wordpress-nightly
+		download https://wordpress.org/nightly-builds/wordpress-latest.zip  /tmp/wordpress-nightly/wordpress-nightly.zip
+		unzip -q /tmp/wordpress-nightly/wordpress-nightly.zip -d /tmp/wordpress-nightly/
+		mv /tmp/wordpress-nightly/wordpress/* $WP_CORE_DIR
 	else
 		if [ $WP_VERSION == 'latest' ]; then
 			local ARCHIVE_NAME='latest'
-		elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+ ]]; then
-			# https serves multiple offers, whereas http serves single.
-			download https://api.wordpress.org/core/version-check/1.7/ $TMPDIR/wp-latest.json
-			if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
-				# version x.x.0 means the first release of the major version, so strip off the .0 and download version x.x
-				LATEST_VERSION=${WP_VERSION%??}
-			else
-				# otherwise, scan the releases and get the most up to date minor version of the major release
-				local VERSION_ESCAPED=`echo $WP_VERSION | sed 's/\./\\\\./g'`
-				LATEST_VERSION=$(grep -o '"version":"'$VERSION_ESCAPED'[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//' | head -1)
-			fi
-			if [[ -z "$LATEST_VERSION" ]]; then
-				local ARCHIVE_NAME="wordpress-$WP_VERSION"
-			else
-				local ARCHIVE_NAME="wordpress-$LATEST_VERSION"
-			fi
 		else
 			local ARCHIVE_NAME="wordpress-$WP_VERSION"
 		fi
-		download https://wordpress.org/${ARCHIVE_NAME}.tar.gz  $TMPDIR/wordpress.tar.gz
-		tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
+		download https://wordpress.org/${ARCHIVE_NAME}.tar.gz  /tmp/wordpress.tar.gz
+		tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
 	fi
 
 	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
@@ -123,7 +72,7 @@ install_wp() {
 install_test_suite() {
 	# portable in-place argument for both GNU sed and Mac OSX sed
 	if [[ $(uname -s) == 'Darwin' ]]; then
-		local ioption='-i.bak'
+		local ioption='-i .bak'
 	else
 		local ioption='-i'
 	fi
@@ -171,18 +120,37 @@ install_db() {
 		fi
 	fi
 
-	# create database
-	RESULT=`mysql -u $DB_USER --password="$DB_PASS" --skip-column-names -e "SHOW DATABASES LIKE '$DB_NAME'"$EXTRA`
-	if [ "$RESULT" != $DB_NAME ]; then
-			mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
-	fi
+
+    RESULT=`mysql -u $DB_USER --password="$DB_PASS" --skip-column-names -e "SHOW DATABASES LIKE '$DB_NAME'"$EXTRA`
+    if [ "$RESULT" != $DB_NAME ]; then
+        mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+    fi
+
+    RESULT_2=`mysql -u $DB_USER --password="$DB_PASS" --skip-column-names -e "SHOW DATABASES LIKE '$DB_SERVE_NAME'"$EXTRA`
+    if [ "$RESULT_2" != $DB_SERVE_NAME ]; then
+        mysqladmin create $DB_SERVE_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+    fi
+
+}
+
+# MySQL may not be ready when container starts; wait at most 30 seconds.
+wait_for_database_connection() {
+    set +ex
+    DB_TRIES=1
+    while [ $DB_TRIES -lt 15 ]; do
+        if curl --fail --show-error --silent "$DB_HOST:3306" > /dev/null 2>&1; then break; fi
+        echo "Waiting for database to be ready...."
+        sleep 2
+        DB_TRIES=$((DB_TRIES + 1))
+    done
+    set -ex
 }
 
 configure_wordpress() {
     cd $WP_CORE_DIR
-    wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --dbhost="$DB_HOST" --skip-check --force=true
-    wp core install --url=wp.test --title="WPGraphQL WooCommerce Tests" --admin_user=admin --admin_password=password --admin_email=admin@wp.test
-    wp rewrite structure '/%year%/%monthnum%/%postname%/'
+    wp $WP_CLI_ARGS config create --dbname="$DB_SERVE_NAME" --dbuser=$DB_USER --dbpass="$DB_PASS" --dbhost="$DB_HOST" --skip-check --force=true
+    wp $WP_CLI_ARGS core install --url=wpgraphql.test --title="WPGraphQL Tests" --admin_user=admin --admin_password=password --admin_email=admin@wpgraphql.test --skip-email
+    wp $WP_CLI_ARGS rewrite structure '/%year%/%monthnum%/%postname%/'
 }
 
 setup_buddypress() {
@@ -206,28 +174,29 @@ setup_wpgraphql() {
 	wp plugin activate wp-graphql-jwt-authentication
 }
 
-setup_plugin() {
-	# Add this repo as a plugin to the repo
-	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress ]; then
-		ln -s $PLUGIN_DIR $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress
-	fi
+activate_plugin() {
+    # Add this repo as a plugin to the repo
+    if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress ]; then
+      ln -s $PLUGIN_DIR $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress
+    fi
 
-	cd $WP_CORE_DIR
+    cd $WP_CORE_DIR
 
-	# activate the plugin
-	wp plugin activate wp-graphql-buddypress
+    # activate the plugin
+    wp $WP_CLI_ARGS plugin activate wp-graphql-buddypress
 
-	# Flush the permalinks
-	wp rewrite flush
+    # Flush the permalinks
+    wp $WP_CLI_ARGS rewrite flush
 
-	# Export the db for codeception to use
-	wp db export $PLUGIN_DIR/tests/_data/dump.sql
+    # Export the db for codeception to use
+    wp $WP_CLI_ARGS db export $PLUGIN_DIR/tests/_data/dump.sql
 }
 
 install_wp
 install_test_suite
+wait_for_database_connection
 install_db
 configure_wordpress
 setup_buddypress
 setup_wpgraphql
-setup_plugin
+activate_plugin

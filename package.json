@@ -1,0 +1,54 @@
+{
+  "name": "wp-graphql-buddypress",
+  "version": "0.3.6",
+  "description": "Adds BuddyPress functionality to WPGraphQL schema.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wp-graphql/wp-graphql-buddypress.git"
+  },
+  "keywords": [
+    "wordpress",
+    "graphql",
+    "api",
+    "wp-graphql",
+    "wp-graphql-extension",
+    "buddypress-extension",
+    "buddypress",
+    "community",
+    "bp",
+    "rest"
+  ],
+  "authors": [
+    {
+      "name": "Renato Alves",
+      "email": "contato@ralv.es",
+      "role": "Lead developer"
+    }
+  ],
+  "license": "GPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/wp-graphql/wp-graphql-buddypress/issues"
+  },
+  "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress#readme",
+  "devDependencies": {
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2"
+  },
+  "lint-staged": {
+    "*.php": "composer run check-cs"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
+  
