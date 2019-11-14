@@ -6,7 +6,8 @@
 ARG DESIRED_WP_VERSION
 ARG DESIRED_PHP_VERSION
 
-FROM renatonascalves/bp-graphql-app:wp${DESIRED_WP_VERSION}-php${DESIRED_PHP_VERSION}
+# FROM renatonascalves/bp-graphql-app:wp${DESIRED_WP_VERSION}-php${DESIRED_PHP_VERSION}
+FROM wordpress:${DESIRED_WP_VERSION}-php${DESIRED_PHP_VERSION}-apache
 
 LABEL author=renatonascalves
 LABEL author_uri=https://github.com/renatonascalves

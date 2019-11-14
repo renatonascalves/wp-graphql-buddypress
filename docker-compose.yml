@@ -4,7 +4,7 @@ services:
   app:
     depends_on:
       - app_db
-    image: "renatonascalves/bp-graphql-app:wp${WP_VERSION:-5.2.2}-php${PHP_VERSION:-7.2}"
+    image: "wordpress:wp${WP_VERSION:-5.2.2}-php${PHP_VERSION:-7.2}"
     volumes:
       - '.:/var/www/html/wp-content/plugins/wp-graphql-buddypress'
       - './.log/app:/var/log/apache2'
