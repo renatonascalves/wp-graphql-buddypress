@@ -1,21 +1,46 @@
 #!/usr/bin/env bash
 
-if [ $# -lt 3 ]; then
-	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version] [skip-database-creation]"
+source .env
+
+print_usage_instruction() {
+	echo "Ensure that .env file exist in project root directory exists."
+	echo "And run the following 'composer install-wp-tests' in the project root directory"
 	exit 1
+}
+
+if [[ -z "$TEST_DB_NAME" ]]; then
+	echo "TEST_DB_NAME not found"
+	print_usage_instruction
+else
+	DB_NAME=$TEST_DB_NAME
+fi
+if [[ -z "$TEST_DB_USER" ]]; then 
+	echo "TEST_DB_USER not found"
+	print_usage_instruction
+else
+	DB_USER=$TEST_DB_USER
+fi
+if [[ -z "$TEST_DB_PASSWORD" ]]; then 
+	DB_PASS=""
+else
+	DB_PASS=$TEST_DB_PASSWORD
+fi
+if [[ -z "$TEST_DB_HOST" ]]; then 
+	DB_HOST=localhost
+else
+	DB_HOST=$TEST_DB_HOST
+fi
+if [ -z "$SKIP_DB_CREATE" ]; then 
+	SKIP_DB_CREATE=false
 fi
 
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
-DB_HOST=${4-localhost}
-WP_VERSION=${5-latest}
-SKIP_DB_CREATE=${6-false}
-
+WP_VERSION=${WP_VERSION-latest}
 TMPDIR=${TMPDIR-/tmp}
 TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
 WP_TESTS_DIR=${WP_TESTS_DIR-$TMPDIR/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-$TMPDIR/wordpress/}
+PLUGIN_DIR=$(pwd)
+DB_SERVE_NAME=${DB_SERVE_NAME-bp_graphql_serve}
 
 download() {
     if [ `which curl` ]; then
@@ -25,7 +50,11 @@ download() {
     fi
 }
 
-if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
+if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\-(beta|RC)[0-9]+$ ]]; then
+	WP_BRANCH=${WP_VERSION%\-*}
+	WP_TESTS_TAG="branches/$WP_BRANCH"
+
+elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
 	WP_TESTS_TAG="branches/$WP_VERSION"
 elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 	if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
@@ -47,7 +76,6 @@ else
 	fi
 	WP_TESTS_TAG="tags/$LATEST_VERSION"
 fi
-
 set -ex
 
 install_wp() {
@@ -95,7 +123,7 @@ install_wp() {
 install_test_suite() {
 	# portable in-place argument for both GNU sed and Mac OSX sed
 	if [[ $(uname -s) == 'Darwin' ]]; then
-		local ioption='-i .bak'
+		local ioption='-i.bak'
 	else
 		local ioption='-i'
 	fi
@@ -144,9 +172,62 @@ install_db() {
 	fi
 
 	# create database
-	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+	RESULT=`mysql -u $DB_USER --password="$DB_PASS" --skip-column-names -e "SHOW DATABASES LIKE '$DB_NAME'"$EXTRA`
+	if [ "$RESULT" != $DB_NAME ]; then
+			mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+	fi
+}
+
+configure_wordpress() {
+    cd $WP_CORE_DIR
+    wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --dbhost="$DB_HOST" --skip-check --force=true
+    wp core install --url=wp.test --title="WPGraphQL WooCommerce Tests" --admin_user=admin --admin_password=password --admin_email=admin@wp.test
+    wp rewrite structure '/%year%/%monthnum%/%postname%/'
+}
+
+setup_buddypress() {
+	echo "Installing & Activating BuddyPress"
+	wp plugin install buddypress --activate
+}
+
+setup_wpgraphql() {
+	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql ]; then
+		echo "Cloning WPGraphQL"
+		wp plugin install https://github.com/wp-graphql/wp-graphql/archive/master.zip
+	fi
+	echo "Activating WPGraphQL"
+	wp plugin activate wp-graphql
+
+	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-jwt-authentication ]; then
+		echo "Cloning WPGraphQL-JWT-Authentication"
+		wp plugin install https://github.com/wp-graphql/wp-graphql-jwt-authentication/archive/master.zip
+	fi
+	echo "Activating WPGraphQL-JWT-Authentication"
+	wp plugin activate wp-graphql-jwt-authentication
+}
+
+setup_plugin() {
+	# Add this repo as a plugin to the repo
+	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress ]; then
+		ln -s $PLUGIN_DIR $WP_CORE_DIR/wp-content/plugins/wp-graphql-buddypress
+	fi
+
+	cd $WP_CORE_DIR
+
+	# activate the plugin
+	wp plugin activate wp-graphql-buddypress
+
+	# Flush the permalinks
+	wp rewrite flush
+
+	# Export the db for codeception to use
+	wp db export $PLUGIN_DIR/tests/_data/dump.sql
 }
 
 install_wp
 install_test_suite
 install_db
+configure_wordpress
+setup_buddypress
+setup_wpgraphql
+setup_plugin

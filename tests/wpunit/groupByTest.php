@@ -18,7 +18,7 @@ class groupByTest extends \Codeception\TestCase\WPTestCase {
 	 * @group get_item
 	 */
 	public function testgroupBy() {
-		$id = Relay::toGlobalId( 'id' );
+		$id = Relay::toGlobalId( 'group', 'id' );
 
 		$query = '
 			query {
