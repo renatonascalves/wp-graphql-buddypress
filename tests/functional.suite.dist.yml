@@ -23,7 +23,7 @@ modules:
         WPDb:
           dsn: 'mysql:host=127.0.0.1;dbname=wpgraphql_test'
           user: 'root'
-          password: 'root'
+          password: ''
           dump: 'tests/_data/dump.sql'
           populate: true
           cleanup: true

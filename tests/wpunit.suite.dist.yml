@@ -13,7 +13,7 @@ modules:
             dbName: "wpgraphql_test"
             dbHost: "127.0.0.1"
             dbUser: "root"
-            dbPassword: "root"
+            dbPassword: ""
             tablePrefix: "wp_"
             domain: "wpgraphql.test"
             adminEmail: "admin@wpgraphql.test"
