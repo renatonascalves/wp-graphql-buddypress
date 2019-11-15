@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;
 
+use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
 use WPGraphQL\Types;
 
@@ -86,7 +87,7 @@ class Group extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'               => function() {
-					return ! empty( $this->data->id ) ? $this->data->id : null;
+					return ! empty( $this->data->id ) ? Relay::toGlobalId( 'group', $this->data->id ) : null;
 				},
 				'groupId'          => function() {
 					return ! empty( $this->data->id ) ? $this->data->id : null;
@@ -111,7 +112,7 @@ class Group extends Model {
 					return ! empty( $link ) ? $link : null;
 				},
 				'hasForum'         => function() {
-					return $this->data->enable_forum;
+					return ! empty( $this->data->enable_forum ) ? $this->data->enable_forum : null;
 				},
 				'totalMemberCount'        => [
 					'callback'   => function() {
