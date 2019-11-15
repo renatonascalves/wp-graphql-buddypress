@@ -188,7 +188,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Can see hidden groups.
+	 * Check who can see hidden groups.
 	 *
 	 * @param array $query_args Query arguments.
 	 *
@@ -197,15 +197,19 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	protected function can_see_hidden_groups( $query_args ) {
 		if ( isset( $query_args['show_hidden'] ) && $query_args['show_hidden'] ) {
 
+			// Admins can see it all.
 			if ( bp_current_user_can( 'bp_moderate' ) ) {
 				return true;
 			}
 
-			if ( is_user_logged_in() && isset( $query_args['user_id'] ) && absint( $query_args['user_id'] ) === bp_loggedin_user_id() ) {
+			// Check if logged in user is the user name as the user_id.
+			if (
+				is_user_logged_in()
+				&& isset( $query_args['user_id'] )
+				&& absint( $query_args['user_id'] ) === bp_loggedin_user_id()
+			) {
 				return true;
 			}
-
-			return false;
 		}
 
 		return false;

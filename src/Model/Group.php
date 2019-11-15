@@ -73,7 +73,7 @@ class Group extends Model {
 		}
 
 		// Now check if the user is a member of the group.
-		if ( groups_is_user_member( bp_loggedin_user_id(), $this->data->id ) ) {
+		if ( groups_is_user_member( $this->current_user->ID, $this->data->id ) ) {
 			return false;
 		}
 
@@ -112,7 +112,7 @@ class Group extends Model {
 					return ! empty( $link ) ? $link : null;
 				},
 				'hasForum'         => function() {
-					return ! empty( $this->data->enable_forum ) ? $this->data->enable_forum : null;
+					return $this->data->enable_forum;
 				},
 				'totalMemberCount'        => [
 					'callback'   => function() {

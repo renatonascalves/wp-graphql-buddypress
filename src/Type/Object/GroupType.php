@@ -72,7 +72,8 @@ class GroupType {
 							$admins     = [];
 							$admin_mods = groups_get_group_members(
 								[
-									'group_id'   => $group->id,
+									// @codingStandardsIgnoreLine.
+									'group_id'   => $group->groupId,
 									'group_role' => [ 'admin' ],
 								]
 							);
@@ -105,7 +106,8 @@ class GroupType {
 							$mods       = [];
 							$admin_mods = groups_get_group_members(
 								[
-									'group_id'   => $group->id,
+									// @codingStandardsIgnoreLine.
+									'group_id'   => $group->groupId,
 									'group_role' => [ 'mod' ],
 								]
 							);
