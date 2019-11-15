@@ -8,10 +8,6 @@ Stable tag:        0.0.1-alpha
 License:           GPLv3
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
-Adds BuddyPress Functionality to WPGraphQL schema.
-
 == Description ==
 
-Bringing the power of the graphql to BuddyPress.
-
-== Changelog ==
+Bringing the power of GraphQL to BuddyPress.

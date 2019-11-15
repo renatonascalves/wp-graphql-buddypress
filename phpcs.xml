@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Coding standards for the WPGraphQL BuddyPress plugin">
+<ruleset name="Coding standards for the WP GraphQL BuddyPress plugin">
 
 	<!-- Set a description for this ruleset -->
 	<description>Coding standards that will be run on the WP GraphQL BuddyPress plugin.</description>
@@ -15,7 +15,6 @@
 
 	<!-- Load WordPress Coding standards -->
 	<rule ref="WordPress"/>
-	<rule ref="PHPCompatibilityWP"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 
