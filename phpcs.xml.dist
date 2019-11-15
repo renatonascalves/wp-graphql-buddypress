@@ -13,9 +13,8 @@
 	<!-- Check against minimum WP version. -->
 	<config name="minimum_supported_wp_version" value="4.9"/>
 
-	<rule ref="PHPCompatibilityWP"/>
-
 	<!-- Load WordPress Coding standards -->
+	<rule ref="WordPress"/>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 
@@ -30,7 +29,28 @@
 	<arg name="colors"/>
 
 	<!-- Add source codes in the report -->
-	<arg value="s"/>
+	<arg value="spn"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="1"/>
+
+	<!-- Remove the class naming error temporarily -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false"/>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<severity>0</severity>
+	</rule>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>0</severity>
+	</rule>
+
+	<rule ref="WordPress">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+	</rule>
 
 	<!-- Remove the class naming error temporarily -->
 	<rule ref="WordPress.Files.FileName">
