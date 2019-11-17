@@ -19,6 +19,13 @@ use WPGraphQL\Extensions\BuddyPress\Model\Group;
 class GroupObjectLoader extends AbstractDataLoader {
 
 	/**
+	 * Loaded groups.
+	 *
+	 * @var array
+	 */
+	protected $loaded_groups = [];
+
+	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
@@ -27,6 +34,8 @@ class GroupObjectLoader extends AbstractDataLoader {
 	 *
 	 * For example:
 	 * loadKeys(['a', 'b', 'c']) -> ['a' => 'value1, 'b' => null, 'c' => 'value3']
+	 *
+	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
 	 *
@@ -38,8 +47,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		$loaded = [];
-
 		/**
 		 * Execute the query, and prune the cache.
 		 */
@@ -47,7 +54,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 			[
 				'include'  => $keys,
 				'per_page' => count( $keys ),
-				'fields'   => 'ids',
 			]
 		);
 
@@ -58,7 +64,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 		foreach ( $keys as $key ) {
 
 			/**
-			 * Get the group object.
+			 * Get the group object from cache.
 			 */
 			$group_object = groups_get_group( absint( $key ) );
 
@@ -66,7 +72,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 				throw new UserError(
 					sprintf(
 						// translators: Group ID.
-						__( 'No item was found with ID: %d', 'wp-graphql-buddypress' ),
+						__( 'No group was found with ID: %d', 'wp-graphql-buddypress' ),
 						absint( $key )
 					)
 				);
@@ -76,7 +82,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 			 * Return the instance through the Model Layer to ensure we only return
 			 * values the consumer has access to.
 			 */
-			$loaded[ $key ] = new Deferred(
+			$this->loaded_groups[ $key ] = new Deferred(
 				function() use ( $group_object ) {
 
 					if ( ! $group_object instanceof \BP_Groups_Group ) {
@@ -88,6 +94,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 			);
 		}
 
-		return ! empty( $loaded ) ? $loaded : [];
+		return $this->loaded_groups;
 	}
 }
