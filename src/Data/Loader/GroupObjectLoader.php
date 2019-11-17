@@ -9,6 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use GraphQL\Deferred;
+use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
@@ -60,6 +61,16 @@ class GroupObjectLoader extends AbstractDataLoader {
 			 * Get the group object.
 			 */
 			$group_object = groups_get_group( absint( $key ) );
+
+			if ( empty( $group_object ) ) {
+				throw new UserError(
+					sprintf(
+						// translators: Group ID.
+						__( 'No item was found with ID: %d', 'wp-graphql-buddypress' ),
+						absint( $key )
+					)
+				);
+			}
 
 			/**
 			 * Return the instance through the Model Layer to ensure we only return
