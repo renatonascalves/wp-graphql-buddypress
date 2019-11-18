@@ -2,11 +2,11 @@
 /**
  * Group Enums.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Type\WPEnum
+ * @package \WPGraphQL\Extensions\BuddyPress\Type\Enum
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Type\WPEnum;
+namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 
 use WPGraphQL\Type\WPEnumType;
 

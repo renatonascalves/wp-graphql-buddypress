@@ -3,7 +3,7 @@
 /**
  * Test_Groups_Queries Class.
  *
- * @group group
+ * @group groups
  */
 class Test_Groups_Queries extends WP_UnitTestCase {
 
@@ -46,7 +46,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 				lastActivity
 				hasForum
 				link
-				creatorId {
+				creator {
 					userId
 				}
 				mods {
@@ -75,7 +75,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 						'lastActivity'     => null,
 						'hasForum'         => true,
 						'link'             => bp_get_group_permalink( new \BP_Groups_Group( $group_id ) ),
-						'creatorId'        => [
+						'creator'          => [
 							'userId' => $this->user,
 						],
 						'mods'             => null,
@@ -407,7 +407,6 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_groups_query_with_hidden_groups() {
-
 		$this->bp->set_current_user( $this->admin );
 
 		$hidden_group_id = $this->create_group_object(
@@ -488,13 +487,13 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	}
 
 	protected function backwardPagination( $cursor ) {
+		$results = $this->groupsQuery(
+			[
+				'last'   => 1,
+				'before' => $cursor,
+			]
+		);
 
-		$variables = [
-			'last'   => 1,
-			'before' => $cursor,
-		];
-
-		$results              = $this->groupsQuery( $variables );
 		$second_to_last_group = groups_get_groups(
 			[
 				'per_page' => 1,
@@ -515,22 +514,15 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	}
 
 	protected function create_group_object( $args = [] ) {
-
-		/**
-		 * Set up the $defaults
-		 */
-		$defaults = [
-			'slug'         => 'group-test',
-			'name'         => 'Group Test',
-			'description'  => 'Group Description',
-			'creator_id'   => $this->admin,
-		];
-
-		/**
-		 * Combine the defaults with the $args that were
-		 * passed through
-		 */
-		$args = array_merge( $defaults, $args );
+		$args = array_merge(
+			[
+				'slug'         => 'group-test',
+				'name'         => 'Group Test',
+				'description'  => 'Group Description',
+				'creator_id'   => $this->admin,
+			],
+			$args
+		);
 
 		// Create group.
 		return $this->bp_factory->group->create( $args );

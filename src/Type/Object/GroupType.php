@@ -2,11 +2,11 @@
 /**
  * Registers Group type and queries
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Type\WPObject
+ * @package \WPGraphQL\Extensions\BuddyPress\Type\Object
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Type\WPObject;
+namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use GraphQL\Deferred;
 use GraphQL\Error\UserError;
@@ -54,7 +54,7 @@ class GroupType {
 								: null;
 						},
 					],
-					'creatorId'        => [
+					'creator'        => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
