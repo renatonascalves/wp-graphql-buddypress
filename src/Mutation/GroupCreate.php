@@ -69,7 +69,7 @@ class GroupCreate {
 			],
 			'date'        => [
 				'type'        => 'String',
-				'description' => __( 'The date of the group.', 'wp-graphql' ),
+				'description' => __( 'The date of the group.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
@@ -137,7 +137,6 @@ class GroupCreate {
 				'status'       => null,
 				'parent_id'    => null,
 				'enable_forum' => null,
-				'date_created' => null,
 			];
 
 			/**
@@ -157,12 +156,12 @@ class GroupCreate {
 			/**
 			 * Fires after a group is created.
 			 *
-			 * @param int         $group_id      The ID of the group being mutated.
+			 * @param int         $group_id      The ID of the group being created.
 			 * @param array       $input         The input for the mutation.
 			 * @param AppContext  $context       The AppContext passed down the resolve tree.
 			 * @param ResolveInfo $info          The ResolveInfo passed down the resolve rree.
 			 */
-			do_action( 'graphql_group_object_mutation_update_additional_data', $group_id, $input, $context, $info );
+			do_action( 'bp_graphql_groups_create_mutation_update_additional_data', $group_id, $input, $context, $info );
 
 			/**
 			 * Return the group ID.
@@ -185,10 +184,6 @@ class GroupCreate {
 
 		if ( ! empty( $input['parentId'] ) ) {
 			$output_args['parent_id'] = $input['parentId'];
-		}
-
-		if ( ! empty( $input['date'] ) && false !== strtotime( $input['date'] ) ) {
-			$output_args['date_created'] = date( 'Y-m-d H:i:s', strtotime( $input['date'] ) );
 		}
 
 		if ( ! empty( $input['creatorId'] ) ) {
@@ -215,6 +210,6 @@ class GroupCreate {
 			$output_args['status'] = $input['status'];
 		}
 
-		return apply_filters( 'graphql_group_create_args', $output_args, $input );
+		return apply_filters( 'bp_graphql_groups_create_mutation_args', $output_args, $input );
 	}
 }
