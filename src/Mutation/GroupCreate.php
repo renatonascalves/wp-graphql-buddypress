@@ -115,7 +115,7 @@ class GroupCreate {
 			/**
 			 * Check if user can create a group.
 			 */
-			if ( ! ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
+			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to create groups.', 'wp-graphql-buddypress' ) );
 			}
 
