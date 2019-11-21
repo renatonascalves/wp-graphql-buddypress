@@ -273,7 +273,6 @@ class Test_Groups_Mutations extends WP_UnitTestCase {
 		$u        = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		$group_id = $this->bp_factory->group->create( array(
 			'name'        => 'Deleted Group',
-			'description' => 'Deleted Group',
 			'creator_id'  => $u,
 		) );
 

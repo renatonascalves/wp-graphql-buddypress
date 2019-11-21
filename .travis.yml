@@ -55,6 +55,8 @@ matrix:
       env: WP_VERSION=4.8
     - php: 5.6
       env: WP_VERSION=4.7
+  allow_failures:
+    - env: PHP_VERSION=5.6
 
 before_install:
   - |
