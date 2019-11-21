@@ -268,4 +268,56 @@ class Test_Groups_Mutations extends WP_UnitTestCase {
 			do_graphql_request( $mutation, 'createGroupTest', $variables )
 		);
 	}
+
+	public function test_delete_group() {
+		$u        = $this->factory->user->create( array( 'role' => 'subscriber' ) );
+		$group_id = $this->bp_factory->group->create( array(
+			'name'        => 'Deleted Group',
+			'description' => 'Deleted Group',
+			'creator_id'  => $u,
+		) );
+
+		$this->bp->set_current_user( $u );
+
+		$mutation = '
+		mutation deleteGroupTest( $clientMutationId: String!, $groupId: Int ) {
+			deleteGroup(
+		    	input: {
+		      		clientMutationId: $clientMutationId
+              		groupId: $groupId
+		    	}
+          	)
+          	{
+            	clientMutationId
+            	deleted
+            	group {
+					name
+            	}
+          	}
+        }
+        ';
+
+		$variables = [
+			'clientMutationId' => $this->client_mutation_id,
+			'groupId'          => $group_id,
+		];
+
+		/**
+		 * Compare the actual output vs the expected output
+		 */
+		$this->assertEquals(
+			[
+				'data' => [
+					'deleteGroup' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'deleted'          => true,
+						'group'            => [
+							'name' => 'Deleted Group',
+						],
+					],
+				],
+			],
+			do_graphql_request( $mutation, 'deleteGroupTest', $variables )
+		);
+	}
 }

@@ -106,7 +106,7 @@ class GroupCreate {
 			/**
 			 * Throw an exception if there's no input.
 			 */
-			if ( ( empty( $input ) || ! is_array( $input ) ) ) {
+			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError(
 					__( 'Mutation not processed. There was no input for the mutation or the group_object was invalid.', 'wp-graphql-buddypress' )
 				);
@@ -157,11 +157,11 @@ class GroupCreate {
 			 * Fires after a group is created.
 			 *
 			 * @param int         $group_id      The ID of the group being created.
-			 * @param array       $input         The input for the mutation.
+			 * @param array       $input         The input of the mutation.
 			 * @param AppContext  $context       The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info          The ResolveInfo passed down the resolve rree.
+			 * @param ResolveInfo $info          The ResolveInfo passed down the resolve tree.
 			 */
-			do_action( 'bp_graphql_groups_create_mutation_update_additional_data', $group_id, $input, $context, $info );
+			do_action( 'bp_graphql_groups_create_mutation', $group_id, $input, $context, $info );
 
 			/**
 			 * Return the group ID.
@@ -180,7 +180,7 @@ class GroupCreate {
 	 *
 	 * @return array
 	 */
-	public static function prepare_group_args( $input, $output_args ) {
+	protected static function prepare_group_args( $input, $output_args ) {
 
 		if ( ! empty( $input['parentId'] ) ) {
 			$output_args['parent_id'] = $input['parentId'];
@@ -210,6 +210,12 @@ class GroupCreate {
 			$output_args['status'] = $input['status'];
 		}
 
+		/**
+		 * Allows changing output args.
+		 *
+		 * @param array $output_args Mutation output args.
+		 * @param array $input       Mutation input args.
+		 */
 		return apply_filters( 'bp_graphql_groups_create_mutation_args', $output_args, $input );
 	}
 }
