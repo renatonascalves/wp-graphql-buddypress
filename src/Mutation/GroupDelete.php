@@ -52,10 +52,6 @@ class GroupDelete {
 				'type'        => 'String',
 				'description' => __( 'Current group slug.', 'wp-graphql-buddypress' ),
 			],
-			'previousSlug' => [
-				'type'        => 'String',
-				'description' => __( 'Previous group slug.', 'wp-graphql-buddypress' ),
-			],
 		];
 	}
 
@@ -115,8 +111,6 @@ class GroupDelete {
 				$group_id = absint( $id_components['id'] );
 			} elseif ( ! empty( $input['slug'] ) ) {
 				$group_id = groups_get_id( esc_html( $input['slug'] ) );
-			} elseif ( ! empty( $input['previousSlug'] ) ) {
-				$group_id = groups_get_id_by_previous_slug( esc_html( $input['previousSlug'] ) );
 			} elseif ( ! empty( $input['groupId'] ) ) {
 				$group_id = absint( $input['groupId'] );
 			}
