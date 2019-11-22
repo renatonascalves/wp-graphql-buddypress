@@ -9,9 +9,9 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
@@ -96,24 +96,10 @@ class GroupDelete {
 				);
 			}
 
-			$group_id = 0;
-
 			/**
-			 * Trying to get the group ID.
+			 * Get group ID.
 			 */
-			if ( ! empty( $input['id'] ) ) {
-				$id_components = Relay::fromGlobalId( $input['id'] );
-
-				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-				}
-
-				$group_id = absint( $id_components['id'] );
-			} elseif ( ! empty( $input['slug'] ) ) {
-				$group_id = groups_get_id( esc_html( $input['slug'] ) );
-			} elseif ( ! empty( $input['groupId'] ) ) {
-				$group_id = absint( $input['groupId'] );
-			}
+			$group_id = GroupMutation::get_group_id_from_input( $input );
 
 			/**
 			 * Get the group.
@@ -130,12 +116,12 @@ class GroupDelete {
 			/**
 			 * Stop now if a user isn't allowed to delete a group.
 			 */
-			if ( false === self::can_delete_group( $group->creator_id ) ) {
+			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * Get the group before it is deleted.
+			 * Get a Group object before it is deleted.
 			 */
 			$previous_group = new Group( $group );
 
@@ -149,7 +135,7 @@ class GroupDelete {
 			/**
 			 * Fires after a group is deleted.
 			 *
-			 * @param Group       $previous_group The deleted group.
+			 * @param Group       $previous_group The deleted group model object.
 			 * @param array       $input          The input of the mutation.
 			 * @param AppContext  $context        The AppContext passed down the resolve tree.
 			 * @param ResolveInfo $info           The ResolveInfo passed down the resolve tree.
@@ -164,21 +150,5 @@ class GroupDelete {
 				'previousObject' => $previous_group,
 			];
 		};
-	}
-
-	/**
-	 * Check if user can delete group.
-	 *
-	 * @param int $creator_id Creator ID.
-	 * @return boolean
-	 */
-	protected static function can_delete_group( $creator_id ) {
-
-		// Required logged in user.
-		if ( false === is_user_logged_in() ) {
-			return false;
-		}
-
-		return ( bp_current_user_can( 'bp_moderate' ) || absint( bp_loggedin_user_id() ) === absint( $creator_id ) );
 	}
 }

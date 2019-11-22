@@ -50,6 +50,7 @@ class TypeRegistry {
 			// Mutations.
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupCreate::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate::register_mutation();
 		}
 	}
 

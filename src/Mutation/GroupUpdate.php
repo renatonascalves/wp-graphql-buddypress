@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupCreate Mutation.
+ * GroupUpdate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
  * @since   0.0.1-alpha
@@ -9,22 +9,23 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
+use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 
 /**
- * GroupCreate Class.
+ * GroupUpdate Class.
  */
-class GroupCreate {
+class GroupUpdate {
 
 	/**
-	 * Registers the GroupCreate mutation.
+	 * Registers the GroupUpdate mutation.
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'createGroup',
+			'updateGroup',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
@@ -34,12 +35,20 @@ class GroupCreate {
 	}
 
 	/**
-	 * Defines the mutation input field configuration.
+	 * Defines the mutation input fields.
 	 *
 	 * @return array
 	 */
 	public static function get_input_fields() {
 		return [
+			'id'          => [
+				'type'        => 'ID',
+				'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
+			],
+			'groupId'          => [
+				'type'        => 'int',
+				'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
+			],
 			'creatorId'      => [
 				'type'        => 'Int',
 				'description' => __( 'The userId to assign as the group creator.', 'wp-graphql-buddypress' ),
@@ -76,7 +85,7 @@ class GroupCreate {
 	}
 
 	/**
-	 * Defines the mutation output field configuration.
+	 * Defines the mutation output fields.
 	 *
 	 * @return array
 	 */
@@ -84,7 +93,7 @@ class GroupCreate {
 		return [
 			'group' => [
 				'type'        => 'Group',
-				'description' => __( 'The group that was created.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The group that was updated.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
@@ -102,54 +111,64 @@ class GroupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input, AppContext $context, ResolveInfo $info ) {
 
 			/**
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation or the group_object was invalid.', 'wp-graphql-buddypress' )
+					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
 				);
 			}
 
 			/**
-			 * Check if user can create a group.
+			 * Get group ID.
 			 */
-			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to create groups.', 'wp-graphql-buddypress' ) );
+			$group_id = GroupMutation::get_group_id_from_input( $input );
+
+			/**
+			 * Get the group.
+			 */
+			$group = groups_get_group( absint( $group_id ) );
+
+			/**
+			 * Confirm if group exists.
+			 */
+			if ( empty( $group->id ) || ! $group instanceof \BP_Groups_Group ) {
+				throw new UserError( __( 'This group does not exist.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * The group name is required.
+			 * Stop now if a user isn't allowed to update a group.
 			 */
-			if ( empty( $input['name'] ) ) {
-				throw new UserError( __( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
+			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
+				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * Create group and return the ID.
+			 * Update group.
 			 */
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, null, 'create' )
+				GroupMutation::prepare_group_args( $input, $group, 'update' )
 			);
 
 			/**
-			 * Throw an exception if the group failed to be created.
+			 * Throw an exception if the group failed to be updated.
 			 */
 			if ( ! is_numeric( $group_id ) ) {
-				throw new UserError( __( 'The object failed to create but no error was provided.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Cannot update existing group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * Fires after a group is created.
+			 * Fires after a group is updated.
 			 *
-			 * @param int         $group_id      The ID of the group being created.
-			 * @param array       $input         The input of the mutation.
-			 * @param AppContext  $context       The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info          The ResolveInfo passed down the resolve tree.
+			 * @param BP_Groups_Group  $group   The updated group.
+			 * @param array            $input   The input of the mutation.
+			 * @param AppContext       $context The AppContext passed down the resolve tree.
+			 * @param ResolveInfo      $info    The ResolveInfo passed down the resolve tree.
 			 */
-			do_action( 'bp_graphql_groups_create_mutation', $group_id, $input, $context, $info );
+			do_action( 'bp_graphql_groups_update_mutation', $group, $input, $context, $info );
 
 			/**
 			 * Return the group ID.
