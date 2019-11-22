@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
@@ -163,7 +162,7 @@ class GroupUpdate {
 			/**
 			 * Fires after a group is updated.
 			 *
-			 * @param BP_Groups_Group  $group   The updated group.
+			 * @param \BP_Groups_Group $group   The updated group.
 			 * @param array            $input   The input of the mutation.
 			 * @param AppContext       $context The AppContext passed down the resolve tree.
 			 * @param ResolveInfo      $info    The ResolveInfo passed down the resolve tree.

@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupMutation Mutation.
+ * GroupMutation Class.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Data
  * @since   0.0.1-alpha
@@ -22,6 +22,7 @@ class GroupMutation {
 	 * @throws UserError User error for invalid Relay ID.
 	 *
 	 * @param array $input Array of possible input fields.
+	 *
 	 * @return int
 	 */
 	public static function get_group_id_from_input( $input ) {
@@ -141,6 +142,7 @@ class GroupMutation {
 	 * Check if user can delete group.
 	 *
 	 * @param int $creator_id Creator ID.
+	 *
 	 * @return bool
 	 */
 	public static function can_update_or_delete_group( $creator_id ) {
