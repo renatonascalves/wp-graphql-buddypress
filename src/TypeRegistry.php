@@ -46,6 +46,11 @@ class TypeRegistry {
 
 			// Connections.
 			\WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection::register_connections();
+
+			// Mutations.
+			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupCreate::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate::register_mutation();
 		}
 	}
 
