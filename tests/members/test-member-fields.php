@@ -44,17 +44,13 @@ class Test_Members_Queries extends WP_UnitTestCase {
 				link
 			}
         }";
-        
-        do_graphql_request( $query );
-
-        return;
 
 		// Test.
 		$this->assertEquals(
 			[
 				'data' => [
 					'user' => [
-                        'link' => bp_core_get_user_domain( $this->admin, $user->nicename, $user->username ),
+                        'link' => bp_core_get_user_domain( $this->admin ),
 					],
 				],
 			],
