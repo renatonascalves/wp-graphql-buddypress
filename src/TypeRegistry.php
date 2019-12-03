@@ -35,6 +35,13 @@ class TypeRegistry {
 	 */
 	public static function graphql_register_types() {
 
+		// Members component.
+		if ( bp_is_active( 'members' ) ) {
+
+			// Fields.
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType::register();
+		}
+
 		// Groups component.
 		if ( bp_is_active( 'groups' ) ) {
 
