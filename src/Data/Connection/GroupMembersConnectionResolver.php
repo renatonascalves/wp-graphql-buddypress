@@ -30,8 +30,8 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			'group_id'            => 0,
 			'exclude'             => false,
 			'search_terms'        => false,
-			'group_role'          => [],
 			'type'                => 'last_joined',
+			'group_role'          => [],
 			'exclude_admins_mods' => true,
 			'exclude_banned'      => true,
 		];
@@ -122,8 +122,13 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function should_execute() {
 
-		// @todo Check if it is a public group.
-		// $group = groups_get_group( $group_id );
+		$group_id = $this->query_args['group_id'] ?? 0;
+
+		// It is okay for public groups.
+		$group = groups_get_group( $group_id );
+		if ( 'public' === $group->status ) {
+			return true;
+		}
 
 		// Moderators.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
@@ -131,7 +136,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// User is a member of the group.
-		if ( isset( $this->query_args['group_id'] ) && groups_is_user_member( bp_loggedin_user_id(), $this->query_args['group_id'] ) ) {
+		if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
 			return true;
 		}
 
@@ -141,6 +146,8 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
 	 * groups_get_group_members() friendly keys.
+	 *
+	 * @throws UserError User error.
 	 *
 	 * @param array $args The array of query arguments.
 	 *
@@ -158,7 +165,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		) &&
 			! bp_current_user_can( 'bp_moderate' )
 		) {
-			throw new UserError( __( 'Sorry, you are not allowed to filter with those params.', 'wp-graphql-buddypress' ) );
+			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with those params.', 'wp-graphql-buddypress' ) );
 		}
 
 		$arg_mapping = [
