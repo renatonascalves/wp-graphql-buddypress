@@ -49,8 +49,7 @@ class GroupConnection {
 	}
 
 	/**
-	 * Given an array of $args, this returns the connection config, merging the provided args
-	 * with the defaults.
+	 * This returns a RootQuery > group connection config.
 	 *
 	 * @param array $args Array of arguments.
 	 *
@@ -74,8 +73,7 @@ class GroupConnection {
 	}
 
 	/**
-	 * Given an array of $args, this returns the connection config, merging the provided args
-	 * with the defaults.
+	 * This returns a Group > User connection config.
 	 *
 	 * @param array $args Array of arguments.
 	 *
@@ -195,9 +193,9 @@ class GroupConnection {
 			],
 			'groupRoles'     => [
 				'type'        => [
-					'list_of' => 'GroupRolesEnum',
+					'list_of' => 'GroupMemberRolesEnum',
 				],
-				'description' => __( 'Ensure result set includes specific Group roles.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Ensure result set includes specific Group member roles.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
