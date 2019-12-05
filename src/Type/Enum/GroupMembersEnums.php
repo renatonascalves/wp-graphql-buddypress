@@ -1,0 +1,86 @@
+<?php
+/**
+ * Group Members Enums.
+ *
+ * @package \WPGraphQL\Extensions\BuddyPress\Type\Enum
+ * @since 0.0.1-alpha
+ */
+
+namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
+
+use WPGraphQL\Type\WPEnumType;
+
+/**
+ * GroupMembersEnums Class
+ */
+class GroupMembersEnums {
+
+	/**
+	 * Registers enum type.
+	 */
+	public static function register() {
+		$values = [
+			'LAST_JOINED'      => [
+				'name'        => 'LAST_JOINED',
+				'description' => __( 'Used to order group last joined members.', 'wp-graphql-buddypress' ),
+				'value'       => 'last_joined',
+			],
+			'FIRST_JOINED' => [
+				'name'        => 'FIRST_JOINED',
+				'description' => __( 'Used to order group first joined members.', 'wp-graphql-buddypress' ),
+				'value'       => 'first_joined',
+			],
+			'ALPHABETICAL' => [
+				'name'        => 'ALPHABETICAL',
+				'description' => __( 'Used to order group members alphabetically.', 'wp-graphql-buddypress' ),
+				'value'       => 'alphabetical',
+			],
+		];
+
+		if ( bp_is_active( 'activity' ) ) {
+			$values['GROUP_ACTIVITY'] = [
+				'name'        => 'GROUP_ACTIVITY',
+				'description' => __( 'Used to order by group members activity.', 'wp-graphql-buddypress' ),
+				'value'       => 'group_activity',
+			];
+		}
+
+		// Group Members Status Type Enum.
+		register_graphql_enum_type(
+			'GroupMembersStatusTypeEnum',
+			[
+				'description' => __( 'Sort the order of results by the status of the group members.', 'wp-graphql-buddypress' ),
+				'values'      => $values,
+			]
+		);
+
+		// Group Roles.
+		self::group_roles();
+	}
+
+	/**
+	 * Group Roles.
+	 */
+	public static function group_roles() {
+		$roles = [];
+		foreach ( bp_groups_get_group_roles() as $role ) {
+			$roles[ WPEnumType::get_safe_name( $role->id ) ] = [
+				'description' => sprintf(
+					/* translators: group role */
+					__( 'Group role: %1$s', 'wp-graphql-buddypress' ),
+					$role->name
+				),
+				'value' => $role->id,
+			];
+		}
+
+		// Group Roles.
+		register_graphql_enum_type(
+			'GroupRolesEnum',
+			[
+				'description' => __( 'Ensure result set includes specific Group roles.', 'wp-graphql-buddypress' ),
+				'values'      => $roles,
+			]
+		);
+	}
+}

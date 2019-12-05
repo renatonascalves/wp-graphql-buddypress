@@ -53,6 +53,7 @@ class TypeRegistry {
 
 			// Enum(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums::register();
 
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType::register();

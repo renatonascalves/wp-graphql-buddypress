@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Data\DataSource;
 
 /**
  * Class GroupConnection
@@ -37,6 +38,13 @@ class GroupConnection {
 					'fromFieldName' => 'children',
 				]
 			)
+		);
+
+		/**
+		 * Register connection from Group to group members.
+		 */
+		register_graphql_connection(
+			self::get_group_members_connection_config()
 		);
 	}
 
@@ -66,7 +74,32 @@ class GroupConnection {
 	}
 
 	/**
-	 * This returns the connection args for the Groups connection
+	 * Given an array of $args, this returns the connection config, merging the provided args
+	 * with the defaults.
+	 *
+	 * @param array $args Array of arguments.
+	 *
+	 * @return array
+	 */
+	public static function get_group_members_connection_config( $args = [] ) {
+		$defaults = [
+			'fromType'       => 'Group',
+			'toType'         => 'User',
+			'fromFieldName'  => 'members',
+			'connectionArgs' => self::get_group_members_connection_args(),
+			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
+				return DataSource::resolve_user( $id, $context );
+			},
+			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+				return Factory::resolve_group_members_connection( $source, $args, $context, $info );
+			},
+		];
+
+		return array_merge( $defaults, $args );
+	}
+
+	/**
+	 * This returns the connection args for the Groups connection.
 	 *
 	 * @return array
 	 */
@@ -131,6 +164,40 @@ class GroupConnection {
 					'list_of' => 'Int',
 				],
 				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
+			],
+		];
+	}
+
+	/**
+	 * This returns the connection args for the Group members connection.
+	 *
+	 * @return array
+	 */
+	public static function get_group_members_connection_args() {
+		return [
+			'type'        => [
+				'type'        => 'GroupMembersStatusTypeEnum',
+				'description' => __( 'Sort the order of results by the status of the group members.', 'wp-graphql-buddypress' ),
+			],
+			'exclude'     => [
+				'type'        => [
+					'list_of' => 'Int',
+				],
+				'description' => __( 'Ensure result set excludes specific member IDs.', 'wp-graphql-buddypress' ),
+			],
+			'excludeBanned'        => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether results should exclude banned group members.', 'wp-graphql-buddypress' ),
+			],
+			'excludeAdminsMods'        => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether results should exclude group admins and mods.', 'wp-graphql-buddypress' ),
+			],
+			'groupRoles'     => [
+				'type'        => [
+					'list_of' => 'GroupRolesEnum',
+				],
+				'description' => __( 'Ensure result set includes specific Group roles.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
