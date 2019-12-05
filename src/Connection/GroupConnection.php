@@ -191,7 +191,7 @@ class GroupConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether results should exclude group admins and mods.', 'wp-graphql-buddypress' ),
 			],
-			'groupRoles'     => [
+			'groupMemberRoles'     => [
 				'type'        => [
 					'list_of' => 'GroupMemberRolesEnum',
 				],

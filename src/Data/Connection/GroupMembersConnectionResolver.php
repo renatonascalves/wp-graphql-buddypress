@@ -64,14 +64,11 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		 */
 		$query_args['graphql_args'] = $this->args;
 
-		if ( true === is_object( $this->source ) ) {
-			switch ( true ) {
-				case $this->source instanceof Group:
-					$query_args['group_id'] = $this->source->groupId;
-					break;
-				default:
-					break;
-			}
+		/**
+		 * Assign group.
+		 */
+		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['group_id'] = $this->source->groupId;
 		}
 
 		/**
@@ -122,7 +119,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function should_execute() {
 
-		$group_id = $this->query_args['group_id'] ?? 0;
+		$group_id = $this->query_args['group_id'];
 
 		// It is okay for public groups.
 		$group = groups_get_group( $group_id );
@@ -156,12 +153,12 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	public function sanitize_input_fields( array $args ) {
 
 		/**
-		 * Only admins can filter those.
+		 * Only admins and mods can filter those.
 		 */
 		if ( (
 			! empty( $args['excludeAdminsMods'] ) ||
 			! empty( $args['excludeBanned'] ) ||
-			! empty( $args['groupRoles'] )
+			! empty( $args['groupMemberRoles'] )
 		) &&
 			! bp_current_user_can( 'bp_moderate' )
 		) {
@@ -172,8 +169,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			'type'              => 'type',
 			'exclude'           => 'exclude',
 			'search'            => 'search_terms',
-			'groupRoles'        => 'group_role',
-			'type'              => 'type',
+			'groupMemberRoles'  => 'group_role',
 			'excludeAdminsMods' => 'exclude_admins_mods',
 			'excludeBanned'     => 'exclude_banned',
 		];
