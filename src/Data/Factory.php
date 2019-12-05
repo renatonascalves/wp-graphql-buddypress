@@ -14,6 +14,7 @@ use GraphQL\Deferred;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
 
 /**
  * Class Factory
@@ -55,5 +56,19 @@ class Factory {
 	 */
 	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
 		return ( new GroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the MembersConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }
