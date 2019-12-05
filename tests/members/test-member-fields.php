@@ -28,29 +28,30 @@ class Test_Members_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_member_query() {
-
         $global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->admin );
 
-        
-        $user    = get_user_by( 'id', $this->admin );
         $this->bp->set_current_user( $this->admin );
 
 		/**
-		 * Create the query string to pass to the $query
+		 * Create the query.
 		 */
 		$query = "
 		query {
 			user(id: \"{$global_id}\") {
 				link
+				memberTypes
+				mentionName
 			}
-        }";
+		}";
 
 		// Test.
 		$this->assertEquals(
 			[
 				'data' => [
 					'user' => [
-                        'link' => bp_core_get_user_domain( $this->admin ),
+						'link'        => bp_core_get_user_domain( $this->admin ),
+						'memberTypes' => null,
+						'mentionName' => bp_activity_get_user_mentionname( $this->admin ),
 					],
 				],
 			],
