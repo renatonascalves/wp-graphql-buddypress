@@ -28,7 +28,13 @@ class Test_Members_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_member_query() {
-        $global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->admin );
+		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->admin );
+		
+		// Register and set member types.
+		bp_register_member_type( 'foo' );
+		bp_register_member_type( 'bar' );
+		bp_set_member_type( $this->admin, 'foo' );
+		bp_set_member_type( $this->admin, 'bar', true );
 
         $this->bp->set_current_user( $this->admin );
 
@@ -50,7 +56,10 @@ class Test_Members_Queries extends WP_UnitTestCase {
 				'data' => [
 					'user' => [
 						'link'        => bp_core_get_user_domain( $this->admin ),
-						'memberTypes' => null,
+						'memberTypes' => [
+							'bar',
+							'foo',
+						],
 						'mentionName' => bp_activity_get_user_mentionname( $this->admin ),
 					],
 				],
