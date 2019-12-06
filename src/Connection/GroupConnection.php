@@ -24,12 +24,12 @@ class GroupConnection {
 	public static function register_connections() {
 
 		/**
-		 * Register connection from RootQuery to groups
+		 * Register connection from RootQuery to groups.
 		 */
 		register_graphql_connection( self::get_connection_config() );
 
 		/**
-		 * Register connection from Group to children groups
+		 * Register connection from Group to children groups.
 		 */
 		register_graphql_connection(
 			self::get_connection_config(

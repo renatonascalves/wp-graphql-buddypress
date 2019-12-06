@@ -80,14 +80,11 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 */
 		$query_args['graphql_args'] = $this->args;
 
-		if ( true === is_object( $this->source ) ) {
-			switch ( true ) {
-				case $this->source instanceof Group:
-					$query_args['parent_id'] = $this->source->groupId;
-					break;
-				default:
-					break;
-			}
+		/**
+		 * Setting parent group.
+		 */
+		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['parent_id'] = $this->source->groupId;
 		}
 
 		/**

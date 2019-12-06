@@ -155,14 +155,8 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Only admins and mods can filter those.
 		 */
-		if ( (
-			! empty( $args['excludeAdminsMods'] ) ||
-			! empty( $args['excludeBanned'] ) ||
-			! empty( $args['groupMemberRoles'] )
-		) &&
-			! bp_current_user_can( 'bp_moderate' )
-		) {
-			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with those params.', 'wp-graphql-buddypress' ) );
+		if ( ! empty( $args['excludeBanned'] ) && ! bp_current_user_can( 'bp_moderate' ) ) {
+			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
 		}
 
 		$arg_mapping = [
