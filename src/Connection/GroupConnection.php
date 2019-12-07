@@ -85,8 +85,8 @@ class GroupConnection {
 			'toType'         => 'User',
 			'fromFieldName'  => 'members',
 			'connectionArgs' => self::get_group_members_connection_args(),
-			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
-				return DataSource::resolve_user( $id, $context );
+			'resolveNode'    => function ( $user_id, array $args, AppContext $context ) {
+				return DataSource::resolve_user( $user_id, $context );
 			},
 			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 				return Factory::resolve_group_members_connection( $source, $args, $context, $info );

@@ -119,11 +119,13 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function should_execute() {
 
-		$group_id = $this->query_args['group_id'];
+		// Check if group object is there.
+		if ( ! $this->source instanceof Group ) {
+			return false;
+		}
 
 		// It is okay for public groups.
-		$group = groups_get_group( $group_id );
-		if ( 'public' === $group->status ) {
+		if ( 'public' === $this->source->status ) {
 			return true;
 		}
 
@@ -133,7 +135,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// User is a member of the group.
-		if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		if ( groups_is_user_member( bp_loggedin_user_id(), $this->source->groupId ) ) {
 			return true;
 		}
 

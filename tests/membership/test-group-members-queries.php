@@ -28,13 +28,17 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 
 	public function test_group_by_query() {
 
-		$u1       = $this->factory->user->create();
-		$u2       = $this->factory->user->create();
 		$group_id = $this->create_group_object();
 
-		$this->populate_group_with_members( [ $u1, $u2 ], $group_id );
+		$u1 = $this->factory->user->create();
+		$u2 = $this->factory->user->create();
+		$u3 = $this->factory->user->create();
+
+		$this->populate_group_with_members( [ $u1, $u2, $u3 ], $group_id );
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
+
+		$this->bp->set_current_user( $this->admin );
 
 		/**
 		 * Create the query string to pass to the $query.
@@ -46,7 +50,7 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 				groupId
 				members {
 					nodes {
-						id
+						userId
 					}
 				}
 			}
@@ -66,6 +70,9 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 								],
 								1 => [
 									'userId' => $u2
+								],
+								2 => [
+									'userId' => $u3
 								]
 							]
 						],
