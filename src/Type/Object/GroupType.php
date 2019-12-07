@@ -29,7 +29,7 @@ class GroupType {
 	public static $type_name = 'Group';
 
 	/**
-	 * Register Group type and queries to the WPGraphQL schema
+	 * Register Group type and queries to the WPGraphQL schema.
 	 */
 	public static function register() {
 		register_graphql_object_type(
@@ -207,7 +207,7 @@ class GroupType {
 			'groupBy',
 			[
 				'type'        => self::$type_name,
-				'description' => __( 'A BuddyPress Group object', 'wp-graphql-buddypress' ),
+				'description' => __( 'Get a BuddyPress Group object', 'wp-graphql-buddypress' ),
 				'args'        => [
 					'id'           => [
 						'type'        => 'ID',

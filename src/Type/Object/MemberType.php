@@ -23,7 +23,7 @@ class MemberType {
 	public static $type_name = 'User';
 
 	/**
-	 * Register Member fields.
+	 * Register Member fields to the WPGraphQL schema.
 	 */
 	public static function register() {
 		register_graphql_field(

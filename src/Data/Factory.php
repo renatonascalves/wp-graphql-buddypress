@@ -46,6 +46,29 @@ class Factory {
 	}
 
 	/**
+	 * Returns a Xprofile Group object.
+	 *
+	 * @param int|null   $id      XProfile group ID or null.
+	 * @param AppContext $context AppContext object.
+	 *
+	 * @return Deferred|null
+	 */
+	public static function resolve_xprofile_group_object( $id, AppContext $context ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$xprofile_group_id = absint( $id );
+		$context->getLoader( 'xprofile_group_object' )->buffer( [ $xprofile_group_id ] );
+
+		return new Deferred(
+			function () use ( $xprofile_group_id, $context ) {
+				return $context->getLoader( 'xprofile_group_object' )->load( $xprofile_group_id );
+			}
+		);
+	}
+
+	/**
 	 * Wrapper for the GroupsConnectionResolver class.
 	 *
 	 * @param mixed       $source  Source.

@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress;
 
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
 
 /**
  * Class TypeRegistry
@@ -66,6 +65,13 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate::register_mutation();
 		}
+
+		// XProfile component.
+		if ( bp_is_active( 'xprofile' ) ) {
+
+			// Object(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType::register();
+		}
 	}
 
 	/**
@@ -80,7 +86,8 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
-				'group_object' => new GroupObjectLoader( $context ),
+				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
+				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
 			]
 		);
 	}
