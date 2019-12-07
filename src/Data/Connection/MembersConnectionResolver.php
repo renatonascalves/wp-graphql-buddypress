@@ -25,12 +25,14 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args() {
 		$query_args = [
-			'user_ids'       => false,
-			'exclude'        => false,
-			'include'        => false,
-			'type'           => 'active',
-			'xprofile_query' => false,
-			'member_type'    => '',
+			'type'                => 'newest',
+			'user_id'             => false,
+			'user_ids'            => false,
+			'exclude'             => false,
+			'xprofile_query'      => false,
+			'member_type'         => '',
+			'member_type__in'     => '',
+			'member_type__not_in' => '',
 		];
 
 		/**
@@ -123,8 +125,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 		$arg_mapping = [
 			'type'            => 'type',
 			'userId'          => 'user_id',
-			'userIds'         => 'user_ids',
-			'include'         => 'include',
+			'include'         => 'user_ids',
 			'exclude'         => 'exclude',
 			'xprofile'        => 'xprofile_query',
 			'memberType'      => 'member_type',

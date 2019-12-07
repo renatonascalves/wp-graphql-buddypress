@@ -39,10 +39,11 @@ class MemberConnection {
 	 */
 	public static function get_connection_config( $args = [] ) {
 		$defaults = [
-			'fromType'       => 'RootQuery',
-			'toType'         => 'User',
-			'fromFieldName'  => 'members',
-			'connectionArgs' => self::get_connection_args(),
+			'fromType'           => 'RootQuery',
+			'toType'             => 'User',
+			'fromFieldName'      => 'members',
+			'connectionTypeName' => 'RootQueryToMembersConnection',
+			'connectionArgs' => self::get_connection_argsss(),
 			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
 				return DataSource::resolve_user( $id, $context );
 			},
@@ -59,7 +60,7 @@ class MemberConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_connection_args() {
+	public static function get_connection_argsss() {
 		return [
 			'type'  => [
 				'type'        => 'MemberOrderByTypeEnum',
@@ -68,12 +69,6 @@ class MemberConnection {
 			'userId'      => [
 				'type'        => 'Int',
 				'description' => __( 'Limit results to friends of a user.', 'wp-graphql-buddypress' ),
-			],
-			'userIds'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
-				'description' => __( 'Pass IDs of users to limit result set.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
 				'type'        => [
@@ -97,13 +92,13 @@ class MemberConnection {
 				'type'        => [
 					'list_of' => 'String',
 				],
-				'description' => __( 'Limit results set to certain types of member types.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results set to include certain member types.', 'wp-graphql-buddypress' ),
 			],
 			'memberTypeNotIn'     => [
 				'type'        => [
 					'list_of' => 'String',
 				],
-				'description' => __( 'Limit results set excludes certain types of member types.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results set to exclude certain member types.', 'wp-graphql-buddypress' ),
 			],
 			'xprofile'   => [
 				'type'        => 'String',
