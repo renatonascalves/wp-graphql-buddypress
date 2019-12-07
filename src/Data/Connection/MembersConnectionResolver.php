@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupsConnectionResolver Class
+ * MembersConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data\Connection
  * @since 0.0.1-alpha
@@ -12,12 +12,11 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Types;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
- * Class GroupsConnectionResolver
+ * Class MembersConnectionResolver
  */
-class GroupsConnectionResolver extends AbstractConnectionResolver {
+class MembersConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Get query args.
@@ -26,14 +25,14 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args() {
 		$query_args = [
-			'fields'      => 'ids',
-			'show_hidden' => false,
-			'user_id'     => 0,
-			'include'     => [],
-			'exclude'     => [],
-			'meta'        => [],
-			'orderby'     => 'date_created',
-			'type'        => 'active',
+			'type'                => 'newest',
+			'user_id'             => false,
+			'user_ids'            => false,
+			'exclude'             => false,
+			'xprofile_query'      => false,
+			'member_type'         => '',
+			'member_type__in'     => '',
+			'member_type__not_in' => '',
 		];
 
 		/**
@@ -54,22 +53,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
-		 * If there's no orderby params in the inputArgs, set order based on the first/last argument
-		 */
-		if ( empty( $query_args['order'] ) ) {
-			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
-		}
-
-		if ( ! is_user_logged_in() && empty( $query_args['status'] ) ) {
-			$query_args['status'] = 'public';
-		}
-
-		// Adding correct value for the parent_id.
-		if ( empty( $query_args['parent_id'] ) ) {
-			$query_args['parent_id'] = null;
-		}
-
-		/**
 		 * Set the graphql_cursor_offset
 		 */
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
@@ -79,13 +62,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 * Pass the graphql $this->args.
 		 */
 		$query_args['graphql_args'] = $this->args;
-
-		/**
-		 * Setting parent group.
-		 */
-		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
-			$query_args['parent_id'] = $this->source->groupId;
-		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
@@ -98,7 +74,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return apply_filters(
-			'graphql_groups_connection_query_args',
+			'graphql_members_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -108,21 +84,24 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns array of groups and total.
+	 * Returns array of members.
 	 *
 	 * @return array
 	 */
 	public function get_query() {
-		return groups_get_groups( $this->query_args );
+		return new \BP_User_Query( $this->query_args );
 	}
 
 	/**
-	 * Returns an array of groups.
+	 * Returns an array of member ids.
 	 *
 	 * @return array
 	 */
 	public function get_items() {
-		return $this->query['groups'];
+		return wp_list_pluck(
+			array_values( $this->query->results ),
+			'ID'
+		);
 	}
 
 	/**
@@ -136,7 +115,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * BP_Groups_Group::get() friendly keys.
+	 * BP_User_Query() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 *
@@ -144,22 +123,19 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ) {
 		$arg_mapping = [
-			'showHidden' => 'show_hidden',
-			'type'       => 'type',
-			'order'      => 'order',
-			'orderBy'    => 'orderby',
-			'parent'     => 'parent_id',
-			'search'     => 'search_terms',
-			'slug'       => 'slug',
-			'status'     => 'status',
-			'userId'     => 'user_id',
-			'groupType'  => 'group_type',
-			'include'    => 'include',
-			'exclude'    => 'exclude',
+			'type'            => 'type',
+			'userId'          => 'user_id',
+			'include'         => 'user_ids',
+			'exclude'         => 'exclude',
+			'xprofile'        => 'xprofile_query',
+			'memberType'      => 'member_type',
+			'memberTypeIn'    => 'member_type__in',
+			'memberTypeNotIn' => 'member_type__not_in',
+			'search'          => 'search_terms',
 		];
 
 		/**
-		 * Map and sanitize the input args to the BP_Groups_Group compatible args.
+		 * Map and sanitize the input args to the BP_User_Query compatiable args.
 		 */
 		$query_args = Types::map_input( $args, $arg_mapping );
 
@@ -167,7 +143,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
 		 */
 		$query_args = apply_filters(
-			'graphql_map_input_fields_to_groups_query',
+			'graphql_map_input_fields_to_members_query',
 			$query_args,
 			$args,
 			$this->source,

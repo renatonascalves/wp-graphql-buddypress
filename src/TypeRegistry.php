@@ -38,8 +38,14 @@ class TypeRegistry {
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
 
+			// Enum(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums::register();
+
 			// Fields.
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType::register();
+
+			// Connections.
+			\WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection::register_connections();
 		}
 
 		// Groups component.
@@ -47,6 +53,7 @@ class TypeRegistry {
 
 			// Enum(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums::register();
 
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType::register();
