@@ -32,9 +32,8 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 
 		$u1 = $this->factory->user->create();
 		$u2 = $this->factory->user->create();
-		$u3 = $this->factory->user->create();
 
-		$this->populate_group_with_members( [ $u1, $u2, $u3 ], $group_id );
+		$this->populate_group_with_members( [ $u1, $u2 ], $group_id );
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
 
@@ -71,9 +70,6 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 								1 => [
 									'userId' => $u2
 								],
-								2 => [
-									'userId' => $u3
-								]
 							]
 						],
 					],
