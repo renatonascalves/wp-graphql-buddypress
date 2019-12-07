@@ -36,7 +36,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		 */
 		$query = "
 		query {
-			group(id: \"{$global_id}\") {
+			groupBy(id: \"{$global_id}\") {
 				id,
 				groupId
 				name
@@ -65,7 +65,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertEquals(
 			[
 				'data' => [
-					'group' => [
+					'groupBy' => [
 						'id'               => $global_id,
 						'groupId'          => $group_id,
 						'name'             => 'Group Test',
@@ -85,46 +85,6 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 								'userId' => $this->user,
 							],
 						],
-					],
-				],
-			],
-			do_graphql_request( $query )
-		);
-	}
-
-	public function test_group_by_query() {
-
-		$group_id  = $this->create_group_object();
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
-
-		/**
-		 * Create the query string to pass to the $query
-		 */
-		$query = "
-		query {
-			groupBy(id: \"{$global_id}\") {
-				id,
-				groupId
-				name
-				status
-				totalMemberCount
-				lastActivity
-				hasForum
-			}
-		}";
-
-		// Test.
-		$this->assertEquals(
-			[
-				'data' => [
-					'groupBy' => [
-						'id'               => $global_id,
-						'groupId'          => $group_id,
-						'name'             => 'Group Test',
-						'status'           => 'PUBLIC',
-						'totalMemberCount' => null,
-						'lastActivity'     => null,
-						'hasForum'         => true,
 					],
 				],
 			],
@@ -303,7 +263,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$global_child_id = \GraphQLRelay\Relay::toGlobalId( 'group', $child_id );
 
 		$query = "{
-			group(id: \"{$global_child_id}\") {
+			groupBy(id: \"{$global_child_id}\") {
 				id
 				groupId
 				parent {
@@ -318,8 +278,8 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		// Make sure the query didn't return any errors
 		$this->assertArrayNotHasKey( 'errors', $actual );
 
-		$parent = $actual['data']['group']['parent'];
-		$child  = $actual['data']['group'];
+		$parent = $actual['data']['groupBy']['parent'];
+		$child  = $actual['data']['groupBy'];
 
 		/**
 		 * Make sure the child and parent data matches what we expect

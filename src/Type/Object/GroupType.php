@@ -204,29 +204,6 @@ class GroupType {
 
 		register_graphql_field(
 			'RootQuery',
-			'group',
-			[
-				'type'        => self::$type_name,
-				'description' => __( 'A BuddyPress Group object', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id' => [
-						'type' => [ 'non_null' => 'ID' ],
-					],
-				],
-				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$id_components = Relay::fromGlobalId( $args['id'] );
-
-					if ( ! isset( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-						throw new UserError( __( 'The "id" is invalid', 'wp-graphql-buddypress' ) );
-					}
-
-					return Factory::resolve_group_object( absint( $id_components['id'] ), $context );
-				},
-			]
-		);
-
-		register_graphql_field(
-			'RootQuery',
 			'groupBy',
 			[
 				'type'        => self::$type_name,
