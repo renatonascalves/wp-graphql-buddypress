@@ -36,7 +36,7 @@ class XProfileGroupConnection {
 				[
 					'fromType' => 'User',
 					'toType'   => 'XProfileGroup',
-				],
+				]
 			)
 		);
 	}
