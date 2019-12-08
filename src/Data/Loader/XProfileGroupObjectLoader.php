@@ -73,9 +73,6 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 				);
 			}
 
-			// print_r( $xprofile_group_object->fields );
-			// error_log( wp_json_encode( $xprofile_group_object->fields ) );
-
 			/**
 			 * Return the instance through the Model Layer to ensure we only return
 			 * values the consumer has access to.

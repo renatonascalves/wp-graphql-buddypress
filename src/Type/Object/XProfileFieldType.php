@@ -126,9 +126,7 @@ class XProfileFieldType {
 								'description' => __( 'Format of the field value output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( XProfileField $field, array $args, $context ) {
-
-							// error_log( wp_json_encode( $context ) );
+						'resolve'     => function( XProfileField $field, array $args ) {
 							if ( empty( $field->value ) ) {
 								return null;
 							}
