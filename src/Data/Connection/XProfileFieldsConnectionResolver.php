@@ -26,14 +26,12 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args() {
 		$query_args = [
-			'profile_group_id'       => false,
-			'fetch_visibility_level' => true,
-			'fetch_fields'           => true,
-			'fetch_field_data'       => true,
+			'profile_group_id' => false,
+			'fetch_fields'     => true,
 		];
 
 		/**
-		 * Prepare for later use
+		 * Prepare for later use.
 		 */
 		$last = ! empty( $this->args['last'] ) ? $this->args['last'] : null;
 
@@ -61,10 +59,16 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		$query_args['graphql_args'] = $this->args;
 
 		/**
-		 * Setting profile group id.
+		 * Setting profile group ID.
 		 */
-		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
-			$query_args['profile_group_id'] = $this->source->groupId;
+		if ( true === is_object( $this->source ) ) {
+			switch ( true ) {
+				case $this->source instanceof XProfileGroup:
+					$query_args['profile_group_id'] = $this->source->groupId;
+					break;
+				default:
+					break;
+			}
 		}
 
 		/**
@@ -88,7 +92,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns XProfile groups query.
+	 * Returns XProfile groups query with the fields.
 	 *
 	 * @return array
 	 */
@@ -108,7 +112,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 				$ids[] = $field->id;
 			}
 		}
-		return $ids;
+		return array_map( 'absint', $ids );
 	}
 
 	/**
@@ -132,9 +136,6 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		$arg_mapping = [
 			'hideEmptyFields' => 'hide_empty_fields',
 			'excludeFields'   => 'exclude_fields',
-			'fetchFieldData'  => 'fetch_field_data',
-			'userId'          => 'user_id',
-			'memberType'      => 'member_type',
 		];
 
 		/**

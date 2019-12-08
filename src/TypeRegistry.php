@@ -96,7 +96,6 @@ class TypeRegistry {
 			[
 				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
 				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
-				'xprofile_field_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
 			]
 		);
 	}

@@ -117,8 +117,35 @@ class XProfileFieldType {
 							return apply_filters( 'bp_get_the_profile_field_description', stripslashes( $field->description ) );
 						},
 					],
+					'value'      => [
+						'type'        => 'String',
+						'description' => __( 'The value of the XProfile field.', 'wp-graphql-buddypress' ),
+						'args'        => [
+							'format' => [
+								'type'        => 'XProfileFieldValueFormatEnum',
+								'description' => __( 'Format of the field value output', 'wp-graphql-buddypress' ),
+							],
+						],
+						'resolve'     => function( XProfileField $field, array $args, $context ) {
+
+							// error_log( wp_json_encode( $context ) );
+							if ( empty( $field->value ) ) {
+								return null;
+							}
+
+							if ( isset( $args['format'] ) && 'raw' === $args['format'] ) {
+								return $field->value;
+							}
+
+							if ( isset( $args['format'] ) && 'unserialized' === $args['format'] ) {
+								return self::get_profile_field_unserialized_value( $field->value );
+							}
+
+							return self::get_profile_field_rendered_value( $field->value, $field->fieldId );
+						},
+					],
 				],
-				'resolve_node'      => function( $node, $id, $type, $context ) {
+				'resolve_node'      => function( $node, $id, $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_field_object( $id, $context );
 					}
@@ -170,5 +197,67 @@ class XProfileFieldType {
 				},
 			]
 		);
+	}
+
+	/**
+	 * Retrieve the unserialized value of a profile field.
+	 *
+	 * @param  string $value The raw value of the field.
+	 * @return array         The unserialized field value.
+	 */
+	public static function get_profile_field_unserialized_value( $value = '' ) {
+		if ( ! $value ) {
+			return [];
+		}
+
+		$unserialized_value = maybe_unserialize( $value );
+		if ( ! is_array( $unserialized_value ) ) {
+			$unserialized_value = (array) $unserialized_value;
+		}
+
+		return $unserialized_value;
+	}
+
+	/**
+	 * Retrieve the rendered value of a profile field.
+	 *
+	 * @param  string $value       The raw value of the field.
+	 * @param  int    $profile_field The ID of the object for the field.
+	 *
+	 * @return string The field value for the display context.
+	 */
+	public static function get_profile_field_rendered_value( $value = '', $profile_field = null ) {
+		if ( ! $value ) {
+			return '';
+		}
+
+		$profile_field = xprofile_get_field( $profile_field );
+
+		if ( ! isset( $profile_field->id ) ) {
+			return '';
+		}
+
+		// Unserialize the BuddyPress way.
+		$value = bp_unserialize_profile_field( $value );
+
+		global $field;
+		$reset_global = $field;
+
+		// Set the $field global as the `xprofile_filter_link_profile_data` filter needs it.
+		$field = $profile_field;
+
+		/**
+		 * Apply Filters to sanitize XProfile field value.
+		 *
+		 * @param string $value Value for the profile field.
+		 * @param string $type  Type for the profile field.
+		 * @param int    $id    ID for the profile field.
+		 */
+		$value = apply_filters( 'bp_get_the_profile_field_value', $value, $field->type, $field->id );
+
+		// Reset the global before returning the value.
+		$field = $reset_global;
+
+		return $value;
 	}
 }

@@ -12,6 +12,8 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Types;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
+use WPGraphQL\Model\User;
 
 /**
  * Class XProfileGroupsConnectionResolver
@@ -24,7 +26,10 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_query_args() {
-		$query_args = [];
+		$query_args = [
+			'profile_group_id' => false,
+			'user_id'          => 0,
+		];
 
 		/**
 		 * Prepare for later use
@@ -53,6 +58,22 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		 * Pass the graphql $this->args.
 		 */
 		$query_args['graphql_args'] = $this->args;
+
+		/**
+		 * Setting fields from user and parent profile group.
+		 */
+		if ( true === is_object( $this->source ) ) {
+			switch ( true ) {
+				case $this->source instanceof User:
+					$query_args['user_id'] = $this->source->userId;
+					break;
+				case $this->source instanceof XProfileGroup:
+					$query_args['profile_group_id'] = $this->source->groupId;
+					break;
+				default:
+					break;
+			}
+		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
@@ -113,7 +134,6 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		$arg_mapping = [
 			'profileGroupId'  => 'profile_group_id',
 			'hideEmptyGroups' => 'hide_empty_groups',
-			'hideEmptyFields' => 'hide_empty_fields',
 			'excludeGroups'   => 'exclude_groups',
 		];
 

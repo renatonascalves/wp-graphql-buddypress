@@ -19,6 +19,7 @@ use WPGraphQL\Model\Model;
  * @property string $groupId
  * @property string $parent
  * @property string $name
+ * @property string $value
  * @property string $type
  * @property string $canDelete
  * @property string $isRequired
@@ -102,6 +103,9 @@ class XProfileField extends Model {
 				},
 				'description' => function() {
 					return ! empty( $this->data->description ) ? $this->data->description : null;
+				},
+				'value' => function() {
+					return ! empty( $this->data->data->value ) ? $this->data->data->value : null;
 				},
 			];
 		}

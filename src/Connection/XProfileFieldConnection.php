@@ -41,8 +41,8 @@ class XProfileFieldConnection {
 			'toType'         => 'XProfileField',
 			'fromFieldName'  => 'fields',
 			'connectionArgs' => self::get_connection_args(),
-			'resolveNode'    => function ( $group_id, array $args, AppContext $context ) {
-				return Factory::resolve_xprofile_field_object( $group_id, $context );
+			'resolveNode'    => function ( $field_id, array $args, AppContext $context ) {
+				return Factory::resolve_xprofile_field_object( $field_id, $context );
 			},
 			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 				return Factory::resolve_xprofile_fields_connection( $source, $args, $context, $info );
@@ -53,7 +53,7 @@ class XProfileFieldConnection {
 	}
 
 	/**
-	 * This returns the connection args for the XProfile Fields connection.
+	 * This returns the connection args for the XProfile Groups to the XProfile Fields connection.
 	 *
 	 * @return array
 	 */
@@ -63,23 +63,11 @@ class XProfileFieldConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to hide XProfile fields where the user has no provided data.', 'wp-graphql-buddypress' ),
 			],
-			'fetchFieldData'  => [
-				'type'        => 'Boolean',
-				'description' => __( 'Whether to fetch data for each field. Requires a userId.', 'wp-graphql-buddypress' ),
-			],
 			'excludeFields'  => [
 				'type'        => [
 					'list_of' => 'Int',
 				],
 				'description' => __( 'Ensure result set excludes specific fields IDs.', 'wp-graphql-buddypress' ),
-			],
-			'userId'  => [
-				'type'        => 'Int',
-				'description' => __( 'Required if you want to load a specific user\'s data.', 'wp-graphql-buddypress' ),
-			],
-			'memberType'  => [
-				'type'        => 'String',
-				'description' => __( 'Limit fields by those restricted to a given member type, or array of member types. If `userId` is provided, the value of `memberType` will be overridden by the member types of the provided user. The special value of \'any\' will return only those fields that are unrestricted by member type - i.e., those applicable to any type.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}

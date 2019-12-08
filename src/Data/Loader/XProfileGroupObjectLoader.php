@@ -23,7 +23,7 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 	 *
 	 * @var array
 	 */
-	protected $loaded_groups = [];
+	protected $loaded_xprofile_groups = [];
 
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
@@ -47,7 +47,7 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 		\BP_XProfile_Group::get_group_ids();
 
 		/**
-		 * Loop over the keys and return an array of loaded_groups, where the key is the ID and the value
+		 * Loop over the keys and return an array of loaded_xprofile_groups, where the key is the ID and the value
 		 * is the XProfile group object, passed through the Model layer.
 		 */
 		foreach ( $keys as $key ) {
@@ -73,11 +73,14 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 				);
 			}
 
+			// print_r( $xprofile_group_object->fields );
+			// error_log( wp_json_encode( $xprofile_group_object->fields ) );
+
 			/**
 			 * Return the instance through the Model Layer to ensure we only return
 			 * values the consumer has access to.
 			 */
-			$this->loaded_groups[ $key ] = new Deferred(
+			$this->loaded_xprofile_groups[ $key ] = new Deferred(
 				function() use ( $xprofile_group_object ) {
 
 					if ( ! is_object( $xprofile_group_object ) ) {
@@ -89,6 +92,6 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 			);
 		}
 
-		return $this->loaded_groups;
+		return $this->loaded_xprofile_groups;
 	}
 }

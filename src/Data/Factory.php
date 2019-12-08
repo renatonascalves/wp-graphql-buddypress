@@ -11,6 +11,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Deferred;
+use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
@@ -18,6 +19,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
  * Class Factory
@@ -73,24 +75,42 @@ class Factory {
 	/**
 	 * Returns a XProfile Field object.
 	 *
+	 * @throws UserError User error.
+	 *
 	 * @param int|null   $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
 	 *
-	 * @return Deferred|null
+	 * @return \XProfileField|null
 	 */
 	public static function resolve_xprofile_field_object( $id, AppContext $context ) {
+
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
 
-		$xprofile_field_id = absint( $id );
-		$context->getLoader( 'xprofile_field_object' )->buffer( [ $xprofile_field_id ] );
+		// Get the user ID if available.
+		$user_id = $context->config['userId'] ?? 0;
 
-		return new Deferred(
-			function () use ( $xprofile_field_id, $context ) {
-				return $context->getLoader( 'xprofile_field_object' )->load( $xprofile_field_id );
-			}
-		);
+		/**
+		 * Get the XPofile field object.
+		 */
+		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
+
+		if ( empty( $xprofile_field_object ) ) {
+			throw new UserError(
+				sprintf(
+					// translators: XProfile Field ID.
+					__( 'No XProfile field was found with ID: %d', 'wp-graphql-buddypress' ),
+					absint( $id )
+				)
+			);
+		}
+
+		if ( ! $xprofile_field_object instanceof \BP_XProfile_Field ) {
+			return null;
+		}
+
+		return new XProfileField( $xprofile_field_object );
 	}
 
 	/**

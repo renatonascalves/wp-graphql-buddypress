@@ -20,6 +20,31 @@ class XProfileFieldEnums {
 	 */
 	public static function register() {
 
+		// XProfile Field Value Format.
+		register_graphql_enum_type(
+			'XProfileFieldValueFormatEnum',
+			[
+				'description' => __( 'The format of field value field.', 'wp-graphql-buddypress' ),
+				'values'      => [
+					'RAW'      => [
+						'name'        => 'RAW',
+						'description' => __( 'Provide the field value directly from database', 'wp-graphql-buddypress' ),
+						'value'       => 'raw',
+					],
+					'RENDERED' => [
+						'name'        => 'RENDERED',
+						'description' => __( 'Apply the default WordPress rendering', 'wp-graphql-buddypress' ),
+						'value'       => 'rendered',
+					],
+					'UNSERIALIZED' => [
+						'name'        => 'UNSERIALIZED',
+						'description' => __( 'Apply the default WordPress rendering', 'wp-graphql-buddypress' ),
+						'value'       => 'unserialized',
+					],
+				],
+			]
+		);
+
 		$levels = [];
 		foreach ( bp_xprofile_get_visibility_levels() as $level ) {
 			$levels[ WPEnumType::get_safe_name( $level['id'] ) ] = [

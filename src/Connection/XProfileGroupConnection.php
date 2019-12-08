@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Model\User;
 
 /**
  * Class XProfileGroupConnection
@@ -26,10 +27,24 @@ class XProfileGroupConnection {
 		 * Register connection from RootQuery to XProfile Groups.
 		 */
 		register_graphql_connection( self::get_connection_config() );
+
+		/**
+		 * Register connection from User to XProfile groups (and fields).
+		 */
+		register_graphql_connection(
+			self::get_connection_config(
+				[
+					'fromType' => 'User',
+					'toType'   => 'XProfileGroup',
+				],
+			)
+		);
 	}
 
 	/**
 	 * This returns a RootQuery > XProfileGroup connection config.
+	 *
+	 * @todo There is a bug where if one uses both connections, the userId is overlapped to other connections.
 	 *
 	 * @param array $args Array of arguments.
 	 *
@@ -45,6 +60,10 @@ class XProfileGroupConnection {
 				return Factory::resolve_xprofile_group_object( $group_id, $context );
 			},
 			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+				if ( $source instanceof User ) {
+					$context->config['userId'] = $source->userId;
+				}
+
 				return Factory::resolve_xprofile_groups_connection( $source, $args, $context, $info );
 			},
 		];
