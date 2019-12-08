@@ -89,7 +89,7 @@ class Factory {
 		}
 
 		// Get the user ID if available.
-		$user_id = $context->config['userId'] ?? 0;
+		$user_id = $context->config['userId'] ?? null;
 
 		/**
 		 * Get the XPofile field object.

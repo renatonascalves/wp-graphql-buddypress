@@ -86,10 +86,6 @@ class XProfileGroupConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to remove XProfile groups that do not have fields.', 'wp-graphql-buddypress' ),
 			],
-			'hideEmptyFields'  => [
-				'type'        => 'Boolean',
-				'description' => __( 'Whether to hide XProfile groups fields where the user has no provided data.', 'wp-graphql-buddypress' ),
-			],
 			'excludeGroups'  => [
 				'type'        => [
 					'list_of' => 'Int',
