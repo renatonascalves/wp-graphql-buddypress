@@ -69,8 +69,12 @@ class TypeRegistry {
 		// XProfile component.
 		if ( bp_is_active( 'xprofile' ) ) {
 
+			// Enum(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums::register();
+
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType::register();
 		}
 	}
 
@@ -88,6 +92,7 @@ class TypeRegistry {
 			[
 				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
 				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
+				'xprofile_field_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
 			]
 		);
 	}

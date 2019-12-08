@@ -73,7 +73,7 @@ class XProfileGroupType {
 								return $group->description;
 							}
 
-							return apply_filters( 'bp_get_the_profile_field_description', $group->description );
+							return apply_filters( 'bp_get_the_profile_field_description', stripslashes( $group->description ) );
 						},
 					],
 				],
