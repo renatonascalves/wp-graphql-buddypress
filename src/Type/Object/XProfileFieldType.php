@@ -81,7 +81,7 @@ class XProfileFieldType {
 						'description' => __( 'The order of the option into the profile field list of options.', 'wp-graphql-buddypress' ),
 					],
 					'orderBy'             => [
-						'type'        => 'String', // 'asc', 'desc'
+						'type'        => 'OrderEnum',
 						'description' => __( 'The way profile field\'s options are ordered.', 'wp-graphql-buddypress' ),
 					],
 					'isDefaultOption'             => [

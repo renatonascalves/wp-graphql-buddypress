@@ -22,7 +22,7 @@ class XProfileFieldEnums {
 
 		$levels = [];
 		foreach ( bp_xprofile_get_visibility_levels() as $level ) {
-			$levels[ WPEnumType::get_safe_name( $level['id'] )  ] = [
+			$levels[ WPEnumType::get_safe_name( $level['id'] ) ] = [
 				'description' => sprintf(
 					/* translators: visibility level */
 					__( 'Visibility Level: %1$s', 'wp-graphql-buddypress' ),
@@ -32,7 +32,7 @@ class XProfileFieldEnums {
 			];
 		}
 
-		// Group Roles.
+		// Visibility Levels.
 		register_graphql_enum_type(
 			'XProfileFieldVisibilityLevelEnum',
 			[

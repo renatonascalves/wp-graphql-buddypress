@@ -16,6 +16,8 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
 
 /**
  * Class Factory
@@ -89,6 +91,34 @@ class Factory {
 				return $context->getLoader( 'xprofile_field_object' )->load( $xprofile_field_id );
 			}
 		);
+	}
+
+	/**
+	 * Wrapper for the XProfileGroupsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new XProfileGroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the XProfileFieldsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**
