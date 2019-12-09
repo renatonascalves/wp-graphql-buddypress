@@ -49,7 +49,7 @@ class GroupCreate {
 				'description' => __( 'The ID of the parent group.', 'wp-graphql-buddypress' ),
 			],
 			'name'      => [
-				'type'        => 'String',
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The name of the group.', 'wp-graphql-buddypress' ),
 			],
 			'description'      => [
@@ -121,13 +121,6 @@ class GroupCreate {
 			}
 
 			/**
-			 * The group name is required.
-			 */
-			if ( empty( $input['name'] ) ) {
-				throw new UserError( __( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
-			}
-
-			/**
 			 * Create group and return the ID.
 			 */
 			$group_id = groups_create_group(
@@ -138,7 +131,7 @@ class GroupCreate {
 			 * Throw an exception if the group failed to be created.
 			 */
 			if ( ! is_numeric( $group_id ) ) {
-				throw new UserError( __( 'The object failed to create but no error was provided.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'The object failed to be created but no error was provided.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

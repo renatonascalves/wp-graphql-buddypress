@@ -79,6 +79,11 @@ class TypeRegistry {
 			// Connections.
 			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection::register_connections();
 			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection::register_connections();
+
+			// Mutations.
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupCreate::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupUpdate::register_mutation();
 		}
 	}
 

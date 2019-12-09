@@ -142,7 +142,7 @@ class GroupUpdate {
 			 * Stop now if a user isn't allowed to update a group.
 			 */
 			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to update this group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

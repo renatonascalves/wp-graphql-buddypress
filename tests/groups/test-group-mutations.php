@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test_Groups_Queries Class.
+ * Test_Groups_Mutations Class.
  *
  * @group groups
  */
@@ -36,7 +36,7 @@ class Test_Groups_Mutations extends WP_UnitTestCase {
 		$mutation = '
 		mutation createGroupTest(
 			$clientMutationId:String!,
-			$name:String
+			$name:String!
 			$slug:String
 		) {
 			createGroup(
@@ -125,7 +125,7 @@ class Test_Groups_Mutations extends WP_UnitTestCase {
 		$mutation = '
 		mutation createGroupTest(
 			$clientMutationId:String!,
-			$name:String
+			$name:String!
 			$slug:String
 		) {
 			createGroup(
@@ -176,7 +176,7 @@ class Test_Groups_Mutations extends WP_UnitTestCase {
 		$mutation = '
 		mutation createGroupTest(
 			$clientMutationId:String!,
-			$name:String
+			$name:String!
 			$slug:String
 			$status:GroupStatusEnum
 		) {
