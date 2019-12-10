@@ -37,7 +37,7 @@ class Test_XProfile_Group_Mutations extends WP_UnitTestCase {
 		$mutation = '
 		mutation createXProfileGroupTest(
 			$clientMutationId:String!,
-			$name:String
+			$name:String!,
 			$description:String
 		) {
 			createXProfileGroup(
