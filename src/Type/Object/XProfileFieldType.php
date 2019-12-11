@@ -58,11 +58,11 @@ class XProfileFieldType {
 					],
 					'name'             => [
 						'type'        => 'String',
-						'description' => __( 'XProfile field name', 'wp-graphql-buddypress' ),
+						'description' => __( 'XProfile field name.', 'wp-graphql-buddypress' ),
 					],
 					'type'             => [
 						'type'        => 'String',
-						'description' => __( 'XProfile field type', 'wp-graphql-buddypress' ),
+						'description' => __( 'XProfile field type.', 'wp-graphql-buddypress' ),
 					],
 					'canDelete'             => [
 						'type'        => 'Boolean',

@@ -20,6 +20,9 @@ class XProfileFieldEnums {
 	 */
 	public static function register() {
 
+		// @todo add enum for this type.
+		// buddypress()->profile->field_types
+
 		// XProfile Field Value Format.
 		register_graphql_enum_type(
 			'XProfileFieldValueFormatEnum',

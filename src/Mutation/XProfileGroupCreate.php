@@ -122,7 +122,7 @@ class XProfileGroupCreate {
 			 * @param AppContext  $context          The AppContext passed down the resolve tree.
 			 * @param ResolveInfo $info             The ResolveInfo passed down the resolve tree.
 			 */
-			do_action( 'bp_graphql_xprofile_field_groups_create_mutation', $xprofile_group_id, $input, $context, $info );
+			do_action( 'bp_graphql_xprofile_groups_create_mutation', $xprofile_group_id, $input, $context, $info );
 
 			/**
 			 * Return the XProfile group ID.

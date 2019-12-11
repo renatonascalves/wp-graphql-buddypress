@@ -80,10 +80,15 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection::register_connections();
 			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection::register_connections();
 
-			// Mutations.
+			// XProfile Group Mutations.
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupCreate::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupUpdate::register_mutation();
+
+			// XProfile Field Mutations.
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldCreate::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate::register_mutation();
 		}
 	}
 

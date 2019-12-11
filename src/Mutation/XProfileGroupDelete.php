@@ -136,7 +136,7 @@ class XProfileGroupDelete {
 			 * @param AppContext   $context        The AppContext passed down the resolve tree.
 			 * @param ResolveInfo  $info           The ResolveInfo passed down the resolve tree.
 			 */
-			do_action( 'bp_graphql_xprofile_field_groups_delete_mutation', $previous_xprofile_group, $input, $context, $info );
+			do_action( 'bp_graphql_xprofile_groups_delete_mutation', $previous_xprofile_group, $input, $context, $info );
 
 			/**
 			 * The deleted XProfile group and the previous XProfile group object.

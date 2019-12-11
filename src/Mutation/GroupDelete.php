@@ -50,7 +50,7 @@ class GroupDelete {
 			],
 			'slug'         => [
 				'type'        => 'String',
-				'description' => __( 'Current group slug.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Slug of the group.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
