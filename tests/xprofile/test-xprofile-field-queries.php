@@ -61,7 +61,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 						'groupId'         => $u1,
 						'parent'          => null,
 						'canDelete'       => true,
-						'type'            => 'textbox',
+						'type'            => 'TEXTBOX',
 						'isRequired'      => false,
 						'isDefaultOption' => false,
 						'visibilityLevel' => 'PUBLIC',
