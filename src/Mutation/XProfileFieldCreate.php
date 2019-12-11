@@ -41,20 +41,32 @@ class XProfileFieldCreate {
 	public static function get_input_fields() {
 		return [
 			'name'      => [
-				'type'        => 'String',
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The name of the XProfile field.', 'wp-graphql-buddypress' ),
 			],
 			'description'      => [
 				'type'        => 'String',
 				'description' => __( 'The description of the XProfile field.', 'wp-graphql-buddypress' ),
 			],
+			'groupId'          => [
+				'type'        => [ 'non_null' => 'Int' ],
+				'description' => __( 'The id of the group this field will be assigned to.', 'wp-graphql-buddypress' ),
+			],
 			'type'             => [
-				'type'        => 'String',
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'Type of XProfile field.', 'wp-graphql-buddypress' ),
 			],
-			'groupId'          => [
-				'type'        => 'Int',
-				'description' => __( 'The id of the group this field will be assigned to.', 'wp-graphql-buddypress' ),
+			'defaultVisibility'      => [
+				'type'        => 'String',
+				'description' => __( 'Default visibility for the profile field.', 'wp-graphql-buddypress' ),
+			],
+			'allowCustomVisibility'  => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether to allow members to set the visibility for the profile field data or not.', 'wp-graphql-buddypress' ),
+			],
+			'doAutolink'             => [
+				'type'        => 'Boolean',
+				'description' => __( 'Autolink status for this profile field.', 'wp-graphql-buddypress' ),
 			],
 			'parentId'          => [
 				'type'        => 'Int',
@@ -145,6 +157,11 @@ class XProfileFieldCreate {
 			if ( ! is_numeric( $xprofile_field_id ) ) {
 				throw new UserError( __( 'Cannot create XProfile field field.', 'wp-graphql-buddypress' ) );
 			}
+
+			/**
+			 * Save additional information.
+			 */
+			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
 
 			/**
 			 * Fires after a XProfile field is created.

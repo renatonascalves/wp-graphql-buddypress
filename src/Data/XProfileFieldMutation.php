@@ -82,7 +82,7 @@ class XProfileFieldMutation {
 				? $xprofile_field->is_default_option ?? false
 				: $input['isDefaultOption'],
 			'order_by'          => empty( $input['orderBy'] )
-				? $xprofile_field->order_by ?? ''
+				? $xprofile_field->order_by ?? 'asc'
 				: $input['orderBy'],
 			'option_order'      => empty( $input['optionOrder'] )
 				? $xprofile_field->option_order ?? null
@@ -100,6 +100,24 @@ class XProfileFieldMutation {
 		 * @param object|null $xprofile_field XProfile field object.
 		 */
 		return apply_filters( "bp_graphql_xprofile_fields_{$action}_mutation_args", $output_args, $input, $xprofile_field );
+	}
+
+	/**
+	 * Set additional fields on update.
+	 *
+	 * @param int   $field_id Field ID.
+	 * @param array $input    The input for the mutation.
+	 */
+	public static function set_additional_fields( $field_id, $input ) {
+
+		$default_visibility = $input['defaultVisibility'] ?? 'public';
+		bp_xprofile_update_field_meta( $field_id, 'default_visibility', $default_visibility );
+
+		$allow_custom_visibility = $input['allowCustomVisibility'] ? 'allowed' : 'disabled';
+		bp_xprofile_update_field_meta( $field_id, 'allow_custom_visibility', $allow_custom_visibility );
+
+		$do_autolink = $input['doAutolink'] ? 'on' : 'off';
+		bp_xprofile_update_field_meta( $field_id, 'do_autolink', $do_autolink );
 	}
 
 	/**
