@@ -20,6 +20,7 @@ use WPGraphQL\Model\Model;
  * @property string $description
  * @property string $groupOrder
  * @property string $canDelete
+ * @property string $userId
  */
 class XProfileGroup extends Model {
 
@@ -41,7 +42,7 @@ class XProfileGroup extends Model {
 	}
 
 	/**
-	 * Initialize the Xprofile Group object.
+	 * Initialize the XProfile group object.
 	 */
 	protected function init() {
 		if ( empty( $this->fields ) ) {
@@ -65,7 +66,7 @@ class XProfileGroup extends Model {
 					return $this->data->can_delete;
 				},
 				'userId'   => function() {
-					return $this->source->userId;
+					return $this->source->userId ?? null;
 				},
 			];
 		}
