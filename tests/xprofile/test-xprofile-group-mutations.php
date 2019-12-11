@@ -66,6 +66,10 @@ class Test_XProfile_Group_Mutations extends WP_UnitTestCase {
 			]
 		);
 
+		$a = do_graphql_request( $mutation, 'createXProfileGroupTest', $variables );
+
+		print_r( $a );
+
 		$this->assertEquals(
 			[
 				'data' => [
@@ -79,7 +83,7 @@ class Test_XProfile_Group_Mutations extends WP_UnitTestCase {
 					],
 				],
 			],
-			do_graphql_request( $mutation, 'createXProfileGroupTest', $variables )
+			$a
 		);
 	}
 
