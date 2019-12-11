@@ -95,14 +95,9 @@ class XProfileFieldDelete {
 			}
 
 			/**
-			 * Get XProfile field ID from the input.
-			 */
-			$xprofile_field_id = XProfileFieldMutation::get_xprofile_field_id_from_input( $input );
-
-			/**
 			 * Get the XProfile field object.
 			 */
-			$xprofile_field_object = new \BP_XProfile_Field( absint( $xprofile_field_id ) );
+			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
 
 			/**
 			 * Confirm if XProfile field exists.

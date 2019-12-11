@@ -96,6 +96,12 @@ class XProfileFieldType {
 						'type'        => 'Boolean',
 						'description' => __( 'Is autolink enabled for this profile field.', 'wp-graphql-buddypress' ),
 					],
+					'memberTypes'             => [
+						'type'        => [
+							'list_of' => 'MemberTypesEnum',
+						],
+						'description' => __( 'Member types to which this field should be available.', 'wp-graphql-buddypress' ),
+					],
 					'description'      => [
 						'type'        => 'String',
 						'description' => __( 'The description of the XProfile field.', 'wp-graphql-buddypress' ),

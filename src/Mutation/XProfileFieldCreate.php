@@ -96,6 +96,12 @@ class XProfileFieldCreate {
 				'type'        => 'Int',
 				'description' => __( 'The order of the XProfile field into the group of fields.', 'wp-graphql-buddypress' ),
 			],
+			'memberTypes'             => [
+				'type'        => [
+					'list_of' => 'MemberTypesEnum',
+				],
+				'description' => __( 'Sets the member types to which this field should be available.', 'wp-graphql-buddypress' ),
+			],
 		];
 	}
 
@@ -155,7 +161,7 @@ class XProfileFieldCreate {
 			 * Throw an exception if the XProfile field failed to be created.
 			 */
 			if ( ! is_numeric( $xprofile_field_id ) ) {
-				throw new UserError( __( 'Cannot create XProfile field field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Could not create XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

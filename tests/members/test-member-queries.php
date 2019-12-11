@@ -32,9 +32,7 @@ class Test_Members_Queries extends WP_UnitTestCase {
 
 		// Register and set member types.
 		bp_register_member_type( 'foo' );
-		bp_register_member_type( 'bar' );
 		bp_set_member_type( $this->admin, 'foo' );
-		bp_set_member_type( $this->admin, 'bar', true );
 
         $this->bp->set_current_user( $this->admin );
 
@@ -57,7 +55,6 @@ class Test_Members_Queries extends WP_UnitTestCase {
 					'user' => [
 						'link'        => bp_core_get_user_domain( $this->admin ),
 						'memberTypes' => [
-							'bar',
 							'foo',
 						],
 						'mentionName' => bp_activity_get_user_mentionname( $this->admin ),

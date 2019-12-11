@@ -104,6 +104,12 @@ class XProfileFieldUpdate {
 				'type'        => 'Int',
 				'description' => __( 'The order of the XProfile field into the group of fields.', 'wp-graphql-buddypress' ),
 			],
+			'memberTypes'             => [
+				'type'        => [
+					'list_of' => 'MemberTypesEnum',
+				],
+				'description' => __( 'Sets the member types to which this field should be available.', 'wp-graphql-buddypress' ),
+			],
 		];
 	}
 
@@ -146,14 +152,9 @@ class XProfileFieldUpdate {
 			}
 
 			/**
-			 * Get XProfile ID from input.
-			 */
-			$xprofile_field_id = XProfileFieldMutation::get_xprofile_field_id_from_input( $input );
-
-			/**
 			 * Get the XProfile field object.
 			 */
-			$xprofile_field_object = new \BP_XProfile_Field( absint( $xprofile_field_id ) );
+			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
 
 			/**
 			 * Confirm if XProfile field exists.
@@ -185,7 +186,7 @@ class XProfileFieldUpdate {
 			 * Throw an exception if the XProfile field failed to be updated.
 			 */
 			if ( ! is_numeric( $xprofile_field_id ) ) {
-				throw new UserError( __( 'Cannot update XProfile field field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Could not update XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
@@ -197,9 +198,9 @@ class XProfileFieldUpdate {
 			 * Fires after a XProfile field is updated.
 			 *
 			 * @param int         $xprofile_field_id The ID of the XProfile field being updated.
-			 * @param array       $input            The input of the mutation.
-			 * @param AppContext  $context          The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info             The ResolveInfo passed down the resolve tree.
+			 * @param array       $input             The input of the mutation.
+			 * @param AppContext  $context           The AppContext passed down the resolve tree.
+			 * @param ResolveInfo $info              The ResolveInfo passed down the resolve tree.
 			 */
 			do_action( 'bp_graphql_xprofile_fields_update_mutation', $xprofile_field_id, $input, $context, $info );
 

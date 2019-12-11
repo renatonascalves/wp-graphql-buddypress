@@ -19,17 +19,18 @@ use WPGraphQL\Model\Model;
  * @property string $groupId
  * @property string $parent
  * @property string $name
+ * @property string $description
  * @property string $value
  * @property string $type
  * @property string $canDelete
  * @property string $isRequired
  * @property string $fieldOrder
  * @property string $optionOrder
+ * @property string $memberTypes
  * @property string $orderBy
  * @property string $isDefaultOption
  * @property string $visibilityLevel
  * @property string $doAutolink
- * @property string $description
  */
 class XProfileField extends Model {
 
@@ -106,6 +107,9 @@ class XProfileField extends Model {
 				},
 				'value' => function() {
 					return ! empty( $this->data->data->value ) ? $this->data->data->value : null;
+				},
+				'memberTypes' => function() {
+					return ! empty( $this->data->get_member_types() ) ? $this->data->get_member_types() : null;
 				},
 			];
 		}

@@ -23,9 +23,9 @@ class XProfileFieldMutation {
 	 *
 	 * @param array $input Array of possible input fields.
 	 *
-	 * @return int
+	 * @return \BP_XProfile_Field
 	 */
-	public static function get_xprofile_field_id_from_input( $input ) {
+	public static function get_xprofile_field_from_input( $input ) {
 		$xprofile_field_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
@@ -40,7 +40,7 @@ class XProfileFieldMutation {
 			$xprofile_field_id = absint( $input['fieldId'] );
 		}
 
-		return $xprofile_field_id;
+		return new \BP_XProfile_Field( absint( $xprofile_field_id ) );
 	}
 
 	/**
@@ -103,12 +103,22 @@ class XProfileFieldMutation {
 	}
 
 	/**
-	 * Set additional fields on update.
+	 * Set additional fields on update/creation.
 	 *
 	 * @param int   $field_id Field ID.
 	 * @param array $input    The input for the mutation.
 	 */
 	public static function set_additional_fields( $field_id, $input ) {
+
+		// Setting/Updating member types if avaiable.
+		if ( ! empty( $input['memberTypes'] ) ) {
+
+			// Append on update?!
+			$append = ( isset( $input['fieldId'] ) || isset( $input['id'] ) ) ? true : false;
+
+			// Set types.
+			( new \BP_XProfile_Field( $field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
+		}
 
 		$default_visibility = $input['defaultVisibility'] ?? 'public';
 		bp_xprofile_update_field_meta( $field_id, 'default_visibility', $default_visibility );
