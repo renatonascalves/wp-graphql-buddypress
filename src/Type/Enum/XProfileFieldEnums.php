@@ -16,14 +16,11 @@ use WPGraphQL\Type\WPEnumType;
 class XProfileFieldEnums {
 
 	/**
-	 * Registers enum type.
+	 * Registers enums.
 	 */
 	public static function register() {
 
-		// @todo add enum for this type.
-		// buddypress()->profile->field_types
-
-		// XProfile Field Value Format.
+		// XProfile Field Value Format Enum.
 		register_graphql_enum_type(
 			'XProfileFieldValueFormatEnum',
 			[
@@ -48,6 +45,17 @@ class XProfileFieldEnums {
 			]
 		);
 
+		// Field Types Enum.
+		self::field_types_enum();
+
+		// Visibility Levels Enum.
+		self::visibility_levels_enum();
+	}
+
+	/**
+	 * Visibility Levels Enum.
+	 */
+	public static function visibility_levels_enum() {
 		$levels = [];
 		foreach ( bp_xprofile_get_visibility_levels() as $level ) {
 			$levels[ WPEnumType::get_safe_name( $level['id'] ) ] = [
@@ -66,6 +74,31 @@ class XProfileFieldEnums {
 			[
 				'description' => __( 'XProfile field visibility levels.', 'wp-graphql-buddypress' ),
 				'values'      => $levels,
+			]
+		);
+	}
+
+	/**
+	 * Field Types Enum.
+	 */
+	public static function field_types_enum() {
+		$types = [];
+		foreach ( (array) buddypress()->profile->field_types as $type ) {
+			$types[ WPEnumType::get_safe_name( $type ) ] = [
+				'description' => sprintf(
+					/* translators: field type */
+					__( 'Field Type: %1$s', 'wp-graphql-buddypress' ),
+					$type
+				),
+				'value' => $type,
+			];
+		}
+
+		register_graphql_enum_type(
+			'XProfileFieldTypesEnum',
+			[
+				'description' => __( 'XProfile field types.', 'wp-graphql-buddypress' ),
+				'values'      => $types,
 			]
 		);
 	}

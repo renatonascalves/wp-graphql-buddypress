@@ -57,8 +57,20 @@ class XProfileFieldUpdate {
 				'description' => __( 'The description of the XProfile field.', 'wp-graphql-buddypress' ),
 			],
 			'type'             => [
-				'type'        => 'String',
+				'type'        => 'XProfileFieldTypesEnum',
 				'description' => __( 'Type of XProfile field.', 'wp-graphql-buddypress' ),
+			],
+			'defaultVisibility'      => [
+				'type'        => 'String',
+				'description' => __( 'Default visibility for the profile field.', 'wp-graphql-buddypress' ),
+			],
+			'allowCustomVisibility'  => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether to allow members to set the visibility for the profile field data or not.', 'wp-graphql-buddypress' ),
+			],
+			'doAutolink'             => [
+				'type'        => 'Boolean',
+				'description' => __( 'Autolink status for this profile field.', 'wp-graphql-buddypress' ),
 			],
 			'groupId'          => [
 				'type'        => 'Int',
@@ -175,6 +187,11 @@ class XProfileFieldUpdate {
 			if ( ! is_numeric( $xprofile_field_id ) ) {
 				throw new UserError( __( 'Cannot update XProfile field field.', 'wp-graphql-buddypress' ) );
 			}
+
+			/**
+			 * Save additional information.
+			 */
+			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
 
 			/**
 			 * Fires after a XProfile field is updated.

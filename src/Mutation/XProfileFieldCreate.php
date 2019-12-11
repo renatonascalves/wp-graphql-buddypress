@@ -53,7 +53,7 @@ class XProfileFieldCreate {
 				'description' => __( 'The id of the group this field will be assigned to.', 'wp-graphql-buddypress' ),
 			],
 			'type'             => [
-				'type'        => [ 'non_null' => 'String' ],
+				'type'        => [ 'non_null' => 'XProfileFieldTypesEnum' ],
 				'description' => __( 'Type of XProfile field.', 'wp-graphql-buddypress' ),
 			],
 			'defaultVisibility'      => [

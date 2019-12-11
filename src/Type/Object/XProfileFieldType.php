@@ -61,7 +61,7 @@ class XProfileFieldType {
 						'description' => __( 'XProfile field name.', 'wp-graphql-buddypress' ),
 					],
 					'type'             => [
-						'type'        => 'String',
+						'type'        => 'XProfileFieldTypesEnum',
 						'description' => __( 'XProfile field type.', 'wp-graphql-buddypress' ),
 					],
 					'canDelete'             => [
@@ -169,7 +169,7 @@ class XProfileFieldType {
 				'args'        => [
 					'id'           => [
 						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
 					'fieldId'      => [
 						'type'        => 'Int',
@@ -200,8 +200,9 @@ class XProfileFieldType {
 	/**
 	 * Retrieve the unserialized value of a profile field.
 	 *
-	 * @param  string $value The raw value of the field.
-	 * @return array         The unserialized field value.
+	 * @param string $value The raw value of the field.
+	 *
+	 * @return array
 	 */
 	public static function get_profile_field_unserialized_value( $value = '' ) {
 		if ( ! $value ) {
@@ -219,10 +220,10 @@ class XProfileFieldType {
 	/**
 	 * Retrieve the rendered value of a profile field.
 	 *
-	 * @param  string $value       The raw value of the field.
-	 * @param  int    $profile_field The ID of the object for the field.
+	 * @param string   $value         The raw value of the field.
+	 * @param int|null $profile_field The ID of the object for the field.
 	 *
-	 * @return string The field value for the display context.
+	 * @return string
 	 */
 	public static function get_profile_field_rendered_value( $value = '', $profile_field = null ) {
 		if ( ! $value ) {
@@ -245,7 +246,7 @@ class XProfileFieldType {
 		$field = $profile_field;
 
 		/**
-		 * Apply Filters to sanitize XProfile field value.
+		 * Apply filters to sanitize XProfile field value.
 		 *
 		 * @param string $value Value for the profile field.
 		 * @param string $type  Type for the profile field.
