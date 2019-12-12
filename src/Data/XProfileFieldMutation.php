@@ -92,8 +92,6 @@ class XProfileFieldMutation {
 				: $input['fieldOrder'],
 		];
 
-		// print_r( $output_args );
-
 		/**
 		 * Allows changing output args.
 		 *
