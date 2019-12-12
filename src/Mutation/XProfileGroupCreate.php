@@ -88,9 +88,7 @@ class XProfileGroupCreate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

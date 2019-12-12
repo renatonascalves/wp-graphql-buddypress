@@ -23,9 +23,9 @@ class XProfileGroupMutation {
 	 *
 	 * @param array $input Array of possible input fields.
 	 *
-	 * @return int
+	 * @return object
 	 */
-	public static function get_xprofile_group_id_from_input( $input ) {
+	public static function get_xprofile_group_from_input( $input ) {
 		$xprofile_group_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
@@ -40,7 +40,7 @@ class XProfileGroupMutation {
 			$xprofile_group_id = absint( $input['groupId'] );
 		}
 
-		return $xprofile_group_id;
+		return current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );
 	}
 
 	/**
@@ -54,16 +54,16 @@ class XProfileGroupMutation {
 	 */
 	public static function prepare_xprofile_group_args( $input, $xprofile_group = null, $action ) {
 		$output_args = [
-			'name'              => empty( $input['name'] )
+			'name'             => empty( $input['name'] )
 				? $xprofile_group->name ?? ''
 				: $input['name'],
-			'description'       => empty( $input['description'] )
+			'description'      => empty( $input['description'] )
 				? $xprofile_group->description ?? null
 				: $input['description'],
 			'can_delete'       => empty( $input['canDelete'] )
 				? $xprofile_group->can_delete ?? false
 				: $input['canDelete'],
-			'field_group_id'       => empty( $input['field_group_id'] )
+			'field_group_id'   => empty( $input['field_group_id'] )
 				? $xprofile_group->id ?? null
 				: $input['field_group_id'],
 		];
@@ -73,7 +73,7 @@ class XProfileGroupMutation {
 		 *
 		 * @param array       $output_args    Mutation output args.
 		 * @param array       $input          Mutation input args.
-		 * @param object|null $xprofile_group  XProfile group object.
+		 * @param object|null $xprofile_group XProfile group object.
 		 */
 		return apply_filters( "bp_graphql_xprofile_groups_{$action}_mutation_args", $output_args, $input, $xprofile_group );
 	}

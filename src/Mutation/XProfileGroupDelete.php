@@ -40,11 +40,11 @@ class XProfileGroupDelete {
 	 */
 	public static function get_input_fields() {
 		return [
-			'id'          => [
+			'id'      => [
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'groupId'          => [
+			'groupId' => [
 				'type'        => 'int',
 				'description' => __( 'The id field that matches the BP_XProfile_Group->id field.', 'wp-graphql-buddypress' ),
 			],
@@ -69,7 +69,7 @@ class XProfileGroupDelete {
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The deleted XProfile group object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $payload ) {
-					return $payload['previousObject'] ? $payload['previousObject'] : null;
+					return $payload['previousObject'] ?? null;
 				},
 			],
 		];
@@ -87,20 +87,13 @@ class XProfileGroupDelete {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * Get XProfile group ID from the input.
+			 * Get the XProfile group object.
 			 */
-			$profile_group_id = XProfileGroupMutation::get_xprofile_group_id_from_input( $input );
-
-			/**
-			 * Get the XProfile group.
-			 */
-			$xprofile_group_object = current( bp_xprofile_get_groups( [ 'profile_group_id' => $profile_group_id ] ) );
+			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
 
 			/**
 			 * Confirm if XProfile group exists.
@@ -117,7 +110,7 @@ class XProfileGroupDelete {
 			}
 
 			/**
-			 * Get a XProfile group object before it is deleted.
+			 * Get the XProfile group object before it is deleted.
 			 */
 			$previous_xprofile_group = new XProfileGroup( $xprofile_group_object );
 
@@ -131,10 +124,10 @@ class XProfileGroupDelete {
 			/**
 			 * Fires after a XProfile group is deleted.
 			 *
-			 * @param XProfileGroup $previous_group The deleted XProfile group model object.
-			 * @param array        $input          The input of the mutation.
-			 * @param AppContext   $context        The AppContext passed down the resolve tree.
-			 * @param ResolveInfo  $info           The ResolveInfo passed down the resolve tree.
+			 * @param XProfileGroup $previous_xprofile_group The deleted XProfile group model object.
+			 * @param array          $input                  The input of the mutation.
+			 * @param AppContext     $context                The AppContext passed down the resolve tree.
+			 * @param ResolveInfo    $info                   The ResolveInfo passed down the resolve tree.
 			 */
 			do_action( 'bp_graphql_xprofile_groups_delete_mutation', $previous_xprofile_group, $input, $context, $info );
 

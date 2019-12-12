@@ -92,6 +92,8 @@ class XProfileFieldMutation {
 				: $input['fieldOrder'],
 		];
 
+		// print_r( $output_args );
+
 		/**
 		 * Allows changing output args.
 		 *
@@ -105,29 +107,29 @@ class XProfileFieldMutation {
 	/**
 	 * Set additional fields on update/creation.
 	 *
-	 * @param int   $field_id Field ID.
-	 * @param array $input    The input for the mutation.
+	 * @param int   $xprofile_field_id Field ID.
+	 * @param array $input             The input for the mutation.
 	 */
-	public static function set_additional_fields( $field_id, $input ) {
+	public static function set_additional_fields( $xprofile_field_id, $input ) {
 
 		// Setting/Updating member types if avaiable.
 		if ( ! empty( $input['memberTypes'] ) ) {
 
 			// Append on update?!
-			$append = ( isset( $input['fieldId'] ) || isset( $input['id'] ) ) ? true : false;
+			$append = ( isset( $input['fieldId'] ) || isset( $input['id'] ) );
 
 			// Set types.
-			( new \BP_XProfile_Field( $field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
+			( new \BP_XProfile_Field( $xprofile_field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
 		}
 
-		$default_visibility = $input['defaultVisibility'] ?? 'public';
-		bp_xprofile_update_field_meta( $field_id, 'default_visibility', $default_visibility );
+		$default_visibility = ! empty( $input['defaultVisibility'] ) ? $input['defaultVisibility'] : 'public';
+		bp_xprofile_update_field_meta( $xprofile_field_id, 'default_visibility', $default_visibility );
 
-		$allow_custom_visibility = $input['allowCustomVisibility'] ? 'allowed' : 'disabled';
-		bp_xprofile_update_field_meta( $field_id, 'allow_custom_visibility', $allow_custom_visibility );
+		$allow_custom_visibility = ! empty( $input['allowCustomVisibility'] ) ? 'allowed' : 'disabled';
+		bp_xprofile_update_field_meta( $xprofile_field_id, 'allow_custom_visibility', $allow_custom_visibility );
 
-		$do_autolink = $input['doAutolink'] ? 'on' : 'off';
-		bp_xprofile_update_field_meta( $field_id, 'do_autolink', $do_autolink );
+		$do_autolink = ! empty( $input['doAutolink'] ) ? 'on' : 'off';
+		bp_xprofile_update_field_meta( $xprofile_field_id, 'do_autolink', $do_autolink );
 	}
 
 	/**

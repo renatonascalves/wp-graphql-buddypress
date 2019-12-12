@@ -108,9 +108,7 @@ class GroupCreate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation or the group_object was invalid.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
@@ -131,7 +129,7 @@ class GroupCreate {
 			 * Throw an exception if the group failed to be created.
 			 */
 			if ( ! is_numeric( $group_id ) ) {
-				throw new UserError( __( 'The object failed to be created but no error was provided.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Could not create Group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

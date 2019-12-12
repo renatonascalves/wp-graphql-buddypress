@@ -211,19 +211,19 @@ class GroupType {
 				'args'        => [
 					'id'           => [
 						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
 					'groupId'      => [
 						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 					'slug'         => [
 						'type'        => 'String',
-						'description' => __( 'Get the object by its current slug', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its current slug.', 'wp-graphql-buddypress' ),
 					],
 					'previousSlug' => [
 						'type'        => 'String',
-						'description' => __( 'Get the object by its previous slug', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its previous slug.', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {

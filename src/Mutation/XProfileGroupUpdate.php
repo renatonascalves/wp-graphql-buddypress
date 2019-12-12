@@ -100,20 +100,13 @@ class XProfileGroupUpdate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
-
-			/**
-			 * Get XProfile group ID from the input.
-			 */
-			$xprofile_group_id = XProfileGroupMutation::get_xprofile_group_id_from_input( $input );
 
 			/**
 			 * Get the XProfile group.
 			 */
-			$xprofile_group_object = current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );
+			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
 
 			/**
 			 * Confirm if XProfile group exists.
@@ -129,9 +122,6 @@ class XProfileGroupUpdate {
 				throw new UserError( __( 'Sorry, you are not allowed to update this XProfile group.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Setting the XProfile group id for update.
-			$input['field_group_id'] = $xprofile_group_id;
-
 			/**
 			 * Update XProfile group and return the ID.
 			 */
@@ -145,6 +135,9 @@ class XProfileGroupUpdate {
 			if ( ! $xprofile_group ) {
 				throw new UserError( __( 'Cannot update existing XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
+
+			// Get group id.
+			$xprofile_group_id = $xprofile_group_object->id;
 
 			// Update the position if the group_order exists.
 			if ( isset( $input['groupOrder'] ) ) {

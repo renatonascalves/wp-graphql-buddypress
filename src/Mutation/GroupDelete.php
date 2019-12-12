@@ -73,7 +73,7 @@ class GroupDelete {
 				'type'        => 'Group',
 				'description' => __( 'The deleted group object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $payload ) {
-					return $payload['previousObject'] ? $payload['previousObject'] : null;
+					return $payload['previousObject'] ?? null;
 				},
 			],
 		];
@@ -91,20 +91,13 @@ class GroupDelete {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
-			 * Get group ID.
+			 * Get the group object.
 			 */
-			$group_id = GroupMutation::get_group_id_from_input( $input );
-
-			/**
-			 * Get the group.
-			 */
-			$group = groups_get_group( absint( $group_id ) );
+			$group = GroupMutation::get_group_from_input( $input );
 
 			/**
 			 * Confirm if group exists.
@@ -128,7 +121,7 @@ class GroupDelete {
 			/**
 			 * Trying to delete the group.
 			 */
-			if ( ! groups_delete_group( $group_id ) ) {
+			if ( ! groups_delete_group( $group->id ) ) {
 				throw new UserError( __( 'Could not delete the group.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -143,7 +136,7 @@ class GroupDelete {
 			do_action( 'bp_graphql_groups_delete_mutation', $previous_group, $input, $context, $info );
 
 			/**
-			 * The deleted group and the previous group object.
+			 * The deleted group status and the previous group object.
 			 */
 			return [
 				'deleted'        => true,

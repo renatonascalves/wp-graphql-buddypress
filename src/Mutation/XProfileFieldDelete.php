@@ -26,8 +26,8 @@ class XProfileFieldDelete {
 		register_graphql_mutation(
 			'deleteXProfileField',
 			[
-				'inputFields' => self::get_input_fields(),
-				'outputFields' => self::get_output_fields(),
+				'inputFields'         => self::get_input_fields(),
+				'outputFields'        => self::get_output_fields(),
 				'mutateAndGetPayload' => self::mutate_and_get_payload(),
 			]
 		);
@@ -63,16 +63,16 @@ class XProfileFieldDelete {
 	public static function get_output_fields() {
 		return [
 			'deleted' => [
-				'type' => 'Boolean',
+				'type'        => 'Boolean',
 				'description' => __( 'The status of the XProfile field deletion.', 'wp-graphql-buddypress' ),
-				'resolve' => function ( $payload ) {
+				'resolve'     => function ( $payload ) {
 					return (bool) $payload['deleted'];
 				},
 			],
 			'field' => [
-				'type' => 'XProfileField',
+				'type'        => 'XProfileField',
 				'description' => __( 'The deleted XProfile field object.', 'wp-graphql-buddypress' ),
-				'resolve' => function ( $payload ) {
+				'resolve'     => function ( $payload ) {
 					return $payload['previousObject'] ? $payload['previousObject'] : null;
 				},
 			],

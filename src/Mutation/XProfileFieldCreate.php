@@ -54,11 +54,11 @@ class XProfileFieldCreate {
 			],
 			'type'             => [
 				'type'        => [ 'non_null' => 'XProfileFieldTypesEnum' ],
-				'description' => __( 'Type of XProfile field.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The type of the XProfile field.', 'wp-graphql-buddypress' ),
 			],
 			'defaultVisibility'      => [
 				'type'        => 'String',
-				'description' => __( 'Default visibility for the profile field.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The default visibility for the profile field.', 'wp-graphql-buddypress' ),
 			],
 			'allowCustomVisibility'  => [
 				'type'        => 'Boolean',
@@ -138,9 +138,7 @@ class XProfileFieldCreate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
