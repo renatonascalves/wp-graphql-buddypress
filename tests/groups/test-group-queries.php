@@ -244,7 +244,6 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $results );
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
-		$this->assertEquals( $last_group_id, $results['data']['groups']['edges'][0]['node']['groupId'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['startCursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['endCursor'] );

@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress;
 
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
 
 /**
  * Class TypeRegistry
@@ -66,6 +65,31 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate::register_mutation();
 		}
+
+		// XProfile component.
+		if ( bp_is_active( 'xprofile' ) ) {
+
+			// Enum(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums::register();
+
+			// Object(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType::register();
+
+			// Connections.
+			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection::register_connections();
+			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection::register_connections();
+
+			// XProfile Group Mutations.
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupCreate::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupUpdate::register_mutation();
+
+			// XProfile Field Mutations.
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldCreate::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate::register_mutation();
+		}
 	}
 
 	/**
@@ -80,7 +104,8 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
-				'group_object' => new GroupObjectLoader( $context ),
+				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
+				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
 			]
 		);
 	}

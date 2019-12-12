@@ -1,12 +1,14 @@
 <?php
 /**
- * Member Enums.
+ * Members' Enums.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\Enum
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
+
+use WPGraphQL\Type\WPEnumType;
 
 /**
  * MemberEnums Class
@@ -18,7 +20,7 @@ class MemberEnums {
 	 */
 	public static function register() {
 
-		// Member Order by Type.
+		// Member Order by Type Enum.
 		register_graphql_enum_type(
 			'MemberOrderByTypeEnum',
 			[
@@ -55,6 +57,35 @@ class MemberEnums {
 						'value'       => 'popular',
 					],
 				],
+			]
+		);
+
+		// Member Types Enum.
+		self::member_types_enum();
+	}
+
+	/**
+	 * Member Types Enum.
+	 */
+	public static function member_types_enum() {
+		$types = [];
+
+		foreach ( bp_get_member_types() as $type ) {
+			$types[ WPEnumType::get_safe_name( $type ) ] = [
+				'description' => sprintf(
+					/* translators: member type */
+					__( 'Member Type: %1$s', 'wp-graphql-buddypress' ),
+					$type
+				),
+				'value' => $type,
+			];
+		}
+
+		register_graphql_enum_type(
+			'MemberTypesEnum',
+			[
+				'description' => __( 'Member types.', 'wp-graphql-buddypress' ),
+				'values'      => $types,
 			]
 		);
 	}

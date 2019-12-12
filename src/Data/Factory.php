@@ -11,11 +11,15 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Deferred;
+use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
  * Class Factory
@@ -43,6 +47,98 @@ class Factory {
 				return $context->getLoader( 'group_object' )->load( $group_id );
 			}
 		);
+	}
+
+	/**
+	 * Returns a XProfile Group object.
+	 *
+	 * @param int|null   $id      XProfile group ID or null.
+	 * @param AppContext $context AppContext object.
+	 *
+	 * @return Deferred|null
+	 */
+	public static function resolve_xprofile_group_object( $id, AppContext $context ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$xprofile_group_id = absint( $id );
+		$context->getLoader( 'xprofile_group_object' )->buffer( [ $xprofile_group_id ] );
+
+		return new Deferred(
+			function () use ( $xprofile_group_id, $context ) {
+				return $context->getLoader( 'xprofile_group_object' )->load( $xprofile_group_id );
+			}
+		);
+	}
+
+	/**
+	 * Returns a XProfile Field object.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param int|null   $id      XProfile field ID or null.
+	 * @param AppContext $context AppContext object.
+	 *
+	 * @return \XProfileField|null
+	 */
+	public static function resolve_xprofile_field_object( $id, AppContext $context ) {
+
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		// Get the user ID if available.
+		$user_id = $context->config['userId'] ?? null;
+
+		/**
+		 * Get the XPofile field object.
+		 */
+		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
+
+		if ( empty( $xprofile_field_object ) ) {
+			throw new UserError(
+				sprintf(
+					// translators: XProfile Field ID.
+					__( 'No XProfile field was found with ID: %d', 'wp-graphql-buddypress' ),
+					absint( $id )
+				)
+			);
+		}
+
+		if ( ! $xprofile_field_object instanceof \BP_XProfile_Field ) {
+			return null;
+		}
+
+		return new XProfileField( $xprofile_field_object );
+	}
+
+	/**
+	 * Wrapper for the XProfileGroupsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new XProfileGroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the XProfileFieldsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**

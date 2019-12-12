@@ -116,20 +116,13 @@ class GroupUpdate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
-
-			/**
-			 * Get group ID.
-			 */
-			$group_id = GroupMutation::get_group_id_from_input( $input );
 
 			/**
 			 * Get the group.
 			 */
-			$group = groups_get_group( absint( $group_id ) );
+			$group = GroupMutation::get_group_from_input( $input );
 
 			/**
 			 * Confirm if group exists.
@@ -142,7 +135,7 @@ class GroupUpdate {
 			 * Stop now if a user isn't allowed to update a group.
 			 */
 			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to update this group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
@@ -156,7 +149,7 @@ class GroupUpdate {
 			 * Throw an exception if the group failed to be updated.
 			 */
 			if ( ! is_numeric( $group_id ) ) {
-				throw new UserError( __( 'Cannot update existing group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Could not update existing group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

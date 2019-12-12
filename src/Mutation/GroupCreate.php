@@ -49,7 +49,7 @@ class GroupCreate {
 				'description' => __( 'The ID of the parent group.', 'wp-graphql-buddypress' ),
 			],
 			'name'      => [
-				'type'        => 'String',
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The name of the group.', 'wp-graphql-buddypress' ),
 			],
 			'description'      => [
@@ -108,9 +108,7 @@ class GroupCreate {
 			 * Throw an exception if there's no input.
 			 */
 			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError(
-					__( 'Mutation not processed. There was no input for the mutation or the group_object was invalid.', 'wp-graphql-buddypress' )
-				);
+				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
@@ -118,13 +116,6 @@ class GroupCreate {
 			 */
 			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to create groups.', 'wp-graphql-buddypress' ) );
-			}
-
-			/**
-			 * The group name is required.
-			 */
-			if ( empty( $input['name'] ) ) {
-				throw new UserError( __( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
@@ -138,7 +129,7 @@ class GroupCreate {
 			 * Throw an exception if the group failed to be created.
 			 */
 			if ( ! is_numeric( $group_id ) ) {
-				throw new UserError( __( 'The object failed to create but no error was provided.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Could not create Group.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
