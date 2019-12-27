@@ -45,7 +45,7 @@ class XProfileGroupType {
 					],
 					'name'             => [
 						'type'        => 'String',
-						'description' => __( 'XProfile group name', 'wp-graphql-buddypress' ),
+						'description' => __( 'XProfile group name.', 'wp-graphql-buddypress' ),
 					],
 					'groupOrder'             => [
 						'type'        => 'Int',
@@ -61,7 +61,7 @@ class XProfileGroupType {
 						'args'        => [
 							'format' => [
 								'type'        => 'GroupObjectFieldFormatEnum',
-								'description' => __( 'Format of the field output', 'wp-graphql' ),
+								'description' => __( 'Format of the field output.', 'wp-graphql' ),
 							],
 						],
 						'resolve'     => function( XProfileGroup $group, array $args ) {
@@ -77,7 +77,7 @@ class XProfileGroupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type, $context ) {
+				'resolve_node'      => function( $node, $id, $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_group_object( $id, $context );
 					}
@@ -99,15 +99,15 @@ class XProfileGroupType {
 			'xprofileGroupBy',
 			[
 				'type'        => self::$type_name,
-				'description' => __( 'Get a BuddyPress XProfile Group object', 'wp-graphql-buddypress' ),
+				'description' => __( 'Get a BuddyPress XProfile Group object.', 'wp-graphql-buddypress' ),
 				'args'        => [
 					'id'           => [
 						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
 					'groupId'      => [
 						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID', 'wp-graphql-buddypress' ),
+						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {

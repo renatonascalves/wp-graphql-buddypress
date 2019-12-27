@@ -37,9 +37,9 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		];
 
 		/**
-		 * Prepare for later use
+		 * Prepare for later use.
 		 */
-		$last = ! empty( $this->args['last'] ) ? $this->args['last'] : null;
+		$last = $this->args['last'] ?? null;
 
 		/**
 		 * Collect the input_fields.
@@ -65,7 +65,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		$query_args['graphql_args'] = $this->args;
 
 		/**
-		 * Assign group.
+		 * Assign group when trying to get group members from a group.
 		 */
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
 			$query_args['group_id'] = $this->source->groupId;

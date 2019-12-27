@@ -34,7 +34,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Prepare for later use
 		 */
-		$last = ! empty( $this->args['last'] ) ? $this->args['last'] : null;
+		$last = $this->args['last'] ?? null;
 
 		/**
 		 * Collect the input_fields.

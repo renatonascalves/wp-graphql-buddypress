@@ -13,7 +13,7 @@ use WPGraphQL\Model\Model;
 use WPGraphQL\Types;
 
 /**
- * Class Group - Models the data for the Group object type
+ * Class Group - Models the data for the Group object type.
  *
  * @property string $id
  * @property string $groupId
@@ -87,40 +87,41 @@ class Group extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'               => function() {
-					return ! empty( $this->data->id ) ? Relay::toGlobalId( 'group', $this->data->id ) : null;
+					return ! empty( $this->data->id )
+						? Relay::toGlobalId( 'group', $this->data->id )
+						: null;
 				},
 				'groupId'          => function() {
-					return ! empty( $this->data->id ) ? $this->data->id : null;
+					return $this->data->id ?? null;
 				},
 				'parent'           => function() {
-					return ! empty( $this->data->parent_id ) ? $this->data->parent_id : null;
+					return $this->data->parent_id ?? null;
 				},
 				'creator'          => function() {
-					return ! empty( $this->data->creator_id ) ? $this->data->creator_id : null;
+					return $this->data->creator_id ?? null;
 				},
 				'name'             => function() {
-					return ! empty( $this->data->name ) ? $this->data->name : null;
+					return $this->data->name ?? null;
 				},
 				'slug'             => function() {
-					return ! empty( $this->data->slug ) ? $this->data->slug : null;
+					return $this->data->slug ?? null;
 				},
 				'description'      => function() {
-					return ! empty( $this->data->description ) ? $this->data->description : null;
+					return $this->data->description ?? null;
 				},
 				'link'             => function() {
-					$link = bp_get_group_permalink( $this->data );
-					return ! empty( $link ) ? $link : null;
+					return bp_get_group_permalink( $this->data ) ?? null;
 				},
 				'hasForum'         => function() {
 					return $this->data->enable_forum;
 				},
-				'totalMemberCount'        => [
+				'totalMemberCount' => [
 					'callback'   => function() {
 						return groups_get_groupmeta( $this->data->id, 'total_member_count' );
 					},
 					'capability' => 'bp_moderate',
 				],
-				'lastActivity'        => [
+				'lastActivity'     => [
 					'callback'   => function() {
 						return Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
 					},

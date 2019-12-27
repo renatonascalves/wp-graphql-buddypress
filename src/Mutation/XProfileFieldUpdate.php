@@ -3,7 +3,7 @@
  * XProfileFieldUpdate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -74,11 +74,11 @@ class XProfileFieldUpdate {
 			],
 			'groupId'          => [
 				'type'        => 'Int',
-				'description' => __( 'The id of the group this field will assigned to.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The id of the group this field will be assigned to.', 'wp-graphql-buddypress' ),
 			],
 			'parentId'          => [
 				'type'        => 'Int',
-				'description' => __( 'The id of the field this field will assigned to.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The id of the field this field will be updated into.', 'wp-graphql-buddypress' ),
 			],
 			'canDelete'      => [
 				'type'        => 'Boolean',

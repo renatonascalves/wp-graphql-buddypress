@@ -3,7 +3,7 @@
  * GroupMutation Class.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Data
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
@@ -57,7 +57,7 @@ class GroupMutation {
 	 *
 	 * @return array
 	 */
-	public static function prepare_group_args( $input, $group = null, $action ) {
+	public static function prepare_group_args( array $input, $group = null, string $action ) {
 		$output_args = [
 			'name'        => empty( $input['name'] )
 				? $group->name ?? ''

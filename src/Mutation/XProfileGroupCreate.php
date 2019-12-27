@@ -3,7 +3,7 @@
  * XProfileGroupCreate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -65,7 +65,7 @@ class XProfileGroupCreate {
 			'group' => [
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function( array $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}

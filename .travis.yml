@@ -23,12 +23,20 @@ env:
 
 matrix:
   include:
+    - php: 7.4
+      env: WP_VERSION=master PHPCS=1
+    - php: 7.4
+      env: WP_VERSION=5.1
+    - php: 7.4
+      env: WP_VERSION=5.0
     - php: 7.3
       env: WP_VERSION=master PHPCS=1
     - php: 7.3
+      env: WP_VERSION=5.1
+    - php: 7.3
       env: WP_VERSION=5.0
     - php: 7.2
-      env: WP_VERSION=master
+      env: WP_VERSION=master PHPCS=1
     - php: 7.2
       env: WP_VERSION=5.1
     - php: 7.2
@@ -70,7 +78,7 @@ before_script:
     fi
 
 install:
-  # Set up WP + BP + WPGraphQL installation
+  # Set up WP + BP + WPGraphQL.
   - export WP_DEVELOP_DIR=/tmp/wordpress/
   - export WP_TESTS_DIR=$WP_DEVELOP_DIR/tests/phpunit
   - mkdir -p $WP_DEVELOP_DIR

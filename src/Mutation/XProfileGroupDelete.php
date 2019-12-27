@@ -3,7 +3,7 @@
  * XProfileGroupDelete Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -61,14 +61,14 @@ class XProfileGroupDelete {
 			'deleted' => [
 				'type'        => 'Boolean',
 				'description' => __( 'The status of the XProfile group deletion.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => function ( array $payload ) {
 					return (bool) $payload['deleted'];
 				},
 			],
 			'group'   => [
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The deleted XProfile group object.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => function ( array $payload ) {
 					return $payload['previousObject'] ?? null;
 				},
 			],

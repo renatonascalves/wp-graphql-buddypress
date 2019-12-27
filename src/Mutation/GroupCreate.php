@@ -3,7 +3,7 @@
  * GroupCreate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -85,7 +85,7 @@ class GroupCreate {
 			'group' => [
 				'type'        => 'Group',
 				'description' => __( 'The group that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function( array $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}
@@ -119,7 +119,7 @@ class GroupCreate {
 			}
 
 			/**
-			 * Create group and return the ID.
+			 * Create group and return its newly created ID.
 			 */
 			$group_id = groups_create_group(
 				GroupMutation::prepare_group_args( $input, null, 'create' )
@@ -135,10 +135,10 @@ class GroupCreate {
 			/**
 			 * Fires after a group is created.
 			 *
-			 * @param int         $group_id      The ID of the group being created.
-			 * @param array       $input         The input of the mutation.
-			 * @param AppContext  $context       The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info          The ResolveInfo passed down the resolve tree.
+			 * @param int         $group_id The ID of the group being created.
+			 * @param array       $input    The input of the mutation.
+			 * @param AppContext  $context  The AppContext passed down the resolve tree.
+			 * @param ResolveInfo $info     The ResolveInfo passed down the resolve tree.
 			 */
 			do_action( 'bp_graphql_groups_create_mutation', $group_id, $input, $context, $info );
 

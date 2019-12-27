@@ -3,7 +3,7 @@
  * XProfileGroupUpdate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -77,7 +77,7 @@ class XProfileGroupUpdate {
 			'group' => [
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function( array $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}
@@ -136,7 +136,7 @@ class XProfileGroupUpdate {
 				throw new UserError( __( 'Cannot update existing XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Get group id.
+			// Set group id.
 			$xprofile_group_id = $xprofile_group_object->id;
 
 			// Update the position if the group_order exists.
@@ -148,9 +148,9 @@ class XProfileGroupUpdate {
 			 * Fires after a XProfile group is updated.
 			 *
 			 * @param int         $xprofile_group_id The ID of the XProfile group being updated.
-			 * @param array       $input            The input of the mutation.
-			 * @param AppContext  $context          The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info             The ResolveInfo passed down the resolve tree.
+			 * @param array       $input             The input of the mutation.
+			 * @param AppContext  $context           The AppContext passed down the resolve tree.
+			 * @param ResolveInfo $info              The ResolveInfo passed down the resolve tree.
 			 */
 			do_action( 'bp_graphql_xprofile_groups_update_mutation', $xprofile_group_id, $input, $context, $info );
 

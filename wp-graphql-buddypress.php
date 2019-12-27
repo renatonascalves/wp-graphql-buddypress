@@ -1,13 +1,13 @@
 <?php
 /**
- * WP GraphQL BuddyPress
+ * WPGraphQL BuddyPress
  *
  * @package      WPGraphQL\Extensions\BuddyPress
  * @author       Renato Alves
  * @license      GPLv3
  *
  * @wordpress-plugin
- * Plugin Name:       WP GraphQL BuddyPress
+ * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
  * Description:       Adds BuddyPress functionality to WPGraphQL schema.
  * Version:           0.0.1-alpha
@@ -35,7 +35,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Stores the instance of the WP_GraphQL_BuddyPress class
 		 *
-		 * @since  0.0.1-alpha
+		 * @since 0.0.1-alpha
 		 * @var WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
 		private static $instance;
@@ -43,7 +43,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * The instance of the WP_GraphQL_BuddyPress object
 		 *
-		 * @since  0.0.1-alpha
+		 * @since 0.0.1-alpha
 		 * @return object|WP_GraphQL_BuddyPress - The one true WP_GraphQL_BuddyPress
 		 */
 		public static function instance() {
@@ -75,7 +75,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.
 		 *
-		 * @since  0.0.1-alpha
+		 * @since 0.0.1-alpha
 		 * @return void
 		 */
 		public function __clone() {
@@ -94,7 +94,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Disable unserializing of the class.
 		 *
-		 * @since  0.0.1-alpha
+		 * @since 0.0.1-alpha
 		 * @return void
 		 */
 		public function __wakeup() {
@@ -113,7 +113,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Setup plugin constants.
 		 *
-		 * @since  0.0.1-alpha
+		 * @since 0.0.1-alpha
 		 * @return void
 		 */
 		private function setup_constants() {

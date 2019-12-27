@@ -58,22 +58,24 @@ class XProfileField extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'          => function() {
-					return ! empty( $this->data->id ) ? Relay::toGlobalId( 'xprofile_field_object', $this->data->id ) : null;
+					return ! empty( $this->data->id )
+						? Relay::toGlobalId( 'xprofile_field_object', $this->data->id )
+						: null;
 				},
 				'fieldId'     => function() {
-					return ! empty( $this->data->id ) ? $this->data->id : null;
+					return $this->data->id ?? null;
 				},
 				'groupId'     => function() {
-					return ! empty( $this->data->group_id ) ? $this->data->group_id : null;
+					return $this->data->group_id ?? null;
 				},
 				'parent'        => function() {
-					return ! empty( $this->data->parent_id ) ? $this->data->parent_id : null;
+					return $this->data->parent_id ?? null;
 				},
 				'name'        => function() {
-					return ! empty( $this->data->name ) ? $this->data->name : null;
+					return $this->data->name ?? null;
 				},
 				'type'        => function() {
-					return ! empty( $this->data->type ) ? $this->data->type : null;
+					return $this->data->type ?? null;
 				},
 				'canDelete'   => function() {
 					return $this->data->can_delete;
@@ -91,7 +93,7 @@ class XProfileField extends Model {
 					return $this->data->group_order;
 				},
 				'orderBy'  => function() {
-					return ! empty( $this->data->order_by ) ? $this->data->order_by : null;
+					return $this->data->order_by ?? null;
 				},
 				'isDefaultOption'   => function() {
 					return $this->data->is_default_option;
@@ -103,13 +105,13 @@ class XProfileField extends Model {
 					return $this->data->do_autolink;
 				},
 				'description' => function() {
-					return ! empty( $this->data->description ) ? $this->data->description : null;
+					return $this->data->description ?? null;
 				},
 				'value' => function() {
-					return ! empty( $this->data->data->value ) ? $this->data->data->value : null;
+					return $this->data->data->value ?? null;
 				},
 				'memberTypes' => function() {
-					return ! empty( $this->data->get_member_types() ) ? $this->data->get_member_types() : null;
+					return $this->data->get_member_types() ?? null;
 				},
 			];
 		}

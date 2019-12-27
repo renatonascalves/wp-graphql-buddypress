@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Groups Connections
+ * Registers Groups Connections.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -14,12 +14,12 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Data\DataSource;
 
 /**
- * Class GroupConnection
+ * Class GroupConnection.
  */
 class GroupConnection {
 
 	/**
-	 * Register connections to Groups
+	 * Register connections to Groups.
 	 */
 	public static function register_connections() {
 
@@ -135,7 +135,7 @@ class GroupConnection {
 				'type'        => [
 					'list_of' => 'String',
 				],
-				'description' => __( 'Search group or groups by its slug.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Search group or groups by its/their slug(s).', 'wp-graphql-buddypress' ),
 			],
 			'status'      => [
 				'type'        => [

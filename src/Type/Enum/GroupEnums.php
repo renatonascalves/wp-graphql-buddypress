@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 use WPGraphQL\Type\WPEnumType;
 
 /**
- * GroupEnums Class
+ * GroupEnums Class.
  */
 class GroupEnums {
 
@@ -166,11 +166,6 @@ class GroupEnums {
 		$group_types             = bp_groups_get_group_types();
 
 		if ( ! empty( $group_types ) && is_array( $group_types ) ) {
-			/**
-			 * Reset the array
-			 */
-			$group_types_enum_values = [];
-
 			/**
 			 * Loop through the group_stati
 			 */

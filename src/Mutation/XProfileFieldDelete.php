@@ -3,7 +3,7 @@
  * XProfileFieldDelete Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -44,11 +44,11 @@ class XProfileFieldDelete {
 				'type' => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile field.', 'wp-graphql-buddypress' ),
 			],
-			'fieldId'          => [
+			'fieldId' => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_XProfile_Field->id field.', 'wp-graphql-buddypress' ),
 			],
-			'deleteData'      => [
+			'deleteData' => [
 				'type'        => 'Boolean',
 				'description' => __( 'Required if you want to delete the data for the field.', 'wp-graphql-buddypress' ),
 			],
@@ -73,7 +73,7 @@ class XProfileFieldDelete {
 				'type'        => 'XProfileField',
 				'description' => __( 'The deleted XProfile field object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $payload ) {
-					return $payload['previousObject'] ? $payload['previousObject'] : null;
+					return $payload['previousObject'] ?? null;
 				},
 			],
 		];

@@ -48,16 +48,18 @@ class XProfileGroup extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'          => function() {
-					return ! empty( $this->data->id ) ? Relay::toGlobalId( 'xprofile_group_object', $this->data->id ) : null;
+					return ! empty( $this->data->id )
+						? Relay::toGlobalId( 'xprofile_group_object', $this->data->id )
+						: null;
 				},
 				'groupId'     => function() {
-					return ! empty( $this->data->id ) ? $this->data->id : null;
+					return $this->data->id ?? null;
 				},
 				'name'        => function() {
-					return ! empty( $this->data->name ) ? $this->data->name : null;
+					return $this->data->name ?? null;
 				},
 				'description' => function() {
-					return ! empty( $this->data->description ) ? $this->data->description : null;
+					return $this->data->description ?? null;
 				},
 				'groupOrder'  => function() {
 					return $this->data->group_order;

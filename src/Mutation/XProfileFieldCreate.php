@@ -3,7 +3,7 @@
  * XProfileFieldCreate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -115,7 +115,7 @@ class XProfileFieldCreate {
 			'field' => [
 				'type'        => 'XProfileField',
 				'description' => __( 'The XProfile field that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function( array $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}
@@ -149,7 +149,7 @@ class XProfileFieldCreate {
 			}
 
 			/**
-			 * Create XProfile field and return the ID.
+			 * Create XProfile field and return its ID.
 			 */
 			$xprofile_field_id = xprofile_insert_field(
 				XProfileFieldMutation::prepare_xprofile_field_args( $input, null, 'create' )

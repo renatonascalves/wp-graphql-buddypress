@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 
 /**
@@ -55,15 +56,12 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 			/**
 			 * Get the XPofile group object.
 			 */
-			$xprofile_group_object = current(
-				bp_xprofile_get_groups(
-					[
-						'profile_group_id' => absint( $key ),
-					]
-				)
-			);
+			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( absint( $key ) );
 
-			if ( empty( $xprofile_group_object ) || empty( $xprofile_group_object->id ) ) {
+			/**
+			 * Confirm if it is a valid object.
+			 */
+			if ( empty( $xprofile_group_object ) || ! is_object( $xprofile_group_object ) ) {
 				throw new UserError(
 					sprintf(
 						// translators: XProfile Group ID.
@@ -79,11 +77,6 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 			 */
 			$this->loaded_xprofile_groups[ $key ] = new Deferred(
 				function() use ( $xprofile_group_object ) {
-
-					if ( ! is_object( $xprofile_group_object ) ) {
-						return null;
-					}
-
 					return new XProfileGroup( $xprofile_group_object );
 				}
 			);

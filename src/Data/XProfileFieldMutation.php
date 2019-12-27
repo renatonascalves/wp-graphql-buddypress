@@ -3,7 +3,7 @@
  * XProfileFieldMutation Class.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Data
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
@@ -21,7 +21,7 @@ class XProfileFieldMutation {
 	 *
 	 * @throws UserError User error for invalid Relay ID.
 	 *
-	 * @param array $input Array of possible input fields.
+	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile field.
 	 *
 	 * @return \BP_XProfile_Field
 	 */
@@ -38,6 +38,8 @@ class XProfileFieldMutation {
 			$xprofile_field_id = absint( $id_components['id'] );
 		} elseif ( ! empty( $input['fieldId'] ) ) {
 			$xprofile_field_id = absint( $input['fieldId'] );
+		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
+			$xprofile_field_id = absint( $input );
 		}
 
 		return new \BP_XProfile_Field( absint( $xprofile_field_id ) );
@@ -108,19 +110,19 @@ class XProfileFieldMutation {
 	 * @param int   $xprofile_field_id Field ID.
 	 * @param array $input             The input for the mutation.
 	 */
-	public static function set_additional_fields( $xprofile_field_id, $input ) {
+	public static function set_additional_fields( int $xprofile_field_id, array $input ) {
 
-		// Setting/Updating member types if avaiable.
+		// Setting/Updating member types if available.
 		if ( ! empty( $input['memberTypes'] ) ) {
 
 			// Append on update?!
-			$append = ( isset( $input['fieldId'] ) || isset( $input['id'] ) );
+			$append = isset( $input['fieldId'] ) || isset( $input['id'] );
 
 			// Set types.
 			( new \BP_XProfile_Field( $xprofile_field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
 		}
 
-		$default_visibility = ! empty( $input['defaultVisibility'] ) ? $input['defaultVisibility'] : 'public';
+		$default_visibility = $input['defaultVisibility'] ?? 'public';
 		bp_xprofile_update_field_meta( $xprofile_field_id, 'default_visibility', $default_visibility );
 
 		$allow_custom_visibility = ! empty( $input['allowCustomVisibility'] ) ? 'allowed' : 'disabled';

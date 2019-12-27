@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers XProfile Field Connections
+ * Registers XProfile Field Connections.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -13,7 +13,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
- * Class XProfileFieldConnection
+ * Class XProfileFieldConnection.
  */
 class XProfileFieldConnection {
 

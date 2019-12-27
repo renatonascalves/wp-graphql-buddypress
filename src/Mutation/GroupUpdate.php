@@ -3,7 +3,7 @@
  * GroupUpdate Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -93,7 +93,7 @@ class GroupUpdate {
 			'group' => [
 				'type'        => 'Group',
 				'description' => __( 'The group that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function( array $payload, array $args, AppContext $context ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}
@@ -155,7 +155,7 @@ class GroupUpdate {
 			/**
 			 * Fires after a group is updated.
 			 *
-			 * @param \BP_Groups_Group $group   The updated group.
+			 * @param \BP_Groups_Group $group   The updated BuddyPress group object.
 			 * @param array            $input   The input of the mutation.
 			 * @param AppContext       $context The AppContext passed down the resolve tree.
 			 * @param ResolveInfo      $info    The ResolveInfo passed down the resolve tree.

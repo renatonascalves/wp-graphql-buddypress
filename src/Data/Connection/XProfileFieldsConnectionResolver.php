@@ -33,7 +33,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Prepare for later use.
 		 */
-		$last = ! empty( $this->args['last'] ) ? $this->args['last'] : null;
+		$last = $this->args['last'] ?? null;
 
 		/**
 		 * Collect the input_fields.
@@ -61,14 +61,8 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Setting profile group ID.
 		 */
-		if ( true === is_object( $this->source ) ) {
-			switch ( true ) {
-				case $this->source instanceof XProfileGroup:
-					$query_args['profile_group_id'] = $this->source->groupId;
-					break;
-				default:
-					break;
-			}
+		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
+			$query_args['profile_group_id'] = $this->source->groupId;
 		}
 
 		/**
@@ -92,7 +86,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns XProfile groups query with the fields.
+	 * Returns the XProfile groups query, with fields.
 	 *
 	 * @return array
 	 */

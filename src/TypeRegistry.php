@@ -3,7 +3,7 @@
  * Registers BuddyPress types to the schema.
  *
  * @package \WPGraphQL\Extensions\BuddyPress
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress;
@@ -30,7 +30,7 @@ class TypeRegistry {
 	}
 
 	/**
-	 * Registers BuddyPress types, connection, and mutations to GraphQL schema.
+	 * Registers BuddyPress types, connections, and mutations to GraphQL schema.
 	 */
 	public static function graphql_register_types() {
 

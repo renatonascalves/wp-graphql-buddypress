@@ -22,7 +22,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionReso
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
- * Class Factory
+ * Class Factory,
  */
 class Factory {
 
@@ -83,7 +83,6 @@ class Factory {
 	 * @return \XProfileField|null
 	 */
 	public static function resolve_xprofile_field_object( $id, AppContext $context ) {
-
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -96,7 +95,7 @@ class Factory {
 		 */
 		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
 
-		if ( empty( $xprofile_field_object ) ) {
+		if ( empty( $xprofile_field_object ) || ! $xprofile_field_object instanceof \BP_XProfile_Field ) {
 			throw new UserError(
 				sprintf(
 					// translators: XProfile Field ID.
@@ -104,10 +103,6 @@ class Factory {
 					absint( $id )
 				)
 			);
-		}
-
-		if ( ! $xprofile_field_object instanceof \BP_XProfile_Field ) {
-			return null;
 		}
 
 		return new XProfileField( $xprofile_field_object );

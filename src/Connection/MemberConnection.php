@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Members Connections
+ * Registers Members Connections.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -14,7 +14,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Data\DataSource;
 
 /**
- * Class MemberConnection
+ * Class MemberConnection.
  */
 class MemberConnection {
 
@@ -68,7 +68,7 @@ class MemberConnection {
 			],
 			'userId'      => [
 				'type'        => 'Int',
-				'description' => __( 'Limit results to friends of a user.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results to friends of a user with specific ID.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
 				'type'        => [
@@ -84,21 +84,21 @@ class MemberConnection {
 			],
 			'memberType'     => [
 				'type'        => [
-					'list_of' => 'String',
+					'list_of' => 'MemberTypesEnum',
 				],
-				'description' => __( 'Limit results set to certain type(s).', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results set to certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'memberTypeIn'     => [
 				'type'        => [
-					'list_of' => 'String',
+					'list_of' => 'MemberTypesEnum',
 				],
-				'description' => __( 'Limit results set to include certain member types.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results set to include certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'memberTypeNotIn'     => [
 				'type'        => [
-					'list_of' => 'String',
+					'list_of' => 'MemberTypesEnum',
 				],
-				'description' => __( 'Limit results set to exclude certain member types.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit results set to exclude certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'xprofile'   => [
 				'type'        => 'String',

@@ -3,7 +3,7 @@
  * GroupDelete Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
- * @since   0.0.1-alpha
+ * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
@@ -65,14 +65,14 @@ class GroupDelete {
 			'deleted' => [
 				'type'        => 'Boolean',
 				'description' => __( 'The status of the group deletion.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => function ( array $payload ) {
 					return (bool) $payload['deleted'];
 				},
 			],
 			'group'   => [
 				'type'        => 'Group',
 				'description' => __( 'The deleted group object.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $payload ) {
+				'resolve'     => function ( array $payload ) {
 					return $payload['previousObject'] ?? null;
 				},
 			],
@@ -114,7 +114,7 @@ class GroupDelete {
 			}
 
 			/**
-			 * Get a Group object before it is deleted.
+			 * Get and save the Group object before it is deleted.
 			 */
 			$previous_group = new Group( $group );
 

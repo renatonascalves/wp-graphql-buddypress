@@ -68,7 +68,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 			 */
 			$group_object = groups_get_group( absint( $key ) );
 
-			if ( empty( $group_object ) ) {
+			if ( empty( $group_object ) || ! $group_object instanceof \BP_Groups_Group ) {
 				throw new UserError(
 					sprintf(
 						// translators: Group ID.
@@ -84,11 +84,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 			 */
 			$this->loaded_groups[ $key ] = new Deferred(
 				function() use ( $group_object ) {
-
-					if ( ! $group_object instanceof \BP_Groups_Group ) {
-						return null;
-					}
-
 					return new Group( $group_object );
 				}
 			);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers XProfile Group Connections
+ * Registers XProfile Group Connections.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -14,7 +14,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Model\User;
 
 /**
- * Class XProfileGroupConnection
+ * Class XProfileGroupConnection.
  */
 class XProfileGroupConnection {
 
@@ -44,7 +44,7 @@ class XProfileGroupConnection {
 	/**
 	 * This returns a RootQuery > XProfileGroup connection config.
 	 *
-	 * @todo There is a bug where if one uses both connections, the userId is overlapped to other connections.
+	 * @todo There is a bug where if one uses both connections, the userId is overlapping to other connections.
 	 *
 	 * @param array $args Array of arguments.
 	 *
