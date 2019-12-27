@@ -47,8 +47,8 @@ matrix:
       env: WP_VERSION=4.8
     - php: 7.2
       env: WP_VERSION=4.7
-    allow_failures:
-      - env: CANFAIL
+  allow_failures:
+    - env: CANFAIL
 
 before_install:
   - |
