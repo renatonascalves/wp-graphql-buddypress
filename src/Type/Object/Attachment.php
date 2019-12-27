@@ -29,18 +29,6 @@ class Attachment {
 			[
 				'description' => __( 'BuddyPress attachment object used in Avatar and Cover images.', 'wp-graphql-buddypress' ),
 				'fields'      => [
-					'height'       => [
-						'type'        => 'Int',
-						'description' => __( 'Height of the attachment image.', 'wp-graphql-buddypress' ),
-					],
-					'width'        => [
-						'type'        => 'Int',
-						'description' => __( 'Width of the attachment image.', 'wp-graphql-buddypress' ),
-					],
-					'scheme'       => [
-						'type'        => 'String',
-						'description' => __( 'Type of url scheme to use. Typically HTTP vs. HTTPS.', 'wp-graphql-buddypress' ),
-					],
 					'thumb'          => [
 						'type'        => 'String',
 						'description' => __( 'URL for the attachment with the thumb size.', 'wp-graphql-buddypress' ),
