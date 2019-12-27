@@ -19,6 +19,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
@@ -106,6 +107,71 @@ class Factory {
 		}
 
 		return new XProfileField( $xprofile_field_object );
+	}
+
+	/**
+	 * Resolve an attachment avatar for an object (user, group, blog, etc).
+	 *
+	 * @param int|null $id     ID of the object or null.
+	 * @param string   $object Object (user, group, blog, etc).
+	 *
+	 * @return null|Attachment
+	 */
+	public static function resolve_attachment( $id, $object = 'user' ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$attachment = new \stdClass();
+
+		foreach ( [ 'full', 'thumb' ] as $type ) {
+			$attachment->$type = bp_core_fetch_avatar(
+				[
+					'object'  => $object,
+					'type'    => $type,
+					'html'    => false,
+					'item_id' => (int) $id,
+					'no_grav' => true,
+				]
+			);
+		}
+
+		if ( empty( $attachment->full ) && empty( $attachment->thumb ) ) {
+			return null;
+		}
+
+		return new Attachment( $attachment );
+	}
+
+	/**
+	 * Resolve an attachment cover for an object (user, group, blog, etc).
+	 *
+	 * @param int|null $id     ID of the object or null.
+	 * @param string   $object Object (users, groups, blogs, etc).
+	 *
+	 * @return null|Attachment
+	 */
+	public static function resolve_attachment_cover( $id, $object = 'users' ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$url = bp_attachments_get_attachment(
+			'url',
+			[
+				'object_dir' => $object,
+				'item_id'    => $id,
+			]
+		);
+
+		if ( empty( $url ) ) {
+			return null;
+		}
+
+		$attachment       = new \stdClass();
+		$attachment->full = $url;
+
+		return new Attachment( $attachment );
 	}
 
 	/**

@@ -9,6 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * MemberType Class.
@@ -81,6 +82,30 @@ class MemberType {
 					}
 
 					return $link;
+				},
+			]
+		);
+
+		register_graphql_field(
+			self::$type_name,
+			'attachmentCover',
+			[
+				'type'        => 'Attachment',
+				'description' => __( 'Attachment Cover of the member.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( $source ) {
+					return Factory::resolve_attachment_cover( $source->userId );
+				},
+			]
+		);
+
+		register_graphql_field(
+			self::$type_name,
+			'attachmentAvatar',
+			[
+				'type'        => 'Attachment',
+				'description' => __( 'Attachment Avatar of the member.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( $source ) {
+					return Factory::resolve_attachment( $source->userId );
 				},
 			]
 		);

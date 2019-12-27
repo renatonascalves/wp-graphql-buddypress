@@ -90,6 +90,9 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate::register_mutation();
 		}
+
+		// Attachment.
+		\WPGraphQL\Extensions\BuddyPress\Type\Object\Attachment::register();
 	}
 
 	/**
