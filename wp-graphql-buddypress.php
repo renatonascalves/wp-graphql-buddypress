@@ -15,7 +15,7 @@
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
- * Requires PHP:      7.2
+ * Requires PHP:      7.0
  * Requires WP:       4.9
  * Tested up to:      5.2.4
  * License:           GPLv3
