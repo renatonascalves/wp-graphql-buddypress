@@ -36,7 +36,7 @@ if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR' ) ) {
 }
 
 /**
- * Manually load the plugin being tested.
+ * Manually load the plugins being tested.
  */
 function _manually_load_plugin() {
 	// Make sure BP is installed and loaded first.

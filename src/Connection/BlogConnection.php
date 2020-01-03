@@ -41,8 +41,8 @@ class BlogConnection {
 			'toType'         => 'Blog',
 			'fromFieldName'  => 'blogs',
 			'connectionArgs' => self::get_connection_args(),
-			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
-				return Factory::resolve_blog_object( $id, $context );
+			'resolveNode'    => function ( $id ) {
+				return Factory::resolve_blog_object( $id );
 			},
 			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 				return Factory::resolve_blogs_connection( $source, $args, $context, $info );

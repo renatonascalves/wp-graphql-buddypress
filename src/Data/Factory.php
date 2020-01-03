@@ -24,7 +24,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
- * Class Factory,
+ * Class Factory.
  */
 class Factory {
 
@@ -127,9 +127,10 @@ class Factory {
 		/**
 		 * Get the blog object.
 		 */
-		$blog_object = new \BP_Blogs_Blog( absint( $id ) );
+		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => $id ] ) );
+		$blog_object = $blogs[0];
 
-		if ( empty( $blog_object ) || ! $blog_object instanceof \BP_Blogs_Blog ) {
+		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(
 				sprintf(
 					// translators: XProfile Field ID.

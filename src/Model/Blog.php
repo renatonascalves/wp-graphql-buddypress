@@ -21,25 +21,25 @@ use WPGraphQL\Types;
  * @property string $name
  * @property string $permalink
  * @property string $description
- * @property string $domain
  * @property string $path
+ * @property string $domain
  * @property string $lastActivity
  */
 class Blog extends Model {
 
 	/**
-	 * Stores the BP_Blogs_Blog object for the incoming data.
+	 * Stores the Blog object for the incoming data.
 	 *
-	 * @var \BP_Blogs_Blog $data
+	 * @var \stClass $data
 	 */
 	protected $data;
 
 	/**
 	 * Blog constructor.
 	 *
-	 * @param \BP_Blogs_Blog $blog The incoming BP_Blogs_Blog object that needs modeling.
+	 * @param \stClass $blog The incoming blog object that needs modeling.
 	 */
-	public function __construct( \BP_Blogs_Blog $blog ) {
+	public function __construct( $blog ) {
 		$this->data = $blog;
 		parent::__construct();
 	}
@@ -60,7 +60,7 @@ class Blog extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'id'             => function() {
-					return ! empty( $this->data->id )
+					return ! empty( $this->data->blog_id )
 						? Relay::toGlobalId( 'blog', $this->data->blog_id )
 						: null;
 				},
@@ -95,7 +95,7 @@ class Blog extends Model {
 	/**
 	 * Get blog permalink.
 	 *
-	 * @param BP_Blogs_Blog $blog Blog object.
+	 * @param stClass $blog Blog object.
 	 *
 	 * @return string|null
 	 */

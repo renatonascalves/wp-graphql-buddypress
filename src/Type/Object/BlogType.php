@@ -95,9 +95,9 @@ class BlogType {
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type, $context ) {
+				'resolve_node'      => function( $node, $id, $type ) {
 					if ( self::$type_name === $type ) {
-						$node = Factory::resolve_group_object( $id, $context );
+						$node = Factory::resolve_blog_object( $id );
 					}
 
 					return $node;
@@ -128,7 +128,7 @@ class BlogType {
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( $source, array $args, AppContext $context ) {
+				'resolve'     => function ( $source, array $args ) {
 					$blog_id = 0;
 
 					if ( ! empty( $args['id'] ) ) {
@@ -143,7 +143,7 @@ class BlogType {
 						$blog_id = absint( $args['blogId'] );
 					}
 
-					return Factory::resolve_blog_object( $blog_id, $context );
+					return Factory::resolve_blog_object( $blog_id );
 				},
 			]
 		);
