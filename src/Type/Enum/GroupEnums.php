@@ -20,26 +20,6 @@ class GroupEnums {
 	 */
 	public static function register() {
 
-		// Group Field Format.
-		register_graphql_enum_type(
-			'GroupObjectFieldFormatEnum',
-			[
-				'description' => __( 'The format of group description field.', 'wp-graphql-buddypress' ),
-				'values'      => [
-					'RAW'      => [
-						'name'        => 'RAW',
-						'description' => __( 'Provide the field value directly from database', 'wp-graphql-buddypress' ),
-						'value'       => 'raw',
-					],
-					'RENDERED' => [
-						'name'        => 'RENDERED',
-						'description' => __( 'Apply the default WordPress rendering', 'wp-graphql-buddypress' ),
-						'value'       => 'rendered',
-					],
-				],
-			]
-		);
-
 		// Group Order By.
 		register_graphql_enum_type(
 			'GroupOrderByEnum',
