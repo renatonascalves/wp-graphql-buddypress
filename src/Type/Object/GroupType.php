@@ -188,14 +188,14 @@ class GroupType {
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
-							return Factory::resolve_attachment( $group->groupId, 'group' );
+							return Factory::resolve_attachment( $group->groupId ?? 0, 'group' );
 						},
 					],
 					'attachmentCover' => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
-							return Factory::resolve_attachment_cover( $group->groupId, 'groups' );
+							return Factory::resolve_attachment_cover( $group->groupId ?? 0, 'groups' );
 						},
 					],
 				],

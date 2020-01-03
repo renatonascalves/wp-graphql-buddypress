@@ -34,7 +34,7 @@ class MemberType {
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Member types associated with the user.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $source ) {
-					$types = bp_get_member_type( $source->userId, false );
+					$types = bp_get_member_type( $source->userId ?? 0, false );
 
 					if ( empty( $types ) ) {
 						return null;
@@ -56,7 +56,7 @@ class MemberType {
 						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
-					$mention_name = bp_activity_get_user_mentionname( $source->userId );
+					$mention_name = bp_activity_get_user_mentionname( $source->userId ?? 0 );
 
 					if ( empty( $mention_name ) ) {
 						return null;
@@ -74,26 +74,9 @@ class MemberType {
 				'type'        => 'String',
 				'description' => __( 'Profile URL of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $source ) {
+					$link = bp_core_get_user_domain( $source->userId ?? 0 );
 
-					$link = bp_core_get_user_domain( $source->userId );
-
-					if ( empty( $link ) ) {
-						return null;
-					}
-
-					return $link;
-				},
-			]
-		);
-
-		register_graphql_field(
-			self::$type_name,
-			'attachmentCover',
-			[
-				'type'        => 'Attachment',
-				'description' => __( 'Attachment Cover of the member.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
-					return Factory::resolve_attachment_cover( $source->userId );
+					return $link ?? null;
 				},
 			]
 		);
@@ -105,7 +88,19 @@ class MemberType {
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Avatar of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $source ) {
-					return Factory::resolve_attachment( $source->userId );
+					return Factory::resolve_attachment( $source->userId ?? 0 );
+				},
+			]
+		);
+
+		register_graphql_field(
+			self::$type_name,
+			'attachmentCover',
+			[
+				'type'        => 'Attachment',
+				'description' => __( 'Attachment Cover of the member.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( $source ) {
+					return Factory::resolve_attachment_cover( $source->userId ?? 0 );
 				},
 			]
 		);

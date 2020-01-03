@@ -110,7 +110,7 @@ class Factory {
 	}
 
 	/**
-	 * Resolve an attachment avatar for an object (user, group, blog, etc).
+	 * Resolve an attachment avatar for a object (user, group, blog, etc).
 	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (user, group, blog, etc).
@@ -127,11 +127,11 @@ class Factory {
 		foreach ( [ 'full', 'thumb' ] as $type ) {
 			$attachment->$type = bp_core_fetch_avatar(
 				[
+					'item_id' => $id,
 					'object'  => $object,
-					'type'    => $type,
-					'html'    => false,
-					'item_id' => (int) $id,
 					'no_grav' => true,
+					'html'    => false,
+					'type'    => $type,
 				]
 			);
 		}
@@ -144,14 +144,14 @@ class Factory {
 	}
 
 	/**
-	 * Resolve an attachment cover for an object (user, group, blog, etc).
+	 * Resolve an attachment cover for a object (user, group, blog, etc).
 	 *
 	 * @param int|null $id     ID of the object or null.
-	 * @param string   $object Object (users, groups, blogs, etc).
+	 * @param string   $object Object (members, groups, blogs, etc).
 	 *
 	 * @return null|Attachment
 	 */
-	public static function resolve_attachment_cover( $id, $object = 'users' ) {
+	public static function resolve_attachment_cover( $id, $object = 'members' ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
