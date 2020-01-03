@@ -15,7 +15,7 @@
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
- * Requires PHP:      7.2
+ * Requires PHP:      7.0
  * Requires WP:       4.9
  * Tested up to:      5.2.4
  * License:           GPLv3
@@ -76,7 +76,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * therefore, we don't want the object to be cloned.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		public function __clone() {
 
@@ -95,7 +94,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Disable unserializing of the class.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		public function __wakeup() {
 
@@ -114,7 +112,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Setup plugin constants.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		private function setup_constants() {
 
@@ -148,7 +145,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Uses composer's autoload to include required files.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		private function includes() {
 
@@ -164,7 +160,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Class dependencies.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		private function dependencies() {
 
@@ -185,7 +180,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * BuddyPress missing notice.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		public function buddypress_missing_notice() {
 			?>
@@ -198,9 +192,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * WPGraphQL missing notice.
 		 *
-		 * @access public
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		public function wpgraphql_missing_notice() {
 			?>
@@ -214,7 +206,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Sets up actions.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		private function actions() {
 
@@ -228,7 +219,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Sets up filters.
 		 *
 		 * @since 0.0.1-alpha
-		 * @return void
 		 */
 		private function filters() {
 
