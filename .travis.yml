@@ -47,6 +47,18 @@ matrix:
       env: WP_VERSION=4.8
     - php: 7.2
       env: WP_VERSION=4.7
+    - php: 7.0
+      env: WP_VERSION=master PHPCS=1
+    - php: 7.0
+      env: WP_VERSION=5.1
+    - php: 7.0
+      env: WP_VERSION=5.0
+    - php: 7.0
+      env: WP_VERSION=4.9
+    - php: 7.0
+      env: WP_VERSION=4.8
+    - php: 7.0
+      env: WP_VERSION=4.7
   fast_finish: true
   allow_failures:
     - php: 7.4
