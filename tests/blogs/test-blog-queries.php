@@ -45,12 +45,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 			blogBy( id: \"{$global_id}\" ) {
 				id
 				blogId
-				name
-				permalink
-				description
-				path
-				domain
-
 			}
 		}";
 
@@ -59,13 +53,8 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 			[
 				'data' => [
 					'blogBy' => [
-						'id'          => $global_id,
+						'id' => $global_id,
 						'blogId'      => $b1,
-						'name'        => 'Site 59',
-						'permalink'   => 'http://example.org/testpath59/',
-						'description' => 'Just another Test Blog Network site',
-						'path'        => '/testpath59/',
-						'domain'      => 'example.org',
 					],
 				],
 			],
