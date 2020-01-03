@@ -19,10 +19,12 @@ use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\Connection\BlogsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
- * Class Factory,
+ * Class Factory.
  */
 class Factory {
 
@@ -106,6 +108,53 @@ class Factory {
 		}
 
 		return new XProfileField( $xprofile_field_object );
+	}
+
+	/**
+	 * Returns a Blog object.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param int|null $id Blog ID or null.
+	 *
+	 * @return Blog|null
+	 */
+	public static function resolve_blog_object( $id ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		/**
+		 * Get the blog object.
+		 */
+		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => $id ] ) );
+		$blog_object = $blogs[0];
+
+		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
+			throw new UserError(
+				sprintf(
+					// translators: XProfile Field ID.
+					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
+					absint( $id )
+				)
+			);
+		}
+
+		return new Blog( $blog_object );
+	}
+
+	/**
+	 * Wrapper for the BlogsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new BlogsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**
