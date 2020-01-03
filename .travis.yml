@@ -24,11 +24,11 @@ env:
 matrix:
   include:
     - php: 7.4
-      env: WP_VERSION=master PHPCS=1 CANFAIL=1
+      env: WP_VERSION=master PHPCS=1
     - php: 7.4
-      env: WP_VERSION=5.1 CANFAIL=1
+      env: WP_VERSION=5.1
     - php: 7.4
-      env: WP_VERSION=5.0 CANFAIL=1
+      env: WP_VERSION=5.0
     - php: 7.3
       env: WP_VERSION=master PHPCS=1
     - php: 7.3
@@ -47,8 +47,9 @@ matrix:
       env: WP_VERSION=4.8
     - php: 7.2
       env: WP_VERSION=4.7
+  fast_finish: true
   allow_failures:
-    - env: CANFAIL
+    - php: 7.4
 
 before_install:
   - |
