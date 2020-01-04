@@ -55,7 +55,7 @@ class BlogType {
 					],
 					'name'             => [
 						'type'        => 'String',
-						'description' => __( 'The name of the Blog', 'wp-graphql-buddypress' ),
+						'description' => __( 'The name of the Blog.', 'wp-graphql-buddypress' ),
 					],
 					'permalink'             => [
 						'type'        => 'String',
@@ -67,7 +67,7 @@ class BlogType {
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
-								'description' => __( 'Format of the field output', 'wp-graphql' ),
+								'description' => __( 'Format of the field output.', 'wp-graphql' ),
 							],
 						],
 						'resolve'     => function( Blog $blog, array $args ) {
@@ -79,7 +79,7 @@ class BlogType {
 								return $blog->description;
 							}
 
-							return $blog->description;
+							return stripslashes( $blog->description );
 						},
 					],
 					'path'     => [

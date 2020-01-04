@@ -30,27 +30,18 @@ class Blog extends Model {
 	/**
 	 * Stores the Blog object for the incoming data.
 	 *
-	 * @var \stClass $data
+	 * @var \stdClass $data
 	 */
 	protected $data;
 
 	/**
 	 * Blog constructor.
 	 *
-	 * @param \stClass $blog The incoming blog object that needs modeling.
+	 * @param \stdClass $blog The incoming blog object that needs modeling.
 	 */
 	public function __construct( $blog ) {
 		$this->data = $blog;
 		parent::__construct();
-	}
-
-	/**
-	 * Method for determining if the data should be considered private or not.
-	 *
-	 * @return bool
-	 */
-	protected function is_private() {
-		return false;
 	}
 
 	/**

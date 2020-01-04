@@ -1,23 +1,23 @@
 <?php
 /**
- * XProfileFieldsConnectionResolver Class
+ * GroupsConnectionResolver Class
  *
- * @package WPGraphQL\Extensions\BuddyPress\Data\Connection
+ * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Data\Connection;
+namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Types;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
+use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
- * Class XProfileFieldsConnectionResolver
+ * Class GroupsConnectionResolver
  */
-class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
+class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Get query args.
@@ -26,8 +26,14 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args() {
 		$query_args = [
-			'profile_group_id' => false,
-			'fetch_fields'     => true,
+			'fields'      => 'ids',
+			'show_hidden' => false,
+			'user_id'     => 0,
+			'include'     => [],
+			'exclude'     => [],
+			'meta'        => [],
+			'orderby'     => 'date_created',
+			'type'        => 'active',
 		];
 
 		/**
@@ -48,6 +54,22 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
+		 * If there's no orderby params in the inputArgs, set order based on the first/last argument
+		 */
+		if ( empty( $query_args['order'] ) ) {
+			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
+		}
+
+		if ( ! is_user_logged_in() && empty( $query_args['status'] ) ) {
+			$query_args['status'] = 'public';
+		}
+
+		// Adding correct value for the parent_id.
+		if ( empty( $query_args['parent_id'] ) ) {
+			$query_args['parent_id'] = null;
+		}
+
+		/**
 		 * Set the graphql_cursor_offset
 		 */
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
@@ -59,10 +81,10 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		$query_args['graphql_args'] = $this->args;
 
 		/**
-		 * Setting profile group ID.
+		 * Setting parent group.
 		 */
-		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
-			$query_args['profile_group_id'] = $this->source->groupId;
+		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['parent_id'] = $this->source->groupId;
 		}
 
 		/**
@@ -76,7 +98,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return apply_filters(
-			'graphql_xprofile_fields_connection_query_args',
+			'graphql_groups_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -86,27 +108,21 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns the XProfile groups query, with fields.
+	 * Returns the groups query.
 	 *
 	 * @return array
 	 */
 	public function get_query() {
-		return bp_xprofile_get_groups( $this->query_args );
+		return groups_get_groups( $this->query_args );
 	}
 
 	/**
-	 * Returns an array of XProfile fields IDs.
+	 * Returns an array of groups.
 	 *
 	 * @return array
 	 */
 	public function get_items() {
-		$ids = [];
-		foreach ( $this->query as $group ) {
-			foreach ( $group->fields as $field ) {
-				$ids[] = $field->id;
-			}
-		}
-		return array_map( 'absint', $ids );
+		return $this->query['groups'];
 	}
 
 	/**
@@ -120,7 +136,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * BP_XProfile_Group::get() friendly keys.
+	 * BP_Groups_Group::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 *
@@ -128,12 +144,22 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ) {
 		$arg_mapping = [
-			'hideEmptyFields' => 'hide_empty_fields',
-			'excludeFields'   => 'exclude_fields',
+			'showHidden' => 'show_hidden',
+			'type'       => 'type',
+			'order'      => 'order',
+			'orderBy'    => 'orderby',
+			'parent'     => 'parent_id',
+			'search'     => 'search_terms',
+			'slug'       => 'slug',
+			'status'     => 'status',
+			'userId'     => 'user_id',
+			'groupType'  => 'group_type',
+			'include'    => 'include',
+			'exclude'    => 'exclude',
 		];
 
 		/**
-		 * Map and sanitize the input args.
+		 * Map and sanitize the input args to the BP_Groups_Group compatible args.
 		 */
 		$query_args = Types::map_input( $args, $arg_mapping );
 
@@ -141,7 +167,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
 		 */
 		$query_args = apply_filters(
-			'graphql_map_input_fields_to_xprofile_fields_query',
+			'graphql_map_input_fields_to_groups_query',
 			$query_args,
 			$args,
 			$this->source,

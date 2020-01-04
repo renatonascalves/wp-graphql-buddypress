@@ -108,7 +108,7 @@ class TypeRegistry {
 		}
 
 		// Attachment.
-		\WPGraphQL\Extensions\BuddyPress\Type\Object\Attachment::register();
+		\WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType::register();
 
 		// Attachment Enum(s).
 		\WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums::register();

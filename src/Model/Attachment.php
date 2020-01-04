@@ -36,15 +36,6 @@ class Attachment extends Model {
 	}
 
 	/**
-	 * Method for determining if the data should be considered private or not.
-	 *
-	 * @return bool
-	 */
-	protected function is_private() {
-		return false;
-	}
-
-	/**
 	 * Initializes the Attachment object.
 	 */
 	protected function init() {

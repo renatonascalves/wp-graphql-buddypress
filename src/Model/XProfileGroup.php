@@ -27,14 +27,14 @@ class XProfileGroup extends Model {
 	/**
 	 * Stores the object for the incoming data.
 	 *
-	 * @var object $data
+	 * @var \stdClass $data
 	 */
 	protected $data;
 
 	/**
 	 * XProfile group constructor.
 	 *
-	 * @param object $xprofile_group The incoming XProfile object that needs modeling.
+	 * @param \stdClass $xprofile_group The incoming XProfile object that needs modeling.
 	 */
 	public function __construct( $xprofile_group ) {
 		$this->data = $xprofile_group;

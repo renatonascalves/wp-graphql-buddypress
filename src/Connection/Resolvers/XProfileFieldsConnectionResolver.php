@@ -1,24 +1,23 @@
 <?php
 /**
- * XProfileGroupsConnectionResolver Class
+ * XProfileFieldsConnectionResolver Class
  *
- * @package WPGraphQL\Extensions\BuddyPress\Data\Connection
+ * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Data\Connection;
+namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Types;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
-use WPGraphQL\Model\User;
 
 /**
- * Class XProfileGroupsConnectionResolver
+ * Class XProfileFieldsConnectionResolver
  */
-class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
+class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Get query args.
@@ -28,11 +27,11 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	public function get_query_args() {
 		$query_args = [
 			'profile_group_id' => false,
-			'user_id'          => 0,
+			'fetch_fields'     => true,
 		];
 
 		/**
-		 * Prepare for later use
+		 * Prepare for later use.
 		 */
 		$last = $this->args['last'] ?? null;
 
@@ -60,19 +59,10 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		$query_args['graphql_args'] = $this->args;
 
 		/**
-		 * Setting fields from user and parent profile group.
+		 * Setting profile group ID.
 		 */
-		if ( true === is_object( $this->source ) ) {
-			switch ( true ) {
-				case $this->source instanceof User:
-					$query_args['user_id'] = $this->source->userId;
-					break;
-				case $this->source instanceof XProfileGroup:
-					$query_args['profile_group_id'] = $this->source->groupId;
-					break;
-				default:
-					break;
-			}
+		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
+			$query_args['profile_group_id'] = $this->source->groupId;
 		}
 
 		/**
@@ -86,7 +76,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return apply_filters(
-			'graphql_xprofile_groups_connection_query_args',
+			'graphql_xprofile_fields_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -96,7 +86,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns XProfile groups query.
+	 * Returns the XProfile groups query, with fields.
 	 *
 	 * @return array
 	 */
@@ -105,12 +95,18 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns an array of XProfile group IDs.
+	 * Returns an array of XProfile fields IDs.
 	 *
 	 * @return array
 	 */
 	public function get_items() {
-		return wp_list_pluck( $this->query, 'id' );
+		$ids = [];
+		foreach ( $this->query as $group ) {
+			foreach ( $group->fields as $field ) {
+				$ids[] = $field->id;
+			}
+		}
+		return array_map( 'absint', $ids );
 	}
 
 	/**
@@ -132,9 +128,8 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ) {
 		$arg_mapping = [
-			'profileGroupId'  => 'profile_group_id',
-			'hideEmptyGroups' => 'hide_empty_groups',
-			'excludeGroups'   => 'exclude_groups',
+			'hideEmptyFields' => 'hide_empty_fields',
+			'excludeFields'   => 'exclude_fields',
 		];
 
 		/**
@@ -146,7 +141,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
 		 */
 		$query_args = apply_filters(
-			'graphql_map_input_fields_to_xprofile_groups_query',
+			'graphql_map_input_fields_to_xprofile_fields_query',
 			$query_args,
 			$args,
 			$this->source,

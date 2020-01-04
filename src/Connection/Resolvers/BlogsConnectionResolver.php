@@ -2,11 +2,11 @@
 /**
  * BlogsConnectionResolver Class
  *
- * @package WPGraphQL\Extensions\BuddyPress\Data\Connection
+ * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Data\Connection;
+namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;

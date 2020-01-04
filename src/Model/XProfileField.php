@@ -37,7 +37,7 @@ class XProfileField extends Model {
 	/**
 	 * Stores the BP_XProfile_Field object for the incoming data.
 	 *
-	 * @var object $data
+	 * @var \BP_XProfile_Field $data
 	 */
 	protected $data;
 

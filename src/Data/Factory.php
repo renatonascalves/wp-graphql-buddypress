@@ -2,7 +2,7 @@
 /**
  * Factory Class
  *
- * This class serves as a factory for all the resolvers.
+ * This class serves as a factory for all resolvers.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -14,12 +14,12 @@ use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupsConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\GroupMembersConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\MembersConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\Connection\BlogsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupMembersConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
@@ -189,7 +189,7 @@ class Factory {
 	 * @throws UserError User error.
 	 *
 	 * @param int|null $id Blog ID or null.
-	 * @return Blog|null
+	 * @return null|Blog
 	 */
 	public static function resolve_blog_object( $id ) {
 		if ( empty( $id ) || ! absint( $id ) ) {

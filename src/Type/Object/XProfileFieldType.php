@@ -141,6 +141,11 @@ class XProfileFieldType {
 								return $field->value;
 							}
 
+							/**
+							 * This is not working correctly, mainly because the type of the field is a String.
+							 *
+							 * @todo Fix serialized output.
+							 */
 							if ( isset( $args['format'] ) && 'unserialized' === $args['format'] ) {
 								return self::get_profile_field_unserialized_value( $field->value );
 							}
@@ -210,8 +215,8 @@ class XProfileFieldType {
 	 *
 	 * @return array
 	 */
-	public static function get_profile_field_unserialized_value( $value = '' ) {
-		if ( ! $value ) {
+	protected static function get_profile_field_unserialized_value( $value = '' ) {
+		if ( empty( $value ) ) {
 			return [];
 		}
 
@@ -231,7 +236,7 @@ class XProfileFieldType {
 	 *
 	 * @return string
 	 */
-	public static function get_profile_field_rendered_value( $value = '', $profile_field = null ) {
+	protected static function get_profile_field_rendered_value( $value = '', $profile_field = null ) {
 		if ( ! $value ) {
 			return '';
 		}

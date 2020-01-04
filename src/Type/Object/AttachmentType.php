@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers BuddyPress Attachment object.
+ * Registers BuddyPress Attachment Type object.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\Object
  * @since 0.0.1-alpha
@@ -9,9 +9,9 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 /**
- * Attachment Class.
+ * AttachmentType Class.
  */
-class Attachment {
+class AttachmentType {
 
 	/**
 	 * Name of the type.
@@ -21,7 +21,7 @@ class Attachment {
 	public static $type_name = 'Attachment';
 
 	/**
-	 * Register the member avatar object.
+	 * Register the attachment type object.
 	 */
 	public static function register() {
 		register_graphql_object_type(
