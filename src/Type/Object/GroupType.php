@@ -67,7 +67,7 @@ class GroupType {
 						'type'        => [
 							'list_of' => 'User',
 						],
-						'description' => esc_html__( 'Administrators of the group.', 'wp-graphql-buddypress' ),
+						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							$admins     = [];
 							$admin_mods = groups_get_group_members(
@@ -183,6 +183,20 @@ class GroupType {
 					'status'           => [
 						'type'        => 'GroupStatusEnum',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
+					],
+					'attachmentAvatar' => [
+						'type'        => 'Attachment',
+						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
+						'resolve'     => function ( Group $group ) {
+							return Factory::resolve_attachment( $group->groupId ?? 0, 'group' );
+						},
+					],
+					'attachmentCover' => [
+						'type'        => 'Attachment',
+						'description' => __( 'Attachment Cover of the group.', 'wp-graphql-buddypress' ),
+						'resolve'     => function ( Group $group ) {
+							return Factory::resolve_attachment_cover( $group->groupId ?? 0, 'groups' );
+						},
 					],
 				],
 				'resolve_node'      => function( $node, $id, $type, $context ) {

@@ -7,8 +7,8 @@
 	<config name="encoding" value="utf-8"/>
 
 	<!-- Check code for cross-version PHP compatibility. -->
-	<!-- Will check the code compatiblity for PHP greater than 7.2 -->
-	<config name="testVersion" value="7.2-"/>
+	<!-- Will check the code compatiblity for PHP greater than 7.0 -->
+	<config name="testVersion" value="7.0-"/>
 
 	<!-- Check against minimum WP version. -->
 	<config name="minimum_supported_wp_version" value="4.7"/>

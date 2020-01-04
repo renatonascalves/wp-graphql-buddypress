@@ -21,6 +21,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileFieldsConnectionReso
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\XProfileGroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Connection\BlogsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
@@ -111,12 +112,83 @@ class Factory {
 	}
 
 	/**
+	 * Resolve an attachment avatar for a object (user, group, blog, etc).
+	 *
+	 * @param int|null $id     ID of the object or null.
+	 * @param string   $object Object (user, group, blog, etc).
+	 *
+	 * @return null|Attachment
+	 */
+	public static function resolve_attachment( $id, $object = 'user' ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$attachment = new \stdClass();
+
+		foreach ( [ 'full', 'thumb' ] as $type ) {
+			$args = [
+				'item_id' => $id,
+				'object'  => $object,
+				'no_grav' => true,
+				'html'    => false,
+				'type'    => $type,
+			];
+
+			if ( 'blog' === $object ) {
+				// Unset item ID and add correct item id key.
+				unset( $args['item_id'] );
+				$args['blog_id'] = $id;
+				$attachment->$type = bp_get_blog_avatar( $args );
+			} else {
+				$attachment->$type = bp_core_fetch_avatar( $args );
+			}
+		}
+
+		if ( empty( $attachment->full ) && empty( $attachment->thumb ) ) {
+			return null;
+		}
+
+		return new Attachment( $attachment );
+	}
+
+	/**
+	 * Resolve an attachment cover for a object (user, group, blog, etc).
+	 *
+	 * @param int|null $id     ID of the object or null.
+	 * @param string   $object Object (members, groups, blogs, etc).
+	 *
+	 * @return null|Attachment
+	 */
+	public static function resolve_attachment_cover( $id, $object = 'members' ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		$url = bp_attachments_get_attachment(
+			'url',
+			[
+				'object_dir' => $object,
+				'item_id'    => $id,
+			]
+		);
+
+		if ( empty( $url ) ) {
+			return null;
+		}
+
+		$attachment       = new \stdClass();
+		$attachment->full = $url;
+
+		return new Attachment( $attachment );
+	}
+
+	/**
 	 * Returns a Blog object.
 	 *
 	 * @throws UserError User error.
 	 *
 	 * @param int|null $id Blog ID or null.
-	 *
 	 * @return Blog|null
 	 */
 	public static function resolve_blog_object( $id ) {
@@ -128,7 +200,7 @@ class Factory {
 		 * Get the blog object.
 		 */
 		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => $id ] ) );
-		$blog_object = $blogs[0];
+		$blog_object = $blogs[0] ?? 0;
 
 		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(

@@ -94,6 +94,20 @@ class BlogType {
 						'type'        => 'String',
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],
+					'attachmentAvatar' => [
+						'type'        => 'Attachment',
+						'description' => __( 'Attachment Avatar of the blog.', 'wp-graphql-buddypress' ),
+						'resolve'     => function ( Blog $blog ) {
+							return Factory::resolve_attachment( $blog->blogId ?? 0, 'blog' );
+						},
+					],
+					'attachmentCover' => [
+						'type'        => 'Attachment',
+						'description' => __( 'Attachment Cover of the blog.', 'wp-graphql-buddypress' ),
+						'resolve'     => function ( Blog $blog ) {
+							return Factory::resolve_attachment_cover( $blog->blogId ?? 0, 'blogs' );
+						},
+					],
 				],
 				'resolve_node'      => function( $node, $id, $type ) {
 					if ( self::$type_name === $type ) {

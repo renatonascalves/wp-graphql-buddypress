@@ -36,7 +36,7 @@ class XProfileGroup extends Model {
 	 *
 	 * @param object $xprofile_group The incoming XProfile object that needs modeling.
 	 */
-	public function __construct( object $xprofile_group ) {
+	public function __construct( $xprofile_group ) {
 		$this->data = $xprofile_group;
 		parent::__construct();
 	}
