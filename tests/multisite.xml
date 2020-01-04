@@ -11,7 +11,7 @@
 	</php>
 	<testsuites>
 		<testsuite>
-			<directory suffix=".php">./groups/</directory>
+			<directory suffix=".php">./blogs/</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

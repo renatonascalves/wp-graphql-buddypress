@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Model\User;
 
 /**
  * MemberType Class.
@@ -33,7 +34,7 @@ class MemberType {
 			[
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Member types associated with the user.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
+				'resolve'     => function ( User $source ) {
 					$types = bp_get_member_type( $source->userId ?? 0, false );
 
 					if ( empty( $types ) ) {
@@ -51,7 +52,7 @@ class MemberType {
 			[
 				'type'        => 'String',
 				'description' => __( 'The name used for the user in @-mentions.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
+				'resolve'     => function ( User $source ) {
 					if ( ! bp_is_active( 'activity' ) ) {
 						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
@@ -73,7 +74,7 @@ class MemberType {
 			[
 				'type'        => 'String',
 				'description' => __( 'Profile URL of the member.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
+				'resolve'     => function ( User $source ) {
 					$link = bp_core_get_user_domain( $source->userId ?? 0 );
 
 					return $link ?? null;
@@ -87,7 +88,7 @@ class MemberType {
 			[
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Avatar of the member.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
+				'resolve'     => function ( User $source ) {
 					return Factory::resolve_attachment( $source->userId ?? 0 );
 				},
 			]
@@ -99,7 +100,7 @@ class MemberType {
 			[
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Cover of the member.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( $source ) {
+				'resolve'     => function ( User $source ) {
 					return Factory::resolve_attachment_cover( $source->userId ?? 0 );
 				},
 			]

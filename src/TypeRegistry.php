@@ -34,6 +34,9 @@ class TypeRegistry {
 	 */
 	public static function graphql_register_types() {
 
+		// Enum(s).
+		\WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums::register();
+
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
 
@@ -89,6 +92,19 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldCreate::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate::register_mutation();
+		}
+
+		// Blog component.
+		if ( bp_is_active( 'blogs' ) ) {
+
+			// Enum(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums::register();
+
+			// Object(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType::register();
+
+			// Connections.
+			\WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection::register_connections();
 		}
 
 		// Attachment.

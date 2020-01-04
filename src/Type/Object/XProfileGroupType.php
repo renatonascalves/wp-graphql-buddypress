@@ -60,7 +60,7 @@ class XProfileGroupType {
 						'description' => __( 'The description of the XProfile group.', 'wp-graphql-buddypress' ),
 						'args'        => [
 							'format' => [
-								'type'        => 'GroupObjectFieldFormatEnum',
+								'type'        => 'ContentFieldFormatEnum',
 								'description' => __( 'Format of the field output.', 'wp-graphql' ),
 							],
 						],

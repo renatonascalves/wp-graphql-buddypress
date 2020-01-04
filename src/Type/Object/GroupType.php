@@ -144,7 +144,7 @@ class GroupType {
 						'description' => __( 'The description of the group.', 'wp-graphql-buddypress' ),
 						'args'        => [
 							'format' => [
-								'type'        => 'GroupObjectFieldFormatEnum',
+								'type'        => 'ContentFieldFormatEnum',
 								'description' => __( 'Format of the field output', 'wp-graphql' ),
 							],
 						],
@@ -193,7 +193,7 @@ class GroupType {
 					],
 					'attachmentCover' => [
 						'type'        => 'Attachment',
-						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
+						'description' => __( 'Attachment Cover of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
 							return Factory::resolve_attachment_cover( $group->groupId ?? 0, 'groups' );
 						},
