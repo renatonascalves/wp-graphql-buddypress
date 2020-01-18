@@ -123,6 +123,17 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
+	 * Determine whether or not the the offset is valid.
+	 *
+	 * @param int $offset Offset ID.
+	 *
+	 * @return bool
+	 */
+	public function is_valid_offset( $offset ) {
+		return ! empty( current( bp_xprofile_get_groups( [ 'profile_group_id' => absint( $offset ) ] ) ) );
+	}
+
+	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
 	 * BP_XProfile_Group::get() friendly keys.
 	 *

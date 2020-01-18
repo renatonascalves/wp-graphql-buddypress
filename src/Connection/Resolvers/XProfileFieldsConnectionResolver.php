@@ -119,6 +119,20 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
+	 * Determine whether or not the the offset is valid.
+	 *
+	 * @todo Find a way to pass the user ID.
+	 *
+	 * @param int $offset Offset ID.
+	 *
+	 * @return bool
+	 */
+	public function is_valid_offset( $offset ) {
+		return true;
+		// return ! empty( xprofile_get_field( absint( $id ), $user_id ) );
+	}
+
+	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
 	 * BP_XProfile_Group::get() friendly keys.
 	 *

@@ -122,6 +122,19 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
+	 * Determine whether or not the the offset is valid.
+	 *
+	 * @param int $offset Offset ID.
+	 *
+	 * @return bool
+	 */
+	public function is_valid_offset( $offset ) {
+		$blogs = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $offset ) ] ) );
+
+		return ! empty( $blogs[0] );
+	}
+
+	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
 	 * bp_blogs_get_blogs() friendly keys.
 	 *

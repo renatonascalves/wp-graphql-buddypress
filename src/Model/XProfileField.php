@@ -57,27 +57,27 @@ class XProfileField extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'          => function() {
+				'id' => function() {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'xprofile_field_object', $this->data->id )
 						: null;
 				},
-				'fieldId'     => function() {
+				'fieldId' => function() {
 					return $this->data->id ?? null;
 				},
-				'groupId'     => function() {
+				'groupId' => function() {
 					return $this->data->group_id ?? null;
 				},
-				'parent'        => function() {
+				'parent' => function() {
 					return $this->data->parent_id ?? null;
 				},
-				'name'        => function() {
+				'name' => function() {
 					return $this->data->name ?? null;
 				},
-				'type'        => function() {
+				'type' => function() {
 					return $this->data->type ?? null;
 				},
-				'canDelete'   => function() {
+				'canDelete' => function() {
 					return $this->data->can_delete;
 				},
 				'isRequired'   => function() {
@@ -86,22 +86,22 @@ class XProfileField extends Model {
 				'fieldOrder'  => function() {
 					return $this->data->field_order;
 				},
-				'optionOrder'  => function() {
+				'optionOrder' => function() {
 					return $this->data->option_order;
 				},
-				'groupOrder'  => function() {
+				'groupOrder' => function() {
 					return $this->data->group_order;
 				},
-				'orderBy'  => function() {
+				'orderBy' => function() {
 					return $this->data->order_by ?? null;
 				},
-				'isDefaultOption'   => function() {
+				'isDefaultOption' => function() {
 					return $this->data->is_default_option;
 				},
-				'visibilityLevel'   => function() {
+				'visibilityLevel' => function() {
 					return $this->data->default_visibility;
 				},
-				'doAutolink'   => function() {
+				'doAutolink' => function() {
 					return $this->data->do_autolink;
 				},
 				'description' => function() {

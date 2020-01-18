@@ -135,6 +135,17 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
+	 * Determine whether or not the offset is valid.
+	 *
+	 * @param int $offset Offset ID.
+	 *
+	 * @return bool
+	 */
+	public function is_valid_offset( $offset ) {
+		return ! empty( groups_get_group( absint( $offset ) ) );
+	}
+
+	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
 	 * BP_Groups_Group::get() friendly keys.
 	 *

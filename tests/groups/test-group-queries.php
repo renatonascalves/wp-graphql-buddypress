@@ -216,7 +216,6 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_last_group_in_a_group_connection_query() {
-
 		$this->create_group_object();
 		$this->create_group_object();
 
