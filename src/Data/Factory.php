@@ -23,6 +23,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 
 /**
  * Class Factory.
@@ -114,10 +115,12 @@ class Factory {
 	/**
 	 * Resolve an attachment avatar for a object (user, group, blog, etc).
 	 *
+	 * @throws UserError User error.
+	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (user, group, blog, etc).
 	 *
-	 * @return null|Attachment
+	 * @return Attachment|null
 	 */
 	public static function resolve_attachment( $id, $object = 'user' ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -146,7 +149,14 @@ class Factory {
 		}
 
 		if ( empty( $attachment->full ) && empty( $attachment->thumb ) ) {
-			return null;
+			throw new UserError(
+				sprintf(
+					// translators: Avatar ID and Avatar object.
+					__( 'No avatar was found with ID: %1$d and object: %2$s', 'wp-graphql-buddypress' ),
+					absint( $id ),
+					$object
+				)
+			);
 		}
 
 		return new Attachment( $attachment );
@@ -155,10 +165,12 @@ class Factory {
 	/**
 	 * Resolve an attachment cover for a object (user, group, blog, etc).
 	 *
+	 * @throws UserError User error.
+	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (members, groups, blogs, etc).
 	 *
-	 * @return null|Attachment
+	 * @return Attachment|null
 	 */
 	public static function resolve_attachment_cover( $id, $object = 'members' ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -174,7 +186,14 @@ class Factory {
 		);
 
 		if ( empty( $url ) ) {
-			return null;
+			throw new UserError(
+				sprintf(
+					// translators: Attachment ID and attachment object.
+					__( 'No cover attachment was found with ID: %1$d and object: %2$s', 'wp-graphql-buddypress' ),
+					absint( $id ),
+					$object
+				)
+			);
 		}
 
 		$attachment       = new \stdClass();
@@ -189,7 +208,7 @@ class Factory {
 	 * @throws UserError User error.
 	 *
 	 * @param int|null $id Blog ID or null.
-	 * @return null|Blog
+	 * @return Blog|null
 	 */
 	public static function resolve_blog_object( $id ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -205,7 +224,7 @@ class Factory {
 		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(
 				sprintf(
-					// translators: XProfile Field ID.
+					// translators: Blog ID.
 					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $id )
 				)
@@ -213,6 +232,35 @@ class Factory {
 		}
 
 		return new Blog( $blog_object );
+	}
+
+	/**
+	 * Returns a Friendship object.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param int|null $id Friendship ID or null.
+	 * @return Friendship|null
+	 */
+	public static function resolve_friendship_object( $id ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		// Get the friendship object.
+		$friendship = new \BP_Friends_Friendship( $id ); // This is cached.
+
+		if ( ! $friendship || 0 === $friendship->id ) {
+			throw new UserError(
+				sprintf(
+					// translators: Friendship ID.
+					__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
+					absint( $id )
+				)
+			);
+		}
+
+		return new Friendship( $friendship );
 	}
 
 	/**

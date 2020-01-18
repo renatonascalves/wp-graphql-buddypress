@@ -107,6 +107,19 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection::register_connections();
 		}
 
+		// Friends component.
+		if ( bp_is_active( 'friends' ) ) {
+
+			// Enum(s).
+			// \WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums::register();
+
+			// Object(s).
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType::register();
+
+			// Connections.
+			// \WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection::register_connections();
+		}
+
 		// Attachment.
 		\WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType::register();
 
