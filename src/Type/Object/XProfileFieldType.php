@@ -17,7 +17,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 /**
  * XProfileFieldType Class.
  */
-class XProfileFieldType {
+class XProfileFieldType implements RegisterInterface {
 
 	/**
 	 * Name of the type.
@@ -108,7 +108,7 @@ class XProfileFieldType {
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
-								'description' => __( 'Format of the field output', 'wp-graphql' ),
+								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
 						'resolve'     => function( XProfileField $field, array $args ) {

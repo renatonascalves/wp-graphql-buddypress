@@ -19,7 +19,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Group;
 /**
  * Class GroupType
  */
-class GroupType {
+class GroupType implements RegisterInterface {
 
 	/**
 	 * Name of the type.
@@ -145,7 +145,7 @@ class GroupType {
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
-								'description' => __( 'Format of the field output', 'wp-graphql' ),
+								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
 						'resolve'     => function( Group $group, array $args ) {

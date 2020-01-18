@@ -23,7 +23,7 @@
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<!-- What to scan -->
-	<file>.</file>
+	<file>src</file>
 
 	<!-- Enable colors in report -->
 	<arg name="colors"/>
@@ -56,19 +56,12 @@
 		<severity>0</severity>
 	</rule>
 
+	<rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
+		<severity>0</severity>
+	</rule>
+
 	<rule ref="WordPress">
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
-	</rule>
-
-	<!-- Remove the class naming error temporarily -->
-	<rule ref="WordPress.Files.FileName">
-		<properties>
-			<property name="strict_class_file_names" value="false"/>
-		</properties>
-	</rule>
-
-	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
-		<severity>0</severity>
 	</rule>
 
 </ruleset>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Blog object type and queries.
+ * Register Blog object type and queries.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\Object
  * @since 0.0.1-alpha
@@ -16,9 +16,9 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
- * Class BlogType
+ * BlogType Class.
  */
-class BlogType {
+class BlogType implements RegisterInterface {
 
 	/**
 	 * Name of the type.
@@ -28,7 +28,7 @@ class BlogType {
 	public static $type_name = 'Blog';
 
 	/**
-	 * Registers the blog type and queries to the WPGraphQL schema.
+	 * Register the blog type and queries to the WPGraphQL schema.
 	 */
 	public static function register() {
 		register_graphql_object_type(
@@ -36,15 +36,15 @@ class BlogType {
 			[
 				'description'       => __( 'Info about a BuddyPress Blog.', 'wp-graphql-buddypress' ),
 				'fields'            => [
-					'id'               => [
+					'id' => [
 						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier for the blog.', 'wp-graphql-buddypress' ),
 					],
-					'blogId'          => [
+					'blogId' => [
 						'type'        => 'Int',
 						'description' => __( 'The id field that matches the BP_Blogs_Blog->blog_id field.', 'wp-graphql-buddypress' ),
 					],
-					'blogAdmin'        => [
+					'blogAdmin' => [
 						'type'        => 'User',
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Blog $blog, array $args, AppContext $context ) {
@@ -53,21 +53,21 @@ class BlogType {
 								: null;
 						},
 					],
-					'name'             => [
+					'name' => [
 						'type'        => 'String',
 						'description' => __( 'The name of the Blog.', 'wp-graphql-buddypress' ),
 					],
-					'permalink'             => [
+					'permalink' => [
 						'type'        => 'String',
 						'description' => __( 'The permalink of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'description'      => [
+					'description' => [
 						'type'        => 'String',
 						'description' => __( 'The description of the blog.', 'wp-graphql-buddypress' ),
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
-								'description' => __( 'Format of the field output.', 'wp-graphql' ),
+								'description' => __( 'Format of the field output.', 'wp-graphql-buddypress' ),
 							],
 						],
 						'resolve'     => function( Blog $blog, array $args ) {
@@ -82,15 +82,15 @@ class BlogType {
 							return stripslashes( $blog->description );
 						},
 					],
-					'path'     => [
+					'path' => [
 						'type'        => 'String',
 						'description' => __( 'The path of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'domain'      => [
+					'domain' => [
 						'type'        => 'String',
 						'description' => __( 'The domain of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'lastActivity'           => [
+					'lastActivity' => [
 						'type'        => 'String',
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],

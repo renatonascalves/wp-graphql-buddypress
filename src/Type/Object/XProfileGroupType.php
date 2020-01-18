@@ -17,7 +17,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 /**
  * XProfileGroupType Class.
  */
-class XProfileGroupType {
+class XProfileGroupType implements RegisterInterface {
 
 	/**
 	 * Name of the type.
@@ -61,7 +61,7 @@ class XProfileGroupType {
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
-								'description' => __( 'Format of the field output.', 'wp-graphql' ),
+								'description' => __( 'Format of the field output.', 'wp-graphql-buddypress' ),
 							],
 						],
 						'resolve'     => function( XProfileGroup $group, array $args ) {

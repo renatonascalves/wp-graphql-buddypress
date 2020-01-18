@@ -78,11 +78,11 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
 		 * the GraphQL Query have been applied and has the potential to override the GraphQL Query Input Args.
 		 *
-		 * @param array       $query_args array of query_args being passed to the
-		 * @param mixed       $source     Source passed down from the resolve tree
-		 * @param array       $args       array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    object passed down zthe resolve tree
-		 * @param ResolveInfo $info       info about fields passed down the resolve tree
+		 * @param array       $query_args An array of query_args being passed.
+		 * @param mixed       $source     Source passed down from the resolve tree.
+		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
+		 * @param AppContext  $context    Context passed down the resolve tree.
+		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
 		 */
 		return apply_filters(
 			'graphql_blogs_connection_query_args',
@@ -109,10 +109,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_items() {
-		return wp_list_pluck(
-			$this->query['blogs'],
-			'blog_id'
-		);
+		return wp_list_pluck( $this->query['blogs'], 'blog_id' );
 	}
 
 	/**
@@ -147,6 +144,11 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 
 		/**
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
+		 *
+		 * @param array       $query_args An array of query_args being passed.
+		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
+		 * @param AppContext  $context    Context being passed.
+		 * @param ResolveInfo $info       Info about the resolver.
 		 */
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_blogs_query',

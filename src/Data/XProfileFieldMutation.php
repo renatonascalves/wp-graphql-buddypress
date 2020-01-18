@@ -97,8 +97,8 @@ class XProfileFieldMutation {
 		/**
 		 * Allows changing output args.
 		 *
-		 * @param array                  $output_args  Mutation output args.
-		 * @param array                  $input        Mutation input args.
+		 * @param array                   $output_args    Mutation output args.
+		 * @param array                   $input          Mutation input args.
 		 * @param \BP_XProfile_Field|null $xprofile_field XProfile field object.
 		 */
 		return apply_filters( "bp_graphql_xprofile_fields_{$action}_mutation_args", $output_args, $input, $xprofile_field );
@@ -108,7 +108,7 @@ class XProfileFieldMutation {
 	 * Set additional fields on update/creation.
 	 *
 	 * @param int   $xprofile_field_id Field ID.
-	 * @param array $input           The input for the mutation.
+	 * @param array $input             The input for the mutation.
 	 */
 	public static function set_additional_fields( int $xprofile_field_id, array $input ) {
 

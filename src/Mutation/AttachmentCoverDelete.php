@@ -45,7 +45,7 @@ class AttachmentCoverDelete {
 				'description' => __( 'The globally unique identifier for the object.', 'wp-graphql-buddypress' ),
 			],
 			'object'   => [
-				'type'        => 'AttachmentCoverEnum',
+				'type'        => [ 'non_null' => 'AttachmentCoverEnum' ],
 				'description' => __( 'The object (members, groups, blogs, etc) the cover belongs to.', 'wp-graphql-buddypress' ),
 			],
 		];
@@ -90,8 +90,8 @@ class AttachmentCoverDelete {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			$object_id = $input['objectId'] ?? 0;
-			$object    = $input['object'] ?? 'members';
+			$object_id = $input['objectId'];
+			$object    = $input['object'];
 
 			/**
 			 * Get and save the attachment object before it is deleted.

@@ -15,7 +15,7 @@ use WPGraphQL\Model\User;
 /**
  * MemberType Class.
  */
-class MemberType {
+class MemberType implements RegisterInterface {
 
 	/**
 	 * Name of the type.

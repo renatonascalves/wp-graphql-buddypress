@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 /**
  * AttachmentType Class.
  */
-class AttachmentType {
+class AttachmentType implements RegisterInterface {
 
 	/**
 	 * Name of the type.

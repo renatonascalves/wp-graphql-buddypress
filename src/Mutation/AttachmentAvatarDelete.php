@@ -45,7 +45,7 @@ class AttachmentAvatarDelete {
 				'description' => __( 'The globally unique identifier for the object.', 'wp-graphql-buddypress' ),
 			],
 			'object'   => [
-				'type'        => 'AttachmentAvatarEnum',
+				'type'        => [ 'non_null' => 'AttachmentAvatarEnum' ],
 				'description' => __( 'The object (user, group, blog, etc) the avatar belongs to.', 'wp-graphql-buddypress' ),
 			],
 		];
@@ -90,8 +90,8 @@ class AttachmentAvatarDelete {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			$object_id = $input['objectId'] ?? 0;
-			$object    = $input['object'] ?? 'user';
+			$object_id = $input['objectId'];
+			$object    = $input['object'];
 
 			/**
 			 * Get and save the attachment object before it is deleted.

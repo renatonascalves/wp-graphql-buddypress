@@ -113,7 +113,7 @@ class Group extends Model {
 					return bp_get_group_permalink( $this->data ) ?? null;
 				},
 				'hasForum'         => function() {
-					return $this->data->enable_forum;
+					return $this->data->enable_forum ?? null;
 				},
 				'totalMemberCount' => [
 					'callback'   => function() {
