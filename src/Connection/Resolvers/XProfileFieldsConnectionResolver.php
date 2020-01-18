@@ -129,7 +129,6 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function is_valid_offset( $offset ) {
 		return true;
-		// return ! empty( xprofile_get_field( absint( $id ), $user_id ) );
 	}
 
 	/**
