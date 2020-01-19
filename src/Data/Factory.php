@@ -20,6 +20,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
@@ -327,5 +328,19 @@ class Factory {
 	 */
 	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
 		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the FriendshipConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new FriendshipsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }
