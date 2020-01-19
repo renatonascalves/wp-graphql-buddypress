@@ -40,13 +40,13 @@ class FriendshipDelete {
 	 */
 	public static function get_input_fields() {
 		return [
-			'id' => [
-				'type'        => 'ID',
-				'description' => __( 'The globally unique identifier for the friendship.', 'wp-graphql-buddypress' ),
+			'initiatorId' => [
+				'type'        => [ 'non_null' => 'Int' ],
+				'description' => __( 'User ID of the friendship initiator.', 'wp-graphql-buddypress' ),
 			],
-			'friendshipId' => [
-				'type'        => 'Int',
-				'description' => __( 'The id field that matches the BP_Friends_Friendship->id field.', 'wp-graphql-buddypress' ),
+			'friendId' => [
+				'type'        => [ 'non_null' => 'Int' ],
+				'description' => __( 'User ID of the `friend` - the one invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
@@ -88,18 +88,31 @@ class FriendshipDelete {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Get the friendship object.
-			$friendship = FriendshipMutation::get_friendship_from_input( $input );
+			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
+			$friend_id    = get_user_by( 'id', $input['friendId'] );
 
-			// Confirm if friendship exists.
-			if ( ! $friendship || 0 === $friendship->id ) {
-				throw new UserError( __( 'This friendship does not exist.', 'wp-graphql-buddypress' ) );
+			// Check if users are valid.
+			if ( ! $initiator_id || ! $friend_id ) {
+				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Stop now if a user isn't allowed to see this friendship.
-			if ( false === FriendshipMutation::can_update_or_delete_friendship( $friendship ) ) {
-				throw new UserError( __( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
+			if ( false === FriendshipMutation::can_update_or_delete_friendship( $initiator_id->ID, $friend_id->ID ) ) {
+				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
+
+			// Check friendship status.
+			$friendship_status = \BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+
+			// Confirm status.
+			if ( 'not_friends' === $friendship_status ) {
+				throw new UserError( __( 'Those users are not yet friends and not friendship request was found.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Get friendship.
+			$friendship = new \BP_Friends_Friendship(
+				\BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+			);
 
 			// Get and save the friendship object before it is deleted.
 			$previous_friendship = new Friendship( $friendship );
@@ -122,7 +135,7 @@ class FriendshipDelete {
 
 			// Trying to delete the friendship.
 			if ( ! $deleted ) {
-				throw new UserError( __( 'Could not delete friendship.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Friendship could not be deleted.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**

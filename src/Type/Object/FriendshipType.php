@@ -120,12 +120,12 @@ class FriendshipType implements RegisterInterface {
 							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
 						}
 
-						$friendship_id = absint( $id_components['id'] );
+						$friendship_id = $id_components['id'];
 					} elseif ( ! empty( $args['friendshipId'] ) ) {
-						$friendship_id = absint( $args['friendshipId'] );
+						$friendship_id = $args['friendshipId'];
 					}
 
-					$friendship = Factory::resolve_friendship_object( $friendship_id );
+					$friendship = Factory::resolve_friendship_object( absint( $friendship_id ) );
 
 					// Only the friendship initiator and the friend, the one invited to the friendship can see it.
 					if ( ! empty( $friendship ) && ! in_array( bp_loggedin_user_id(), [ $friendship->initiator, $friendship->friend ], true ) ) {
