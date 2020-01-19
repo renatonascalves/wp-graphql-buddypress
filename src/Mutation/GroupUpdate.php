@@ -45,7 +45,7 @@ class GroupUpdate {
 				'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
 			],
 			'groupId'          => [
-				'type'        => 'int',
+				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
 			],
 			'creatorId'      => [

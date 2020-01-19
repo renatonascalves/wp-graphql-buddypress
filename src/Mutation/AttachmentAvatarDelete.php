@@ -41,7 +41,7 @@ class AttachmentAvatarDelete {
 	public static function get_input_fields() {
 		return [
 			'objectId' => [
-				'type'        => [ 'non_null' => 'int' ],
+				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'The globally unique identifier for the object.', 'wp-graphql-buddypress' ),
 			],
 			'object'   => [
