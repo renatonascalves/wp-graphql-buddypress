@@ -116,9 +116,6 @@ class TypeRegistry {
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType::register();
 
-			// Connections.
-			// \WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection::register_connections();
-
 			// Mutations.
 			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipDelete::register_mutation();
 			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipUpdate::register_mutation();
