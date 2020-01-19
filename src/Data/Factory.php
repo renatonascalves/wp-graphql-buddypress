@@ -115,8 +115,6 @@ class Factory {
 	/**
 	 * Resolve an attachment avatar for a object (user, group, blog, etc).
 	 *
-	 * @throws UserError User error.
-	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (user, group, blog, etc).
 	 *
@@ -149,14 +147,7 @@ class Factory {
 		}
 
 		if ( empty( $attachment->full ) && empty( $attachment->thumb ) ) {
-			throw new UserError(
-				sprintf(
-					// translators: Avatar ID and Avatar object.
-					__( 'No avatar was found with ID: %1$d and object: %2$s', 'wp-graphql-buddypress' ),
-					absint( $id ),
-					$object
-				)
-			);
+			return null;
 		}
 
 		return new Attachment( $attachment );
@@ -164,8 +155,6 @@ class Factory {
 
 	/**
 	 * Resolve an attachment cover for a object (user, group, blog, etc).
-	 *
-	 * @throws UserError User error.
 	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (members, groups, blogs, etc).
@@ -186,14 +175,7 @@ class Factory {
 		);
 
 		if ( empty( $url ) ) {
-			throw new UserError(
-				sprintf(
-					// translators: Attachment ID and attachment object.
-					__( 'No cover attachment was found with ID: %1$d and object: %2$s', 'wp-graphql-buddypress' ),
-					absint( $id ),
-					$object
-				)
-			);
+			return null;
 		}
 
 		$attachment       = new \stdClass();

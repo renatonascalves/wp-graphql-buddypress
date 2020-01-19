@@ -106,7 +106,7 @@ class FriendshipType implements RegisterInterface {
 				],
 				'resolve' => function ( $source, array $args ) {
 
-					// Requires a logged in user.
+					// Require user to be logged in.
 					if ( ! is_user_logged_in() ) {
 						throw new UserError( __( 'Sorry, you need to be logged in to perform this action.', 'wp-graphql-buddypress' ) );
 					}

@@ -111,7 +111,7 @@ class TypeRegistry {
 		if ( bp_is_active( 'friends' ) ) {
 
 			// Enum(s).
-			// \WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums::register();
 
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType::register();

@@ -73,18 +73,18 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 						'totalMemberCount' => null,
 						'description'      => 'Group Description',
 						'lastActivity'     => null,
-						'hasForum'         => true,
+						'hasForum'         => 1,
 						'link'             => bp_get_group_permalink( new \BP_Groups_Group( $group_id ) ),
 						'creator'          => [
-							'userId' => $this->user,
+							'userId' => $this->admin,
 						],
 						'mods'             => null,
-						'parent'           => null,
 						'admins'           => [
 							0 => [
-								'userId' => $this->user,
+								'userId' => $this->admin,
 							],
 						],
+						'parent'           => null,
 					],
 				],
 			],
