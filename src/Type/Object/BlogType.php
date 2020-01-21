@@ -18,7 +18,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 /**
  * BlogType Class.
  */
-class BlogType implements RegisterInterface {
+class BlogType {
 
 	/**
 	 * Name of the type.

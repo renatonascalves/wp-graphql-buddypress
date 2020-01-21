@@ -226,6 +226,26 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 * Setup filters
 			 */
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_filters();
+
+			/**
+			 * Change the visibility of the user to `restricted`.
+			 *
+			 * BuddyPress users are "open" by default.
+			 *
+			 * @todo Confirm if we are not exposing sensitive field/information to the public.
+			 */
+			add_filter(
+				'graphql_object_visibility',
+				function( $visibility, $model_name ) {
+					if ( 'UserObject' === $model_name && 'private' === $visibility ) {
+						return 'restricted';
+					}
+
+					return $visibility;
+				},
+				10,
+				2
+			);
 		}
 	}
 

@@ -17,7 +17,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 /**
  * XProfileGroupType Class.
  */
-class XProfileGroupType implements RegisterInterface {
+class XProfileGroupType {
 
 	/**
 	 * Name of the type.

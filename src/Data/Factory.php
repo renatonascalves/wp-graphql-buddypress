@@ -20,9 +20,11 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 
 /**
  * Class Factory.
@@ -117,7 +119,7 @@ class Factory {
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (user, group, blog, etc).
 	 *
-	 * @return null|Attachment
+	 * @return Attachment|null
 	 */
 	public static function resolve_attachment( $id, $object = 'user' ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -158,7 +160,7 @@ class Factory {
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (members, groups, blogs, etc).
 	 *
-	 * @return null|Attachment
+	 * @return Attachment|null
 	 */
 	public static function resolve_attachment_cover( $id, $object = 'members' ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -189,7 +191,7 @@ class Factory {
 	 * @throws UserError User error.
 	 *
 	 * @param int|null $id Blog ID or null.
-	 * @return null|Blog
+	 * @return Blog|null
 	 */
 	public static function resolve_blog_object( $id ) {
 		if ( empty( $id ) || ! absint( $id ) ) {
@@ -205,7 +207,7 @@ class Factory {
 		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(
 				sprintf(
-					// translators: XProfile Field ID.
+					// translators: Blog ID.
 					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $id )
 				)
@@ -213,6 +215,35 @@ class Factory {
 		}
 
 		return new Blog( $blog_object );
+	}
+
+	/**
+	 * Returns a Friendship object.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param int|null $id Friendship ID or null.
+	 * @return Friendship|null
+	 */
+	public static function resolve_friendship_object( $id ) {
+		if ( empty( $id ) || ! absint( $id ) ) {
+			return null;
+		}
+
+		// Get the friendship object.
+		$friendship = new \BP_Friends_Friendship( $id ); // This is cached.
+
+		if ( ! $friendship || 0 === $friendship->id ) {
+			throw new UserError(
+				sprintf(
+					// translators: Friendship ID.
+					__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
+					absint( $id )
+				)
+			);
+		}
+
+		return new Friendship( $friendship );
 	}
 
 	/**
@@ -297,5 +328,19 @@ class Factory {
 	 */
 	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
 		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the FriendshipConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 *
+	 * @return array
+	 */
+	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+		return ( new FriendshipsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }

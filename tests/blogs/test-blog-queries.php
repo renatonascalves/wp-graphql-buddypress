@@ -67,7 +67,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_blog_query_with_body_by_non_logged_in_user() {
+	public function test_blog_query_with_another_logged_in_user() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
 		}
@@ -103,7 +103,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 						'id'        => $global_id,
 						'blogId'    => $b1,
 						'blogAdmin' => [
-							'userId' => null,
+							'userId' => $u1,
 						],
 					],
 				],

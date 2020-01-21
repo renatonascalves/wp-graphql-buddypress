@@ -19,7 +19,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Group;
 /**
  * Class GroupType
  */
-class GroupType implements RegisterInterface {
+class GroupType {
 
 	/**
 	 * Name of the type.
