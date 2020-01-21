@@ -1,6 +1,6 @@
 <?php
 /**
- * FriendshipEnums Enums.
+ * Friendship Enums.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Type\Enum
  * @since 0.0.1-alpha
@@ -14,7 +14,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 class FriendshipEnums {
 
 	/**
-	 * Registers enum type.
+	 * Register enum type.
 	 */
 	public static function register() {
 

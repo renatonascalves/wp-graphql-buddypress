@@ -12,6 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Types;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
 use WPGraphQL\Model\User;
 
 /**
@@ -110,7 +111,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 			return true;
 		}
 
-		// Current user is the same one from the object.
+		// Logged in user is the same one from the current user object.
 		if ( bp_loggedin_user_id() === $this->source->userId ) {
 			return true;
 		}
@@ -126,7 +127,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ) {
-		return true;
+		return FriendshipMutation::friendship_exists( $offset );
 	}
 
 	/**

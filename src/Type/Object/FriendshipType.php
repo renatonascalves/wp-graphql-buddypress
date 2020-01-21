@@ -18,7 +18,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 /**
  * FriendshipType Class.
  */
-class FriendshipType implements RegisterInterface {
+class FriendshipType {
 
 	/**
 	 * Name of the type.

@@ -17,7 +17,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 /**
  * XProfileFieldType Class.
  */
-class XProfileFieldType implements RegisterInterface {
+class XProfileFieldType {
 
 	/**
 	 * Name of the type.

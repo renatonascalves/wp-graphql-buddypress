@@ -21,7 +21,7 @@ class FriendshipMutation {
 	 * @return bool
 	 */
 	public static function friendship_exists( $friendship ) {
-		return ( 0 !== $friendship->id && $friendship instanceof \BP_Friends_Friendship );
+		return ( $friendship instanceof \BP_Friends_Friendship && ( 0 !== $friendship->id ?? 0 ) );
 	}
 
 	/**
