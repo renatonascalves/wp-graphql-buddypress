@@ -29,8 +29,8 @@ class FriendshipMutation {
 	 *
 	 * Only the friendship initiator and the friend, the one invited to the friendship can see it.
 	 *
-	 * @param int $initiator Friendship initiator.
-	 * @param int $friend    Friendship friend.
+	 * @param int $initiator Friendship initiator ID.
+	 * @param int $friend    Friendship friend ID.
 	 *
 	 * @return bool
 	 */

@@ -41,7 +41,7 @@ class FriendshipType {
 						'description' => __( 'The globally unique identifier for the friendship.', 'wp-graphql-buddypress' ),
 					],
 					'friendshipId' => [
-						'type'        => 'Int',
+						'type'        => [ 'non_null' => 'Int' ],
 						'description' => __( 'The id field that matches the BP_Friends_Friendship->id field.', 'wp-graphql-buddypress' ),
 					],
 					'initiator' => [

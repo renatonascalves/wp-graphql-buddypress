@@ -46,7 +46,7 @@ class FriendshipCreate {
 			],
 			'friendId' => [
 				'type'        => [ 'non_null' => 'Int' ],
-				'description' => __( 'User ID of the `friend` - the one invited to the friendship.', 'wp-graphql-buddypress' ),
+				'description' => __( 'User ID of the `friend` - the one being invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}

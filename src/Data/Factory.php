@@ -233,7 +233,8 @@ class Factory {
 		// Get the friendship object.
 		$friendship = new \BP_Friends_Friendship( $id ); // This is cached.
 
-		if ( ! $friendship || 0 === $friendship->id ) {
+		// Check if friendship exists.
+		if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
 			throw new UserError(
 				sprintf(
 					// translators: Friendship ID.

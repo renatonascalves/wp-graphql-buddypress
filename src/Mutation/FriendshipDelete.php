@@ -106,7 +106,7 @@ class FriendshipDelete {
 
 			// Confirm status.
 			if ( 'not_friends' === $friendship_status ) {
-				throw new UserError( __( 'Those users are not yet friends and not friendship request was found.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Those users are not yet friends and no friendship request was found.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get friendship.

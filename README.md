@@ -26,6 +26,7 @@ Please use and provide feedback!
 - [x] XProfile (Groups, Fields and Data)
 - [x] Members (with Avatar and Cover Attachments)
 - [x] Blogs (with Avatar and Cover Attachments)
+- [x] Friends
 
 ## Pending Components
 
@@ -35,6 +36,5 @@ Please use and provide feedback!
 - [ ] Group Membership Request(s)
 - [ ] Group Invites
 - [ ] Signup
-- [ ] Friends
 - [ ] Components
 - [ ] Notifications

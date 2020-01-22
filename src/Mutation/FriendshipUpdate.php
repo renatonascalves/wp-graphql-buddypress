@@ -111,9 +111,14 @@ class FriendshipUpdate {
 				\BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
 			);
 
+			// Confirm if friendship exists.
+			if ( ! FriendshipMutation::friendship_exists( $friendship ) ) {
+				throw new UserError( __( 'No Friendship requested was found.', 'wp-graphql-buddypress' ) );
+			}
+
 			// Accept friendship.
 			if ( ! friends_accept_friendship( $friendship->id ) ) {
-				throw new UserError( __( 'Could not accept friendship.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'There was a problem accepting the friendship. Try again.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
