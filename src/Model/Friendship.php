@@ -10,7 +10,8 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
-use WPGraphQL\Types;
+use WPGraphQL\Utils\Utils;
+use BP_Friends_Friendship;
 
 /**
  * Class Friendship - Models the data for the Friendship object type.
@@ -27,16 +28,16 @@ class Friendship extends Model {
 	/**
 	 * Stores the Friendship object for the incoming data.
 	 *
-	 * @var \BP_Friends_Friendship $data
+	 * @var BP_Friends_Friendship
 	 */
 	protected $data;
 
 	/**
 	 * Friendship constructor.
 	 *
-	 * @param \BP_Friends_Friendship $friendship The incoming friendship object that needs modeling.
+	 * @param BP_Friends_Friendship $friendship The incoming friendship object that needs modeling.
 	 */
-	public function __construct( \BP_Friends_Friendship $friendship ) {
+	public function __construct( BP_Friends_Friendship $friendship ) {
 		$this->data = $friendship;
 		parent::__construct();
 	}
@@ -65,7 +66,7 @@ class Friendship extends Model {
 					return $this->data->is_confirmed ?? null;
 				},
 				'dateCreated' => function() {
-					return Types::prepare_date_response( $this->data->date_created );
+					return Utils::prepare_date_response( $this->data->date_created );
 				},
 			];
 		}

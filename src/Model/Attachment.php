@@ -21,7 +21,7 @@ class Attachment extends Model {
 	/**
 	 * Stores the object.
 	 *
-	 * @var stdClass $data
+	 * @var stdClass
 	 */
 	protected $data;
 

@@ -10,7 +10,8 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
-use WPGraphQL\Types;
+use WPGraphQL\Utils\Utils;
+use stdClass;
 
 /**
  * Class Blog - Models the data for the Blog object type.
@@ -30,16 +31,16 @@ class Blog extends Model {
 	/**
 	 * Stores the Blog object for the incoming data.
 	 *
-	 * @var \stdClass $data
+	 * @var stdClass
 	 */
 	protected $data;
 
 	/**
 	 * Blog constructor.
 	 *
-	 * @param \stdClass $blog The incoming blog object that needs modeling.
+	 * @param stdClass $blog The incoming blog object that needs modeling.
 	 */
-	public function __construct( $blog ) {
+	public function __construct( stdClass $blog ) {
 		$this->data = $blog;
 		parent::__construct();
 	}
@@ -77,7 +78,7 @@ class Blog extends Model {
 					return $this->data->domain ?? null;
 				},
 				'lastActivity' => function() {
-					return Types::prepare_date_response( $this->data->last_activity );
+					return Utils::prepare_date_response( $this->data->last_activity );
 				},
 			];
 		}
@@ -87,10 +88,9 @@ class Blog extends Model {
 	 * Get blog permalink.
 	 *
 	 * @param stdClass $blog Blog object.
-	 *
 	 * @return string|null
 	 */
-	protected function get_blog_domain( $blog ) {
+	protected function get_blog_domain( stdClass $blog ): ?string {
 
 		// Bail early.
 		if ( empty( $blog->domain ) && empty( $blog->path ) ) {

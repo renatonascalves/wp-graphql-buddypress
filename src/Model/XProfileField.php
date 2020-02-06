@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
+use BP_XProfile_Field;
 
 /**
  * Class XProfile Field - Models the data for the XProfile Field object type.
@@ -37,16 +38,16 @@ class XProfileField extends Model {
 	/**
 	 * Stores the BP_XProfile_Field object for the incoming data.
 	 *
-	 * @var \BP_XProfile_Field $data
+	 * @var BP_XProfile_Field
 	 */
 	protected $data;
 
 	/**
 	 * XProfile field constructor.
 	 *
-	 * @param \BP_XProfile_Field $xprofile_field The incoming BP_XProfile_Field object that needs modeling.
+	 * @param BP_XProfile_Field $xprofile_field The incoming BP_XProfile_Field object that needs modeling.
 	 */
-	public function __construct( \BP_XProfile_Field $xprofile_field ) {
+	public function __construct( BP_XProfile_Field $xprofile_field ) {
 		$this->data = $xprofile_field;
 		parent::__construct();
 	}

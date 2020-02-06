@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
+use stdClass;
 
 /**
  * Class XProfile Group - Models the data for the XProfile Group object type.
@@ -27,16 +28,16 @@ class XProfileGroup extends Model {
 	/**
 	 * Stores the object for the incoming data.
 	 *
-	 * @var \stdClass $data
+	 * @var stdClass
 	 */
 	protected $data;
 
 	/**
 	 * XProfile group constructor.
 	 *
-	 * @param \stdClass $xprofile_group The incoming XProfile object that needs modeling.
+	 * @param stdClass $xprofile_group The incoming XProfile object that needs modeling.
 	 */
-	public function __construct( $xprofile_group ) {
+	public function __construct( stdClass $xprofile_group ) {
 		$this->data = $xprofile_group;
 		parent::__construct();
 	}

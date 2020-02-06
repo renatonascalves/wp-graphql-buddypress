@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Types;
+use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
 
 /**
@@ -148,7 +148,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Map and sanitize the input args to the BP_User_Query compatiable args.
 		 */
-		$query_args = Types::map_input( $args, $arg_mapping );
+		$query_args = Utils::map_input( $args, $arg_mapping );
 
 		/**
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.

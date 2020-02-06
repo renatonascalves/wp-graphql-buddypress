@@ -8,9 +8,10 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;
 
+use WPGraphQL\Utils\Utils;
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
-use WPGraphQL\Types;
+use BP_Groups_Group;
 
 /**
  * Class Group - Models the data for the Group object type.
@@ -36,16 +37,16 @@ class Group extends Model {
 	/**
 	 * Stores the BP_Groups_Group object for the incoming data.
 	 *
-	 * @var \BP_Groups_Group $data
+	 * @var BP_Groups_Group
 	 */
 	protected $data;
 
 	/**
 	 * Group constructor.
 	 *
-	 * @param \BP_Groups_Group $group The incoming BP_Groups_Group object that needs modeling.
+	 * @param BP_Groups_Group $group The incoming BP_Groups_Group object that needs modeling.
 	 */
-	public function __construct( \BP_Groups_Group $group ) {
+	public function __construct( BP_Groups_Group $group ) {
 		$this->data = $group;
 		parent::__construct();
 	}
@@ -55,7 +56,7 @@ class Group extends Model {
 	 *
 	 * @return bool
 	 */
-	protected function is_private() {
+	protected function is_private(): bool {
 
 		// If it is not a hidden/private group, user can see it.
 		if ( 'public' === $this->data->status ) {
@@ -123,12 +124,12 @@ class Group extends Model {
 				],
 				'lastActivity' => [
 					'callback' => function() {
-						return Types::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
+						return Utils::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
 					},
 					'capability' => 'bp_moderate',
 				],
 				'dateCreated' => function() {
-					return Types::prepare_date_response( $this->data->date_created );
+					return Utils::prepare_date_response( $this->data->date_created );
 				},
 				'status' => function() {
 					return bp_get_group_status( $this->data );
