@@ -25,7 +25,7 @@ class GroupMutation {
 	 *
 	 * @return \BP_Groups_Group
 	 */
-	public static function get_group_from_input( $input ) {
+	public static function get_group_from_input( $input ): ?\BP_Groups_Group {
 		$group_id = 0;
 
 		/**
@@ -57,7 +57,7 @@ class GroupMutation {
 	 *
 	 * @return array
 	 */
-	public static function prepare_group_args( array $input, $group = null, string $action ) {
+	public static function prepare_group_args( array $input, $group = null, string $action ): array {
 		$output_args = [
 			'name'        => empty( $input['name'] )
 				? $group->name ?? ''
@@ -104,7 +104,7 @@ class GroupMutation {
 	 *
 	 * @return bool
 	 */
-	public static function can_update_or_delete_group( $creator_id ) {
+	public static function can_update_or_delete_group( $creator_id ): bool {
 		return ( bp_current_user_can( 'bp_moderate' ) || absint( bp_loggedin_user_id() ) === absint( $creator_id ) );
 	}
 }

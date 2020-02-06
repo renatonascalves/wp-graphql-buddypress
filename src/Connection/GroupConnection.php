@@ -23,14 +23,10 @@ class GroupConnection {
 	 */
 	public static function register_connections() {
 
-		/**
-		 * Register connection from RootQuery to groups.
-		 */
+		// Register connection from RootQuery to groups.
 		register_graphql_connection( self::get_connection_config() );
 
-		/**
-		 * Register connection from Group to children groups.
-		 */
+		// Register connection from Group to children groups.
 		register_graphql_connection(
 			self::get_connection_config(
 				[
@@ -40,19 +36,14 @@ class GroupConnection {
 			)
 		);
 
-		/**
-		 * Register connection from Group to group members.
-		 */
-		register_graphql_connection(
-			self::get_group_members_connection_config()
-		);
+		// Register connection from Group to group members.
+		register_graphql_connection( self::get_group_members_connection_config() );
 	}
 
 	/**
 	 * This returns a RootQuery > group connection config.
 	 *
 	 * @param array $args Array of arguments.
-	 *
 	 * @return array
 	 */
 	public static function get_connection_config( $args = [] ) {
@@ -76,7 +67,6 @@ class GroupConnection {
 	 * This returns a Group > User connection config.
 	 *
 	 * @param array $args Array of arguments.
-	 *
 	 * @return array
 	 */
 	public static function get_group_members_connection_config( $args = [] ) {
@@ -132,15 +122,11 @@ class GroupConnection {
 				'description' => __( 'Search term(s) to retrieve matching groups for.', 'wp-graphql-buddypress' ),
 			],
 			'slug'        => [
-				'type'        => [
-					'list_of' => 'String',
-				],
+				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Search group or groups by its/their slug(s).', 'wp-graphql-buddypress' ),
 			],
 			'status'      => [
-				'type'        => [
-					'list_of' => 'GroupStatusEnum',
-				],
+				'type'        => [ 'list_of' => 'GroupStatusEnum' ],
 				'description' => __( 'Group statuses to limit results to.', 'wp-graphql-buddypress' ),
 			],
 			'groupType'   => [
@@ -152,15 +138,11 @@ class GroupConnection {
 				'description' => __( 'Include groups that this user is a member of.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 			'include'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 		];

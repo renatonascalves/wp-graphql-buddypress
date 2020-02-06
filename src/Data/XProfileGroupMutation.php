@@ -54,7 +54,7 @@ class XProfileGroupMutation {
 	 *
 	 * @return array
 	 */
-	public static function prepare_xprofile_group_args( array $input, $xprofile_group = null, string $action ) {
+	public static function prepare_xprofile_group_args( array $input, $xprofile_group = null, string $action ): array {
 		$output_args = [
 			'name'           => empty( $input['name'] )
 				? $xprofile_group->name ?? ''
@@ -85,7 +85,7 @@ class XProfileGroupMutation {
 	 *
 	 * @return bool
 	 */
-	public static function can_manage_xprofile_group() {
+	public static function can_manage_xprofile_group(): bool {
 		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
 	}
 }

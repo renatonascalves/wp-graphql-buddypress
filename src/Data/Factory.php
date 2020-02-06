@@ -39,7 +39,7 @@ class Factory {
 	 *
 	 * @return Deferred|null
 	 */
-	public static function resolve_group_object( $id, AppContext $context ) {
+	public static function resolve_group_object( $id, AppContext $context ): ?Deferred {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -62,7 +62,7 @@ class Factory {
 	 *
 	 * @return Deferred|null
 	 */
-	public static function resolve_xprofile_group_object( $id, AppContext $context ) {
+	public static function resolve_xprofile_group_object( $id, AppContext $context ): ?Deferred {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -85,9 +85,9 @@ class Factory {
 	 * @param int|null   $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
 	 *
-	 * @return \XProfileField|null
+	 * @return XProfileField|null
 	 */
-	public static function resolve_xprofile_field_object( $id, AppContext $context ) {
+	public static function resolve_xprofile_field_object( $id, AppContext $context ): ?XProfileField {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -114,14 +114,14 @@ class Factory {
 	}
 
 	/**
-	 * Resolve an attachment avatar for a object (user, group, blog, etc).
+	 * Resolve an attachment avatar for an object (user, group, blog, etc).
 	 *
 	 * @param int|null $id     ID of the object or null.
 	 * @param string   $object Object (user, group, blog, etc).
 	 *
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment( $id, $object = 'user' ) {
+	public static function resolve_attachment( $id, $object = 'user' ): ?Attachment {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -138,9 +138,11 @@ class Factory {
 			];
 
 			if ( 'blog' === $object ) {
+
 				// Unset item ID and add correct item id key.
 				unset( $args['item_id'] );
-				$args['blog_id'] = $id;
+
+				$args['blog_id']   = $id;
 				$attachment->$type = bp_get_blog_avatar( $args );
 			} else {
 				$attachment->$type = bp_core_fetch_avatar( $args );
@@ -162,7 +164,7 @@ class Factory {
 	 *
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment_cover( $id, $object = 'members' ) {
+	public static function resolve_attachment_cover( $id, $object = 'members' ): ?Attachment {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -193,21 +195,19 @@ class Factory {
 	 * @param int|null $id Blog ID or null.
 	 * @return Blog|null
 	 */
-	public static function resolve_blog_object( $id ) {
+	public static function resolve_blog_object( $id ): ?Blog {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
 
-		/**
-		 * Get the blog object.
-		 */
-		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => $id ] ) );
+		// Get the blog object.
+		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $id ) ] ) );
 		$blog_object = $blogs[0] ?? 0;
 
 		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(
 				sprintf(
-					// translators: Blog ID.
+					// translators: %d is the blog ID.
 					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $id )
 				)
@@ -225,7 +225,7 @@ class Factory {
 	 * @param int|null $id Friendship ID or null.
 	 * @return Friendship|null
 	 */
-	public static function resolve_friendship_object( $id ) {
+	public static function resolve_friendship_object( $id ): ?Friendship {
 		if ( empty( $id ) || ! absint( $id ) ) {
 			return null;
 		}
@@ -237,7 +237,7 @@ class Factory {
 		if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
 			throw new UserError(
 				sprintf(
-					// translators: Friendship ID.
+					// translators: %d is the friendship ID.
 					__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $id )
 				)
@@ -257,7 +257,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new BlogsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -271,7 +271,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new XProfileGroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -285,7 +285,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -299,7 +299,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new GroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -313,7 +313,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new GroupMembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -327,7 +327,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -341,7 +341,7 @@ class Factory {
 	 *
 	 * @return array
 	 */
-	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ) {
+	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
 		return ( new FriendshipsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }

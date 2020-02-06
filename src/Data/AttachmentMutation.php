@@ -16,13 +16,13 @@ class AttachmentMutation {
 	/**
 	 * Check if user can manage an attachment.
 	 *
-	 * @param int    $object_id Object ID.
-	 * @param string $object    Object.
-	 * @param bool   $cover     Is it a cover check? Default: false.
+	 * @param int    $object_id Attachment Object ID.
+	 * @param string $object    Attachment Object.
+	 * @param bool   $cover     Is it a cover image? Default: false.
 	 *
 	 * @return bool
 	 */
-	public static function can_update_or_delete_attachment( $object_id, $object, $cover = false ) {
+	public static function can_update_or_delete_attachment( $object_id, $object, $cover = false ): bool {
 		$args = [
 			'item_id' => $object_id,
 			'object'  => $object,

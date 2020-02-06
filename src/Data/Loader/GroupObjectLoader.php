@@ -12,6 +12,7 @@ use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use BP_Groups_Group;
 
 /**
  * Class GroupObjectLoader
@@ -41,15 +42,13 @@ class GroupObjectLoader extends AbstractDataLoader {
 	 *
 	 * @return array
 	 */
-	public function loadKeys( array $keys ) {
+	public function loadKeys( array $keys ): array {
 
 		if ( empty( $keys ) ) {
 			return $keys;
 		}
 
-		/**
-		 * Execute the query, and prune the cache.
-		 */
+		// Execute the query, and prune the cache.
 		groups_get_groups(
 			[
 				'include'  => $keys,
@@ -63,15 +62,13 @@ class GroupObjectLoader extends AbstractDataLoader {
 		 */
 		foreach ( $keys as $key ) {
 
-			/**
-			 * Get the group object from cache.
-			 */
+			// Get the group object from cache.
 			$group_object = groups_get_group( absint( $key ) );
 
-			if ( empty( $group_object ) || ! $group_object instanceof \BP_Groups_Group ) {
+			if ( empty( $group_object ) || ! $group_object instanceof BP_Groups_Group ) {
 				throw new UserError(
 					sprintf(
-						// translators: Group ID.
+						// translators: %d is the Group ID.
 						__( 'No group was found with ID: %d', 'wp-graphql-buddypress' ),
 						absint( $key )
 					)

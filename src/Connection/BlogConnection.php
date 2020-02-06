@@ -18,13 +18,9 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 class BlogConnection {
 
 	/**
-	 * Register connections to Blogs.
+	 * Register connection from RootQuery -> Blog (type).
 	 */
 	public static function register_connections() {
-
-		/**
-		 * Register connection from RootQuery -> Blog (type).
-		 */
 		register_graphql_connection(
 			[
 				'fromType'       => 'RootQuery',
@@ -44,9 +40,7 @@ class BlogConnection {
 						'description' => __( 'ID of the user whose blogs user can post to.', 'wp-graphql-buddypress' ),
 					],
 					'include'     => [
-						'type'        => [
-							'list_of' => 'Int',
-						],
+						'type'        => [ 'list_of' => 'Int' ],
 						'description' => __( 'Ensure result set includes Blogs with specific IDs.', 'wp-graphql-buddypress' ),
 					],
 				],

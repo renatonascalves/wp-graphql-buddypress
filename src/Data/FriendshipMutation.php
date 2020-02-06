@@ -20,7 +20,7 @@ class FriendshipMutation {
 	 *
 	 * @return bool
 	 */
-	public static function friendship_exists( $friendship ) {
+	public static function friendship_exists( $friendship ): bool {
 		return ( $friendship instanceof \BP_Friends_Friendship && ( 0 !== $friendship->id ?? 0 ) );
 	}
 
@@ -34,7 +34,7 @@ class FriendshipMutation {
 	 *
 	 * @return bool
 	 */
-	public static function can_update_or_delete_friendship( $initiator, $friend ) {
+	public static function can_update_or_delete_friendship( $initiator, $friend ): bool {
 		return in_array( bp_loggedin_user_id(), [ $initiator, $friend ], true );
 	}
 }

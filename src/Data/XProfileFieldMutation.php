@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
+use BP_XProfile_Field;
 
 /**
  * XProfileFieldMutation Class.
@@ -23,9 +24,9 @@ class XProfileFieldMutation {
 	 *
 	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile field.
 	 *
-	 * @return \BP_XProfile_Field
+	 * @return BP_XProfile_Field
 	 */
-	public static function get_xprofile_field_from_input( $input ) {
+	public static function get_xprofile_field_from_input( $input ): BP_XProfile_Field {
 		$xprofile_field_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
@@ -42,19 +43,19 @@ class XProfileFieldMutation {
 			$xprofile_field_id = absint( $input );
 		}
 
-		return new \BP_XProfile_Field( absint( $xprofile_field_id ) );
+		return new BP_XProfile_Field( absint( $xprofile_field_id ) );
 	}
 
 	/**
 	 * Mapping XProfile field params.
 	 *
-	 * @param array                   $input          The input for the mutation.
-	 * @param \BP_XProfile_Field|null $xprofile_field XProfile field object.
-	 * @param string                  $action         Hook action.
+	 * @param array                  $input          The input for the mutation.
+	 * @param BP_XProfile_Field|null $xprofile_field XProfile field object.
+	 * @param string                 $action         Hook action.
 	 *
 	 * @return array
 	 */
-	public static function prepare_xprofile_field_args( $input, $xprofile_field = null, $action ) {
+	public static function prepare_xprofile_field_args( $input, $xprofile_field = null, $action ): array {
 		$output_args = [
 			'field_id'          => empty( $input['fieldId'] )
 				? $xprofile_field->id ?? null
@@ -99,7 +100,7 @@ class XProfileFieldMutation {
 		 *
 		 * @param array                   $output_args    Mutation output args.
 		 * @param array                   $input          Mutation input args.
-		 * @param \BP_XProfile_Field|null $xprofile_field XProfile field object.
+		 * @param BP_XProfile_Field|null  $xprofile_field XProfile field object.
 		 */
 		return apply_filters( "bp_graphql_xprofile_fields_{$action}_mutation_args", $output_args, $input, $xprofile_field );
 	}
@@ -119,7 +120,7 @@ class XProfileFieldMutation {
 			$append = isset( $input['fieldId'] ) || isset( $input['id'] );
 
 			// Set types.
-			( new \BP_XProfile_Field( $xprofile_field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
+			( new BP_XProfile_Field( $xprofile_field_id ) )->set_member_types( stripslashes_deep( $input['memberTypes'] ), $append );
 		}
 
 		$default_visibility = $input['defaultVisibility'] ?? 'public';
@@ -137,7 +138,7 @@ class XProfileFieldMutation {
 	 *
 	 * @return bool
 	 */
-	public static function can_manage_xprofile_field() {
+	public static function can_manage_xprofile_field(): bool {
 		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
 	}
 }

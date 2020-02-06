@@ -23,14 +23,10 @@ class XProfileGroupConnection {
 	 */
 	public static function register_connections() {
 
-		/**
-		 * Register connection from RootQuery to XProfile Groups.
-		 */
+		// Register connection from RootQuery to XProfile Groups.
 		register_graphql_connection( self::get_connection_config() );
 
-		/**
-		 * Register connection from User to XProfile groups (and fields).
-		 */
+		// Register connection from User to XProfile groups (and fields).
 		register_graphql_connection(
 			self::get_connection_config(
 				[
@@ -47,7 +43,6 @@ class XProfileGroupConnection {
 	 * @todo There is a bug where if one uses both connections, the userId is overlapping to other connections.
 	 *
 	 * @param array $args Array of arguments.
-	 *
 	 * @return array
 	 */
 	public static function get_connection_config( $args = [] ) {
@@ -87,9 +82,7 @@ class XProfileGroupConnection {
 				'description' => __( 'Whether to remove XProfile groups that do not have fields.', 'wp-graphql-buddypress' ),
 			],
 			'excludeGroups'  => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes specific XProfile field groups.', 'wp-graphql-buddypress' ),
 			],
 		];

@@ -19,40 +19,24 @@ use WPGraphQL\Data\DataSource;
 class MemberConnection {
 
 	/**
-	 * Register connections to members
+	 * Register connections from the RootQuery to User members.
 	 */
 	public static function register_connections() {
-
-		/**
-		 * Register connection from RootQuery to members.
-		 */
-		register_graphql_connection( self::get_connection_config() );
-	}
-
-	/**
-	 * Given an array of $args, this returns the connection config, merging the provided args
-	 * with the defaults.
-	 *
-	 * @param array $args Array of arguments.
-	 *
-	 * @return array
-	 */
-	public static function get_connection_config( $args = [] ) {
-		$defaults = [
-			'fromType'           => 'RootQuery',
-			'toType'             => 'User',
-			'fromFieldName'      => 'members',
-			'connectionTypeName' => 'RootQueryToMembersConnection',
-			'connectionArgs' => self::get_connection_argsss(),
-			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
-				return DataSource::resolve_user( $id, $context );
-			},
-			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-				return Factory::resolve_members_connection( $source, $args, $context, $info );
-			},
-		];
-
-		return array_merge( $defaults, $args );
+		register_graphql_connection(
+			[
+				'fromType'           => 'RootQuery',
+				'toType'             => 'User',
+				'fromFieldName'      => 'members',
+				'connectionTypeName' => 'RootQueryToMembersConnection',
+				'connectionArgs'     => self::get_connection_args(),
+				'resolveNode'        => function ( $id, array $args, AppContext $context ) {
+					return DataSource::resolve_user( $id, $context );
+				},
+				'resolve'            => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+					return Factory::resolve_members_connection( $source, $args, $context, $info );
+				},
+			]
+		);
 	}
 
 	/**
@@ -60,7 +44,7 @@ class MemberConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_connection_argsss() {
+	public static function get_connection_args() {
 		return [
 			'type'  => [
 				'type'        => 'MemberOrderByTypeEnum',
@@ -71,33 +55,23 @@ class MemberConnection {
 				'description' => __( 'Limit results to friends of a user with specific ID.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes Members with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 			'include'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set includes Members with specific IDs.', 'wp-graphql-buddypress' ),
 			],
 			'memberType'     => [
-				'type'        => [
-					'list_of' => 'MemberTypesEnum',
-				],
+				'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 				'description' => __( 'Limit results set to certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'memberTypeIn'     => [
-				'type'        => [
-					'list_of' => 'MemberTypesEnum',
-				],
+				'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 				'description' => __( 'Limit results set to include certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'memberTypeNotIn'     => [
-				'type'        => [
-					'list_of' => 'MemberTypesEnum',
-				],
+				'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 				'description' => __( 'Limit results set to exclude certain member type(s).', 'wp-graphql-buddypress' ),
 			],
 			'xprofile'   => [

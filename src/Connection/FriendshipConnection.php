@@ -18,13 +18,9 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 class FriendshipConnection {
 
 	/**
-	 * Register friendship connections.
+	 * Register connection from User -> Friendship(s).
 	 */
 	public static function register_connections() {
-
-		/**
-		 * Register connection from User -> Friendship(s).
-		 */
 		register_graphql_connection(
 			[
 				'fromType'       => 'User',

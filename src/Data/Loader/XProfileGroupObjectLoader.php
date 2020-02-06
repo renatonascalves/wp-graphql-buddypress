@@ -13,6 +13,7 @@ use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
+use BP_XProfile_Group;
 
 /**
  * Class XProfileGroupObjectLoader
@@ -36,16 +37,14 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 	 *
 	 * @return array
 	 */
-	public function loadKeys( array $keys ) {
+	public function loadKeys( array $keys ): array {
 
 		if ( empty( $keys ) ) {
 			return $keys;
 		}
 
-		/**
-		 * Execute the query, and prune the cache.
-		 */
-		\BP_XProfile_Group::get_group_ids();
+		// Execute the query, and prune the cache.
+		BP_XProfile_Group::get_group_ids();
 
 		/**
 		 * Loop over the keys and return an array of loaded_xprofile_groups, where the key is the ID and the value
@@ -53,18 +52,14 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 		 */
 		foreach ( $keys as $key ) {
 
-			/**
-			 * Get the XPofile group object.
-			 */
+			// Get the XPofile group object.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( absint( $key ) );
 
-			/**
-			 * Confirm if it is a valid object.
-			 */
+			// Confirm if it is a valid object.
 			if ( empty( $xprofile_group_object ) || ! is_object( $xprofile_group_object ) ) {
 				throw new UserError(
 					sprintf(
-						// translators: XProfile Group ID.
+						// translators: %d is the XProfile Group ID.
 						__( 'No XProfile group was found with ID: %d', 'wp-graphql-buddypress' ),
 						absint( $key )
 					)
