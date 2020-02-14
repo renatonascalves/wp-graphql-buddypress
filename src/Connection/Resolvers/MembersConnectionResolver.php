@@ -12,6 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use BP_User_Query;
 
 /**
  * Class MembersConnectionResolver
@@ -23,7 +24,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'type'                => 'newest',
 			'user_id'             => false,
@@ -86,10 +87,10 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * Returns the BP User query.
 	 *
-	 * @return array
+	 * @return BP_User_Query
 	 */
-	public function get_query() {
-		return new \BP_User_Query( $this->query_args );
+	public function get_query(): BP_User_Query {
+		return new BP_User_Query( $this->query_args );
 	}
 
 	/**
@@ -97,7 +98,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return wp_list_pluck(
 			array_values( $this->query->results ),
 			'ID'
@@ -109,7 +110,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 		return true;
 	}
 
@@ -117,10 +118,9 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return ! empty( get_user_by( 'ID', absint( $offset ) ) );
 	}
 
@@ -129,10 +129,9 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 * BP_User_Query() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'type'            => 'type',
 			'userId'          => 'user_id',
@@ -145,14 +144,10 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 			'search'          => 'search_terms',
 		];
 
-		/**
-		 * Map and sanitize the input args to the BP_User_Query compatiable args.
-		 */
+		// Map and sanitize the input args to the BP_User_Query compatiable args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_members_query',
 			$query_args,

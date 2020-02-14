@@ -24,7 +24,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'profile_group_id' => false,
 			'fetch_fields'     => true,
@@ -90,7 +90,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return bp_xprofile_get_groups( $this->query_args );
 	}
 
@@ -99,7 +99,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		$ids = [];
 		foreach ( $this->query as $group ) {
 			foreach ( $group->fields as $field ) {
@@ -114,7 +114,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 		return true;
 	}
 
@@ -124,10 +124,9 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 * @todo Find a way to pass the user ID.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return true;
 	}
 
@@ -136,23 +135,18 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 * BP_XProfile_Group::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'hideEmptyFields' => 'hide_empty_fields',
 			'excludeFields'   => 'exclude_fields',
 		];
 
-		/**
-		 * Map and sanitize the input args.
-		 */
+		// Map and sanitize the input args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_xprofile_fields_query',
 			$query_args,

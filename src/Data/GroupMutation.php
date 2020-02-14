@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
+use BP_Groups_Group;
 
 /**
  * GroupMutation Class.
@@ -22,10 +23,9 @@ class GroupMutation {
 	 * @throws UserError User error for invalid Relay ID.
 	 *
 	 * @param array $input Array of possible input fields.
-	 *
-	 * @return \BP_Groups_Group
+	 * @return BP_Groups_Group
 	 */
-	public static function get_group_from_input( $input ): ?\BP_Groups_Group {
+	public static function get_group_from_input( $input ): ?BP_Groups_Group {
 		$group_id = 0;
 
 		/**
@@ -101,7 +101,6 @@ class GroupMutation {
 	 * Check if user can delete groups.
 	 *
 	 * @param int $creator_id Creator ID.
-	 *
 	 * @return bool
 	 */
 	public static function can_update_or_delete_group( $creator_id ): bool {

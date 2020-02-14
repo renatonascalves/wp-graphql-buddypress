@@ -8,6 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
+use BP_Friends_Friendship;
+
 /**
  * FriendshipMutation Class.
  */
@@ -16,12 +18,12 @@ class FriendshipMutation {
 	/**
 	 * Check if friendship exists.
 	 *
-	 * @param \BP_Friends_Friendship $friendship Friendship object.
+	 * @param BP_Friends_Friendship $friendship Friendship object.
 	 *
 	 * @return bool
 	 */
 	public static function friendship_exists( $friendship ): bool {
-		return ( $friendship instanceof \BP_Friends_Friendship && ( 0 !== $friendship->id ?? 0 ) );
+		return ( $friendship instanceof BP_Friends_Friendship && ( 0 !== $friendship->id ?? 0 ) );
 	}
 
 	/**
@@ -31,7 +33,6 @@ class FriendshipMutation {
 	 *
 	 * @param int $initiator Friendship initiator ID.
 	 * @param int $friend    Friendship friend ID.
-	 *
 	 * @return bool
 	 */
 	public static function can_update_or_delete_friendship( $initiator, $friend ): bool {

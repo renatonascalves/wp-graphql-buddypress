@@ -36,6 +36,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Stores the instance of the WP_GraphQL_BuddyPress class
 		 *
 		 * @since 0.0.1-alpha
+		 *
 		 * @var WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
 		private static $instance;
@@ -44,6 +45,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * The instance of the WP_GraphQL_BuddyPress object
 		 *
 		 * @since 0.0.1-alpha
+		 *
 		 * @return object|WP_GraphQL_BuddyPress - The one true WP_GraphQL_BuddyPress
 		 */
 		public static function instance() {
@@ -64,9 +66,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 */
 			do_action( 'graphql_buddypress_init', self::$instance );
 
-			/**
-			 * Return the WP_GraphQL_BuddyPress Instance
-			 */
+			// Return the WP_GraphQL_BuddyPress Instance.
 			return self::$instance;
 		}
 
@@ -258,11 +258,7 @@ endif;
  */
 function wp_graphql_buddypress_init() {
 
-	/**
-	 * Return an instance of the action.
-	 *
-	 * @since 0.0.1-alpha
-	 */
+	// Return an instance of the action.
 	return \WP_GraphQL_BuddyPress::instance();
 }
 add_action( 'graphql_init', 'wp_graphql_buddypress_init' );

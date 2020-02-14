@@ -25,7 +25,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'profile_group_id' => false,
 			'user_id'          => 0,
@@ -100,7 +100,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return bp_xprofile_get_groups( $this->query_args );
 	}
 
@@ -109,7 +109,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return wp_list_pluck( $this->query, 'id' );
 	}
 
@@ -118,7 +118,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 		return true;
 	}
 
@@ -126,10 +126,9 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return ! empty( current( bp_xprofile_get_groups( [ 'profile_group_id' => absint( $offset ) ] ) ) );
 	}
 
@@ -138,24 +137,19 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 * BP_XProfile_Group::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'profileGroupId'  => 'profile_group_id',
 			'hideEmptyGroups' => 'hide_empty_groups',
 			'excludeGroups'   => 'exclude_groups',
 		];
 
-		/**
-		 * Map and sanitize the input args.
-		 */
+		// Map and sanitize the input args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_xprofile_groups_query',
 			$query_args,

@@ -45,7 +45,7 @@ class XProfileGroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_connection_config( $args = [] ) {
+	public static function get_connection_config( $args = [] ): array {
 		$defaults = [
 			'fromType'       => 'RootQuery',
 			'toType'         => 'XProfileGroup',
@@ -71,7 +71,7 @@ class XProfileGroupConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_connection_args() {
+	public static function get_connection_args(): array {
 		return [
 			'profileGroupId'  => [
 				'type'        => 'Int',

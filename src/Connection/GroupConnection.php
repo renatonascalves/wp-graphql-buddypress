@@ -46,7 +46,7 @@ class GroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_connection_config( $args = [] ) {
+	public static function get_connection_config( $args = [] ): array {
 		$defaults = [
 			'fromType'       => 'RootQuery',
 			'toType'         => 'Group',
@@ -69,7 +69,7 @@ class GroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_group_members_connection_config( $args = [] ) {
+	public static function get_group_members_connection_config( $args = [] ): array {
 		$defaults = [
 			'fromType'       => 'Group',
 			'toType'         => 'User',
@@ -91,7 +91,7 @@ class GroupConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_connection_args() {
+	public static function get_connection_args(): array {
 		return [
 			'showHidden'  => [
 				'type'        => 'Boolean',
@@ -153,7 +153,7 @@ class GroupConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_group_members_connection_args() {
+	public static function get_group_members_connection_args(): array {
 		return [
 			'type'        => [
 				'type'        => 'GroupMembersStatusTypeEnum',

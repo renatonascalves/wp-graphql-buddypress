@@ -44,7 +44,7 @@ class MemberConnection {
 	 *
 	 * @return array
 	 */
-	public static function get_connection_args() {
+	public static function get_connection_args(): array {
 		return [
 			'type'  => [
 				'type'        => 'MemberOrderByTypeEnum',

@@ -24,7 +24,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'include_blog_ids' => [],
 			'user_id'          => 0,
@@ -99,7 +99,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return bp_blogs_get_blogs( $this->query_args );
 	}
 
@@ -108,7 +108,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return wp_list_pluck( $this->query['blogs'], 'blog_id' );
 	}
 
@@ -117,7 +117,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 		return true;
 	}
 
@@ -125,10 +125,9 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		$blogs = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $offset ) ] ) );
 
 		return ! empty( $blogs[0] );
@@ -139,10 +138,9 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * bp_blogs_get_blogs() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'userId'  => 'user_id',
 			'include' => 'include_blog_ids',

@@ -24,7 +24,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'fields'      => 'ids',
 			'show_hidden' => false,
@@ -112,7 +112,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return groups_get_groups( $this->query_args );
 	}
 
@@ -121,7 +121,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return $this->query['groups'];
 	}
 
@@ -130,7 +130,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 		return true;
 	}
 
@@ -138,10 +138,9 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return ! empty( groups_get_group( absint( $offset ) ) );
 	}
 
@@ -150,10 +149,9 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * BP_Groups_Group::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'showHidden' => 'show_hidden',
 			'type'       => 'type',
@@ -169,14 +167,10 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			'exclude'    => 'exclude',
 		];
 
-		/**
-		 * Map and sanitize the input args to the BP_Groups_Group compatible args.
-		 */
+		// Map and sanitize the input args to the BP_Groups_Group compatible args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_groups_query',
 			$query_args,

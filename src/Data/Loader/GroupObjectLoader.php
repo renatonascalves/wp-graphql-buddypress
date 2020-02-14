@@ -39,7 +39,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
-	 *
 	 * @return array
 	 */
 	public function loadKeys( array $keys ): array {

@@ -23,7 +23,6 @@ class XProfileFieldMutation {
 	 * @throws UserError User error for invalid Relay ID.
 	 *
 	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile field.
-	 *
 	 * @return BP_XProfile_Field
 	 */
 	public static function get_xprofile_field_from_input( $input ): BP_XProfile_Field {
@@ -52,7 +51,6 @@ class XProfileFieldMutation {
 	 * @param array                  $input          The input for the mutation.
 	 * @param BP_XProfile_Field|null $xprofile_field XProfile field object.
 	 * @param string                 $action         Hook action.
-	 *
 	 * @return array
 	 */
 	public static function prepare_xprofile_field_args( $input, $xprofile_field = null, $action ): array {

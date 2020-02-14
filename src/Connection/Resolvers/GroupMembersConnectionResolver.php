@@ -25,7 +25,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'group_id'            => 0,
 			'exclude'             => false,
@@ -96,7 +96,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return groups_get_group_members( $this->query_args );
 	}
 
@@ -105,7 +105,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return wp_list_pluck(
 			$this->query['members'],
 			'ID'
@@ -117,7 +117,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 
 		// Check if group object is there.
 		if ( ! $this->source instanceof Group ) {
@@ -143,13 +143,13 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid.
+	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
 	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return ! empty( get_user_by( 'ID', absint( $offset ) ) );
 	}
 
@@ -160,14 +160,11 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @throws UserError User error.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 
-		/**
-		 * Only admins and mods can filter those.
-		 */
+		// Only admins and mods can filter those.
 		if ( ! empty( $args['excludeBanned'] ) && ! bp_current_user_can( 'bp_moderate' ) ) {
 			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
 		}
@@ -181,14 +178,10 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			'excludeBanned'     => 'exclude_banned',
 		];
 
-		/**
-		 * Map and sanitize the input args.
-		 */
+		// Map and sanitize the input args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		$query_args = apply_filters(
 			'graphql_map_input_fields_to_group_members_query',
 			$query_args,

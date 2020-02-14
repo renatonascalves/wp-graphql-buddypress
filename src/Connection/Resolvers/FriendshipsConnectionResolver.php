@@ -25,7 +25,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query_args() {
+	public function get_query_args(): array {
 		$query_args = [
 			'user_id'      => 0,
 			'is_confirmed' => null,
@@ -86,7 +86,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_query() {
+	public function get_query(): array {
 		return \BP_Friends_Friendship::get_friendships( $this->source->userId ?? 0, $this->query_args );
 	}
 
@@ -95,7 +95,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items() {
+	public function get_items(): array {
 		return array_map( 'absint', wp_list_pluck( $this->query, 'id' ) );
 	}
 
@@ -104,7 +104,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return bool
 	 */
-	public function should_execute() {
+	public function should_execute(): bool {
 
 		// Moderators can see everything.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
@@ -112,7 +112,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// Logged in user is the same one from the current user object.
-		if ( bp_loggedin_user_id() === $this->source->userId ) {
+		if ( isset( $this->source->userId ) && bp_loggedin_user_id() === $this->source->userId ) {
 			return true;
 		}
 
@@ -123,10 +123,9 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
-	public function is_valid_offset( $offset ) {
+	public function is_valid_offset( $offset ): bool {
 		return FriendshipMutation::friendship_exists( $offset );
 	}
 
@@ -135,10 +134,9 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * BP_Friends_Friendship::get_friendships friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
-	 *
 	 * @return array
 	 */
-	public function sanitize_input_fields( array $args ) {
+	public function sanitize_input_fields( array $args ): array {
 		$arg_mapping = [
 			'order'       => 'sort_order',
 			'isConfirmed' => 'is_confirmed',
