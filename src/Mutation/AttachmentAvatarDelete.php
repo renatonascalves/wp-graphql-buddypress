@@ -24,7 +24,7 @@ class AttachmentAvatarDelete {
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'attachmentAvatarDelete',
+			'deleteAttachmentAvatar',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),

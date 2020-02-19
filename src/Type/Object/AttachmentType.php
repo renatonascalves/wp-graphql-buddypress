@@ -24,6 +24,8 @@ class AttachmentType {
 	 * Register the attachment type object.
 	 */
 	public static function register() {
+
+		// Regiter Attachment object.
 		register_graphql_object_type(
 			self::$type_name,
 			[
@@ -36,6 +38,24 @@ class AttachmentType {
 					'full'          => [
 						'type'        => 'String',
 						'description' => __( 'URL for the attachment with the full size.', 'wp-graphql-buddypress' ),
+					],
+				],
+			]
+		);
+
+		// Register Upload object.
+		register_graphql_input_type(
+			'Upload',
+			[
+				'description' => __( 'The `Upload` special type represents a file to be uploaded in the same HTTP request as specified by [graphql-multipart-request-spec](https://github.com/jaydenseric/graphql-multipart-request-spec).', 'wp-graphql-buddypress' ),
+				'fields'      => [
+					'fileName' => [
+						'type'        => 'String',
+						'description' => __( 'The name of the file being uploaded.', 'wp-graphql-buddypress' ),
+					],
+					'mimeType' => [
+						'type'        => 'MimeTypeEnum',
+						'description' => __( 'The mime-type of the file being uploaded.', 'wp-graphql-buddypress' ),
 					],
 				],
 			]

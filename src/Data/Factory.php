@@ -25,6 +25,9 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
+use stdClass;
+use BP_XProfile_Field;
+use BP_Friends_Friendship;
 
 /**
  * Class Factory.
@@ -34,7 +37,7 @@ class Factory {
 	/**
 	 * Returns a Group object.
 	 *
-	 * @param int|null   $id      Group ID or null.
+	 * @param int        $id      Group ID.
 	 * @param AppContext $context AppContext object.
 	 *
 	 * @return Deferred|null
@@ -57,7 +60,7 @@ class Factory {
 	/**
 	 * Returns a XProfile Group object.
 	 *
-	 * @param int|null   $id      XProfile group ID or null.
+	 * @param int        $id      XProfile group ID.
 	 * @param AppContext $context AppContext object.
 	 *
 	 * @return Deferred|null
@@ -95,12 +98,10 @@ class Factory {
 		// Get the user ID if available.
 		$user_id = $context->config['userId'] ?? null;
 
-		/**
-		 * Get the XPofile field object.
-		 */
+		// Get the XPofile field object.
 		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
 
-		if ( empty( $xprofile_field_object ) || ! $xprofile_field_object instanceof \BP_XProfile_Field ) {
+		if ( empty( $xprofile_field_object ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
 			throw new UserError(
 				sprintf(
 					// translators: XProfile Field ID.
@@ -114,11 +115,10 @@ class Factory {
 	}
 
 	/**
-	 * Resolve an attachment avatar for an object (user, group, blog, etc).
+	 * Resolve an attachment avatar for an object.
 	 *
-	 * @param int|null $id     ID of the object or null.
-	 * @param string   $object Object (user, group, blog, etc).
-	 *
+	 * @param int    $id     ID of the object.
+	 * @param string $object Object (user, group, blog, etc). Default: 'user'.
 	 * @return Attachment|null
 	 */
 	public static function resolve_attachment( $id, $object = 'user' ): ?Attachment {
@@ -126,7 +126,7 @@ class Factory {
 			return null;
 		}
 
-		$attachment = new \stdClass();
+		$attachment = new stdClass();
 
 		foreach ( [ 'full', 'thumb' ] as $type ) {
 			$args = [
@@ -159,9 +159,8 @@ class Factory {
 	/**
 	 * Resolve an attachment cover for a object (user, group, blog, etc).
 	 *
-	 * @param int|null $id     ID of the object or null.
-	 * @param string   $object Object (members, groups, blogs, etc).
-	 *
+	 * @param int    $id     ID of the object.
+	 * @param string $object Object (members, groups, blogs, etc). Default: 'members'.
 	 * @return Attachment|null
 	 */
 	public static function resolve_attachment_cover( $id, $object = 'members' ): ?Attachment {
@@ -181,18 +180,18 @@ class Factory {
 			return null;
 		}
 
-		$attachment       = new \stdClass();
+		$attachment       = new stdClass();
 		$attachment->full = $url;
 
 		return new Attachment( $attachment );
 	}
 
 	/**
-	 * Returns a Blog object.
+	 * Return a Blog object.
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param int|null $id Blog ID or null.
+	 * @param int $id Blog ID.
 	 * @return Blog|null
 	 */
 	public static function resolve_blog_object( $id ): ?Blog {
@@ -222,7 +221,7 @@ class Factory {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param int|null $id Friendship ID or null.
+	 * @param int $id Friendship ID.
 	 * @return Friendship|null
 	 */
 	public static function resolve_friendship_object( $id ): ?Friendship {
@@ -231,7 +230,7 @@ class Factory {
 		}
 
 		// Get the friendship object.
-		$friendship = new \BP_Friends_Friendship( $id ); // This is cached.
+		$friendship = new BP_Friends_Friendship( $id ); // This is cached.
 
 		// Check if friendship exists.
 		if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {

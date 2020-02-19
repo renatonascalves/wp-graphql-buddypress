@@ -8,6 +8,10 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
+use GraphQL\Error\UserError;
+use stdClass;
+use BP_Attachment_Avatar;
+
 /**
  * AttachmentMutation Class.
  */
@@ -19,7 +23,6 @@ class AttachmentMutation {
 	 * @param int    $object_id Attachment Object ID.
 	 * @param string $object    Attachment Object.
 	 * @param bool   $cover     Is it a cover image? Default: false.
-	 *
 	 * @return bool
 	 */
 	public static function can_update_or_delete_attachment( $object_id, $object, $cover = false ): bool {
@@ -31,5 +34,301 @@ class AttachmentMutation {
 		$action = $cover ? 'edit_cover_image' : 'edit_avatar';
 
 		return ( is_user_logged_in() && bp_attachments_current_user_can( $action, $args ) );
+	}
+
+	/**
+	 * Cover upload from file.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param mixed  $file    Image file to upload.
+	 * @param string $object  Object (members, groups, blogs, etc).
+	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
+	 */
+	public static function upload_cover_from_file( $file, $object, $item_id ) {
+
+		// Set global variables.
+		$bp = buddypress();
+		switch ( $object ) {
+			case 'groups':
+				$bp->groups->current_group = groups_get_group( $item_id );
+				break;
+			case 'members':
+			default:
+				$bp->displayed_user     = new stdClass();
+				$bp->displayed_user->id = (int) $item_id;
+				break;
+		}
+
+		// Try to upload image.
+		$avatar_instance = new BP_Attachment_Avatar();
+		$uploaded_image  = $avatar_instance->upload( $file );
+
+		// Bail with error.
+		if ( ! empty( $uploaded_image['error'] ) ) {
+			throw new UserError(
+				sprintf(
+					/* translators: %s is replaced with the error */
+					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
+					$uploaded_image['error']
+				),
+			);
+		}
+
+		$bp_attachments_uploads_dir = bp_attachments_cover_image_upload_dir(
+			[
+				'object_directory' => $object,
+				'object_id'        => $item_id,
+			]
+		);
+
+		// The BP Attachments Uploads Dir is not set, stop.
+		if ( false === $bp_attachments_uploads_dir ) {
+			throw new UserError( __( 'The BuddyPress attachments uploads directory is not set.', 'wp-graphql-buddypress' ) );
+		}
+
+		$cover_subdir = $bp_attachments_uploads_dir['subdir'];
+		$cover_dir    = $bp_attachments_uploads_dir['basedir'] . $cover_subdir;
+
+		// If upload path doesn't exist, stop.
+		if ( 0 !== validate_file( $cover_dir ) || ! is_dir( $cover_dir ) ) {
+			throw new UserError( __( 'The cover image directory is not valid.', 'wp-graphql-buddypress' ) );
+		}
+
+		// Upload cover.
+		$cover = bp_attachments_cover_image_generate_file(
+			[
+				'file'            => $uploaded_image['file'],
+				'component'       => $object,
+				'cover_image_dir' => $cover_dir,
+			]
+		);
+
+		// Bail if any error happened.
+		if ( false === $cover ) {
+			throw new UserError( __( 'There was a problem uploading the cover image.', 'wp-graphql-buddypress' ) );
+		}
+
+		// Bail with error if too small.
+		if ( true === $cover['is_too_small'] ) {
+
+			// Hacky way to get correct image dimentions.
+			$object = ( 'members' === $object ) ? 'xprofile' : $object;
+
+			// Get cover image advised dimensions.
+			$cover_dimensions = bp_attachments_get_cover_image_dimensions( $object );
+
+			throw new UserError(
+				sprintf(
+					/* translators: %$1s and %$2s is replaced with the correct sizes. */
+					__( 'You have selected an image that is smaller than the recommended size. For better results, make sure to upload an image that is larger than %1$spx wide, and %2$spx tall.', 'wp-graphql-buddypress' ),
+					(int) $cover_dimensions['width'],
+					(int) $cover_dimensions['height']
+				)
+			);
+		}
+	}
+
+	/**
+	 * Avatar upload from file.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param mixed  $file    Image file to upload.
+	 * @param string $object  Object (user, geroup, group, etc).
+	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
+	 */
+	public static function upload_avatar_from_file( $file, $object, $item_id ) {
+
+		// Set global variables.
+		$bp = buddypress();
+		switch ( $object ) {
+			case 'group':
+				$bp->groups->current_group = groups_get_group( $item_id );
+				$upload_main_dir           = 'groups_avatar_upload_dir';
+				break;
+			case 'user':
+			default:
+				$upload_main_dir        = 'xprofile_avatar_upload_dir';
+				$bp->displayed_user     = new stdClass();
+				$bp->displayed_user->id = (int) $item_id;
+				break;
+		}
+
+		$avatar_instance = new BP_Attachment_Avatar();
+		$avatar_original = $avatar_instance->upload( $file, $upload_main_dir );
+
+		// Bail early in case of an error.
+		if ( ! empty( $avatar_original['error'] ) ) {
+			throw new UserError(
+				sprintf(
+					/* translators: %s is replaced with the error */
+					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
+					$avatar_original['error']
+				),
+			);
+		}
+
+		// Get uploaded image file.
+		$image_file = $avatar_original['file'];
+
+		// Get image and bail early if there is an error.
+		$image_file = self::resize( $image_file, $avatar_instance );
+
+		// Delete existing image if one already exists.
+		self::delete_existing_image( $item_id, $object );
+
+		// Crop the profile photo accordingly.
+		self::crop_image( $image_file, $avatar_instance, $object, $item_id );
+	}
+
+	/**
+	 * Resize image.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param mixed                $file            Image to resize.
+	 * @param BP_Attachment_Avatar $avatar_instance Avatar instance.
+	 * @return string
+	 */
+	protected static function resize( $file, $avatar_instance ) {
+		$bp          = buddypress();
+		$upload_path = bp_core_avatar_upload_path();
+
+		if ( ! isset( $bp->avatar_admin ) ) {
+			$bp->avatar_admin = new stdClass();
+		}
+
+		// The Avatar UI available width.
+		$ui_available_width = 0;
+
+		// Try to set the ui_available_width using the avatar_admin global.
+		if ( isset( $bp->avatar_admin->ui_available_width ) ) {
+			$ui_available_width = $bp->avatar_admin->ui_available_width;
+		}
+
+		$resized = $avatar_instance->shrink( $file, $ui_available_width );
+
+		// We only want to handle one image after resize.
+		if ( empty( $resized ) ) {
+			$image_file = $file;
+			$img_dir    = str_replace( $upload_path, '', $file );
+		} else {
+			$image_file = $resized['path'];
+			$img_dir    = str_replace( $upload_path, '', $resized['path'] );
+			unlink( $file );
+		}
+
+		// Check for WP_Error on what should be an image.
+		if ( is_wp_error( $img_dir ) ) {
+			throw new UserError(
+				sprintf(
+					/* translators: %s is replaced with the error */
+					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
+					$img_dir->get_error_message()
+				),
+			);
+		}
+
+		return $image_file;
+	}
+
+	/**
+	 * Crop image.
+	 *
+	 * @throws UserError User error.
+	 *
+	 * @param mixed                $image_file      Image to crop.
+	 * @param BP_Attachment_Avatar $avatar_instance Avatar instance.
+	 * @param string               $object          Object.
+	 * @param int                  $item_id         Item ID.
+	 */
+	protected static function crop_image( $image_file, $avatar_instance, $object, $item_id ) {
+		$image          = getimagesize( $image_file );
+		$avatar_to_crop = str_replace( bp_core_avatar_upload_path(), '', $image_file );
+
+		// Get avatar full width and height.
+		$full_height = bp_core_avatar_full_height();
+		$full_width  = bp_core_avatar_full_width();
+
+		// Use as much as possible of the image.
+		$avatar_ratio = $full_width / $full_height;
+		$image_ratio  = $image[0] / $image[1];
+
+		if ( $image_ratio >= $avatar_ratio ) {
+			// Uploaded image is wider than BP ratio, so we crop horizontally.
+			$crop_y = 0;
+			$crop_h = $image[1];
+
+			// Get the target width by multiplying unmodified image height by target ratio.
+			$crop_w    = $avatar_ratio * $image[1];
+			$padding_w = round( ( $image[0] - $crop_w ) / 2 );
+			$crop_x    = $padding_w;
+		} else {
+			// Uploaded image is narrower than BP ratio, so we crop vertically.
+			$crop_x = 0;
+			$crop_w = $image[0];
+
+			// Get the target height by multiplying unmodified image width by target ratio.
+			$crop_h    = $avatar_ratio * $image[0];
+			$padding_h = round( ( $image[1] - $crop_h ) / 2 );
+			$crop_y    = $padding_h;
+		}
+
+		add_filter( 'bp_attachments_current_user_can', '__return_true' );
+
+		// Crop the image.
+		$cropped = $avatar_instance->crop(
+			[
+				'object'        => $object,
+				'avatar_dir'    => ( 'group' === $object ) ? 'group-avatars' : 'avatars',
+				'item_id'       => $item_id,
+				'original_file' => $avatar_to_crop,
+				'crop_w'        => $crop_w,
+				'crop_h'        => $crop_h,
+				'crop_x'        => $crop_x,
+				'crop_y'        => $crop_y,
+			]
+		);
+
+		remove_filter( 'bp_attachments_current_user_can', '__return_false' );
+
+		// Check for errors.
+		if ( empty( $cropped['full'] ) || empty( $cropped['thumb'] ) || is_wp_error( $cropped['full'] ) || is_wp_error( $cropped['thumb'] ) ) {
+			throw new UserError(
+				sprintf(
+					/* translators: %s is replaced with object type. */
+					__( 'There was a problem cropping your %s photo.', 'wp-graphql-buddypress' ),
+					$object
+				),
+			);
+		}
+	}
+
+	/**
+	 * Delete group/user's existing avatar if one exists.
+	 *
+	 * @param int    $item_id Item ID.
+	 * @param string $object  Object.
+	 */
+	protected static function delete_existing_image( $item_id, $object ) {
+		// Get existing avatar.
+		$existing_avatar = bp_core_fetch_avatar(
+			[
+				'object'  => $object,
+				'item_id' => $item_id,
+				'html'    => false,
+			]
+		);
+
+		// Check if the avatar exists before deleting it.
+		if ( ! empty( $existing_avatar ) ) {
+			bp_core_delete_existing_avatar(
+				[
+					'object'  => $object,
+					'item_id' => $item_id,
+				]
+			);
+		}
 	}
 }

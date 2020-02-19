@@ -20,9 +20,7 @@ class AttachmentEnums {
 	 */
 	public static function register() {
 
-		/**
-		 * Attachment Avatar Enum.
-		 */
+		// Attachment Avatar Enum.
 		register_graphql_enum_type(
 			'AttachmentAvatarEnum',
 			[
@@ -47,9 +45,7 @@ class AttachmentEnums {
 			]
 		);
 
-		/**
-		 * Attachment Cover Enum.
-		 */
+		// Attachment Cover Enum.
 		register_graphql_enum_type(
 			'AttachmentCoverEnum',
 			[

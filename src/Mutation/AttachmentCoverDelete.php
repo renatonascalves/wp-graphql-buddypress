@@ -24,7 +24,7 @@ class AttachmentCoverDelete {
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'attachmentCoverDelete',
+			'deleteAttachmentCover',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
