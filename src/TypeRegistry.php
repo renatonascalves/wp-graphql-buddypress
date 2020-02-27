@@ -136,6 +136,7 @@ class TypeRegistry {
 		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarDelete::register_mutation();
 
 		// Attachment Cover Mutations.
+		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverUpload::register_mutation();
 		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverDelete::register_mutation();
 	}
 

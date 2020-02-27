@@ -1,6 +1,6 @@
 <?php
 /**
- * AttachmentCoverCreate Mutation.
+ * AttachmentCoverUpload Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
@@ -15,16 +15,16 @@ use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
- * AttachmentCoverCreate Class.
+ * AttachmentCoverUpload Class.
  */
-class AttachmentCoverCreate {
+class AttachmentCoverUpload {
 
 	/**
-	 * Registers the AttachmentCoverCreate mutation.
+	 * Registers the AttachmentCoverUpload mutation.
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'createAttachmentCover',
+			'uploadAttachmentCover',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
@@ -41,7 +41,7 @@ class AttachmentCoverCreate {
 	public static function get_input_fields(): array {
 		return [
 			'file' => [
-				'type'        => [ 'non_null' => 'String' ],
+				'type'        => [ 'non_null' => 'Upload' ],
 				'description' => __( 'Upload a local file using multi-part.', 'wp-graphql-buddypress' ),
 			],
 			'objectId' => [
@@ -83,11 +83,6 @@ class AttachmentCoverCreate {
 			$object_id = $input['objectId'];
 			$object    = $input['object'];
 
-			// Check if user has access to upload it.
-			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Check if cover upload is enabled for members.
 			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {
 				throw new UserError( __( 'Sorry, member cover upload is disabled.', 'wp-graphql-buddypress' ) );
@@ -103,8 +98,13 @@ class AttachmentCoverCreate {
 				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
+			// Check if user has access to upload it.
+			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+			}
+
 			// Try to upload the cover image file.
-			AttachmentMutation::upload_cover_from_file( $input['file'], $object, $object_id );
+			AttachmentMutation::upload_cover_from_file( $input, $object, $object_id );
 
 			/**
 			 * Fires after an attachment cover is uploaded.

@@ -46,7 +46,7 @@ class AttachmentAvatarUpload {
 			],
 			'objectId' => [
 				'type'        => [ 'non_null' => 'Int' ],
-				'description' => __( 'The unique identifier (user_id, group_id, etc) for the object the avatar will belong to.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The unique identifier (user_id, group_id, blog_id, etc) for the object the avatar will belong to.', 'wp-graphql-buddypress' ),
 			],
 			'object'   => [
 				'type'        => [ 'non_null' => 'AttachmentAvatarEnum' ],

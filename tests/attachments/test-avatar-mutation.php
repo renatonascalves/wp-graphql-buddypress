@@ -12,6 +12,7 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	public $client_mutation_id;
 	public $image_file;
 	public $user;
+	public $group;
 
 	public function setUp() {
 		parent::setUp();
