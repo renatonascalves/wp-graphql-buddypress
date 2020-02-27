@@ -71,7 +71,7 @@ class AttachmentMutation {
 					/* translators: %s is replaced with the error */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
 					$uploaded_image['error']
-				),
+				)
 			);
 		}
 
@@ -230,7 +230,6 @@ class AttachmentMutation {
 		} else {
 			$image_file = $resized['path'];
 			$img_dir    = str_replace( $upload_path, '', $resized['path'] );
-			// unlink( $file );
 		}
 
 		// Check for WP_Error on what should be an image.
