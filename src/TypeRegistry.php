@@ -132,7 +132,7 @@ class TypeRegistry {
 		\WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums::register();
 
 		// Attachment Avatar Mutations.
-		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarCreate::register_mutation();
+		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarUpload::register_mutation();
 		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarDelete::register_mutation();
 
 		// Attachment Cover Mutations.

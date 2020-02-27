@@ -21,7 +21,7 @@ class AttachmentType {
 	public static $type_name = 'Attachment';
 
 	/**
-	 * Register the attachment type object.
+	 * Attachment registrations.
 	 */
 	public static function register() {
 
@@ -51,7 +51,7 @@ class AttachmentType {
 				'fields'      => [
 					'fileName' => [
 						'type'        => 'String',
-						'description' => __( 'The name of the file being uploaded.', 'wp-graphql-buddypress' ),
+						'description' => __( 'The file being uploaded.', 'wp-graphql-buddypress' ),
 					],
 					'mimeType' => [
 						'type'        => 'MimeTypeEnum',

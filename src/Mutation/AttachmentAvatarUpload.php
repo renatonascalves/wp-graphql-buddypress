@@ -1,6 +1,6 @@
 <?php
 /**
- * AttachmentAvatarCreate Mutation.
+ * AttachmentAvatarUpload Mutation.
  *
  * @package \WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
@@ -15,16 +15,16 @@ use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
- * AttachmentAvatarCreate Class.
+ * AttachmentAvatarUpload Class.
  */
-class AttachmentAvatarCreate {
+class AttachmentAvatarUpload {
 
 	/**
-	 * Registers the AttachmentAvatarCreate mutation.
+	 * Registers the AttachmentAvatarUpload mutation.
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'createAttachmentAvatar',
+			'uploadAttachmentAvatar',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
@@ -41,7 +41,7 @@ class AttachmentAvatarCreate {
 	public static function get_input_fields(): array {
 		return [
 			'file' => [
-				'type'        => [ 'non_null' => 'String' ],
+				'type'        => [ 'non_null' => 'Upload' ],
 				'description' => __( 'Upload a local file using multi-part.', 'wp-graphql-buddypress' ),
 			],
 			'objectId' => [
@@ -84,11 +84,6 @@ class AttachmentAvatarCreate {
 			$object       = $input['object'];
 			$show_avatars = buddypress()->avatar->show_avatars;
 
-			// Check if user has access to upload it.
-			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Check if upload is enabled for member.
 			if ( 'user' === $object && ( true === bp_disable_avatar_uploads() || false === $show_avatars ) ) {
 				throw new UserError( __( 'Sorry, member avatar upload is disabled.', 'wp-graphql-buddypress' ) );
@@ -104,8 +99,13 @@ class AttachmentAvatarCreate {
 				throw new UserError( __( 'Sorry, blog avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
+			// Check if user has access to upload it.
+			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object ) ) {
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+			}
+
 			// Try to upload the avatar image file.
-			AttachmentMutation::upload_avatar_from_file( $input['file'], $object, $object_id );
+			AttachmentMutation::upload_avatar_from_file( $input, $object, $object_id );
 
 			/**
 			 * Fires after an attachment avatar is uploaded.

@@ -41,11 +41,11 @@ class AttachmentMutation {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param mixed  $file    Image file to upload.
+	 * @param array  $input   Image file to upload.
 	 * @param string $object  Object (members, groups, blogs, etc).
 	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
-	public static function upload_cover_from_file( $file, $object, $item_id ) {
+	public static function upload_cover_from_file( $input, $object, $item_id ) {
 
 		// Set global variables.
 		$bp = buddypress();
@@ -62,7 +62,7 @@ class AttachmentMutation {
 
 		// Try to upload image.
 		$avatar_instance = new BP_Attachment_Avatar();
-		$uploaded_image  = $avatar_instance->upload( $file );
+		$uploaded_image  = $avatar_instance->upload( $input );
 
 		// Bail with error.
 		if ( ! empty( $uploaded_image['error'] ) ) {
@@ -134,11 +134,11 @@ class AttachmentMutation {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param mixed  $file    Image file to upload.
-	 * @param string $object  Object (user, geroup, group, etc).
+	 * @param array  $input   Image file to upload.
+	 * @param string $object  Object (user, group, blog, etc).
 	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
-	public static function upload_avatar_from_file( $file, $object, $item_id ) {
+	public static function upload_avatar_from_file( $input, $object, $item_id ) {
 
 		// Set global variables.
 		$bp = buddypress();
@@ -155,8 +155,22 @@ class AttachmentMutation {
 				break;
 		}
 
+		// Build expected file array for BuddyPress.
+		$file_to_upload = [
+			'file' => [
+				'tmp_name' => $input['file']['fileName'],
+				'name'     => basename( $input['file']['fileName'] ),
+				'type'     => $input['file']['mimeType'],
+				'error'    => 0,
+				'size'     => filesize( $input['file']['fileName'] ),
+			],
+		];
+
+		// Force the post action for BuddyPress.
+		$_POST['action'] = 'bp_avatar_upload';
+
 		$avatar_instance = new BP_Attachment_Avatar();
-		$avatar_original = $avatar_instance->upload( $file, $upload_main_dir );
+		$avatar_original = $avatar_instance->upload( $file_to_upload, $upload_main_dir );
 
 		// Bail early in case of an error.
 		if ( ! empty( $avatar_original['error'] ) ) {
@@ -169,14 +183,14 @@ class AttachmentMutation {
 			);
 		}
 
+		// Delete existing image if one already exists.
+		self::delete_existing_image( $item_id, $object );
+
 		// Get uploaded image file.
 		$image_file = $avatar_original['file'];
 
 		// Get image and bail early if there is an error.
 		$image_file = self::resize( $image_file, $avatar_instance );
-
-		// Delete existing image if one already exists.
-		self::delete_existing_image( $item_id, $object );
 
 		// Crop the profile photo accordingly.
 		self::crop_image( $image_file, $avatar_instance, $object, $item_id );
@@ -216,7 +230,7 @@ class AttachmentMutation {
 		} else {
 			$image_file = $resized['path'];
 			$img_dir    = str_replace( $upload_path, '', $resized['path'] );
-			unlink( $file );
+			// unlink( $file );
 		}
 
 		// Check for WP_Error on what should be an image.
