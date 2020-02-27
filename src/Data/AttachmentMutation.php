@@ -179,7 +179,7 @@ class AttachmentMutation {
 					/* translators: %s is replaced with the error */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
 					$avatar_original['error']
-				),
+				)
 			);
 		}
 
@@ -205,7 +205,7 @@ class AttachmentMutation {
 	 * @param BP_Attachment_Avatar $avatar_instance Avatar instance.
 	 * @return string
 	 */
-	protected static function resize( $file, $avatar_instance ) {
+	protected static function resize( $file, $avatar_instance ): string {
 		$bp          = buddypress();
 		$upload_path = bp_core_avatar_upload_path();
 
@@ -236,10 +236,10 @@ class AttachmentMutation {
 		if ( is_wp_error( $img_dir ) ) {
 			throw new UserError(
 				sprintf(
-					/* translators: %s is replaced with the error */
+					/* translators: %s is replaced with the error. */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
 					$img_dir->get_error_message()
-				),
+				)
 			);
 		}
 
@@ -313,7 +313,7 @@ class AttachmentMutation {
 					/* translators: %s is replaced with object type. */
 					__( 'There was a problem cropping your %s photo.', 'wp-graphql-buddypress' ),
 					$object
-				),
+				)
 			);
 		}
 	}
