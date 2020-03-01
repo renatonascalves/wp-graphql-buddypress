@@ -134,7 +134,7 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		$mutation = $this->upload_avatar( 'GROUP', $this->group );
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
-		if ( version_compare( phpversion(), '7.2' ) ) {
+		if ( version_compare( phpversion(), '7.2' ) === 0 ) {
 			print_r( $response );
 		}
 
