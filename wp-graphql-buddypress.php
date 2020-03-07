@@ -9,15 +9,15 @@
  * @wordpress-plugin
  * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
- * Description:       Adds BuddyPress functionality to WPGraphQL schema.
+ * Description:       Adds BuddyPress functionality to the WPGraphQL schema.
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
- * Requires PHP:      7.0
- * Requires WP:       4.9
- * Tested up to:      5.2.4
+ * Requires PHP:      7.1
+ * Requires WP:       4.8
+ * Tested up to:      5.3.2
  * License:           GPLv3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -46,7 +46,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 *
-		 * @return object|WP_GraphQL_BuddyPress - The one true WP_GraphQL_BuddyPress
+		 * @return WP_GraphQL_BuddyPress - The one true WP_GraphQL_BuddyPress
 		 */
 		public static function instance() {
 
@@ -60,7 +60,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			}
 
 			/**
-			 * Fire off init action
+			 * Fire off init action.
 			 *
 			 * @param WP_GraphQL_BuddyPress $instance The instance of the WP_GraphQL_BuddyPress class
 			 */
@@ -148,9 +148,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		private function includes() {
 
-			/**
-			 * Autoload Required Classes
-			 */
+			// Autoload Required Classes.
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
 				require_once WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR . 'vendor/autoload.php';
 			}
@@ -209,9 +207,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		private function actions() {
 
-			/**
-			 * Setup actions
-			 */
+			// Setup actions.
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_actions();
 		}
 
@@ -222,9 +218,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		private function filters() {
 
-			/**
-			 * Setup filters
-			 */
+			// Setup filters.
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_filters();
 
 			/**
