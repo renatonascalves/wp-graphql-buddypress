@@ -147,6 +147,11 @@ class AttachmentMutation {
 				$bp->groups->current_group = groups_get_group( $item_id );
 				$upload_main_dir           = 'groups_avatar_upload_dir';
 				break;
+
+			case 'blog':
+				$upload_main_dir = 'blog_avatar_upload_dir'; // @todo Pending introduction in BP core.
+				break;
+
 			case 'user':
 			default:
 				$upload_main_dir        = 'bp_members_avatar_upload_dir';
@@ -290,11 +295,26 @@ class AttachmentMutation {
 
 		add_filter( 'bp_attachments_current_user_can', '__return_true' );
 
+		switch ( $object ) {
+			case 'group':
+				$avatar_dir = 'group-avatars';
+				break;
+
+			case 'blog':
+				$avatar_dir = 'blog-avatars';
+				break;
+
+			case 'user':
+			default:
+				$avatar_dir = 'avatars';
+				break;
+		}
+
 		// Crop the image.
 		$cropped = $avatar_instance->crop(
 			[
 				'object'        => $object,
-				'avatar_dir'    => ( 'group' === $object ) ? 'group-avatars' : 'avatars',
+				'avatar_dir'    => $avatar_dir,
 				'item_id'       => $item_id,
 				'original_file' => $avatar_to_crop,
 				'crop_w'        => $crop_w,
