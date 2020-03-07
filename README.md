@@ -8,8 +8,8 @@ Please use and provide feedback!
 
 ## System Requirements
 
-* PHP >= 7.0
-* WP >= 4.7
+* PHP >= 7.1
+* WP >= 4.8
 * WPGraphQL >= latest
 * BuddyPress >= latest
 
