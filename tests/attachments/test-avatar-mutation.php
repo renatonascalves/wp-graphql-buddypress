@@ -278,6 +278,9 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, blog avatar upload is disabled.', $response['errors'][0]['message'] );
+
+		// Enable it.
+		buddypress()->avatar->show_avatars = true;
 	}
 
 	/**
