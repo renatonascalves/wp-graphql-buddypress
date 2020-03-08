@@ -1,0 +1,124 @@
+<?php
+/**
+ * AttachmentCoverUpload Mutation.
+ *
+ * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @since 0.0.1-alpha
+ */
+
+namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+
+use GraphQL\Error\UserError;
+use GraphQL\Type\Definition\ResolveInfo;
+use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+
+/**
+ * AttachmentCoverUpload Class.
+ */
+class AttachmentCoverUpload {
+
+	/**
+	 * Registers the AttachmentCoverUpload mutation.
+	 */
+	public static function register_mutation() {
+		register_graphql_mutation(
+			'uploadAttachmentCover',
+			[
+				'inputFields'         => self::get_input_fields(),
+				'outputFields'        => self::get_output_fields(),
+				'mutateAndGetPayload' => self::mutate_and_get_payload(),
+			]
+		);
+	}
+
+	/**
+	 * Defines the mutation input fields.
+	 *
+	 * @return array
+	 */
+	public static function get_input_fields(): array {
+		return [
+			'file' => [
+				'type'        => [ 'non_null' => 'Upload' ],
+				'description' => __( 'Upload a local file using multi-part.', 'wp-graphql-buddypress' ),
+			],
+			'objectId' => [
+				'type'        => [ 'non_null' => 'Int' ],
+				'description' => __( 'The unique identifier (user_id, group_id, blog_id, etc) for the object the cover will belong to.', 'wp-graphql-buddypress' ),
+			],
+			'object'   => [
+				'type'        => [ 'non_null' => 'AttachmentCoverEnum' ],
+				'description' => __( 'The object (members, groups, blogs, etc) the cover will belong to.', 'wp-graphql-buddypress' ),
+			],
+		];
+	}
+
+	/**
+	 * Defines the mutation output fields.
+	 *
+	 * @return array
+	 */
+	public static function get_output_fields(): array {
+		return [
+			'attachment' => [
+				'type'        => 'Attachment',
+				'description' => __( 'The uploaded cover attachment object.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( array $payload ) {
+					return Factory::resolve_attachment_cover( $payload['id'] ?? null, $payload['object'] ?? null );
+				},
+			],
+		];
+	}
+
+	/**
+	 * Defines the mutation data modification closure.
+	 *
+	 * @return callable
+	 */
+	public static function mutate_and_get_payload() {
+		return function ( $input, AppContext $context, ResolveInfo $info ) {
+
+			$object_id = $input['objectId'];
+			$object    = $input['object'];
+
+			// Check if cover upload is enabled for members.
+			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {
+				throw new UserError( __( 'Sorry, member cover upload is disabled.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Check if cover upload is enabled for groups.
+			if ( 'groups' === $object && true === bp_disable_group_cover_image_uploads() ) {
+				throw new UserError( __( 'Sorry, group cover upload is disabled.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Check if cover upload is enabled for blogs.
+			if ( 'blogs' === $object && false === buddypress()->avatar->show_avatars ) {
+				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Check if user has access to upload it.
+			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Try to upload the cover image file.
+			AttachmentMutation::upload_cover_from_file( $input, $object, $object_id );
+
+			/**
+			 * Fires after an attachment cover is uploaded.
+			 *
+			 * @param array       $input    The input of the mutation.
+			 * @param AppContext  $context  The AppContext passed down the resolve tree.
+			 * @param ResolveInfo $info     The ResolveInfo passed down the resolve tree.
+			 */
+			do_action( 'bp_graphql_attachment_cover_create_mutation', $input, $context, $info );
+
+			return [
+				'id'     => $object_id,
+				'object' => $object,
+			];
+		};
+	}
+}

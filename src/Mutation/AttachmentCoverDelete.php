@@ -13,6 +13,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 
 /**
  * AttachmentCoverDelete Class.
@@ -24,7 +25,7 @@ class AttachmentCoverDelete {
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
-			'attachmentCoverDelete',
+			'deleteAttachmentCover',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
@@ -83,38 +84,23 @@ class AttachmentCoverDelete {
 	public static function mutate_and_get_payload() {
 		return function ( $input, AppContext $context, ResolveInfo $info ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			$object_id = $input['objectId'];
 			$object    = $input['object'];
 
-			/**
-			 * Get and save the attachment object before it is deleted.
-			 */
+			// Stop now if a user isn't allowed to delete an attachment cover.
+			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Get the attachment object before it is deleted.
 			$previous_attachment = Factory::resolve_attachment_cover( $object_id, $object );
 
-			/**
-			 * Check if object has a cover to delete first.
-			 */
-			if ( empty( $previous_attachment ) ) {
+			// Check if object has a cover to delete first.
+			if ( ! $previous_attachment instanceof Attachment ) {
 				throw new UserError( __( 'Sorry, there are no uploaded covers to delete.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Stop now if a user isn't allowed to delete the attachment cover.
-			 */
-			if ( AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to delete the attachment cover.', 'wp-graphql-buddypress' ) );
-			}
-
-			/**
-			 * Trying to delete the attachment cover.
-			 */
+			// Trying to delete the attachment cover.
 			$deleted = bp_attachments_delete_file(
 				[
 					'item_id'    => $object_id,
@@ -123,10 +109,8 @@ class AttachmentCoverDelete {
 				]
 			);
 
-			/**
-			 * Confirm deletion.
-			 */
-			if ( ! $deleted ) {
+			// Confirm deletion.
+			if ( false === $deleted ) {
 				throw new UserError( __( 'Could not delete the attachment cover.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -140,9 +124,7 @@ class AttachmentCoverDelete {
 			 */
 			do_action( 'bp_graphql_attachment_cover_delete_mutation', $previous_attachment, $input, $context, $info );
 
-			/**
-			 * The deleted attachment cover status and the previous object.
-			 */
+			// The deleted attachment cover status and the previous object.
 			return [
 				'deleted'        => true,
 				'previousObject' => $previous_attachment,

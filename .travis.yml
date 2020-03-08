@@ -24,9 +24,9 @@ env:
 matrix:
   include:
     - php: 7.4
-      env: WP_VERSION=master PHPCS=1
-    - php: 7.3
       env: WP_VERSION=master
+    - php: 7.3
+      env: WP_VERSION=master PHPCS=1
     - php: 7.3
       env: WP_VERSION=5.1
     - php: 7.3

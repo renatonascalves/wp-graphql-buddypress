@@ -21,6 +21,7 @@
 	<!-- What to exclude -->
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
 
 	<!-- What to scan -->
 	<file>src</file>
@@ -32,10 +33,6 @@
 	<arg value="psn" />
 	<arg name="extensions" value="php"/>
 	<arg name="parallel" value="1"/>
-
-	<exclude-pattern>tests/</exclude-pattern>
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/vendor/</exclude-pattern>
 
 	<!-- Remove the class naming error temporarily -->
 	<rule ref="WordPress.Files.FileName">

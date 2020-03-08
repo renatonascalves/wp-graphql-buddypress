@@ -14,18 +14,11 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 class AttachmentType {
 
 	/**
-	 * Name of the type.
-	 *
-	 * @var string Type name.
-	 */
-	public static $type_name = 'Attachment';
-
-	/**
-	 * Register the attachment type object.
+	 * Attachment registrations.
 	 */
 	public static function register() {
 		register_graphql_object_type(
-			self::$type_name,
+			'Attachment',
 			[
 				'description' => __( 'BuddyPress attachment object used in Avatar and Cover images.', 'wp-graphql-buddypress' ),
 				'fields'      => [
