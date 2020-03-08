@@ -39,6 +39,10 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group member-cover
 	 */
 	public function test_member_upload_cover() {
+		if ( 4.9 > (float) $GLOBALS['wp_version'] ) {
+			$this->markTestSkipped();
+		}
+
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
@@ -122,6 +126,10 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group group-cover
 	 */
 	public function test_group_upload_cover() {
+		if ( 4.9 > (float) $GLOBALS['wp_version'] ) {
+			$this->markTestSkipped();
+		}
+
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
