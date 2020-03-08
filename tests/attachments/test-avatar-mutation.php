@@ -39,6 +39,10 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	 * @group member-avatar
 	 */
 	public function test_member_upload_avatar() {
+		if ( 4.9 > (float) $GLOBALS['wp_version'] ) {
+			$this->markTestSkipped();
+		}
+
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
