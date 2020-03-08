@@ -122,6 +122,79 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @group member-avatar
+	 */
+	public function test_member_avatar_delete_without_permissions() {
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
+
+		$mutation = $this->delete_avatar( 'USER', $this->user );
+		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group member-avatar
+	 */
+	public function test_member_avatar_delete_avatar() {
+		if ( 4.9 > (float) $GLOBALS['wp_version'] ) {
+			$this->markTestSkipped();
+		}
+
+		$u = $this->bp_factory->user->create();
+
+		$this->bp->set_current_user( $u );
+
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
+
+		$mutation = $this->upload_avatar( 'USER', $u );
+		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
+
+		$full  = $this->get_avatar_image( 'full', 'user', $u );
+		$thumb = $this->get_avatar_image( 'thumb', 'user', $u );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'uploadAttachmentAvatar' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'attachment'       => [
+							'full'  => $full,
+							'thumb' => $thumb,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		$mutation = $this->delete_avatar( 'USER', $u );
+		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'deleteAttachmentAvatar' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'deleted'          => true,
+						'attachment'       => [
+							'full'  => $full,
+							'thumb' => $thumb,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		// Confirm that the default avatar IS present.
+		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', $u ), 'mystery-man.jpg' ) );
+	}
+
+	/**
 	 * @group group-avatar
 	 */
 	public function test_group_upload_avatar() {
@@ -208,6 +281,77 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-avatar
+	 */
+	public function test_group_avatar_delete_without_permissions() {
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
+
+		$mutation = $this->delete_avatar( 'GROUP', $this->group );
+		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-avatar
+	 */
+	public function test_group_avatar_delete_avatar() {
+		if ( 4.9 > (float) $GLOBALS['wp_version'] ) {
+			$this->markTestSkipped();
+		}
+
+		$this->bp->set_current_user( $this->user );
+
+		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+
+		$mutation = $this->upload_avatar( 'GROUP', $this->group );
+		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+
+		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+
+		$full  = $this->get_avatar_image( 'full', 'group', $this->group );
+		$thumb = $this->get_avatar_image( 'thumb', 'group', $this->group );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'uploadAttachmentAvatar' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'attachment'       => [
+							'full'  => $full,
+							'thumb' => $thumb,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		$mutation = $this->delete_avatar( 'GROUP', $this->group );
+		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'deleteAttachmentAvatar' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'deleted'          => true,
+						'attachment'       => [
+							'full'  => $full,
+							'thumb' => $thumb,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		// Confirm that the group default avatar IS present.
+		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'group', $this->group ), 'mystery-group.png' ) );
 	}
 
 	/**
@@ -378,6 +522,38 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		return [ $mutation, $variables ];
 	}
 
+	protected function delete_avatar( string $object, int $objectId ): array {
+		$mutation = '
+		mutation deleteAvatarTest( $clientMutationId: String!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
+			deleteAttachmentAvatar(
+				input: {
+					clientMutationId: $clientMutationId
+					object: $object
+					objectId: $objectId
+				}
+			)
+		  	{
+				clientMutationId
+				deleted
+				attachment {
+					full
+					thumb
+				}
+		  	}
+		}
+		';
+
+		$variables = wp_json_encode(
+			[
+				'clientMutationId' => $this->client_mutation_id,
+				'object'           => $object,
+				'objectId'         => $objectId,
+			]
+		);
+
+		return [ $mutation, $variables ];
+	}
+
 	protected function get_avatar_image( $size, $object, $item_id ): string {
 		return bp_core_fetch_avatar(
 			[
@@ -385,7 +561,7 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 				'type'    => $size,
 				'item_id' => $item_id,
 				'html'    => false,
-				'no_grav' => false,
+				'no_grav' => true,
 			]
 		);
 	}
