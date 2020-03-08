@@ -196,7 +196,7 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	/**
 	 * @group group-avatar
 	 */
-	public function test_group_avatar_upload_with_an_invalid_member_id() {
+	public function test_group_avatar_upload_with_an_invalid_group_id() {
 		$mutation = $this->upload_avatar( 'GROUP', 99999999 );
 
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
@@ -212,7 +212,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
@@ -329,7 +328,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		}
 
 		$mutation = $this->upload_avatar( 'BLOG', 99999999 );
-
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
@@ -351,7 +349,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
-
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );

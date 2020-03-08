@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data;
 use GraphQL\Error\UserError;
 use stdClass;
 use BP_Attachment_Avatar;
+use BP_Attachment_Cover_Image;
 
 /**
  * AttachmentMutation Class.
@@ -26,6 +27,24 @@ class AttachmentMutation {
 	 * @return bool
 	 */
 	public static function can_update_or_delete_attachment( $object_id, $object, $cover = false ): bool {
+
+		// Mapping object for verification.
+		if ( $cover ) {
+			switch ( $object ) {
+				case 'members':
+					$object = 'user';
+					break;
+
+				case 'groups':
+					$object = 'group';
+					break;
+
+				case 'blogs':
+					$object = 'blog';
+					break;
+			}
+		}
+
 		$args = [
 			'item_id' => $object_id,
 			'object'  => $object,
@@ -53,6 +72,7 @@ class AttachmentMutation {
 			case 'groups':
 				$bp->groups->current_group = groups_get_group( $item_id );
 				break;
+
 			case 'members':
 			default:
 				$bp->displayed_user     = new stdClass();
@@ -60,15 +80,29 @@ class AttachmentMutation {
 				break;
 		}
 
-		// Try to upload image.
-		$avatar_instance = new BP_Attachment_Avatar();
-		$uploaded_image  = $avatar_instance->upload( $input );
+		// Build expected file array for BuddyPress.
+		$file_to_upload = [
+			'file' => [
+				'tmp_name' => $input['file']['fileName'],
+				'name'     => basename( $input['file']['fileName'] ),
+				'type'     => $input['file']['mimeType'],
+				'error'    => 0,
+				'size'     => filesize( $input['file']['fileName'] ),
+			],
+		];
 
-		// Bail with error.
+		// Force the post action for BuddyPress.
+		$_POST['action'] = 'bp_cover_image_upload';
+
+		// Try to upload cover image.
+		$cover_instance = new BP_Attachment_Cover_Image();
+		$uploaded_image = $cover_instance->upload( $file_to_upload );
+
+		// Something went wrong? Bail with error.
 		if ( ! empty( $uploaded_image['error'] ) ) {
 			throw new UserError(
 				sprintf(
-					/* translators: %s is replaced with the error */
+					/* translators: %s is replaced with an error message */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
 					$uploaded_image['error']
 				)
@@ -82,7 +116,7 @@ class AttachmentMutation {
 			]
 		);
 
-		// The BP Attachments Uploads Dir is not set, stop.
+		// The BP Attachments Uploads Dir is not set, so stop here.
 		if ( false === $bp_attachments_uploads_dir ) {
 			throw new UserError( __( 'The BuddyPress attachments uploads directory is not set.', 'wp-graphql-buddypress' ) );
 		}
@@ -101,7 +135,8 @@ class AttachmentMutation {
 				'file'            => $uploaded_image['file'],
 				'component'       => $object,
 				'cover_image_dir' => $cover_dir,
-			]
+			],
+			$cover_instance
 		);
 
 		// Bail if any error happened.

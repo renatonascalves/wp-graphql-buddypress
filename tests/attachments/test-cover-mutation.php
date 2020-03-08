@@ -38,19 +38,50 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	/**
 	 * @group member-cover
 	 */
+	public function test_member_upload_cover() {
+		$this->bp->set_current_user( $this->user );
+
+		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
+
+		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'uploadAttachmentCover' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'attachment'       => [
+							'full'  => $this->get_cover_image( 'members', $this->user ),
+							'thumb' => null,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		// Confirm the member path.
+		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
+	}
+
+	/**
+	 * @group member-cover
+	 */
 	public function test_member_cover_upload_with_upload_disabled() {
 		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
 
 		// Disabling avatar upload.
 		add_filter( 'bp_disable_cover_image_uploads', '__return_true' );
 
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, member cover upload is disabled.', $response['errors'][0]['message'] );
-
-		// Enabling again.
-		add_filter( 'bp_disable_cover_image_uploads', '__return_false' );
 	}
 
 	/**
@@ -79,9 +110,99 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group member-cover
 	 */
 	public function test_member_cover_upload_with_member_without_permissions() {
-		$this->bp->set_current_user( $this->user );
+		$u = $this->bp_factory->user->create();
+
+		$this->bp->set_current_user( $u );
 
 		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-cover
+	 */
+	public function test_group_upload_cover() {
+		$this->markTestSkipped();
+
+		$this->bp->set_current_user( $this->user );
+
+		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
+
+		$mutation = $this->upload_cover( 'GROUPS', $this->group );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'uploadAttachmentCover' => [
+						'clientMutationId' => $this->client_mutation_id,
+						'attachment'       => [
+							'full'  => $this->get_cover_image( 'groups', $this->group ),
+							'thumb' => null,
+						],
+					],
+				],
+			],
+			$response
+		);
+
+		// Confirm the path.
+		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
+	}
+
+	/**
+	 * @group group-cover
+	 */
+	public function test_group_cover_upload_with_upload_disabled() {
+		$mutation = $this->upload_cover( 'GROUPS', $this->group );
+
+		// Disabling group cover upload.
+		add_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );
+
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, group cover upload is disabled.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-cover
+	 */
+	public function test_group_cover_upload_without_a_loggin_in_user() {
+		$mutation = $this->upload_cover( 'GROUPS', $this->group );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-cover
+	 */
+	public function test_group_cover_upload_with_an_invalid_group_id() {
+		$mutation = $this->upload_cover( 'MEMBERS', 99999999 );
+		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @group group-cover
+	 */
+	public function test_group_cover_upload_with_member_without_permissions() {
+		$u = $this->bp_factory->user->create();
+
+		$this->bp->set_current_user( $u );
+
+		$mutation = $this->upload_cover( 'GROUPS', $this->group );
 		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
@@ -124,7 +245,7 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 		return [ $mutation, $variables ];
 	}
 
-	protected function get_cover_image( $object, $item_id ) {
+	protected function get_cover_image( $object, $item_id ): string {
 		return bp_attachments_get_attachment(
 			'url',
 			[
@@ -132,5 +253,13 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 				'item_id'    => $item_id,
 			]
 		);
+	}
+
+	public function copy_file( $return = null, $file, $new_file ) {
+		return @copy( $file['tmp_name'], $new_file );
+	}
+
+	public function return_100(): int {
+		return 100;
 	}
 }
