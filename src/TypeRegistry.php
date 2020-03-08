@@ -125,8 +125,11 @@ class TypeRegistry {
 			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipCreate::register_mutation();
 		}
 
-		// Attachment.
+		// Attachment Type/Object.
 		\WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType::register();
+
+		// Attachment Input, aka, Upload input type.
+		\WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput::register();
 
 		// Attachment Enum(s).
 		\WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums::register();

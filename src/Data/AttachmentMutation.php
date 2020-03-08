@@ -60,7 +60,7 @@ class AttachmentMutation {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param array  $input   Image file to upload.
+	 * @param array  $input   Mutation input fields.
 	 * @param string $object  Object (members, groups, blogs, etc).
 	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
@@ -179,7 +179,7 @@ class AttachmentMutation {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param array  $input   Image file to upload.
+	 * @param array  $input   Mutation input fields.
 	 * @param string $object  Object (user, group, blog, etc).
 	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
@@ -191,10 +191,6 @@ class AttachmentMutation {
 			case 'group':
 				$bp->groups->current_group = groups_get_group( $item_id );
 				$upload_main_dir           = 'groups_avatar_upload_dir';
-				break;
-
-			case 'blog':
-				$upload_main_dir = 'blog_avatar_upload_dir'; // @todo Pending introduction in BP core.
 				break;
 
 			case 'user':
@@ -236,11 +232,8 @@ class AttachmentMutation {
 		// Delete existing image if one already exists.
 		self::delete_existing_image( $item_id, $object );
 
-		// Get uploaded image file.
-		$image_file = $avatar_original['file'];
-
 		// Get image and bail early if there is an error.
-		$image_file = self::resize( $image_file, $avatar_instance );
+		$image_file = self::resize( $avatar_original['file'], $avatar_instance );
 
 		// Crop the profile photo accordingly.
 		self::crop_image( $image_file, $avatar_instance, $object, $item_id );
@@ -369,7 +362,7 @@ class AttachmentMutation {
 			]
 		);
 
-		remove_filter( 'bp_attachments_current_user_can', '__return_false' );
+		remove_filter( 'bp_attachments_current_user_can', '__return_true' );
 
 		// Check for errors.
 		if ( empty( $cropped['full'] ) || empty( $cropped['thumb'] ) || is_wp_error( $cropped['full'] ) || is_wp_error( $cropped['thumb'] ) ) {

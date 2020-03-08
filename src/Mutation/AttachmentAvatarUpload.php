@@ -85,12 +85,12 @@ class AttachmentAvatarUpload {
 			$show_avatars = buddypress()->avatar->show_avatars;
 
 			// Check if upload is enabled for member.
-			if ( 'user' === $object && ( true === bp_disable_avatar_uploads() || false === $show_avatars ) ) {
+			if ( 'user' === $object && true === bp_disable_avatar_uploads() ) {
 				throw new UserError( __( 'Sorry, member avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if upload is enabled for group.
-			if ( 'group' === $object && ( true === bp_disable_group_avatar_uploads() || false === $show_avatars ) ) {
+			if ( 'group' === $object && true === bp_disable_group_avatar_uploads() ) {
 				throw new UserError( __( 'Sorry, group avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
