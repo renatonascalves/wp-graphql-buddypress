@@ -91,6 +91,17 @@ class AttachmentMutation {
 			],
 		];
 
+		// Hacky solution to use correct values in the file upload.
+		\add_filter(
+			'bp_after_cover_image_upload_dir_parse_args',
+			function () use ( $object, $item_id ) {
+				return [
+					'object_id'        => $item_id,
+					'object_directory' => $object,
+				];
+			}
+		);
+
 		// Force the post action for BuddyPress.
 		$_POST['action'] = 'bp_cover_image_upload';
 
@@ -135,8 +146,7 @@ class AttachmentMutation {
 				'file'            => $uploaded_image['file'],
 				'component'       => $object,
 				'cover_image_dir' => $cover_dir,
-			],
-			$cover_instance
+			]
 		);
 
 		// Bail if any error happened.

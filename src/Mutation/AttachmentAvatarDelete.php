@@ -40,13 +40,13 @@ class AttachmentAvatarDelete {
 	 */
 	public static function get_input_fields() {
 		return [
-			'objectId' => [
-				'type'        => [ 'non_null' => 'Int' ],
-				'description' => __( 'The globally unique identifier for the object.', 'wp-graphql-buddypress' ),
-			],
 			'object'   => [
 				'type'        => [ 'non_null' => 'AttachmentAvatarEnum' ],
 				'description' => __( 'The object (user, group, blog, etc) the avatar belongs to.', 'wp-graphql-buddypress' ),
+			],
+			'objectId' => [
+				'type'        => [ 'non_null' => 'Int' ],
+				'description' => __( 'The globally unique identifier for the object.', 'wp-graphql-buddypress' ),
 			],
 		];
 	}
@@ -83,38 +83,23 @@ class AttachmentAvatarDelete {
 	public static function mutate_and_get_payload() {
 		return function ( $input, AppContext $context, ResolveInfo $info ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			$object_id = $input['objectId'];
 			$object    = $input['object'];
 
-			/**
-			 * Get and save the attachment object before it is deleted.
-			 */
+			// Get the attachment object before it is deleted.
 			$previous_attachment = Factory::resolve_attachment( $object_id, $object );
 
-			/**
-			 * Check if object has an avatar to delete first.
-			 */
+			// Check if object has an avatar to delete first.
 			if ( empty( $previous_attachment ) ) {
 				throw new UserError( __( 'Sorry, there are no uploaded avatars to delete.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Stop now if a user isn't allowed to delete the attachment.
-			 */
+			// Stop now if a user isn't allowed to delete the attachment.
 			if ( AttachmentMutation::can_update_or_delete_attachment( $object_id, $object ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to delete this attachment.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Trying to delete the attachment avatar.
-			 */
+			// Trying to delete the attachment avatar.
 			$deleted = bp_core_delete_existing_avatar(
 				[
 					'item_id' => $object_id,
@@ -122,26 +107,22 @@ class AttachmentAvatarDelete {
 				]
 			);
 
-			/**
-			 * Confirm deletion.
-			 */
-			if ( ! $deleted ) {
+			// Confirm deletion.
+			if ( false === $deleted ) {
 				throw new UserError( __( 'Could not delete the attachment avatar.', 'wp-graphql-buddypress' ) );
 			}
 
 			/**
 			 * Fires after an attachment avatar is deleted.
 			 *
-			 * @param Attachment  $previous_attachment The deleted attachment object.
+			 * @param Attachment  $previous_attachment The previous deleted attachment object.
 			 * @param array       $input               The input of the mutation.
 			 * @param AppContext  $context             The AppContext passed down the resolve tree.
 			 * @param ResolveInfo $info                The ResolveInfo passed down the resolve tree.
 			 */
 			do_action( 'bp_graphql_attachment_avatar_delete_mutation', $previous_attachment, $input, $context, $info );
 
-			/**
-			 * The deleted attachment avatar status and the previous object.
-			 */
+			// The deleted attachment avatar status and the previous object.
 			return [
 				'deleted'        => true,
 				'previousObject' => $previous_attachment,

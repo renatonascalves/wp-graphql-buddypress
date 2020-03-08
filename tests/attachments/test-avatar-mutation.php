@@ -42,13 +42,11 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$mutation = $this->upload_avatar( 'USER', $this->user );
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$this->assertEquals(
 			[
@@ -82,9 +80,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, member avatar upload is disabled.', $response['errors'][0]['message'] );
-
-		// Enabling again.
-		add_filter( 'bp_disable_avatar_uploads', '__return_false' );
 	}
 
 	/**
@@ -133,13 +128,11 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$mutation = $this->upload_avatar( 'GROUP', $this->group );
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$this->assertEquals(
 			[
@@ -176,9 +169,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, group avatar upload is disabled.', $response['errors'][0]['message'] );
-
-		// Enabling again.
-		add_filter( 'bp_disable_group_avatar_uploads', '__return_false' );
 	}
 
 	/**
@@ -186,7 +176,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	 */
 	public function test_group_avatar_upload_without_a_loggin_in_user() {
 		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
@@ -198,7 +187,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	 */
 	public function test_group_avatar_upload_with_an_invalid_group_id() {
 		$mutation = $this->upload_avatar( 'GROUP', 99999999 );
-
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		$this->assertArrayHasKey( 'errors', $response );
@@ -242,13 +230,11 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		);
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$mutation = $this->upload_avatar( 'BLOG', $blog );
 		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$this->assertEquals(
 			[
@@ -292,8 +278,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, blog avatar upload is disabled.', $response['errors'][0]['message'] );
-
-		buddypress()->avatar->show_avatars = true;
 	}
 
 	/**
@@ -321,10 +305,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	public function test_blog_avatar_upload_with_an_invalid_blog_id() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$mutation = $this->upload_avatar( 'BLOG', 99999999 );
@@ -405,9 +385,5 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 
 	public function copy_file( $return = null, $file, $new_file ) {
 		return @copy( $file['tmp_name'], $new_file );
-	}
-
-	public function return_100() {
-		return 100;
 	}
 }

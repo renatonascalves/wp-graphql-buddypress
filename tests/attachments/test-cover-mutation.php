@@ -42,13 +42,11 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
 		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$this->assertEquals(
 			[
@@ -66,6 +64,7 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 		);
 
 		// Confirm the member path.
+		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/members' ) );
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
 	}
 
@@ -110,9 +109,7 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group member-cover
 	 */
 	public function test_member_cover_upload_with_member_without_permissions() {
-		$u = $this->bp_factory->user->create();
-
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
 		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
@@ -125,18 +122,14 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group group-cover
 	 */
 	public function test_group_upload_cover() {
-		$this->markTestSkipped();
-
 		$this->bp->set_current_user( $this->user );
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		add_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$mutation = $this->upload_cover( 'GROUPS', $this->group );
 		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
-		remove_filter( 'bp_core_avatar_dimension', array( $this, 'return_100' ), 10, 1 );
 
 		$this->assertEquals(
 			[
@@ -153,7 +146,8 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 			$response
 		);
 
-		// Confirm the path.
+		// Confirm the group path.
+		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
 	}
 
@@ -198,9 +192,7 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 	 * @group group-cover
 	 */
 	public function test_group_cover_upload_with_member_without_permissions() {
-		$u = $this->bp_factory->user->create();
-
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$mutation = $this->upload_cover( 'GROUPS', $this->group );
 		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
@@ -257,9 +249,5 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 
 	public function copy_file( $return = null, $file, $new_file ) {
 		return @copy( $file['tmp_name'], $new_file );
-	}
-
-	public function return_100(): int {
-		return 100;
 	}
 }
