@@ -2,17 +2,16 @@
 /**
  * FriendshipDelete Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
+use BP_Friends_Friendship;
 
 /**
  * FriendshipDelete Class.
@@ -38,7 +37,7 @@ class FriendshipDelete {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'initiatorId' => [
 				'type'        => [ 'non_null' => 'Int' ],
@@ -56,7 +55,7 @@ class FriendshipDelete {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'deleted' => [
 				'type' => 'Boolean',
@@ -81,7 +80,7 @@ class FriendshipDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input ) {
 
 			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
@@ -102,7 +101,7 @@ class FriendshipDelete {
 			}
 
 			// Check friendship status.
-			$friendship_status = \BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
 
 			// Confirm status.
 			if ( 'not_friends' === $friendship_status ) {
@@ -110,8 +109,8 @@ class FriendshipDelete {
 			}
 
 			// Get friendship.
-			$friendship = new \BP_Friends_Friendship(
-				\BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+			$friendship = new BP_Friends_Friendship(
+				BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
 			);
 
 			// Get and save the friendship object before it is deleted.
@@ -134,19 +133,9 @@ class FriendshipDelete {
 			}
 
 			// Trying to delete the friendship.
-			if ( ! $deleted ) {
+			if ( false === $deleted ) {
 				throw new UserError( __( 'Friendship could not be deleted.', 'wp-graphql-buddypress' ) );
 			}
-
-			/**
-			 * Fires after a friendship is deleted.
-			 *
-			 * @param Friendship  $previous_friendship The deleted friendship model object.
-			 * @param array       $input               The input of the mutation.
-			 * @param AppContext  $context             The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info                The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_friends_delete_mutation', $previous_friendship, $input, $context, $info );
 
 			// The deleted friendship status and the previous friendship object.
 			return [

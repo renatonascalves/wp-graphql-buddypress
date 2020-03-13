@@ -2,15 +2,13 @@
 /**
  * AttachmentAvatarUpload Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
@@ -78,7 +76,7 @@ class AttachmentAvatarUpload {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input ) {
 
 			$object_id    = $input['objectId'];
 			$object       = $input['object'];
@@ -106,15 +104,6 @@ class AttachmentAvatarUpload {
 
 			// Try to upload the avatar image file.
 			AttachmentMutation::upload_avatar_from_file( $input, $object, $object_id );
-
-			/**
-			 * Fires after an attachment avatar is uploaded.
-			 *
-			 * @param array       $input    The input of the mutation.
-			 * @param AppContext  $context  The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info     The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_attachment_avatar_create_mutation', $input, $context, $info );
 
 			return [
 				'id'     => $object_id,

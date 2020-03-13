@@ -2,17 +2,16 @@
 /**
  * GroupDelete Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use BP_Groups_Group;
 
 /**
  * GroupDelete Class.
@@ -38,7 +37,7 @@ class GroupDelete {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'id'          => [
 				'type'        => 'ID',
@@ -60,7 +59,7 @@ class GroupDelete {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'deleted' => [
 				'type'        => 'Boolean',
@@ -85,59 +84,35 @@ class GroupDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
+			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Get the group object.
-			 */
+			// Get the group object.
 			$group = GroupMutation::get_group_from_input( $input );
 
-			/**
-			 * Confirm if group exists.
-			 */
-			if ( empty( $group->id ) || ! $group instanceof \BP_Groups_Group ) {
+			// Confirm if group exists.
+			if ( empty( $group->id ) || ! $group instanceof BP_Groups_Group ) {
 				throw new UserError( __( 'This group does not exist.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Stop now if a user isn't allowed to delete a group.
-			 */
+			// Stop now if a user isn't allowed to delete a group.
 			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Get and save the Group object before it is deleted.
-			 */
+			// Get and save the Group object before it is deleted.
 			$previous_group = new Group( $group );
 
-			/**
-			 * Trying to delete the group.
-			 */
-			if ( ! groups_delete_group( $group->id ) ) {
+			// Trying to delete the group.
+			if ( false === groups_delete_group( $group->id ) ) {
 				throw new UserError( __( 'Could not delete the group.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Fires after a group is deleted.
-			 *
-			 * @param Group       $previous_group The deleted group model object.
-			 * @param array       $input          The input of the mutation.
-			 * @param AppContext  $context        The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info           The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_groups_delete_mutation', $previous_group, $input, $context, $info );
-
-			/**
-			 * The deleted group status and the previous group object.
-			 */
+			// The deleted group status and the previous group object.
 			return [
 				'deleted'        => true,
 				'previousObject' => $previous_group,

@@ -2,17 +2,17 @@
 /**
  * FriendshipCreate Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use BP_Friends_Friendship;
 
 /**
  * FriendshipCreate Class.
@@ -38,7 +38,7 @@ class FriendshipCreate {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'initiatorId' => [
 				'type'        => 'Int',
@@ -56,7 +56,7 @@ class FriendshipCreate {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'friendship' => [
 				'type'        => 'Friendship',
@@ -78,7 +78,7 @@ class FriendshipCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input ) {
 
 			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
@@ -100,7 +100,7 @@ class FriendshipCreate {
 			}
 
 			// Check friendship status.
-			$friendship_status = \BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
 
 			// Already friends.
 			if ( 'is_friend' === $friendship_status ) {
@@ -113,29 +113,19 @@ class FriendshipCreate {
 			}
 
 			// Adding friendship.
-			if ( ! friends_add_friend( $initiator_id->ID, $friend_id->ID ) ) {
+			if ( false === friends_add_friend( $initiator_id->ID, $friend_id->ID ) ) {
 				throw new UserError( __( 'There was a problem requesting the friendship.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Get friendship.
-			$friendship = new \BP_Friends_Friendship(
-				\BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+			// Get friendship object.
+			$friendship = new BP_Friends_Friendship(
+				BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
 			);
 
 			// Confirm if friendship exists after creation.
-			if ( ! FriendshipMutation::friendship_exists( $friendship ) ) {
+			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
 				throw new UserError( __( 'Friendship was not requested.', 'wp-graphql-buddypress' ) );
 			}
-
-			/**
-			 * Fires after a friendship is requested.
-			 *
-			 * @param \BP_Friends_Friendship $friendship The created friendship BuddyPress object.
-			 * @param array                  $input      The input of the mutation.
-			 * @param AppContext             $context    The AppContext passed down the resolve tree.
-			 * @param ResolveInfo            $info       The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_friends_create_mutation', $friendship, $input, $context, $info );
 
 			// Return the friendship id.
 			return [
