@@ -2,7 +2,7 @@
 /**
  * Blog Enums.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Type\Enum
+ * @package WPGraphQL\Extensions\BuddyPress\Type\Enum
  * @since 0.0.1-alpha
  */
 

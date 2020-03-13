@@ -2,7 +2,7 @@
 /**
  * Register the Friendship object type and queries.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Type\Object
+ * @package WPGraphQL\Extensions\BuddyPress\Type\Object
  * @since 0.0.1-alpha
  */
 

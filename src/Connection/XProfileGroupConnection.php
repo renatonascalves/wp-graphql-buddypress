@@ -2,7 +2,7 @@
 /**
  * Registers XProfile Group Connections.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Connection
+ * @package WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
  */
 
