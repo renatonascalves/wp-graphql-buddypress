@@ -2,14 +2,13 @@
 /**
  * XProfileFieldCreate Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
@@ -38,7 +37,7 @@ class XProfileFieldCreate {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'name'      => [
 				'type'        => [ 'non_null' => 'String' ],
@@ -110,7 +109,7 @@ class XProfileFieldCreate {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'field' => [
 				'type'        => 'XProfileField',
@@ -132,54 +131,32 @@ class XProfileFieldCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input, AppContext $context, ResolveInfo $info ) {
+		return function( $input ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
+			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Check if user can create a XProfile field.
-			 */
+			// Check if user can create a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to create XProfile fields.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Create XProfile field and return its ID.
-			 */
+			// Create XProfile field and return its ID.
 			$xprofile_field_id = xprofile_insert_field(
 				XProfileFieldMutation::prepare_xprofile_field_args( $input, null, 'create' )
 			);
 
-			/**
-			 * Throw an exception if the XProfile field failed to be created.
-			 */
-			if ( ! is_numeric( $xprofile_field_id ) ) {
+			// Throw an exception if the XProfile field failed to be created.
+			if ( false === is_numeric( $xprofile_field_id ) ) {
 				throw new UserError( __( 'Could not create XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Save additional information.
-			 */
+			// Save additional information.
 			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
 
-			/**
-			 * Fires after a XProfile field is created.
-			 *
-			 * @param int         $xprofile_field_id The ID of the XProfile field being created.
-			 * @param array       $input            The input of the mutation.
-			 * @param AppContext  $context          The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info             The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_xprofile_fields_create_mutation', $xprofile_field_id, $input, $context, $info );
-
-			/**
-			 * Return the XProfile field ID.
-			 */
+			// Return the XProfile field ID.
 			return [
 				'id' => $xprofile_field_id,
 			];

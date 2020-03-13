@@ -2,14 +2,13 @@
 /**
  * XProfileGroupUpdate Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
@@ -38,7 +37,7 @@ class XProfileGroupUpdate {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'id'          => [
 				'type'        => 'ID',
@@ -72,7 +71,7 @@ class XProfileGroupUpdate {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'group' => [
 				'type'        => 'XProfileGroup',
@@ -94,45 +93,33 @@ class XProfileGroupUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input, AppContext $context, ResolveInfo $info ) {
+		return function ( $input ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
+			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Get the XProfile group.
-			 */
+			// Get the XProfile group.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
 
-			/**
-			 * Confirm if XProfile group exists.
-			 */
+			// Confirm if XProfile group exists.
 			if ( empty( $xprofile_group_object->id ) || ! is_object( $xprofile_group_object ) ) {
 				throw new UserError( __( 'This XProfile group does not exist.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Stop now if a user isn't allowed to update a XProfile group.
-			 */
+			// Stop now if a user isn't allowed to update a XProfile group.
 			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to update this XProfile group.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Update XProfile group and return the ID.
-			 */
+			// Update XProfile group and return the ID.
 			$xprofile_group = xprofile_insert_field_group(
 				XProfileGroupMutation::prepare_xprofile_group_args( $input, $xprofile_group_object, 'update' )
 			);
 
-			/**
-			 * Throw an exception if the XProfile group failed to be updated.
-			 */
-			if ( ! $xprofile_group ) {
+			// Throw an exception if the XProfile group failed to be updated.
+			if ( false === $xprofile_group ) {
 				throw new UserError( __( 'Cannot update existing XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -144,19 +131,7 @@ class XProfileGroupUpdate {
 				xprofile_update_field_group_position( $xprofile_group_id, absint( $input['groupOrder'] ) );
 			}
 
-			/**
-			 * Fires after a XProfile group is updated.
-			 *
-			 * @param int         $xprofile_group_id The ID of the XProfile group being updated.
-			 * @param array       $input             The input of the mutation.
-			 * @param AppContext  $context           The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info              The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_xprofile_groups_update_mutation', $xprofile_group_id, $input, $context, $info );
-
-			/**
-			 * Return the XProfile group ID.
-			 */
+			// Return the XProfile group ID.
 			return [
 				'id' => $xprofile_group_id,
 			];

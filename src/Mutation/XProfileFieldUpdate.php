@@ -2,14 +2,13 @@
 /**
  * XProfileFieldUpdate Mutation.
  *
- * @package \WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation
  * @since 0.0.1-alpha
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
@@ -38,7 +37,7 @@ class XProfileFieldUpdate {
 	 *
 	 * @return array
 	 */
-	public static function get_input_fields() {
+	public static function get_input_fields(): array {
 		return [
 			'id' => [
 				'type' => 'ID',
@@ -118,7 +117,7 @@ class XProfileFieldUpdate {
 	 *
 	 * @return array
 	 */
-	public static function get_output_fields() {
+	public static function get_output_fields(): array {
 		return [
 			'field' => [
 				'type'        => 'XProfileField',
@@ -140,30 +139,22 @@ class XProfileFieldUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input, AppContext $context, ResolveInfo $info ) {
+		return function( $input ) {
 
-			/**
-			 * Throw an exception if there's no input.
-			 */
+			// Throw an exception if there's no input.
 			if ( empty( $input ) || ! is_array( $input ) ) {
 				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Get the XProfile field object.
-			 */
+			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
 
-			/**
-			 * Confirm if XProfile field exists.
-			 */
+			// Confirm if XProfile field exists.
 			if ( empty( $xprofile_field_object->id ) ) {
 				throw new UserError( __( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Check if user can update a XProfile field.
-			 */
+			// Check if user can update a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to update this XProfile field.', 'wp-graphql-buddypress' ) );
 			}
@@ -173,38 +164,20 @@ class XProfileFieldUpdate {
 				$input['canDelete'] = false;
 			}
 
-			/**
-			 * Create XProfile field and return the ID.
-			 */
+			// Create XProfile field and return the ID.
 			$xprofile_field_id = xprofile_insert_field(
 				XProfileFieldMutation::prepare_xprofile_field_args( $input, $xprofile_field_object, 'update' )
 			);
 
-			/**
-			 * Throw an exception if the XProfile field failed to be updated.
-			 */
-			if ( ! is_numeric( $xprofile_field_id ) ) {
+			// Throw an exception if the XProfile field failed to be updated.
+			if ( false === is_numeric( $xprofile_field_id ) ) {
 				throw new UserError( __( 'Could not update XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
-			/**
-			 * Save additional information.
-			 */
+			// Save additional information.
 			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
 
-			/**
-			 * Fires after a XProfile field is updated.
-			 *
-			 * @param int         $xprofile_field_id The ID of the XProfile field being updated.
-			 * @param array       $input             The input of the mutation.
-			 * @param AppContext  $context           The AppContext passed down the resolve tree.
-			 * @param ResolveInfo $info              The ResolveInfo passed down the resolve tree.
-			 */
-			do_action( 'bp_graphql_xprofile_fields_update_mutation', $xprofile_field_id, $input, $context, $info );
-
-			/**
-			 * Return the XProfile field ID.
-			 */
+			// Return the XProfile field ID.
 			return [
 				'id' => $xprofile_field_id,
 			];
