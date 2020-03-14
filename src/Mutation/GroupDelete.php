@@ -86,7 +86,6 @@ class GroupDelete {
 	public static function mutate_and_get_payload() {
 		return function ( $input ) {
 
-
 			// Get the group object.
 			$group = GroupMutation::get_group_from_input( $input );
 
