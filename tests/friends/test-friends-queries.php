@@ -9,14 +9,14 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 
 	public $bp_factory;
 	public $bp;
-	public $admin;
+	public $user;
 
 	public function setUp() {
 		parent::setUp();
 
 		$this->bp_factory = new BP_UnitTest_Factory();
 		$this->bp         = new BP_UnitTestCase();
-		$this->user      = $this->factory->user->create();
+		$this->user       = $this->factory->user->create();
 	}
 
 	public function tearDown() {
@@ -111,7 +111,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_friendship_by_with_non_logged_in_user() {        
+	public function test_friendship_by_with_non_logged_in_user() {
 		$f         = $this->create_friendship();
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
 		$query     = "{
@@ -119,7 +119,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 				id
 			}
 		}";
-		
+
 		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
 	}
 

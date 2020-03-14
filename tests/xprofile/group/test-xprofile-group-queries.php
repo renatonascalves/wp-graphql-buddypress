@@ -49,23 +49,24 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'xprofile_group_object', $u1 );
 
 		$query = "
-		query {
-			xprofileGroupBy(id: \"{$global_id}\") {
-				id,
-				groupId
-				groupOrder
-				canDelete
-				name
-				description
-				fields {
-					nodes {
-						name
-						fieldId
-						value
+			query {
+				xprofileGroupBy(id: \"{$global_id}\") {
+					id,
+					groupId
+					groupOrder
+					canDelete
+					name
+					description
+					fields {
+						nodes {
+							name
+							fieldId
+							value
+						}
 					}
 				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -95,29 +96,27 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_xprofile_group_by_invalid_id() {
-		$query = "
-		query {
-			xprofileGroupBy(groupId: {REST_TESTS_IMPOSSIBLY_HIGH_NUMBER}) {
-				id,
-				groupId
-				groupOrder
-				canDelete
-				name
-				description
-				fields {
-					nodes {
-						name
-						fieldId
-						value
+		$query = '
+			query {
+				xprofileGroupBy(groupId: {1111}) {
+					id,
+					groupId
+					groupOrder
+					canDelete
+					name
+					description
+					fields {
+						nodes {
+							name
+							fieldId
+							value
+						}
 					}
 				}
 			}
-		}";
+		';
 
-		$this->assertArrayHasKey(
-			'errors',
-			do_graphql_request( $query )
-		);
+		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
 	}
 
 	protected function xprofileGroupsQuery( $variables ) {

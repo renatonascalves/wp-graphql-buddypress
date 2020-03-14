@@ -1,6 +1,6 @@
 === WPGraphQL BuddyPress ===
 Contributors:      espellcaste
-Tags:              graphql, wp-graphql, rest, community, api, buddypress, social networking
+Tags:              graphql, bp graphql, wp-graphql, rest, community, api, buddypress, social networking
 Requires at least: 4.8
 Requires PHP:      7.1
 Tested up to:      5.3.2

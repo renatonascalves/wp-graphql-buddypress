@@ -141,22 +141,17 @@ class XProfileFieldUpdate {
 	public static function mutate_and_get_payload() {
 		return function( $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
 
 			// Confirm if XProfile field exists.
-			if ( empty( $xprofile_field_object->id ) ) {
+			if ( empty( $xprofile_field_object->id ) || ! is_object( $xprofile_field_object ) ) {
 				throw new UserError( __( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user can update a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to update this XProfile field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Specific check to make sure the Full Name xprofile field will remain undeletable.
@@ -164,7 +159,7 @@ class XProfileFieldUpdate {
 				$input['canDelete'] = false;
 			}
 
-			// Create XProfile field and return the ID.
+			// Update XProfile field and return the ID.
 			$xprofile_field_id = xprofile_insert_field(
 				XProfileFieldMutation::prepare_xprofile_field_args( $input, $xprofile_field_object, 'update' )
 			);

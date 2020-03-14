@@ -103,14 +103,9 @@ class GroupCreate {
 	public static function mutate_and_get_payload() {
 		return function( $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Check if user can create a group.
 			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to create groups.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create group and return its newly created ID.

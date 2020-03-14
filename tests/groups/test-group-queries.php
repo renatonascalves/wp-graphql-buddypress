@@ -35,31 +35,32 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		 * Create the query string to pass to the $query
 		 */
 		$query = "
-		query {
-			groupBy(id: \"{$global_id}\") {
-				id,
-				groupId
-				name
-				status
-				description(format: RAW)
-				totalMemberCount
-				lastActivity
-				hasForum
-				link
-				creator {
-					userId
-				}
-				mods {
-					userId
-				}
-				admins {
-					userId
-				}
-				parent {
+			query {
+				groupBy(id: \"{$global_id}\") {
+					id,
 					groupId
+					name
+					status
+					description(format: RAW)
+					totalMemberCount
+					lastActivity
+					hasForum
+					link
+					creator {
+						userId
+					}
+					mods {
+						userId
+					}
+					admins {
+						userId
+					}
+					parent {
+						groupId
+					}
 				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -97,17 +98,16 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$group_id  = $this->create_group_object();
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
 
-		/**
-		 * Create the query string to pass to the $query
-		 */
+		// Create the query string to pass to the $query
 		$query = "
-		query {
-			groupBy(id: \"{$global_id}\") {
-				id,
-				groupId
-				name
+			query {
+				groupBy(id: \"{$global_id}\") {
+					id,
+					groupId
+					name
+				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(

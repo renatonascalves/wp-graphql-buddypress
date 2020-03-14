@@ -31,9 +31,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 		$u1       = $this->bp_factory->xprofile_group->create();
 		$field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $u1 ] );
 
-		/**
-		 * Create the query string to pass to the $query.
-		 */
+		// Create the query string to pass to the $query.
 		$query = "
 		query {
 			xprofileFieldBy(fieldId: {$field_id}) {
@@ -75,7 +73,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 	public function test_xprofile_field_by_invalid_id() {
 		$query = "
 		query {
-			xprofileFieldBy(fieldId: {REST_TESTS_IMPOSSIBLY_HIGH_NUMBER}) {
+			xprofileFieldBy(fieldId: {111}) {
 				value
 				fieldId
 				groupId
@@ -90,9 +88,6 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 			}
 		}";
 
-		$this->assertArrayHasKey(
-			'errors',
-			do_graphql_request( $query )
-		);
+		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
 	}
 }
