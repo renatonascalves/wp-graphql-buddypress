@@ -81,11 +81,6 @@ class XProfileGroupDelete {
 	public static function mutate_and_get_payload() {
 		return function ( $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Get the XProfile group object.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
 
@@ -96,7 +91,7 @@ class XProfileGroupDelete {
 
 			// Stop now if a user isn't allowed to delete a XProfile group.
 			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to delete this XProfile group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get the XProfile group object before it is deleted.

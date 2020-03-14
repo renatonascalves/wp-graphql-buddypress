@@ -86,10 +86,6 @@ class GroupDelete {
 	public static function mutate_and_get_payload() {
 		return function ( $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
 
 			// Get the group object.
 			$group = GroupMutation::get_group_from_input( $input );
@@ -101,7 +97,7 @@ class GroupDelete {
 
 			// Stop now if a user isn't allowed to delete a group.
 			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to delete this group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the Group object before it is deleted.

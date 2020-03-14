@@ -1,23 +1,21 @@
-# Copyright (C) 2019 Renato Alves
-# This file is distributed under the same license as the WP GraphQL BuddyPress plugin.
+# Copyright (C) 2020 Renato Alves
+# This file is distributed under the same license as the WPGraphQL BuddyPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP GraphQL BuddyPress 0.0.1-alpha\n"
+"Project-Id-Version: WPGraphQL BuddyPress 0.0.1-alpha\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-graphql-buddypress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-10-20T19:28:37+00:00\n"
+"POT-Creation-Date: 2020-03-12T00:08:25-04:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.2.0\n"
+"X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wp-graphql-buddypress\n"
 
 #. Plugin Name of the plugin
-#: wp-graphql-buddypress.php:193
-#: wp-graphql-buddypress.php:208
-msgid "WP GraphQL BuddyPress"
+msgid "WPGraphQL BuddyPress"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -25,7 +23,7 @@ msgid "https://github.com/wp-graphql/wp-graphql-buddypress"
 msgstr ""
 
 #. Description of the plugin
-msgid "Adds BuddyPress functionality to WPGraphQL schema."
+msgid "Adds BuddyPress functionality to the WPGraphQL schema."
 msgstr ""
 
 #. Author of the plugin
@@ -36,99 +34,1301 @@ msgstr ""
 msgid "https://ralv.es"
 msgstr ""
 
-#: wp-graphql-buddypress.php:86
-msgid "The WP_GraphQL_BuddyPress class should not be cloned."
+#: src/Connection/BlogConnection.php:32
+msgid "The order in which blogs should be returned."
 msgstr ""
 
-#: wp-graphql-buddypress.php:105
-msgid "De-serializing instances of the WP_GraphQL_BuddyPress class is not allowed"
+#: src/Connection/BlogConnection.php:36
+msgid "Search term(s) to retrieve matching blogs for."
 msgstr ""
 
-#: wp-graphql-buddypress.php:193
-msgid "depends on the lastest version of Buddypress to work!"
+#: src/Connection/BlogConnection.php:40
+msgid "ID of the user whose blogs user can post to."
 msgstr ""
 
-#: wp-graphql-buddypress.php:208
-msgid "depends on the lastest version of WPGraphQL to work!"
+#: src/Connection/BlogConnection.php:44
+msgid "Ensure result set includes Blogs with specific IDs."
 msgstr ""
 
-#: src/type/enum/class-group-enums.php:23
-msgid "The format of group description field."
+#: src/Connection/FriendshipConnection.php:32
+msgid "Whether the friendship has been accepted."
 msgstr ""
 
-#: src/type/enum/class-group-enums.php:27
-msgid "Provide the field value directly from database"
+#: src/Connection/FriendshipConnection.php:36
+#: src/Connection/GroupConnection.php:110
+msgid "Order sort attribute ascending or descending."
 msgstr ""
 
-#: src/type/enum/class-group-enums.php:32
-msgid "Apply the default WordPress rendering"
+#: src/Connection/GroupConnection.php:98
+msgid "Whether results should include hidden Groups."
 msgstr ""
 
-#: src/type/object/class-group-type.php:39
-msgid "Info about a BuddyPress group"
+#: src/Connection/GroupConnection.php:102
+msgid "Whether the Group has a forum enabled or not."
 msgstr ""
 
-#: src/type/object/class-group-type.php:44
-msgid "The globally unique identifier for the group."
+#: src/Connection/GroupConnection.php:106
+#: src/Connection/MemberConnection.php:51
+#: src/Type/Enum/BlogEnums.php:25
+#: src/Type/Enum/GroupEnums.php:62
+msgid "Shorthand for certain orderby/order combinations."
 msgstr ""
 
-#: src/type/object/class-group-type.php:51
-msgid "The id field that matches the BP_Groups_Group->id field."
+#: src/Connection/GroupConnection.php:114
+msgid "Order groups by attribute."
 msgstr ""
 
-#: src/type/object/class-group-type.php:58
-msgid "Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID."
+#: src/Connection/GroupConnection.php:118
+msgid "Parent ID of group to retrieve children of."
 msgstr ""
 
-#: src/type/object/class-group-type.php:67
-msgid "Group name"
+#: src/Connection/GroupConnection.php:122
+msgid "Search term(s) to retrieve matching groups for."
 msgstr ""
 
-#: src/type/object/class-group-type.php:74
-msgid "The creator of the group"
+#: src/Connection/GroupConnection.php:126
+msgid "Search group or groups by its/their slug(s)."
 msgstr ""
 
-#: src/type/object/class-group-type.php:85
-msgid "The slug of the group."
+#: src/Connection/GroupConnection.php:130
+msgid "Group statuses to limit results to."
 msgstr ""
 
-#: src/type/object/class-group-type.php:92
+#: src/Connection/GroupConnection.php:134
+msgid "Include groups of a given type."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:138
+msgid "Include groups that this user is a member of."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:142
+msgid "Ensure result set excludes Groups with specific IDs."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:146
+msgid "Ensure result set includes Groups with specific IDs."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:160
+#: src/Type/Enum/GroupMembersEnums.php:52
+msgid "Sort the order of results by the status of the group members."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:166
+msgid "Ensure result set excludes specific member IDs."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:170
+msgid "Whether results should exclude banned group members."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:174
+msgid "Whether results should exclude group admins and mods."
+msgstr ""
+
+#: src/Connection/GroupConnection.php:180
+#: src/Type/Enum/GroupMembersEnums.php:81
+msgid "Ensure result set includes specific Group member roles."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:55
+msgid "Limit results to friends of a user with specific ID."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:59
+msgid "Ensure result set excludes Members with specific IDs."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:63
+msgid "Ensure result set includes Members with specific IDs."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:67
+msgid "Limit results set to certain member type(s)."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:71
+msgid "Limit results set to include certain member type(s)."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:75
+msgid "Limit results set to exclude certain member type(s)."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:79
+msgid "Limit results set to a certain XProfile field."
+msgstr ""
+
+#: src/Connection/MemberConnection.php:83
+msgid "Search term(s) to retrieve matching members."
+msgstr ""
+
+#: src/Connection/Resolvers/GroupMembersConnectionResolver.php:169
+msgid "Sorry, you do not have the necessary permissions to filter with this param."
+msgstr ""
+
+#: src/Connection/XProfileFieldConnection.php:32
+msgid "Whether to hide XProfile fields where the user has no provided data."
+msgstr ""
+
+#: src/Connection/XProfileFieldConnection.php:36
+msgid "Ensure result set excludes specific fields IDs."
+msgstr ""
+
+#: src/Connection/XProfileGroupConnection.php:78
+msgid "Limit results to a single XProfile group."
+msgstr ""
+
+#: src/Connection/XProfileGroupConnection.php:82
+msgid "Whether to remove XProfile groups that do not have fields."
+msgstr ""
+
+#: src/Connection/XProfileGroupConnection.php:86
+msgid "Ensure result set excludes specific XProfile field groups."
+msgstr ""
+
+#. translators: %s is replaced with an error message
+#. translators: %s is replaced with the error
+#. translators: %s is replaced with the error.
+#: src/Data/AttachmentMutation.php:117
+#: src/Data/AttachmentMutation.php:226
+#: src/Data/AttachmentMutation.php:283
+msgid "Upload failed! Error was: %s."
+msgstr ""
+
+#: src/Data/AttachmentMutation.php:132
+msgid "The BuddyPress attachments uploads directory is not set."
+msgstr ""
+
+#: src/Data/AttachmentMutation.php:140
+msgid "The cover image directory is not valid."
+msgstr ""
+
+#: src/Data/AttachmentMutation.php:154
+msgid "There was a problem uploading the cover image."
+msgstr ""
+
+#. translators: %$1s and %$2s is replaced with the correct sizes.
+#: src/Data/AttachmentMutation.php:169
+msgid "You have selected an image that is smaller than the recommended size. For better results, make sure to upload an image that is larger than %1$spx wide, and %2$spx tall."
+msgstr ""
+
+#. translators: %s is replaced with object type.
+#: src/Data/AttachmentMutation.php:372
+msgid "There was a problem cropping your %s photo."
+msgstr ""
+
+#. translators: XProfile Field ID.
+#: src/Data/Factory.php:108
+msgid "No XProfile field was found with ID: %d"
+msgstr ""
+
+#. translators: %d is the blog ID.
+#: src/Data/Factory.php:210
+msgid "No Blog was found with ID: %d"
+msgstr ""
+
+#. translators: %d is the friendship ID.
+#: src/Data/Factory.php:240
+msgid "No Friendship was found with ID: %d"
+msgstr ""
+
+#: src/Data/GroupMutation.php:38
+#: src/Data/XProfileFieldMutation.php:35
+#: src/Data/XProfileGroupMutation.php:34
+#: src/Type/Object/BlogType.php:152
+#: src/Type/Object/FriendshipType.php:120
+#: src/Type/Object/GroupType.php:250
+#: src/Type/Object/XProfileFieldType.php:197
+#: src/Type/Object/XProfileGroupType.php:120
+msgid "The \"id\" is invalid."
+msgstr ""
+
+#. translators: %d is the Group ID.
+#: src/Data/Loader/GroupObjectLoader.php:71
+msgid "No group was found with ID: %d"
+msgstr ""
+
+#. translators: %d is the XProfile Group ID.
+#: src/Data/Loader/XProfileGroupObjectLoader.php:62
+msgid "No XProfile group was found with ID: %d"
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:44
+msgid "The object (user, group, blog, etc) the avatar belongs to."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:48
+#: src/Mutation/AttachmentCoverDelete.php:44
+msgid "The globally unique identifier for the object."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:62
+#: src/Mutation/AttachmentCoverDelete.php:62
+msgid "The status of the attachment deletion."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:69
+#: src/Mutation/AttachmentCoverDelete.php:69
+msgid "The deleted attachment object."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:90
+#: src/Mutation/AttachmentAvatarUpload.php:102
+#: src/Mutation/AttachmentCoverDelete.php:90
+#: src/Mutation/AttachmentCoverUpload.php:101
+msgid "Sorry, you are not allowed to perform this action."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:98
+msgid "Sorry, there are no uploaded avatars to delete."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarDelete.php:111
+msgid "Could not delete the attachment avatar."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:43
+#: src/Mutation/AttachmentCoverUpload.php:43
+msgid "Upload a local file using multi-part."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:47
+msgid "The unique identifier (user_id, group_id, blog_id, etc) for the object the avatar will belong to."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:51
+msgid "The object (user, group, blog, etc) the avatar will belong to."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:65
+msgid "The uploaded avatar attachment object."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:87
+msgid "Sorry, member avatar upload is disabled."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:92
+msgid "Sorry, group avatar upload is disabled."
+msgstr ""
+
+#: src/Mutation/AttachmentAvatarUpload.php:97
+msgid "Sorry, blog avatar upload is disabled."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverDelete.php:48
+msgid "The object (members, groups, blogs, etc) the cover belongs to."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverDelete.php:98
+msgid "Sorry, there are no uploaded covers to delete."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverDelete.php:112
+msgid "Could not delete the attachment cover."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:47
+msgid "The unique identifier (user_id, group_id, blog_id, etc) for the object the cover will belong to."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:51
+msgid "The object (members, groups, blogs, etc) the cover will belong to."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:65
+msgid "The uploaded cover attachment object."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:86
+msgid "Sorry, member cover upload is disabled."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:91
+msgid "Sorry, group cover upload is disabled."
+msgstr ""
+
+#: src/Mutation/AttachmentCoverUpload.php:96
+msgid "Sorry, blog cover upload is disabled."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:45
+msgid "User ID of the friendship initiator. Defaults to the logged in user."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:49
+msgid "User ID of the `friend` - the one being invited to the friendship."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:63
+msgid "The friendship that was created."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:85
+#: src/Mutation/FriendshipDelete.php:87
+#: src/Mutation/FriendshipUpdate.php:85
+#: src/Mutation/GroupCreate.php:108
+#: src/Mutation/GroupDelete.php:91
+#: src/Mutation/GroupUpdate.php:117
+#: src/Mutation/XProfileFieldCreate.php:138
+#: src/Mutation/XProfileFieldDelete.php:90
+#: src/Mutation/XProfileFieldUpdate.php:146
+#: src/Mutation/XProfileGroupCreate.php:88
+#: src/Mutation/XProfileGroupDelete.php:86
+#: src/Mutation/XProfileGroupUpdate.php:100
+msgid "Mutation not processed. There was no input for the mutation."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:94
+#: src/Mutation/FriendshipDelete.php:95
+#: src/Mutation/FriendshipUpdate.php:93
+msgid "There was a problem confirming if user is valid."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:99
+#: src/Mutation/FriendshipDelete.php:100
+#: src/Mutation/FriendshipUpdate.php:98
+msgid "Sorry, you do not have permission to perform this action."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:107
+msgid "You are already friends with this user."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:112
+msgid "You already have a pending friendship request with this user."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:117
+msgid "There was a problem requesting the friendship."
+msgstr ""
+
+#: src/Mutation/FriendshipCreate.php:127
+msgid "Friendship was not requested."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:44
+#: src/Mutation/FriendshipUpdate.php:45
+msgid "User ID of the friendship initiator."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:48
+#: src/Mutation/FriendshipUpdate.php:49
+msgid "User ID of the `friend` - the one invited to the friendship."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:62
+msgid "The status of the friendship deletion."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:69
+msgid "The deleted friendship object."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:108
+msgid "Those users are not yet friends and no friendship request was found."
+msgstr ""
+
+#: src/Mutation/FriendshipDelete.php:137
+msgid "Friendship could not be deleted."
+msgstr ""
+
+#: src/Mutation/FriendshipUpdate.php:63
+msgid "The friendship that was updated/accepted."
+msgstr ""
+
+#: src/Mutation/FriendshipUpdate.php:106
+msgid "There is no friendship request or users are already friends."
+msgstr ""
+
+#: src/Mutation/FriendshipUpdate.php:116
+msgid "No Friendship requested was found."
+msgstr ""
+
+#: src/Mutation/FriendshipUpdate.php:121
+msgid "There was a problem accepting the friendship. Try again."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:44
+#: src/Mutation/GroupUpdate.php:53
+msgid "The userId to assign as the group creator."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:48
+#: src/Mutation/GroupUpdate.php:57
+msgid "The ID of the parent group."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:52
+#: src/Mutation/GroupUpdate.php:61
+msgid "The name of the group."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:56
+#: src/Mutation/GroupUpdate.php:65
+#: src/Type/Object/GroupType.php:144
 msgid "The description of the group."
 msgstr ""
 
-#: src/type/object/class-group-type.php:113
-msgid "The link of the group."
+#: src/Mutation/GroupCreate.php:60
+#: src/Mutation/GroupUpdate.php:69
+#: src/Type/Object/GroupType.php:140
+msgid "The slug of the group."
 msgstr ""
 
-#: src/type/object/class-group-type.php:120
-msgid "Whether the group has a forum or not"
-msgstr ""
-
-#: src/type/object/class-group-type.php:127
-msgid "Count of all group members."
-msgstr ""
-
-#: src/type/object/class-group-type.php:141
-msgid "The date the group was last active"
-msgstr ""
-
-#: src/type/object/class-group-type.php:153
-msgid "The date the group was created."
-msgstr ""
-
-#: src/type/object/class-group-type.php:160
+#: src/Mutation/GroupCreate.php:64
+#: src/Mutation/GroupUpdate.php:73
+#: src/Type/Object/GroupType.php:185
 msgid "The status of the group."
 msgstr ""
 
-#: src/type/object/class-group-type.php:188
-msgid "A BuddyPress Group object"
+#: src/Mutation/GroupCreate.php:68
+#: src/Mutation/GroupUpdate.php:77
+msgid "Whether the group has a forum enabled."
 msgstr ""
 
-#: src/data/class-factory.php:38
-msgid "The Groups component is not active."
+#: src/Mutation/GroupCreate.php:72
+#: src/Mutation/GroupUpdate.php:81
+msgid "The date of the group."
 msgstr ""
 
-#. translators: group ID.
-#: src/data/class-factory.php:47
-msgid "No group was found with the ID: %d"
+#: src/Mutation/GroupCreate.php:86
+msgid "The group object that was created."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:113
+msgid "Sorry, you are not allowed to create groups."
+msgstr ""
+
+#: src/Mutation/GroupCreate.php:123
+msgid "Could not create Group."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:44
+#: src/Mutation/GroupUpdate.php:45
+#: src/Type/Object/GroupType.php:42
+msgid "The globally unique identifier for the group."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:48
+#: src/Mutation/GroupUpdate.php:49
+#: src/Type/Object/GroupType.php:46
+msgid "The id field that matches the BP_Groups_Group->id field."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:52
+msgid "Slug of the group."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:66
+msgid "The status of the group deletion."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:73
+msgid "The deleted group object."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:99
+#: src/Mutation/GroupUpdate.php:125
+msgid "This group does not exist."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:104
+msgid "Sorry, you are not allowed to delete this group."
+msgstr ""
+
+#: src/Mutation/GroupDelete.php:112
+msgid "Could not delete the group."
+msgstr ""
+
+#: src/Mutation/GroupUpdate.php:95
+msgid "The group that was updated."
+msgstr ""
+
+#: src/Mutation/GroupUpdate.php:130
+msgid "Sorry, you are not allowed to update this group."
+msgstr ""
+
+#: src/Mutation/GroupUpdate.php:140
+msgid "Could not update existing group."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:44
+#: src/Mutation/XProfileFieldUpdate.php:52
+msgid "The name of the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:48
+#: src/Mutation/XProfileFieldUpdate.php:56
+#: src/Type/Object/XProfileFieldType.php:107
+msgid "The description of the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:52
+#: src/Mutation/XProfileFieldUpdate.php:76
+msgid "The id of the group this field will be assigned to."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:56
+msgid "The type of the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:60
+msgid "The default visibility for the profile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:64
+#: src/Mutation/XProfileFieldUpdate.php:68
+msgid "Whether to allow members to set the visibility for the profile field data or not."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:68
+#: src/Mutation/XProfileFieldUpdate.php:72
+msgid "Autolink status for this profile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:72
+msgid "The id of the parent field this field will be assigned to."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:76
+#: src/Mutation/XProfileFieldUpdate.php:84
+msgid "Option to allow XProfile field to be deleted."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:80
+#: src/Mutation/XProfileFieldUpdate.php:88
+msgid "Whether the profile field must have a value."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:84
+#: src/Mutation/XProfileFieldUpdate.php:92
+msgid "Whether the option should be the default one for the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:88
+#: src/Mutation/XProfileFieldUpdate.php:96
+#: src/Type/Object/XProfileFieldType.php:85
+msgid "The way profile field's options are ordered."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:92
+#: src/Mutation/XProfileFieldUpdate.php:100
+#: src/Type/Object/XProfileFieldType.php:81
+msgid "The order of the option into the profile field list of options."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:96
+#: src/Mutation/XProfileFieldUpdate.php:104
+msgid "The order of the XProfile field into the group of fields."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:102
+#: src/Mutation/XProfileFieldUpdate.php:110
+msgid "Sets the member types to which this field should be available."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:116
+msgid "The XProfile field that was created."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:143
+msgid "Sorry, you are not allowed to create XProfile fields."
+msgstr ""
+
+#: src/Mutation/XProfileFieldCreate.php:153
+msgid "Could not create XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:43
+#: src/Mutation/XProfileFieldUpdate.php:44
+#: src/Type/Object/XProfileFieldType.php:40
+msgid "The globally unique identifier for the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:47
+#: src/Mutation/XProfileFieldUpdate.php:48
+#: src/Type/Object/XProfileFieldType.php:44
+msgid "The id field that matches the BP_XProfile_Field->id field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:51
+msgid "Required if you want to delete the data for the field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:65
+msgid "The status of the XProfile field deletion."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:72
+msgid "The deleted XProfile field object."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:98
+#: src/Mutation/XProfileFieldUpdate.php:154
+msgid "This XProfile field does not exist."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:103
+msgid "Sorry, you are not allowed to delete XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldDelete.php:111
+msgid "Could not delete the XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:60
+msgid "Type of XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:64
+msgid "Default visibility for the profile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:80
+msgid "The id of the field this field will be updated into."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:124
+msgid "The XProfile field that was updated."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:159
+msgid "Sorry, you are not allowed to update this XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileFieldUpdate.php:174
+msgid "Could not update XProfile field."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:44
+#: src/Mutation/XProfileGroupUpdate.php:52
+msgid "The name of the XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:48
+#: src/Mutation/XProfileGroupUpdate.php:56
+#: src/Type/Object/XProfileGroupType.php:60
+msgid "The description of the XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:52
+#: src/Mutation/XProfileGroupUpdate.php:60
+msgid "Option to allow XProfile group to be deleted."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:66
+msgid "The XProfile group that was created."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:93
+msgid "Sorry, you are not allowed to create XProfile groups."
+msgstr ""
+
+#: src/Mutation/XProfileGroupCreate.php:103
+msgid "Cannot create XProfile field group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:43
+#: src/Mutation/XProfileGroupUpdate.php:44
+#: src/Type/Object/XProfileGroupType.php:40
+msgid "The globally unique identifier for the XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:47
+#: src/Mutation/XProfileGroupUpdate.php:48
+#: src/Type/Object/XProfileGroupType.php:44
+msgid "The id field that matches the BP_XProfile_Group->id field."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:61
+msgid "The status of the XProfile group deletion."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:68
+msgid "The deleted XProfile group object."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:94
+#: src/Mutation/XProfileGroupUpdate.php:108
+msgid "This XProfile group does not exist."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:99
+msgid "Sorry, you are not allowed to delete this XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupDelete.php:107
+msgid "Could not delete the XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupUpdate.php:64
+#: src/Type/Object/XProfileGroupType.php:52
+msgid "Order of the group relative to other groups."
+msgstr ""
+
+#: src/Mutation/XProfileGroupUpdate.php:78
+msgid "The XProfile group that was updated."
+msgstr ""
+
+#: src/Mutation/XProfileGroupUpdate.php:113
+msgid "Sorry, you are not allowed to update this XProfile group."
+msgstr ""
+
+#: src/Mutation/XProfileGroupUpdate.php:123
+msgid "Cannot update existing XProfile field group."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:27
+msgid "Avatar Attachment objects."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:31
+msgid "Avatar Attachment for the user."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:36
+msgid "Avatar Attachment for the group."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:41
+msgid "Avatar Attachment for the blog."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:52
+msgid "Cover Attachment objects."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:56
+msgid "Cover Attachment for the members/users."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:61
+msgid "Cover Attachment for the groups."
+msgstr ""
+
+#: src/Type/Enum/AttachmentEnums.php:66
+msgid "Cover Attachment for the blogs."
+msgstr ""
+
+#: src/Type/Enum/BlogEnums.php:29
+msgid "Used to order blogs by their status."
+msgstr ""
+
+#: src/Type/Enum/BlogEnums.php:34
+msgid "Used to order blogs by their date."
+msgstr ""
+
+#: src/Type/Enum/BlogEnums.php:39
+msgid "Used to order blogs by alphabetical order."
+msgstr ""
+
+#: src/Type/Enum/BlogEnums.php:44
+msgid "Used to order blogs randomly."
+msgstr ""
+
+#: src/Type/Enum/FriendshipEnums.php:27
+msgid "The attribute to order friendships by."
+msgstr ""
+
+#: src/Type/Enum/FriendshipEnums.php:31
+msgid "Sort friendships by the id column."
+msgstr ""
+
+#: src/Type/Enum/FriendshipEnums.php:36
+msgid "Sort friendships by the friend_user_id column."
+msgstr ""
+
+#: src/Type/Enum/FriendshipEnums.php:41
+msgid "Sort friendships by the initiator_user_id column."
+msgstr ""
+
+#: src/Type/Enum/FriendshipEnums.php:46
+msgid "Sort friendships by the date_created column."
+msgstr ""
+
+#: src/Type/Enum/GeneralEnums.php:25
+msgid "The format of content field."
+msgstr ""
+
+#: src/Type/Enum/GeneralEnums.php:29
+#: src/Type/Enum/XProfileFieldEnums.php:31
+msgid "Provide the field value directly from database"
+msgstr ""
+
+#: src/Type/Enum/GeneralEnums.php:34
+#: src/Type/Enum/XProfileFieldEnums.php:36
+#: src/Type/Enum/XProfileFieldEnums.php:41
+msgid "Apply the default WordPress rendering"
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:27
+msgid "The attribute to order groups by."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:31
+msgid "Used to order groups by the created date."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:36
+msgid "Used to order groups by last activity."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:41
+msgid "Used to order groups by totam member count."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:46
+msgid "Used to order groups by name."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:51
+#: src/Type/Enum/GroupEnums.php:81
+msgid "Used to order groups randomly."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:66
+msgid "Used to order groups by their status."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:71
+msgid "Used to order groups by their date."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:76
+msgid "Used to order groups by alphabetical order."
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:86
+msgid "Used to order groups by their populatity."
+msgstr ""
+
+#. translators: group status
+#: src/Type/Enum/GroupEnums.php:124
+msgid "Objects with the %1$s status"
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:135
+msgid "The status of the object."
+msgstr ""
+
+#. translators: group type
+#: src/Type/Enum/GroupEnums.php:156
+msgid "Objects with the %1$s type"
+msgstr ""
+
+#: src/Type/Enum/GroupEnums.php:167
+msgid "The type of the object."
+msgstr ""
+
+#: src/Type/Enum/GroupMembersEnums.php:25
+msgid "Used to order group last joined members."
+msgstr ""
+
+#: src/Type/Enum/GroupMembersEnums.php:30
+msgid "Used to order group first joined members."
+msgstr ""
+
+#: src/Type/Enum/GroupMembersEnums.php:35
+msgid "Used to order group members alphabetically."
+msgstr ""
+
+#: src/Type/Enum/GroupMembersEnums.php:43
+msgid "Used to order by group members activity."
+msgstr ""
+
+#. translators: group role
+#: src/Type/Enum/GroupMembersEnums.php:70
+msgid "Group member role: %1$s"
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:27
+msgid "Shorthand for certain members orderby/order combinations."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:31
+msgid "Used to order active members."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:36
+msgid "Used to order members by newest."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:41
+msgid "Used to order members alphabetically."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:46
+msgid "Used to order members randomly."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:51
+msgid "Used to order online members."
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:56
+msgid "Used to order popular members."
+msgstr ""
+
+#. translators: member type
+#: src/Type/Enum/MemberEnums.php:77
+msgid "Member Type: %1$s"
+msgstr ""
+
+#: src/Type/Enum/MemberEnums.php:87
+msgid "Member types."
+msgstr ""
+
+#: src/Type/Enum/XProfileFieldEnums.php:27
+msgid "The format of field value field."
+msgstr ""
+
+#. translators: visibility level
+#: src/Type/Enum/XProfileFieldEnums.php:64
+msgid "Visibility Level: %1$s"
+msgstr ""
+
+#: src/Type/Enum/XProfileFieldEnums.php:75
+msgid "XProfile field visibility levels."
+msgstr ""
+
+#. translators: field type
+#: src/Type/Enum/XProfileFieldEnums.php:90
+msgid "Field Type: %1$s"
+msgstr ""
+
+#: src/Type/Enum/XProfileFieldEnums.php:100
+msgid "XProfile field types."
+msgstr ""
+
+#: src/Type/Input/AttachmentInput.php:23
+msgid "The `Upload` special type represents a file to be uploaded in the same HTTP request as specified by [graphql-multipart-request-spec](https://github.com/jaydenseric/graphql-multipart-request-spec)."
+msgstr ""
+
+#: src/Type/Input/AttachmentInput.php:27
+msgid "The file being uploaded."
+msgstr ""
+
+#: src/Type/Input/AttachmentInput.php:31
+msgid "The mime-type of the file being uploaded."
+msgstr ""
+
+#: src/Type/Object/AttachmentType.php:23
+msgid "BuddyPress attachment object used in Avatar and Cover images."
+msgstr ""
+
+#: src/Type/Object/AttachmentType.php:27
+msgid "URL for the attachment with the thumb size."
+msgstr ""
+
+#: src/Type/Object/AttachmentType.php:31
+msgid "URL for the attachment with the full size."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:37
+msgid "Info about a BuddyPress Blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:41
+msgid "The globally unique identifier for the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:45
+msgid "The id field that matches the BP_Blogs_Blog->blog_id field."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:49
+msgid "The admin of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:58
+msgid "The name of the Blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:62
+msgid "The permalink of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:66
+msgid "The description of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:70
+#: src/Type/Object/XProfileGroupType.php:64
+msgid "Format of the field output."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:87
+msgid "The path of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:91
+msgid "The domain of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:95
+msgid "The last activity date from the blog, in the site's timezone."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:99
+msgid "Attachment Avatar of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:106
+msgid "Attachment Cover of the blog."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:134
+msgid "Get a BuddyPress Blog object."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:138
+#: src/Type/Object/FriendshipType.php:100
+#: src/Type/Object/GroupType.php:228
+#: src/Type/Object/XProfileFieldType.php:183
+#: src/Type/Object/XProfileGroupType.php:106
+msgid "Get the object by its global ID."
+msgstr ""
+
+#: src/Type/Object/BlogType.php:142
+#: src/Type/Object/FriendshipType.php:104
+#: src/Type/Object/GroupType.php:232
+#: src/Type/Object/XProfileGroupType.php:110
+msgid "Get the object by its database ID."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:37
+msgid "Info about a BuddyPress Friendship."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:41
+msgid "The globally unique identifier for the friendship."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:45
+msgid "The id field that matches the BP_Friends_Friendship->id field."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:49
+msgid "The initiator of the friendship."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:58
+msgid "The friend, the one invited to the friendship."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:67
+msgid "Whether the friendship been confirmed or accepted."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:71
+msgid "The date the friendship was created, in the site's timezone."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:96
+msgid "Get a BuddyPress Friendship object."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:111
+msgid "Sorry, you need to be logged in to perform this action."
+msgstr ""
+
+#: src/Type/Object/FriendshipType.php:132
+msgid "Sorry, you don't have permission to see this friendship."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:38
+msgid "Info about a BuddyPress group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:50
+msgid "Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:59
+msgid "The creator of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:70
+msgid "Administrators of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:104
+msgid "Moderators of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:136
+msgid "Group name"
+msgstr ""
+
+#: src/Type/Object/GroupType.php:148
+#: src/Type/Object/XProfileFieldType.php:111
+msgid "Format of the field output"
+msgstr ""
+
+#: src/Type/Object/GroupType.php:165
+msgid "The link of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:169
+msgid "Whether forums are enabled for the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:173
+msgid "Count of all group members."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:177
+msgid "The date the group was last active."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:181
+msgid "The date the group was created."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:189
+msgid "Attachment Avatar of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:196
+msgid "Attachment Cover of the group."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:224
+msgid "Get a BuddyPress Group object."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:236
+msgid "Get the object by its current slug."
+msgstr ""
+
+#: src/Type/Object/GroupType.php:240
+msgid "Get the object by its previous slug."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:36
+msgid "Member types associated with the user."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:54
+msgid "The name used for the user in @-mentions."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:57
+msgid "The Activity component needs to be active to use this field."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:76
+msgid "Profile URL of the member."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:90
+msgid "Attachment Avatar of the member."
+msgstr ""
+
+#: src/Type/Object/MemberType.php:102
+msgid "Attachment Cover of the member."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:36
+msgid "Info about a BuddyPress XProfile field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:48
+msgid "The id field that matches the BP_XProfile_Field->group_id field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:52
+msgid "Parent field of the current field. This field is equivalent to the BP_XProfile_Field object matching the BP_XProfile_Field->parent_id ID."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:61
+msgid "XProfile field name."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:65
+msgid "XProfile field type."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:69
+msgid "Can this field be deleted?"
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:73
+msgid "Is it a required field?"
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:77
+msgid "The order of the profile field into the group of fields."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:89
+msgid "Whether the option is the default one for the profile field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:93
+msgid "Who may see the saved value for this profile field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:97
+msgid "Is autolink enabled for this profile field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:103
+msgid "Member types to which this field should be available."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:128
+msgid "The value of the XProfile field."
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:132
+msgid "Format of the field value output"
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:179
+msgid "Get a BuddyPress XProfile Field object"
+msgstr ""
+
+#: src/Type/Object/XProfileFieldType.php:187
+msgid "Get the object by its database ID"
+msgstr ""
+
+#: src/Type/Object/XProfileGroupType.php:36
+msgid "Info about a BuddyPress XProfile group."
+msgstr ""
+
+#: src/Type/Object/XProfileGroupType.php:48
+msgid "XProfile group name."
+msgstr ""
+
+#: src/Type/Object/XProfileGroupType.php:56
+msgid "Can this group be deleted?"
+msgstr ""
+
+#: src/Type/Object/XProfileGroupType.php:102
+msgid "Get a BuddyPress XProfile Group object."
+msgstr ""
+
+#: wp-graphql-buddypress.php:85
+msgid "The WP_GraphQL_BuddyPress class should not be cloned."
+msgstr ""
+
+#: wp-graphql-buddypress.php:103
+msgid "De-serializing instances of the WP_GraphQL_BuddyPress class is not allowed"
+msgstr ""
+
+#: wp-graphql-buddypress.php:185
+#: wp-graphql-buddypress.php:198
+msgid "WP GraphQL BuddyPress"
+msgstr ""
+
+#: wp-graphql-buddypress.php:185
+msgid "depends on the lastest version of Buddypress to work!"
+msgstr ""
+
+#: wp-graphql-buddypress.php:198
+msgid "depends on the lastest version of WPGraphQL to work!"
 msgstr ""

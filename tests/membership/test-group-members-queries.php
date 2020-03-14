@@ -39,9 +39,7 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 
 		$this->bp->set_current_user( $this->admin );
 
-		/**
-		 * Create the query string to pass to the $query.
-		 */
+		// Create the query string to pass to the $query.
 		$query = "
 		query {
 			groupBy(id: \"{$global_id}\") {

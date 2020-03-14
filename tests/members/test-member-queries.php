@@ -36,17 +36,16 @@ class Test_Members_Queries extends WP_UnitTestCase {
 
         $this->bp->set_current_user( $this->admin );
 
-		/**
-		 * Create the query.
-		 */
+		// Create the query.
 		$query = "
-		query {
-			user(id: \"{$global_id}\") {
-				link
-				memberTypes
-				mentionName
+			query {
+				user(id: \"{$global_id}\") {
+					link
+					memberTypes
+					mentionName
+				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -93,9 +92,7 @@ class Test_Members_Queries extends WP_UnitTestCase {
 
 		$this->bp->set_current_user( $this->admin );
 
-		/**
-		 * Here we're querying the groups in our dataset.
-		 */
+		// Here we're querying the groups in our dataset.
 		$results = $this->membersQuery(
 			[
 				'first' => 2,

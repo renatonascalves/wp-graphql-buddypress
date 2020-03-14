@@ -113,7 +113,7 @@ class AttachmentMutation {
 		if ( ! empty( $uploaded_image['error'] ) ) {
 			throw new UserError(
 				sprintf(
-					/* translators: %s is replaced with an error message */
+					/* translators: %s is replaced with a cover error message */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
 					$uploaded_image['error']
 				)

@@ -133,14 +133,9 @@ class XProfileFieldCreate {
 	public static function mutate_and_get_payload() {
 		return function( $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Check if user can create a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to create XProfile fields.', 'wp-graphql-buddypress' ) );
+				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create XProfile field and return its ID.

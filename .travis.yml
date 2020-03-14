@@ -64,6 +64,7 @@ before_install:
     fi
 
 before_script:
+  # Install PHPUnit and composer scripts.
   - |
     composer require --dev phpunit/phpunit ^6;
     composer install;
