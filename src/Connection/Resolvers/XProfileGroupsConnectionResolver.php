@@ -21,6 +21,15 @@ use WPGraphQL\Model\User;
 class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
+	 * Return the name of the loader to be used with the connection resolver.
+	 *
+	 * @return string
+	 */
+	public function get_loader_name(): string {
+		return 'xprofile_group_object';
+	}
+
+	/**
 	 * Get query args.
 	 *
 	 * @return array
@@ -31,14 +40,10 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 			'user_id'          => 0,
 		];
 
-		/**
-		 * Prepare for later use
-		 */
+		// Prepare for later use.
 		$last = $this->args['last'] ?? null;
 
-		/**
-		 * Collect the input_fields.
-		 */
+		// Collect the input_fields.
 		$input_fields = [];
 		if ( ! empty( $this->args['where'] ) ) {
 			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
@@ -48,20 +53,14 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		/**
-		 * Set the graphql_cursor_offset
-		 */
+		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
-		/**
-		 * Pass the graphql $this->args.
-		 */
+		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		/**
-		 * Setting fields from user and parent profile group.
-		 */
+		// Setting fields from user and parent profile group.
 		if ( true === is_object( $this->source ) ) {
 			switch ( true ) {
 				case $this->source instanceof User:
@@ -109,7 +108,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items(): array {
+	public function get_ids(): array {
 		return wp_list_pluck( $this->query, 'id' );
 	}
 

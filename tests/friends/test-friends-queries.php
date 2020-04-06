@@ -23,7 +23,47 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		parent::tearDown();
 	}
 
-	public function test_friendship_by_with_initiator() {
+	public function test_get_members_friends_query() {
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+		$u3 = $this->bp_factory->user->create();
+
+		$this->create_friendship( $u1, $this->user );
+		$this->create_friendship( $u2, $this->user );
+		$this->create_friendship( $u3, $this->user );
+
+		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->user );
+
+        $this->bp->set_current_user( $this->user );
+
+		// Create the query.
+		$query = "
+			query {
+				user(id: \"{$global_id}\") {
+					friends {
+						nodes {
+							initiator {
+								userId
+							}
+							friend {
+								userId
+							}
+						}
+					}
+				}
+			}
+		";
+
+		$results = do_graphql_request( $query );
+
+		// Make sure the query didn't return any errors
+		$this->assertArrayNotHasKey( 'errors', $results );
+
+		// Check our four members.
+		$this->assertTrue( count( $results['data']['user']['friends']['nodes'] ) === 3 );
+	}
+
+	public function test_getting_friendship_with_initiator() {
 		$u = $this->bp_factory->user->create();
 		$f = $this->create_friendship( $u, $this->user );
 
@@ -66,7 +106,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_friendship_by_with_invited_friend() {
+	public function test_getting_friendship_with_invited_friend() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -111,7 +151,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_friendship_by_with_non_logged_in_user() {
+	public function test_getting_friendship_with_non_logged_in_user() {
 		$f         = $this->create_friendship();
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
 		$query     = "{
@@ -120,10 +160,13 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 			}
 		}";
 
-		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
+		$response = do_graphql_request( $query );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you need to be logged in to perform this action.', $response['errors'][0]['message'] );
 	}
 
-	public function test_friendship_by_with_unauthorized_member() {
+	public function test_friendship_with_unauthorized_member() {
 		$f = $this->create_friendship();
 
 		$u = $this->bp_factory->user->create();
@@ -137,7 +180,10 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 			}
 		}";
 
-		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
+		$response = do_graphql_request( $query );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Sorry, you don\'t have permission to see this friendship.', $response['errors'][0]['message'] );
 	}
 
 	protected function create_friendship( $u = 0, $initiator = 0 ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Groups Connections.
+ * Register Group Connections.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection
  * @since 0.0.1-alpha
@@ -11,7 +11,6 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Data\DataSource;
 
 /**
  * Class GroupConnection.
@@ -47,20 +46,18 @@ class GroupConnection {
 	 * @return array
 	 */
 	public static function get_connection_config( $args = [] ): array {
-		$defaults = [
-			'fromType'       => 'RootQuery',
-			'toType'         => 'Group',
-			'fromFieldName'  => 'groups',
-			'connectionArgs' => self::get_connection_args(),
-			'resolveNode'    => function ( $id, array $args, AppContext $context ) {
-				return Factory::resolve_group_object( $id, $context );
-			},
-			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-				return Factory::resolve_groups_connection( $source, $args, $context, $info );
-			},
-		];
-
-		return array_merge( $defaults, $args );
+		return array_merge(
+			[
+				'fromType'       => 'RootQuery',
+				'toType'         => 'Group',
+				'fromFieldName'  => 'groups',
+				'connectionArgs' => self::get_connection_args(),
+				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+					return Factory::resolve_groups_connection( $source, $args, $context, $info );
+				},
+			],
+			$args
+		);
 	}
 
 	/**
@@ -70,20 +67,18 @@ class GroupConnection {
 	 * @return array
 	 */
 	public static function get_group_members_connection_config( $args = [] ): array {
-		$defaults = [
-			'fromType'       => 'Group',
-			'toType'         => 'User',
-			'fromFieldName'  => 'members',
-			'connectionArgs' => self::get_group_members_connection_args(),
-			'resolveNode'    => function ( $user_id, array $args, AppContext $context ) {
-				return DataSource::resolve_user( $user_id, $context );
-			},
-			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-				return Factory::resolve_group_members_connection( $source, $args, $context, $info );
-			},
-		];
-
-		return array_merge( $defaults, $args );
+		return array_merge(
+			[
+				'fromType'       => 'Group',
+				'toType'         => 'User',
+				'fromFieldName'  => 'members',
+				'connectionArgs' => self::get_group_members_connection_args(),
+				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+					return Factory::resolve_group_members_connection( $source, $args, $context, $info );
+				},
+			],
+			$args
+		);
 	}
 
 	/**

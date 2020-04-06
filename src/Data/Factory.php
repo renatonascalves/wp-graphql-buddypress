@@ -101,7 +101,7 @@ class Factory {
 		// Get the XPofile field object.
 		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
 
-		if ( empty( $xprofile_field_object ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
+		if ( empty( $xprofile_field_object ) || empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
 			throw new UserError(
 				sprintf(
 					// translators: XProfile Field ID.
@@ -112,6 +112,16 @@ class Factory {
 		}
 
 		return new XProfileField( $xprofile_field_object );
+
+		/*
+		$context->getLoader( 'xprofile_field_object' )->buffer( [ $xprofile_field_id ] );
+
+		return new Deferred(
+			function () use ( $xprofile_field_id, $context ) {
+				return $context->getLoader( 'xprofile_field_object' )->load( $xprofile_field_id );
+			}
+		);
+		*/
 	}
 
 	/**
@@ -254,9 +264,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new BlogsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -268,9 +278,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new XProfileGroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -282,9 +292,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -296,9 +306,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new GroupsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -310,9 +320,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new GroupMembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -324,9 +334,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -338,9 +348,9 @@ class Factory {
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
 	 *
-	 * @return array
+	 * @return Deferred
 	 */
-	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ): array {
+	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new FriendshipsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }

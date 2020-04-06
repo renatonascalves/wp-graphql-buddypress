@@ -30,12 +30,11 @@
     "source": "https://github.com/wp-graphql/wp-graphql-buddypress"
   },
   "require": {
-    "php": ">=7.1"
-  },
-  "require-dev": {
-    "phpcompatibility/phpcompatibility-wp": "^2.0",
-    "wp-coding-standards/wpcs": "^2.1",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0"
+    "php": ">=7.1",
+    "squizlabs/php_codesniffer" : "^3.5.4",
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
+    "phpcompatibility/phpcompatibility-wp" : "*",
+    "wp-coding-standards/wpcs": "*"
   },
   "config": {
     "optimize-autoloader": true

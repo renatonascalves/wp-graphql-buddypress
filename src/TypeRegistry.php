@@ -151,12 +151,15 @@ class TypeRegistry {
 	 *
 	 * @return array
 	 */
-	public static function graphql_register_autoloaders( array $loaders, AppContext $context ) {
+	public static function graphql_register_autoloaders( array $loaders, AppContext $context ): array {
 		return array_merge(
 			$loaders,
 			[
 				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
 				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
+				'xprofile_field_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
+				'friend_object'         => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader( $context ),
+				'blog_object'           => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader( $context ),
 			]
 		);
 	}

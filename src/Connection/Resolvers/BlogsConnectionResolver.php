@@ -20,6 +20,15 @@ use WPGraphQL\Model\User;
 class BlogsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
+	 * Return the name of the loader to be used with the connection resolver.
+	 *
+	 * @return string
+	 */
+	public function get_loader_name(): string {
+		return 'blog_object';
+	}
+
+	/**
 	 * Get query args.
 	 *
 	 * @return array
@@ -32,14 +41,10 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			'type'             => 'active',
 		];
 
-		/**
-		 * Prepare for later use.
-		 */
+		// Prepare for later use.
 		$last = $this->args['last'] ?? null;
 
-		/**
-		 * Collect the input_fields.
-		 */
+		// Collect the input_fields.
 		$input_fields = [];
 		if ( ! empty( $this->args['where'] ) ) {
 			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
@@ -49,27 +54,19 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		/**
-		 * If there's no orderby params in the inputArgs, set order based on the first/last argument
-		 */
+		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
 		if ( empty( $query_args['order'] ) ) {
 			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
 		}
 
-		/**
-		 * Set the graphql_cursor_offset
-		 */
+		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
-		/**
-		 * Pass the graphql $this->args.
-		 */
+		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		/**
-		 * Setting the user ID whose blogs user can post to.
-		 */
+		// Setting the user ID whose blogs user can post to.
 		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
 			$query_args['user_id'] = $this->source->userId;
 		}
@@ -104,11 +101,11 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns an array of blogs.
+	 * Returns an array of blog IDs.
 	 *
 	 * @return array
 	 */
-	public function get_items(): array {
+	public function get_ids(): array {
 		return wp_list_pluck( $this->query['blogs'], 'blog_id' );
 	}
 
@@ -148,9 +145,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			'type'    => 'type',
 		];
 
-		/**
-		 * Map and sanitize the input args to the bp_blogs_get_blogs compatible args.
-		 */
+		// Map and sanitize the input args to the bp_blogs_get_blogs compatible args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
 		/**

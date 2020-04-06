@@ -11,6 +11,9 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 	public $admin;
 	public $bp_factory;
 	public $bp;
+	public $name;
+	public $field_name;
+	public $desc;
 
 	public function setUp() {
 		parent::setUp();
@@ -21,6 +24,10 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 			'role'       => 'administrator',
 			'user_email' => 'admin@example.com',
 		] );
+
+		$this->name       = 'XProfile Group Name';
+		$this->field_name = 'XProfile Field name';
+		$this->desc       = 'XProfile Group Desc';
 	}
 
 	public function tearDown() {
@@ -28,20 +35,16 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_xprofile_group_by_query() {
-		$name       = 'XProfile Group Name';
-		$field_name = 'XProfile Field name';
-		$desc       = 'XProfile Group Desc';
-
 		$u1 = $this->bp_factory->xprofile_group->create(
 			[
-				'name'        => $name,
-				'description' => $desc,
+				'name'        => $this->name,
+				'description' => $this->desc,
 			]
 		);
 
 		$field_id = $this->bp_factory->xprofile_field->create(
 			[
-				'name'           => $field_name,
+				'name'           => $this->field_name,
 				'field_group_id' => $u1
 			]
 		);
@@ -77,12 +80,12 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 						'groupId'     => $u1,
 						'groupOrder'  => 0,
 						'canDelete'   => true,
-						'name'        => $name,
-						'description' => $desc,
+						'name'        => $this->name,
+						'description' => $this->desc,
 						'fields' => [
 							'nodes' => [
 								0 => [
-									'name' => $field_name,
+									'name' => $this->field_name,
 									'fieldId' => $field_id,
 									'value' => null,
 								]
@@ -96,29 +99,37 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_xprofile_group_by_invalid_id() {
-		$query = '
+		$global_id = 1111;
+		$query = "
 			query {
-				xprofileGroupBy(groupId: {1111}) {
-					id,
-					groupId
-					groupOrder
-					canDelete
-					name
-					description
-					fields {
-						nodes {
-							name
-							fieldId
-							value
-						}
-					}
+				xprofileGroupBy(id: \"{$global_id}\") {
+					id
 				}
 			}
-		';
+		";
 
-		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
+		$response = do_graphql_request( $query );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'The "id" is invalid.', $response['errors'][0]['message'] );
+
+		$query = "
+			query {
+				xprofileGroupBy(groupId: 111) {
+					id
+				}
+			}
+		";
+
+		$response = do_graphql_request( $query );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'Internal server error', $response['errors'][0]['message'] );
 	}
 
+	/**
+	 * @todo
+	 */
 	protected function xprofileGroupsQuery( $variables ) {
 		$query = 'query xprofileGroupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToXProfileGroupConnectionWhereArgs) {
 			xprofileGroups( first:$first last:$last after:$after before:$before where:$where ) {

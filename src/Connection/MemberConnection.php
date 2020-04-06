@@ -11,7 +11,6 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Data\DataSource;
 
 /**
  * Class MemberConnection.
@@ -29,9 +28,6 @@ class MemberConnection {
 				'fromFieldName'      => 'members',
 				'connectionTypeName' => 'RootQueryToMembersConnection',
 				'connectionArgs'     => self::get_connection_args(),
-				'resolveNode'        => function ( $id, array $args, AppContext $context ) {
-					return DataSource::resolve_user( $id, $context );
-				},
 				'resolve'            => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_members_connection( $source, $args, $context, $info );
 				},

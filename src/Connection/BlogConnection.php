@@ -44,9 +44,6 @@ class BlogConnection {
 						'description' => __( 'Ensure result set includes Blogs with specific IDs.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolveNode' => function ( $id ) {
-					return Factory::resolve_blog_object( $id );
-				},
 				'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_blogs_connection( $source, $args, $context, $info );
 				},

@@ -150,7 +150,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		if ( function_exists( 'wp_initialize_site' ) ) {
 			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
-		
+
 		$this->bp->set_current_user( $this->admin );
 
 		$u1 = $this->factory->blog->create();
@@ -170,7 +170,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'errors', $results );
 
 		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
-		
+
 		// Confirm total count.
 		$this->assertTrue( count( $blogs_ids ) === 2 );
 
@@ -191,7 +191,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		if ( function_exists( 'wp_initialize_site' ) ) {
 			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
-		
+
 		$this->bp->set_current_user( $this->admin );
 
 		$u1 = $this->factory->blog->create();
@@ -199,9 +199,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		$u3 = $this->factory->blog->create();
 		$u4 = $this->factory->blog->create();
 
-		/**
-		 * Here we're querying the blogs in our dataset.
-		 */
+		// Here we're querying the blogs in our dataset.
 		$results = $this->blogsQuery(
 			[
 				'first' => 2,
@@ -222,7 +220,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		// Confirm pagination.
 		$this->assertTrue( $results['data']['blogs']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['blogs']['pageInfo']['hasPreviousPage'] );
-		
+
 		// Confirm total count.
 		$this->assertTrue( count( $blogs_ids ) === 2 );
 
