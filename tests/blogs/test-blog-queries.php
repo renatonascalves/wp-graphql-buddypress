@@ -28,10 +28,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 			$this->markTestSkipped();
 		}
 
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
-		}
-
 		$u = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u );
@@ -70,10 +66,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 	public function test_blog_query_with_another_logged_in_user() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$u1 = $this->bp_factory->user->create();
@@ -117,10 +109,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 			$this->markTestSkipped();
 		}
 
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
-		}
-
 		$this->bp->set_current_user( $this->admin );
 
 		$b1 = $this->factory->blog->create();
@@ -145,10 +133,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 	public function test_blogs_query_using_where_include() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$this->bp->set_current_user( $this->admin );
@@ -186,10 +170,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 	public function test_blogs_query_paginated() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$this->bp->set_current_user( $this->admin );

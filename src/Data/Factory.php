@@ -101,7 +101,7 @@ class Factory {
 		// Get the XPofile field object.
 		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
 
-		if ( empty( $xprofile_field_object ) || empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
+		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
 			throw new UserError(
 				sprintf(
 					// translators: XProfile Field ID.
@@ -112,16 +112,6 @@ class Factory {
 		}
 
 		return new XProfileField( $xprofile_field_object );
-
-		/*
-		$context->getLoader( 'xprofile_field_object' )->buffer( [ $xprofile_field_id ] );
-
-		return new Deferred(
-			function () use ( $xprofile_field_id, $context ) {
-				return $context->getLoader( 'xprofile_field_object' )->load( $xprofile_field_id );
-			}
-		);
-		*/
 	}
 
 	/**
