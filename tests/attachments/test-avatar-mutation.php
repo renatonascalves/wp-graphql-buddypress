@@ -411,10 +411,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 			$this->markTestSkipped();
 		}
 
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
-		}
-
 		$this->bp->set_current_user( $this->user );
 
 		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
@@ -437,10 +433,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	public function test_blog_avatar_upload_without_a_loggin_in_user() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
@@ -471,10 +463,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 	public function test_blog_avatar_upload_with_member_without_permissions() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
-		}
-
-		if ( function_exists( 'wp_initialize_site' ) ) {
-			$this->setExpectedDeprecated( 'wpmu_new_blog' );
 		}
 
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
