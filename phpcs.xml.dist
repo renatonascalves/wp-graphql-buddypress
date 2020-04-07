@@ -32,7 +32,7 @@
 	<!-- Add source codes in the report -->
 	<arg value="psn" />
 	<arg name="extensions" value="php"/>
-	<arg name="parallel" value="1"/>
+	<arg name="parallel" value="20"/>
 
 	<!-- Remove the class naming error temporarily -->
 	<rule ref="WordPress.Files.FileName">
@@ -45,15 +45,7 @@
 		<severity>0</severity>
 	</rule>
 
-	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
-		<severity>0</severity>
-	</rule>
-
 	<rule ref="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase">
-		<severity>0</severity>
-	</rule>
-
-	<rule ref="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar">
 		<severity>0</severity>
 	</rule>
 

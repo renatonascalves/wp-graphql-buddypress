@@ -36,9 +36,6 @@ class XProfileFieldConnection {
 						'description' => __( 'Ensure result set excludes specific fields IDs.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolveNode'    => function ( $field_id, array $args, AppContext $context ) {
-					return Factory::resolve_xprofile_field_object( $field_id, $context );
-				},
 				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_xprofile_fields_connection( $source, $args, $context, $info );
 				},

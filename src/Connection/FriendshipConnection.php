@@ -36,9 +36,6 @@ class FriendshipConnection {
 						'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolveNode' => function ( $id ) {
-					return Factory::resolve_friendship_object( $id );
-				},
 				'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_friendship_connection( $source, $args, $context, $info );
 				},

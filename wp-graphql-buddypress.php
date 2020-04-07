@@ -17,7 +17,7 @@
  * Domain Path:       /languages/
  * Requires PHP:      7.1
  * Requires WP:       4.8
- * Tested up to:      5.3.2
+ * Tested up to:      5.4
  * License:           GPLv3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */

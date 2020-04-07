@@ -20,6 +20,15 @@ use WPGraphQL\Extensions\BuddyPress\Model\Group;
 class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
+	 * Return the name of the loader to be used with the connection resolver.
+	 *
+	 * @return string
+	 */
+	public function get_loader_name(): string {
+		return 'group_object';
+	}
+
+	/**
 	 * Get query args.
 	 *
 	 * @return array
@@ -36,14 +45,10 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			'type'        => 'active',
 		];
 
-		/**
-		 * Prepare for later use.
-		 */
+		// Prepare for later use.
 		$last = $this->args['last'] ?? null;
 
-		/**
-		 * Collect the input_fields.
-		 */
+		// Collect the input_fields.
 		$input_fields = [];
 		if ( ! empty( $this->args['where'] ) ) {
 			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
@@ -53,9 +58,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		/**
-		 * If there's no orderby params in the inputArgs, set order based on the first/last argument
-		 */
+		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
 		if ( empty( $query_args['order'] ) ) {
 			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
 		}
@@ -69,20 +72,14 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args['parent_id'] = null;
 		}
 
-		/**
-		 * Set the graphql_cursor_offset
-		 */
+		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
-		/**
-		 * Pass the graphql $this->args.
-		 */
+		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		/**
-		 * Setting parent group.
-		 */
+		// Setting parent group.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
 			$query_args['parent_id'] = $this->source->groupId;
 		}
@@ -117,11 +114,11 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns an array of groups.
+	 * Return an array of group ids from the query.
 	 *
 	 * @return array
 	 */
-	public function get_items(): array {
+	public function get_ids(): array {
 		return $this->query['groups'];
 	}
 

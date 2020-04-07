@@ -46,24 +46,22 @@ class XProfileGroupConnection {
 	 * @return array
 	 */
 	public static function get_connection_config( $args = [] ): array {
-		$defaults = [
-			'fromType'       => 'RootQuery',
-			'toType'         => 'XProfileGroup',
-			'fromFieldName'  => 'xprofileGroups',
-			'connectionArgs' => self::get_connection_args(),
-			'resolveNode'    => function ( $group_id, array $args, AppContext $context ) {
-				return Factory::resolve_xprofile_group_object( $group_id, $context );
-			},
-			'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-				if ( $source instanceof User ) {
-					$context->config['userId'] = $source->userId;
-				}
+		return array_merge(
+			[
+				'fromType'       => 'RootQuery',
+				'toType'         => 'XProfileGroup',
+				'fromFieldName'  => 'xprofileGroups',
+				'connectionArgs' => self::get_connection_args(),
+				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+					if ( $source instanceof User ) {
+						$context->config['userId'] = $source->userId;
+					}
 
-				return Factory::resolve_xprofile_groups_connection( $source, $args, $context, $info );
-			},
-		];
-
-		return array_merge( $defaults, $args );
+					return Factory::resolve_xprofile_groups_connection( $source, $args, $context, $info );
+				},
+			],
+			$args
+		);
 	}
 
 	/**

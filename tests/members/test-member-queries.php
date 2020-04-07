@@ -82,6 +82,15 @@ class Test_Members_Queries extends WP_UnitTestCase {
 
 		// Make sure the query didn't return any errors
 		$this->assertArrayNotHasKey( 'errors', $results );
+
+		$ids = wp_list_pluck(
+			$results['data']['members']['nodes'],
+			'userId'
+		);
+
+		// Check our four members.
+		$this->assertTrue( count( $ids ) === 4 );
+		$this->assertTrue( in_array( $u1, $ids, true ) );
 	}
 
 	public function test_members_query_paginated() {

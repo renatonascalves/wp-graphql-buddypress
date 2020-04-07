@@ -24,17 +24,17 @@ env:
 matrix:
   include:
     - php: 7.4
-      env: WP_VERSION=master
+      env: WP_VERSION=master PHPCS=1
     - php: 7.3
       env: WP_VERSION=master PHPCS=1
     - php: 7.3
-      env: WP_VERSION=5.1
+      env: WP_VERSION=5.4
     - php: 7.3
       env: WP_VERSION=5.0
     - php: 7.2
       env: WP_VERSION=master
     - php: 7.2
-      env: WP_VERSION=5.1
+      env: WP_VERSION=5.4
     - php: 7.2
       env: WP_VERSION=5.0
     - php: 7.2
@@ -44,7 +44,7 @@ matrix:
     - php: 7.1
       env: WP_VERSION=master
     - php: 7.1
-      env: WP_VERSION=5.1
+      env: WP_VERSION=5.4
     - php: 7.1
       env: WP_VERSION=5.0
     - php: 7.1
@@ -72,10 +72,6 @@ before_script:
   # Install PHP CodeSniffer and WPCS.
   - |
     if [[ "$PHPCS" == "1" ]]; then
-      composer require squizlabs/php_codesniffer
-      composer require phpcompatibility/phpcompatibility-wp
-      composer require wp-coding-standards/wpcs
-      composer dealerdirect/phpcodesniffer-composer-installer
       composer install
 
       phpenv rehash

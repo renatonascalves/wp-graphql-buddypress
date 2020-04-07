@@ -11,6 +11,8 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 	public $admin;
 	public $bp_factory;
 	public $bp;
+	public $xprofile_group_id;
+	public $xprofile_field_id;
 
 	public function setUp() {
 		parent::setUp();
@@ -21,6 +23,9 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 			'role'       => 'administrator',
 			'user_email' => 'admin@example.com',
 		] );
+
+		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create();
+		$this->xprofile_field_id  = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
 	}
 
 	public function tearDown() {
@@ -28,26 +33,23 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_xprofile_field_by_query() {
-		$u1       = $this->bp_factory->xprofile_group->create();
-		$field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $u1 ] );
-
-		// Create the query string to pass to the $query.
 		$query = "
-		query {
-			xprofileFieldBy(fieldId: {$field_id}) {
-				value
-				fieldId
-				groupId
-				parent {
-					name
+			query {
+				xprofileFieldBy(fieldId: {$this->xprofile_field_id}) {
+					value
+					fieldId
+					groupId
+					parent {
+						name
+					}
+					type
+					canDelete
+					isRequired
+					isDefaultOption
+					visibilityLevel
 				}
-				type
-				canDelete
-				isRequired
-				isDefaultOption
-    			visibilityLevel
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -55,8 +57,8 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 				'data' => [
 					'xprofileFieldBy' => [
 						'value'           => null,
-						'fieldId'         => $field_id,
-						'groupId'         => $u1,
+						'fieldId'         => $this->xprofile_field_id,
+						'groupId'         => $this->xprofile_group_id,
 						'parent'          => null,
 						'canDelete'       => true,
 						'type'            => 'TEXTBOX',
@@ -72,22 +74,44 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 
 	public function test_xprofile_field_by_invalid_id() {
 		$query = "
-		query {
-			xprofileFieldBy(fieldId: {111}) {
-				value
-				fieldId
-				groupId
-				parent {
-					name
+			query {
+				xprofileFieldBy(fieldId: 111) {
+					fieldId
 				}
-				type
-				canDelete
-				isRequired
-				isDefaultOption
-    			visibilityLevel
 			}
-		}";
+		";
 
-		$this->assertArrayHasKey( 'errors', do_graphql_request( $query ) );
+		$response = do_graphql_request( $query  );
+
+		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertSame( 'No XProfile field was found with ID: 111', $response['errors'][0]['message'] );
+	}
+
+	/**
+	 * @todo
+	 */
+	protected function xprofileFieldsQuery( $variables ) {
+		$query = 'query xprofileFieldsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToXProfileFieldsConnectionWhereArgs) {
+			xprofileFields( first:$first last:$last after:$after before:$before where:$where ) {
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					startCursor
+					endCursor
+				}
+				edges {
+					cursor
+					node {
+						id
+						name
+					}
+				}
+				nodes {
+				  id
+				}
+			}
+		}';
+
+		return do_graphql_request( $query, 'xprofileFieldsQuery', $variables );
 	}
 }

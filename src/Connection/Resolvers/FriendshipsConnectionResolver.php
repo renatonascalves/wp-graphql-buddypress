@@ -21,6 +21,15 @@ use WPGraphQL\Model\User;
 class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
+	 * Return the name of the loader to be used with the connection resolver.
+	 *
+	 * @return string
+	 */
+	public function get_loader_name(): string {
+		return 'friend_object';
+	}
+
+	/**
 	 * Get query args.
 	 *
 	 * @return array
@@ -95,8 +104,14 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items(): array {
-		return array_map( 'absint', wp_list_pluck( $this->query, 'id' ) );
+	public function get_ids(): array {
+		return array_map(
+			'absint',
+			wp_list_pluck(
+				$this->query,
+				'id'
+			)
+		);
 	}
 
 	/**
@@ -142,9 +157,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 			'isConfirmed' => 'is_confirmed',
 		];
 
-		/**
-		 * Map and sanitize the input args to the BP_Friends_Friendship::get_friendships compatible args.
-		 */
+		// Map and sanitize the input args to the BP_Friends_Friendship::get_friendships compatible args.
 		$query_args = Utils::map_input( $args, $arg_mapping );
 
 		/**

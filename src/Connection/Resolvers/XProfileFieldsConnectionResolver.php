@@ -20,6 +20,15 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
+	 * Return the name of the loader to be used with the connection resolver.
+	 *
+	 * @return string
+	 */
+	public function get_loader_name(): string {
+		return 'xprofile_field_object';
+	}
+
+	/**
 	 * Get query args.
 	 *
 	 * @return array
@@ -30,14 +39,10 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 			'fetch_fields'     => true,
 		];
 
-		/**
-		 * Prepare for later use.
-		 */
+		// Prepare for later use.
 		$last = $this->args['last'] ?? null;
 
-		/**
-		 * Collect the input_fields.
-		 */
+		// Collect the input_fields.
 		$input_fields = [];
 		if ( ! empty( $this->args['where'] ) ) {
 			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
@@ -47,20 +52,14 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		/**
-		 * Set the graphql_cursor_offset
-		 */
+		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
-		/**
-		 * Pass the graphql $this->args.
-		 */
+		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		/**
-		 * Setting profile group ID.
-		 */
+		// Setting profile group ID.
 		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
 			$query_args['profile_group_id'] = $this->source->groupId;
 		}
@@ -99,7 +98,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 *
 	 * @return array
 	 */
-	public function get_items(): array {
+	public function get_ids(): array {
 		$ids = [];
 		foreach ( $this->query as $group ) {
 			foreach ( $group->fields as $field ) {

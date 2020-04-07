@@ -182,19 +182,16 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	public function test_first_group_in_a_group_connection_query() {
 
 		$this->create_group_object();
+		$this->create_group_object();
 
-		/**
-		 * Here we're querying the first group in our dataset.
-		 */
+		// Here we're querying the first group in our dataset.
 		$results = $this->groupsQuery(
 			[
 				'first' => 1,
 			]
 		);
 
-		/**
-		 * Let's query the first group in our data set so we can test against it.
-		 */
+		// Let's query the first group in our data set so we can test against it.
 		$first_group = groups_get_groups(
 			[
 				'per_page' => 1,
@@ -204,7 +201,11 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$first_group_id   = $first_group['groups'][0]->id;
 		$expected_cursor = \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $first_group_id );
 
+		// Make sure the query didn't return any errors
+		$this->assertArrayNotHasKey( 'errors', $results );
+
 		$this->assertNotEmpty( $results );
+
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
 		$this->assertEquals( $first_group_id, $results['data']['groups']['edges'][0]['node']['groupId'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );
@@ -219,18 +220,14 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->create_group_object();
 		$this->create_group_object();
 
-		/**
-		 * Here we're trying to query the last post in our dataset
-		 */
+		// Here we're trying to query the last post in our dataset.
 		$results = $this->groupsQuery(
 			[
 				'last' => 1
 			]
 		);
 
-		/**
-		 * Let's query the last group in our data set so we can test against it.
-		 */
+		// Let's query the last group in our data set so we can test against it.
 		$last_group = groups_get_groups(
 			[
 				'per_page' => 1,
@@ -241,7 +238,11 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$last_group_id   = $last_group['groups'][0]->id;
 		$expected_cursor = \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $last_group_id );
 
+		// Make sure the query didn't return any errors
+		$this->assertArrayNotHasKey( 'errors', $results );
+
 		$this->assertNotEmpty( $results );
+
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['startCursor'] );
@@ -316,31 +317,33 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertEquals( $private_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
 	}
 
-	public function test_private_group_without_access() {
-		$u = $this->factory->user->create();
-		$this->bp->set_current_user( $u );
-
+	public function test_getting_private_group_without_access() {
 		$private_group_id = $this->create_group_object(
 			[
 				'status' => 'private'
 			]
 		);
 
-		// Returns an error as the user has no access to the private group.
-		$this->assertArrayHasKey(
-			'errors',
-			$this->groupsQuery(
-				[
-					'where' => [
-						'include' => [ $private_group_id ],
-						'status'  => [ 'PRIVATE']
-					]
+		$u = $this->factory->user->create();
+		$this->bp->set_current_user( $u );
+
+		$results = $this->groupsQuery(
+			[
+				'where' => [
+					'include' => [ $private_group_id ],
+					'status'  => [ 'PRIVATE']
 				]
-			)
+			]
 		);
+
+		// Make sure the query didn't return any errors
+		$this->assertArrayNotHasKey( 'errors', $results );
+
+		// Returns nothing.
+		$this->assertTrue( empty( $results['data']['groups']['edges'] ) );
 	}
 
-	public function test_hidden_group_without_access() {
+	public function test_getting_hidden_group_without_access() {
 		$u = $this->factory->user->create();
 		$this->bp->set_current_user( $u );
 
@@ -350,18 +353,20 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 			]
 		);
 
-		// Returns an error as the user has no access to the private group.
-		$this->assertArrayHasKey(
-			'errors',
-			$this->groupsQuery(
-				[
-					'where' => [
-						'include' => [ $hidden_group_id ],
-						'status'  => [ 'HIDDEN']
-					]
+		$results = $this->groupsQuery(
+			[
+				'where' => [
+					'include' => [ $hidden_group_id ],
+					'status'  => [ 'HIDDEN']
 				]
-			)
+			]
 		);
+
+		// Make sure the query didn't return any errors
+		$this->assertArrayNotHasKey( 'errors', $results );
+
+		// Returns nothing.
+		$this->assertTrue( empty( $results['data']['groups']['edges'] ) );
 	}
 
 	public function test_groups_query_with_hidden_groups() {
@@ -391,7 +396,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertEquals( $hidden_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
 	}
 
-	protected function groupsQuery( $variables ) {
+	protected function groupsQuery( $variables = [] ) {
 		$query = 'query groupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToGroupConnectionWhereArgs) {
 			groups( first:$first last:$last after:$after before:$before where:$where ) {
 				pageInfo {
@@ -472,17 +477,16 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	}
 
 	protected function create_group_object( $args = [] ) {
-		$args = array_merge(
-			[
-				'slug'         => 'group-test',
-				'name'         => 'Group Test',
-				'description'  => 'Group Description',
-				'creator_id'   => $this->admin,
-			],
-			$args
+		return $this->bp_factory->group->create(
+			array_merge(
+				[
+					'slug'         => 'group-test',
+					'name'         => 'Group Test',
+					'description'  => 'Group Description',
+					'creator_id'   => $this->admin,
+				],
+				$args
+			)
 		);
-
-		// Create group.
-		return $this->bp_factory->group->create( $args );
 	}
 }
