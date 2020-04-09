@@ -78,6 +78,7 @@ class TypeRegistry {
 			// Object(s).
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType::register();
 			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType::register();
+			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType::register();
 
 			// Connections.
 			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection::register_connections();

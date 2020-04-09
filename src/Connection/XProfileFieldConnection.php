@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
@@ -21,6 +22,18 @@ class XProfileFieldConnection {
 	 * Register connection from RootQuery to XProfile Groups.
 	 */
 	public static function register_connections() {
+
+		register_graphql_connection(
+			[
+				'fromType'      => 'XProfileField',
+				'toType'        => 'XProfileField',
+				'fromFieldName' => 'options',
+				'resolve'       => function ( $source, array $args, AppContext $context ) {
+					return XProfileFieldOptionsConnectionResolver::resolve( $source, $args, $context );
+				},
+			]
+		);
+
 		register_graphql_connection(
 			[
 				'fromType'       => 'XProfileGroup',
@@ -31,7 +44,7 @@ class XProfileFieldConnection {
 						'type'        => 'Boolean',
 						'description' => __( 'Whether to hide XProfile fields where the user has no provided data.', 'wp-graphql-buddypress' ),
 					],
-					'excludeFields' => [
+					'excludeFields'   => [
 						'type'        => [ 'list_of' => 'Int' ],
 						'description' => __( 'Ensure result set excludes specific fields IDs.', 'wp-graphql-buddypress' ),
 					],
