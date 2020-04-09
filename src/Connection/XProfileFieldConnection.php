@@ -10,7 +10,6 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
