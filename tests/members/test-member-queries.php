@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Members_Queries Class.
+ * Test_Member_Queries Class.
  *
  * @group members
  */
-class Test_Members_Queries extends WP_UnitTestCase {
+class Test_Member_Queries extends WP_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -14,9 +14,9 @@ class Test_Members_Queries extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->bp_factory = new BP_UnitTest_Factory();
-		$this->bp         = new BP_UnitTestCase();
-		$this->admin      = $this->factory->user->create( [
+		$this->bp_factory         = new BP_UnitTest_Factory();
+		$this->bp                 = new BP_UnitTestCase();
+		$this->admin              = $this->factory->user->create( [
 			'role'       => 'administrator',
             'user_email' => 'admin@example.com',
             'user_login' => 'user',
