@@ -22,12 +22,14 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectio
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use stdClass;
-use BP_XProfile_Field;
 use BP_Friends_Friendship;
+use BP_XProfile_ProfileData;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 
 /**
  * Class Factory.
@@ -99,6 +101,20 @@ class Factory {
 		$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $id ), $user_id );
 
 		return new XProfileField( $xprofile_field_object );
+	}
+
+	/**
+	 * Returns a XProfile Field Value object.
+	 *
+	 * @param XProfileField $xprofile_field XProfile field value or null.
+	 * @return XProfileFieldValue|null
+	 */
+	public static function resolve_xprofile_field_data_object( $xprofile_field ): ?XProfileFieldValue {
+		if ( empty( $xprofile_field ) ) {
+			return null;
+		}
+
+		return new XProfileFieldValue( $xprofile_field );
 	}
 
 	/**
@@ -273,6 +289,19 @@ class Factory {
 	 */
 	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the XProfileFieldOptionsConnectionResolver class.
+	 *
+	 * @param XProfileField $source  Source.
+	 * @param array         $args    Query args to pass to the connection resolver.
+	 * @param AppContext    $context The context of the query to pass along.
+	 *
+	 * @return array|null
+	 */
+	public static function resolve_xprofile_field_options_connection( XProfileField $source, array $args, AppContext $context ): ?array {
+		return XProfileFieldOptionsConnectionResolver::resolve( $source, $args, $context );
 	}
 
 	/**

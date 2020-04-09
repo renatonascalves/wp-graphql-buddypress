@@ -97,9 +97,7 @@ class XProfileFieldType {
 						'description' => __( 'Is autolink enabled for this profile field.', 'wp-graphql-buddypress' ),
 					],
 					'memberTypes'             => [
-						'type'        => [
-							'list_of' => 'MemberTypesEnum',
-						],
+						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 						'description' => __( 'Member types to which this field should be available.', 'wp-graphql-buddypress' ),
 					],
 					'description'      => [
@@ -123,34 +121,11 @@ class XProfileFieldType {
 							return apply_filters( 'bp_get_the_profile_field_description', stripslashes( $field->description ) );
 						},
 					],
-					'value'      => [
-						'type'        => 'String',
+					'value'           => [
+						'type'        => 'XProfileFieldValue',
 						'description' => __( 'The value of the XProfile field.', 'wp-graphql-buddypress' ),
-						'args'        => [
-							'format' => [
-								'type'        => 'XProfileFieldValueFormatEnum',
-								'description' => __( 'Format of the field value output', 'wp-graphql-buddypress' ),
-							],
-						],
-						'resolve'     => function( XProfileField $field, array $args ) {
-							if ( empty( $field->value ) ) {
-								return null;
-							}
-
-							if ( isset( $args['format'] ) && 'raw' === $args['format'] ) {
-								return $field->value;
-							}
-
-							/**
-							 * This is not working correctly, mainly because the type of the field is a String.
-							 *
-							 * @todo Fix serialized output.
-							 */
-							if ( isset( $args['format'] ) && 'unserialized' === $args['format'] ) {
-								return self::get_profile_field_unserialized_value( $field->value );
-							}
-
-							return self::get_profile_field_rendered_value( $field->value, $field->fieldId );
+						'resolve'     => function( XProfileField $field ) {
+							return Factory::resolve_xprofile_field_data_object( $field );
 						},
 					],
 				],
@@ -206,66 +181,5 @@ class XProfileFieldType {
 				},
 			]
 		);
-	}
-
-	/**
-	 * Retrieve the unserialized value of a profile field.
-	 *
-	 * @param string $value The raw value of the field.
-	 * @return array
-	 */
-	protected static function get_profile_field_unserialized_value( $value = '' ): array {
-		if ( empty( $value ) ) {
-			return [];
-		}
-
-		$unserialized_value = maybe_unserialize( $value );
-		if ( ! is_array( $unserialized_value ) ) {
-			$unserialized_value = (array) $unserialized_value;
-		}
-
-		return $unserialized_value;
-	}
-
-	/**
-	 * Retrieve the rendered value of a profile field.
-	 *
-	 * @param string   $value         The raw value of the field.
-	 * @param int|null $profile_field The ID of the object for the field.
-	 * @return string
-	 */
-	protected static function get_profile_field_rendered_value( $value = '', $profile_field = null ): string {
-		if ( ! $value ) {
-			return '';
-		}
-
-		$profile_field = xprofile_get_field( $profile_field );
-
-		if ( ! isset( $profile_field->id ) ) {
-			return '';
-		}
-
-		// Unserialize the BuddyPress way.
-		$value = bp_unserialize_profile_field( $value );
-
-		global $field;
-		$reset_global = $field;
-
-		// Set the $field global as the `xprofile_filter_link_profile_data` filter needs it.
-		$field = $profile_field;
-
-		/**
-		 * Apply filters to sanitize XProfile field value.
-		 *
-		 * @param string $value Value for the profile field.
-		 * @param string $type  Type for the profile field.
-		 * @param int    $id    ID for the profile field.
-		 */
-		$value = apply_filters( 'bp_get_the_profile_field_value', $value, $field->type, $field->id );
-
-		// Reset the global before returning the value.
-		$field = $reset_global;
-
-		return $value;
 	}
 }

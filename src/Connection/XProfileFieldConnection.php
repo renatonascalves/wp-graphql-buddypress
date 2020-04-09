@@ -21,6 +21,20 @@ class XProfileFieldConnection {
 	 * Register connection from RootQuery to XProfile Groups.
 	 */
 	public static function register_connections() {
+
+		// Connection for the XProfile Field options.
+		register_graphql_connection(
+			[
+				'fromType'      => 'XProfileField',
+				'toType'        => 'XProfileField',
+				'fromFieldName' => 'options',
+				'resolve'       => function ( $source, array $args, AppContext $context ) {
+					return Factory::resolve_xprofile_field_options_connection( $source, $args, $context );
+				},
+			]
+		);
+
+		// Connection for the XProfile group fields.
 		register_graphql_connection(
 			[
 				'fromType'       => 'XProfileGroup',
@@ -31,7 +45,7 @@ class XProfileFieldConnection {
 						'type'        => 'Boolean',
 						'description' => __( 'Whether to hide XProfile fields where the user has no provided data.', 'wp-graphql-buddypress' ),
 					],
-					'excludeFields' => [
+					'excludeFields'   => [
 						'type'        => [ 'list_of' => 'Int' ],
 						'description' => __( 'Ensure result set excludes specific fields IDs.', 'wp-graphql-buddypress' ),
 					],

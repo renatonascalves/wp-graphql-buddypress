@@ -60,7 +60,6 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 						nodes {
 							name
 							fieldId
-							value
 						}
 					}
 				}
@@ -83,7 +82,6 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 								0 => [
 									'name' => $this->field_name,
 									'fieldId' => $field_id,
-									'value' => null,
 								]
 							]
 						],
