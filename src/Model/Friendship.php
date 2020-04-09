@@ -15,13 +15,6 @@ use BP_Friends_Friendship;
 
 /**
  * Class Friendship - Models the data for the Friendship object type.
- *
- * @property string $id
- * @property string $friendshipId
- * @property string $initiator
- * @property string $friend
- * @property string $isConfirmed
- * @property string $dateCreated
  */
 class Friendship extends Model {
 
@@ -35,7 +28,7 @@ class Friendship extends Model {
 	/**
 	 * Friendship constructor.
 	 *
-	 * @param BP_Friends_Friendship $friendship The incoming friendship object that needs modeling.
+	 * @param BP_Friends_Friendship $friendship The BP_Friends_Friendship object.
 	 */
 	public function __construct( BP_Friends_Friendship $friendship ) {
 		$this->data = $friendship;

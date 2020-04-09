@@ -148,18 +148,17 @@ class TypeRegistry {
 	 *
 	 * @param array      $loaders Autoloaders.
 	 * @param AppContext $context Context.
-	 *
 	 * @return array
 	 */
 	public static function graphql_register_autoloaders( array $loaders, AppContext $context ): array {
 		return array_merge(
 			$loaders,
 			[
-				'group_object'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
-				'xprofile_group_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
-				'xprofile_field_object' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
-				'friend_object'         => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader( $context ),
-				'blog_object'           => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader( $context ),
+				'bp_group'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
+				'bp_xprofile_group' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
+				'bp_xprofile_field' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
+				'bp_friend'         => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader( $context ),
+				'bp_blog'           => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader( $context ),
 			]
 		);
 	}

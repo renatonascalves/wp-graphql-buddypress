@@ -31,10 +31,6 @@ class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	/**
 	 * @group member-cover
 	 */

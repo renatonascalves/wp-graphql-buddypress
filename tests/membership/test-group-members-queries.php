@@ -22,12 +22,7 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 		] );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_group_by_query() {
-
 		$group_id = $this->create_group_object();
 
 		$u1 = $this->factory->user->create();

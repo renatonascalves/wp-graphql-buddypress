@@ -58,7 +58,7 @@ class FriendshipDelete {
 	public static function get_output_fields(): array {
 		return [
 			'deleted' => [
-				'type' => 'Boolean',
+				'type'        => 'Boolean',
 				'description' => __( 'The status of the friendship deletion.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
 					return (bool) $payload['deleted'];
@@ -81,11 +81,6 @@ class FriendshipDelete {
 	 */
 	public static function mutate_and_get_payload() {
 		return function ( $input ) {
-
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
 
 			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
 			$friend_id    = get_user_by( 'id', $input['friendId'] );

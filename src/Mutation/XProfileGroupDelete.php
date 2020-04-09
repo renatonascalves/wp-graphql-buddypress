@@ -84,11 +84,6 @@ class XProfileGroupDelete {
 			// Get the XProfile group object.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
 
-			// Confirm if XProfile group exists.
-			if ( empty( $xprofile_group_object->id ) || ! is_object( $xprofile_group_object ) ) {
-				throw new UserError( __( 'This XProfile group does not exist.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Stop now if a user isn't allowed to delete a XProfile group.
 			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );

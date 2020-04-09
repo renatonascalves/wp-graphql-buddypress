@@ -67,10 +67,6 @@ class BlogObjectLoader extends AbstractDataLoader {
 				);
 			}
 
-			/**
-			 * Return the instance through the Model Layer to ensure we only return
-			 * values the consumer has access to.
-			 */
 			$loaded_blogs[ $key ] = new Blog( $blog_object );
 		}
 

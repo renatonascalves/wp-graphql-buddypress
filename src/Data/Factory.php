@@ -39,7 +39,6 @@ class Factory {
 	 *
 	 * @param int        $id      Group ID.
 	 * @param AppContext $context AppContext object.
-	 *
 	 * @return Deferred|null
 	 */
 	public static function resolve_group_object( $id, AppContext $context ): ?Deferred {
@@ -48,11 +47,11 @@ class Factory {
 		}
 
 		$group_id = absint( $id );
-		$context->getLoader( 'group_object' )->buffer( [ $group_id ] );
+		$context->getLoader( 'bp_group' )->buffer( [ $group_id ] );
 
 		return new Deferred(
 			function () use ( $group_id, $context ) {
-				return $context->getLoader( 'group_object' )->load( $group_id );
+				return $context->getLoader( 'bp_group' )->load( $group_id );
 			}
 		);
 	}
@@ -62,7 +61,6 @@ class Factory {
 	 *
 	 * @param int        $id      XProfile group ID.
 	 * @param AppContext $context AppContext object.
-	 *
 	 * @return Deferred|null
 	 */
 	public static function resolve_xprofile_group_object( $id, AppContext $context ): ?Deferred {
@@ -71,11 +69,11 @@ class Factory {
 		}
 
 		$xprofile_group_id = absint( $id );
-		$context->getLoader( 'xprofile_group_object' )->buffer( [ $xprofile_group_id ] );
+		$context->getLoader( 'bp_xprofile_group' )->buffer( [ $xprofile_group_id ] );
 
 		return new Deferred(
 			function () use ( $xprofile_group_id, $context ) {
-				return $context->getLoader( 'xprofile_group_object' )->load( $xprofile_group_id );
+				return $context->getLoader( 'bp_xprofile_group' )->load( $xprofile_group_id );
 			}
 		);
 	}
@@ -87,7 +85,6 @@ class Factory {
 	 *
 	 * @param int|null   $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
-	 *
 	 * @return XProfileField|null
 	 */
 	public static function resolve_xprofile_field_object( $id, AppContext $context ): ?XProfileField {
@@ -99,17 +96,7 @@ class Factory {
 		$user_id = $context->config['userId'] ?? null;
 
 		// Get the XPofile field object.
-		$xprofile_field_object = xprofile_get_field( absint( $id ), $user_id );
-
-		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
-			throw new UserError(
-				sprintf(
-					// translators: XProfile Field ID.
-					__( 'No XProfile field was found with ID: %d', 'wp-graphql-buddypress' ),
-					absint( $id )
-				)
-			);
-		}
+		$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $id ), $user_id );
 
 		return new XProfileField( $xprofile_field_object );
 	}

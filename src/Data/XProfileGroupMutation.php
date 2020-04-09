@@ -19,7 +19,7 @@ class XProfileGroupMutation {
 	/**
 	 * Get XProfile group ID helper.
 	 *
-	 * @throws UserError User error for invalid Relay ID.
+	 * @throws UserError User error for invalid XProfile group.
 	 *
 	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile group.
 	 * @return object
@@ -41,7 +41,15 @@ class XProfileGroupMutation {
 			$xprofile_group_id = absint( $input );
 		}
 
-		return current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );
+		// Get group object.
+		$xprofile_group_object = current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );
+
+		// Confirm if it is a valid object.
+		if ( empty( $xprofile_group_object ) || ! is_object( $xprofile_group_object ) ) {
+			throw new UserError( __( 'This XProfile group does not exist.', 'wp-graphql-buddypress' ) );
+		}
+
+		return $xprofile_group_object;
 	}
 
 	/**

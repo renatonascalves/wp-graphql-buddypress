@@ -12,6 +12,7 @@ class Test_XProfile_Field_Delete_Mutation extends WP_UnitTestCase {
 	public $bp_factory;
 	public $bp;
 	public $xprofile_group_id;
+	public $xprofile_field_id;
 	public $client_mutation_id;
 
 	public function setUp() {
@@ -21,6 +22,7 @@ class Test_XProfile_Field_Delete_Mutation extends WP_UnitTestCase {
 		$this->bp_factory         = new BP_UnitTest_Factory();
 		$this->bp                 = new BP_UnitTestCase();
 		$this->xprofile_group_id  = $this->bp_factory->xprofile_group->create( [ 'name' => 'XProfile Group' ] );
+		$this->xprofile_field_id  = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
 		$this->admin              = $this->factory->user->create(
 			[
 				'role'       => 'administrator',
@@ -29,13 +31,7 @@ class Test_XProfile_Field_Delete_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_delete_xprofile_field() {
-        $field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
-
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertEquals(
@@ -45,12 +41,12 @@ class Test_XProfile_Field_Delete_Mutation extends WP_UnitTestCase {
 						'clientMutationId' => $this->client_mutation_id,
 						'deleted'          => true,
 						'field'            => [
-							'fieldId' => $field_id,
+							'fieldId' => $this->xprofile_field_id,
 						],
 					],
 				],
 			],
-			$this->delete_xprofile_field( $field_id )
+			$this->delete_xprofile_field( $this->xprofile_field_id )
 		);
 	}
 
@@ -64,20 +60,17 @@ class Test_XProfile_Field_Delete_Mutation extends WP_UnitTestCase {
 	}
 
 	public function test_delete_xprofile_field_user_not_logged_in() {
-        $field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
-		$response = $this->delete_xprofile_field( $field_id );
+		$response = $this->delete_xprofile_field( $this->xprofile_field_id );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
     }
 
     public function test_delete_xprofile_field_user_without_permission() {
-        $field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
-
 		$u1 = $this->factory->user->create( array( 'role' => 'subscriber' ) );
         $this->bp->set_current_user( $u1 );
 
-		$response = $this->delete_xprofile_field( $field_id );
+		$response = $this->delete_xprofile_field( $this->xprofile_field_id );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );

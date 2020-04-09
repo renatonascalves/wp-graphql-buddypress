@@ -62,10 +62,6 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 				);
 			}
 
-			/**
-			 * Return the instance through the Model Layer to ensure we only return
-			 * values the consumer has access to.
-			 */
 			$loaded_friends[ $key ] = new Friendship( $friendship );
 		}
 

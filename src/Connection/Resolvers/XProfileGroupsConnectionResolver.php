@@ -26,7 +26,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'xprofile_group_object';
+		return 'bp_xprofile_group';
 	}
 
 	/**

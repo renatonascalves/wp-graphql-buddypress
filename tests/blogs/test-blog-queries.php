@@ -19,10 +19,6 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		$this->admin      = $this->factory->user->create();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_blog_query_with_body_by() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();

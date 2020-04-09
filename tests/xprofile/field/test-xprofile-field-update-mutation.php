@@ -29,10 +29,6 @@ class Test_XProfile_Field_Update_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
     public function test_update_xprofile_field() {
         $field_id = $this->bp_factory->xprofile_field->create(
             [

@@ -30,10 +30,6 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 		$this->desc       = 'XProfile Group Desc';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_xprofile_group_by_query() {
 		$u1 = $this->bp_factory->xprofile_group->create(
 			[
@@ -49,7 +45,7 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 			]
 		);
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'xprofile_group_object', $u1 );
+		$global_id = \GraphQLRelay\Relay::toGlobalId( 'bp_xprofile_group', $u1 );
 
 		$query = "
 			query {

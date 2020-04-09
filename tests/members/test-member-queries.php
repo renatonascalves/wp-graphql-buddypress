@@ -23,10 +23,6 @@ class Test_Members_Queries extends WP_UnitTestCase {
 		] );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_member_query() {
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->admin );
 

@@ -20,17 +20,14 @@ class GroupMutation {
 	/**
 	 * Get group ID helper.
 	 *
-	 * @throws UserError User error for invalid Relay ID.
+	 * @throws UserError User error for invalid group.
 	 *
 	 * @param array $input Array of possible input fields.
 	 * @return BP_Groups_Group
 	 */
-	public static function get_group_from_input( $input ): ?BP_Groups_Group {
+	public static function get_group_from_input( $input ): BP_Groups_Group {
 		$group_id = 0;
 
-		/**
-		 * Trying to get the group ID.
-		 */
 		if ( ! empty( $input['id'] ) ) {
 			$id_components = Relay::fromGlobalId( $input['id'] );
 
@@ -43,9 +40,18 @@ class GroupMutation {
 			$group_id = groups_get_id( esc_html( $input['slug'] ) );
 		} elseif ( ! empty( $input['groupId'] ) ) {
 			$group_id = absint( $input['groupId'] );
+		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
+			$group_id = absint( $input );
 		}
 
-		return groups_get_group( absint( $group_id ) );
+		$group = groups_get_group( $group_id );
+
+		// Confirm if group exists.
+		if ( empty( $group->id ) || ! $group instanceof BP_Groups_Group ) {
+			throw new UserError( __( 'This group does not exist.', 'wp-graphql-buddypress' ) );
+		}
+
+		return $group;
 	}
 
 	/**

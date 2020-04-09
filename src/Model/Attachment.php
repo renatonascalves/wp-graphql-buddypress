@@ -12,9 +12,6 @@ use WPGraphQL\Model\Model;
 
 /**
  * Class Attachment - Models data.
- *
- * @property string $thumb
- * @property string $full
  */
 class Attachment extends Model {
 
@@ -44,7 +41,7 @@ class Attachment extends Model {
 				'thumb' => function() {
 					return $this->data->thumb ?? null;
 				},
-				'full' => function() {
+				'full'  => function() {
 					return $this->data->full ?? null;
 				},
 			];
