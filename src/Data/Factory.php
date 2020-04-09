@@ -29,6 +29,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use stdClass;
 use BP_Friends_Friendship;
 use BP_XProfile_ProfileData;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 
 /**
  * Class Factory.
@@ -288,6 +289,19 @@ class Factory {
 	 */
 	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new XProfileFieldsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the XProfileFieldOptionsConnectionResolver class.
+	 *
+	 * @param XProfileField $source  Source.
+	 * @param array         $args    Query args to pass to the connection resolver.
+	 * @param AppContext    $context The context of the query to pass along.
+	 *
+	 * @return array|null
+	 */
+	public static function resolve_xprofile_field_options_connection( XProfileField $source, array $args, AppContext $context ): ?array {
+		return XProfileFieldOptionsConnectionResolver::resolve( $source, $args, $context );
 	}
 
 	/**

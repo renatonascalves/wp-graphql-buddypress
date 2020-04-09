@@ -11,10 +11,22 @@ namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
+/**
+ * Class XProfileFieldOptionsConnectionResolver
+ */
 class XProfileFieldOptionsConnectionResolver {
 
-	public static function resolve( $source, array $args, AppContext $context ) {
+	/**
+	 * XProfile Field Options Resolver.
+	 *
+	 * @param XProfileField $source  Source.
+	 * @param array         $args    Query args to pass to the connection resolver.
+	 * @param AppContext    $context The context of the query to pass along.
+	 * @return array|null
+	 */
+	public static function resolve( XProfileField $source, array $args, AppContext $context ): ?array {
 
 		if ( ! method_exists( $source->options, 'get_children' ) ) {
 			return null;

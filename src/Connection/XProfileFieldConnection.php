@@ -23,17 +23,19 @@ class XProfileFieldConnection {
 	 */
 	public static function register_connections() {
 
+		// Connection for the XProfile Field options.
 		register_graphql_connection(
 			[
 				'fromType'      => 'XProfileField',
 				'toType'        => 'XProfileField',
 				'fromFieldName' => 'options',
 				'resolve'       => function ( $source, array $args, AppContext $context ) {
-					return XProfileFieldOptionsConnectionResolver::resolve( $source, $args, $context );
+					return Factory::resolve_xprofile_field_options_connection( $source, $args, $context );
 				},
 			]
 		);
 
+		// Connection for the XProfile group fields.
 		register_graphql_connection(
 			[
 				'fromType'       => 'XProfileGroup',
