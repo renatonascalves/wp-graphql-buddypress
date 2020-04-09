@@ -24,7 +24,7 @@ class XProfileGroupMutation {
 	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile group.
 	 * @return object
 	 */
-	public static function get_xprofile_group_from_input( $input ): object {
+	public static function get_xprofile_group_from_input( $input ) {
 		$xprofile_group_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
