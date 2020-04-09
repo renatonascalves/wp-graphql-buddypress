@@ -212,10 +212,9 @@ class XProfileFieldType {
 	 * Retrieve the unserialized value of a profile field.
 	 *
 	 * @param string $value The raw value of the field.
-	 *
 	 * @return array
 	 */
-	protected static function get_profile_field_unserialized_value( $value = '' ) {
+	protected static function get_profile_field_unserialized_value( $value = '' ): array {
 		if ( empty( $value ) ) {
 			return [];
 		}
@@ -233,10 +232,9 @@ class XProfileFieldType {
 	 *
 	 * @param string   $value         The raw value of the field.
 	 * @param int|null $profile_field The ID of the object for the field.
-	 *
 	 * @return string
 	 */
-	protected static function get_profile_field_rendered_value( $value = '', $profile_field = null ) {
+	protected static function get_profile_field_rendered_value( $value = '', $profile_field = null ): string {
 		if ( ! $value ) {
 			return '';
 		}

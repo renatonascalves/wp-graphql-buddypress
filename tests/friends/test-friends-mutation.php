@@ -20,10 +20,6 @@ class Test_Friendship_Mutations extends \WP_UnitTestCase {
 		$this->bp                 = new BP_UnitTestCase();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_create_friendship() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();

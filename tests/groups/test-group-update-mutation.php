@@ -31,10 +31,6 @@ class Test_Group_Update_Mutation extends WP_UnitTestCase {
 		) );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_update_group() {
 		$u        = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		$group_id = $this->bp_factory->group->create( array(

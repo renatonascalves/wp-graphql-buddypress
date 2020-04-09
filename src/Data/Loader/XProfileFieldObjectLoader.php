@@ -10,8 +10,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use BP_XProfile_Field;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
 
 /**
  * Class XProfileFieldObjectLoader
@@ -35,6 +36,9 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 
 		$loaded_xprofile_fields = [];
 
+		// Get the user ID if available.
+		$user_id = $this->context->config['userId'] ?? null;
+
 		/**
 		 * Loop over the keys and return an array of loaded_xprofile_fields, where the key is the ID and the value
 		 * is the XProfile field object, passed through the Model layer.
@@ -42,23 +46,9 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 		foreach ( $keys as $key ) {
 
 			// Get the XPofile field object.
-			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $key ) );
+			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $key ), $user_id );
 
-			// Confirm if it is a valid object.
-			if ( empty( $xprofile_field_object ) || ! is_object( $xprofile_field_object ) ) {
-				throw new UserError(
-					sprintf(
-						// translators: %d is the XProfile Field ID.
-						__( 'No XProfile field was found with ID: %d', 'wp-graphql-buddypress' ),
-						absint( $key )
-					)
-				);
-			}
-
-			/**
-			 * Return the instance through the Model Layer to ensure we only return
-			 * values the consumer has access to.
-			 */
+			// Pass object to our model.
 			$loaded_xprofile_fields[ $key ] = new XProfileField( $xprofile_field_object );
 		}
 

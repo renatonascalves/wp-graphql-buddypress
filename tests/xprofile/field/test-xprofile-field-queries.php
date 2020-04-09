@@ -28,10 +28,6 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 		$this->xprofile_field_id  = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_xprofile_field_by_query() {
 		$query = "
 			query {
@@ -84,7 +80,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 		$response = do_graphql_request( $query  );
 
 		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'No XProfile field was found with ID: 111', $response['errors'][0]['message'] );
+		$this->assertSame( 'This XProfile field does not exist.', $response['errors'][0]['message'] );
 	}
 
 	/**

@@ -92,7 +92,7 @@ class FriendshipType {
 			'RootQuery',
 			'friendshipBy',
 			[
-				'type' => self::$type_name,
+				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Friendship object.', 'wp-graphql-buddypress' ),
 				'args'        => [
 					'id' => [

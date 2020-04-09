@@ -15,16 +15,6 @@ use stdClass;
 
 /**
  * Class Blog - Models the data for the Blog object type.
- *
- * @property string $id
- * @property string $blogId
- * @property string $admin
- * @property string $name
- * @property string $permalink
- * @property string $description
- * @property string $path
- * @property string $domain
- * @property string $lastActivity
  */
 class Blog extends Model {
 
@@ -38,7 +28,7 @@ class Blog extends Model {
 	/**
 	 * Blog constructor.
 	 *
-	 * @param stdClass $blog The incoming blog object that needs modeling.
+	 * @param stdClass $blog The Blog object.
 	 */
 	public function __construct( stdClass $blog ) {
 		$this->data = $blog;

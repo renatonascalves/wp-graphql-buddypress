@@ -29,10 +29,6 @@ class Test_XProfile_Group_Delete_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_delete_xprofile_group() {
 		$this->bp->set_current_user( $this->admin );
 

@@ -73,7 +73,6 @@ before_script:
   - |
     if [[ "$PHPCS" == "1" ]]; then
       composer install
-
       phpenv rehash
 
       ./vendor/bin/phpcs --config-set installed_paths '../../wimg/php-compatibility/,../../wp-coding-standards/wpcs/'

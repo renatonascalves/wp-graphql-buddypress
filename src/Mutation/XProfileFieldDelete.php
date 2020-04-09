@@ -88,11 +88,6 @@ class XProfileFieldDelete {
 			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
 
-			// Confirm if XProfile field exists.
-			if ( empty( $xprofile_field_object->id ) || ! \is_object( $xprofile_field_object ) ) {
-				throw new UserError( __( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Stop now if a user isn't allowed to delete a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );

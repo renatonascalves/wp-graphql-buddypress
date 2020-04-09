@@ -25,7 +25,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'xprofile_field_object';
+		return 'bp_xprofile_field';
 	}
 
 	/**

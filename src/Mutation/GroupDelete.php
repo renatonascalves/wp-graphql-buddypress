@@ -89,11 +89,6 @@ class GroupDelete {
 			// Get the group object.
 			$group = GroupMutation::get_group_from_input( $input );
 
-			// Confirm if group exists.
-			if ( empty( $group->id ) || ! $group instanceof BP_Groups_Group ) {
-				throw new UserError( __( 'This group does not exist.', 'wp-graphql-buddypress' ) );
-			}
-
 			// Stop now if a user isn't allowed to delete a group.
 			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );

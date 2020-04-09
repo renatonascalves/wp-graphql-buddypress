@@ -14,24 +14,6 @@ use BP_XProfile_Field;
 
 /**
  * Class XProfile Field - Models the data for the XProfile Field object type.
- *
- * @property string $id
- * @property string $fieldId
- * @property string $groupId
- * @property string $parent
- * @property string $name
- * @property string $description
- * @property string $value
- * @property string $type
- * @property string $canDelete
- * @property string $isRequired
- * @property string $fieldOrder
- * @property string $optionOrder
- * @property string $memberTypes
- * @property string $orderBy
- * @property string $isDefaultOption
- * @property string $visibilityLevel
- * @property string $doAutolink
  */
 class XProfileField extends Model {
 
@@ -45,7 +27,7 @@ class XProfileField extends Model {
 	/**
 	 * XProfile field constructor.
 	 *
-	 * @param BP_XProfile_Field $xprofile_field The incoming BP_XProfile_Field object that needs modeling.
+	 * @param BP_XProfile_Field $xprofile_field The BP_XProfile_Field object.
 	 */
 	public function __construct( BP_XProfile_Field $xprofile_field ) {
 		$this->data = $xprofile_field;
@@ -60,7 +42,7 @@ class XProfileField extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'xprofile_field_object', $this->data->id )
+						? Relay::toGlobalId( 'bp_xprofile_field', $this->data->id )
 						: null;
 				},
 				'fieldId' => function() {

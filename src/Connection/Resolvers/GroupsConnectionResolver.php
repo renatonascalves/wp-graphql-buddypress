@@ -25,7 +25,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'group_object';
+		return 'bp_group';
 	}
 
 	/**

@@ -29,10 +29,6 @@ class Test_XProfile_Field_Create_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_create_xprofile_field() {
         $this->bp->set_current_user( $this->admin );
 

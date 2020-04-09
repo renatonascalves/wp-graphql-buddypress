@@ -15,22 +15,6 @@ use BP_Groups_Group;
 
 /**
  * Class Group - Models the data for the Group object type.
- *
- * @property string $id
- * @property string $groupId
- * @property string $parent
- * @property string $creator
- * @property string $name
- * @property string $slug
- * @property string $link
- * @property string $description
- * @property string $hasForum
- * @property string $totalMemberCount
- * @property string $lastActivity
- * @property string $dateCreated
- * @property string $status
- * @property string $admins
- * @property string $mods
  */
 class Group extends Model {
 
@@ -44,7 +28,7 @@ class Group extends Model {
 	/**
 	 * Group constructor.
 	 *
-	 * @param BP_Groups_Group $group The incoming BP_Groups_Group object that needs modeling.
+	 * @param BP_Groups_Group $group The BP_Groups_Group object.
 	 */
 	public function __construct( BP_Groups_Group $group ) {
 		$this->data = $group;

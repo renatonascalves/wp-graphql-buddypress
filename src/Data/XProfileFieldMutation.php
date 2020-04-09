@@ -20,12 +20,14 @@ class XProfileFieldMutation {
 	/**
 	 * Get XProfile field ID helper.
 	 *
-	 * @throws UserError User error for invalid Relay ID.
+	 * @throws UserError  User error for invalid XProfile field.
 	 *
-	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile field.
+	 * @param array|int $input   Array of possible input fields, or
+	 *                           an integer from a specific XProfile field.
+	 * @param int|null  $user_id User ID.
 	 * @return BP_XProfile_Field
 	 */
-	public static function get_xprofile_field_from_input( $input ): BP_XProfile_Field {
+	public static function get_xprofile_field_from_input( $input, $user_id = null ): BP_XProfile_Field {
 		$xprofile_field_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
@@ -42,7 +44,13 @@ class XProfileFieldMutation {
 			$xprofile_field_id = absint( $input );
 		}
 
-		return new BP_XProfile_Field( absint( $xprofile_field_id ) );
+		$xprofile_field_object = xprofile_get_field( absint( $xprofile_field_id ), $user_id );
+
+		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
+			throw new UserError( __( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
+		}
+
+		return $xprofile_field_object;
 	}
 
 	/**
@@ -53,7 +61,7 @@ class XProfileFieldMutation {
 	 * @param string                 $action         Hook action.
 	 * @return array
 	 */
-	public static function prepare_xprofile_field_args( $input, $xprofile_field = null, $action ): array {
+	public static function prepare_xprofile_field_args( array $input, $xprofile_field = null, string $action ): array {
 		$output_args = [
 			'field_id'          => empty( $input['fieldId'] )
 				? $xprofile_field->id ?? null

@@ -26,7 +26,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'friend_object';
+		return 'bp_friend';
 	}
 
 	/**

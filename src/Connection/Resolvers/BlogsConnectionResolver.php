@@ -25,7 +25,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'blog_object';
+		return 'bp_blog';
 	}
 
 	/**

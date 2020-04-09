@@ -19,10 +19,6 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		$this->user       = $this->factory->user->create();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_get_members_friends_query() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();

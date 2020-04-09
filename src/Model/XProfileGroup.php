@@ -14,14 +14,6 @@ use stdClass;
 
 /**
  * Class XProfile Group - Models the data for the XProfile Group object type.
- *
- * @property string $id
- * @property string $groupId
- * @property string $name
- * @property string $description
- * @property string $groupOrder
- * @property string $canDelete
- * @property string $userId
  */
 class XProfileGroup extends Model {
 
@@ -35,7 +27,7 @@ class XProfileGroup extends Model {
 	/**
 	 * XProfile group constructor.
 	 *
-	 * @param stdClass $xprofile_group The incoming XProfile object that needs modeling.
+	 * @param stdClass $xprofile_group The XProfile object.
 	 */
 	public function __construct( stdClass $xprofile_group ) {
 		$this->data = $xprofile_group;
@@ -50,7 +42,7 @@ class XProfileGroup extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'xprofile_group_object', $this->data->id )
+						? Relay::toGlobalId( 'bp_xprofile_group', $this->data->id )
 						: null;
 				},
 				'groupId' => function() {

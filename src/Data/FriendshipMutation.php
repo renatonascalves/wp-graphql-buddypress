@@ -19,7 +19,6 @@ class FriendshipMutation {
 	 * Check if friendship exists.
 	 *
 	 * @param BP_Friends_Friendship $friendship Friendship object.
-	 *
 	 * @return bool
 	 */
 	public static function friendship_exists( $friendship ): bool {

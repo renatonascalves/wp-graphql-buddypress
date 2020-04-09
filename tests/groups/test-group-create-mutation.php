@@ -26,10 +26,6 @@ class Test_Groups_Create_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	public function test_create_group() {
 		$this->bp->set_current_user( $this->admin );
 

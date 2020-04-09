@@ -31,10 +31,6 @@ class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-	}
-
 	/**
 	 * @group member-avatar
 	 */
