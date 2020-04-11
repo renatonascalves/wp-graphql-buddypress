@@ -264,12 +264,17 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 					}
 
 					// Check for settings to confirm if users can delete their own accounts.
-					if ( false === bp_disable_account_deletion() ) {
+					if ( true === bp_disable_account_deletion() ) {
+						return $caps;
+					}
+
+					// Check if user is logged in.
+					if ( false === is_user_logged_in() ) {
 						return $caps;
 					}
 
 					// Confirm user to check against with logged in user.
-					if ( ! isset( $args[2] ) || isset( $args[2] ) && bp_loggedin_user_id() !== absint( $args[2] ) ) {
+					if ( isset( $args[2] ) && bp_loggedin_user_id() !== absint( $args[2] ) ) {
 						return $caps;
 					}
 
