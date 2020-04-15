@@ -1,36 +1,34 @@
 <?php
 
 /**
- * Test_Members_Queries Class.
+ * Test_Member_Queries Class.
  *
  * @group members
  */
-class Test_Members_Queries extends WP_UnitTestCase {
+class Test_Member_Queries extends WP_UnitTestCase {
 
-	public $admin;
-	public $bp_factory;
-	public $bp;
+	public static $admin;
+	public static $user;
+	public static $bp;
+	public static $bp_factory;
 
-	public function setUp() {
-		parent::setUp();
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 
-		$this->bp_factory = new BP_UnitTest_Factory();
-		$this->bp         = new BP_UnitTestCase();
-		$this->admin      = $this->factory->user->create( [
-			'role'       => 'administrator',
-            'user_email' => 'admin@example.com',
-            'user_login' => 'user',
-		] );
+		self::$bp         = new BP_UnitTestCase();
+		self::$bp_factory = new BP_UnitTest_Factory();
+		self::$user       = self::factory()->user->create();
+		self::$admin      = self::factory()->user->create( [ 'role' => 'administrator' ] );
 	}
 
 	public function test_member_query() {
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->admin );
+		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', self::$admin );
 
 		// Register and set member types.
 		bp_register_member_type( 'foo' );
-		bp_set_member_type( $this->admin, 'foo' );
+		bp_set_member_type( self::$admin, 'foo' );
 
-        $this->bp->set_current_user( $this->admin );
+        self::$bp->set_current_user( self::$admin );
 
 		// Create the query.
 		$query = "
@@ -48,11 +46,9 @@ class Test_Members_Queries extends WP_UnitTestCase {
 			[
 				'data' => [
 					'user' => [
-						'link'        => bp_core_get_user_domain( $this->admin ),
-						'memberTypes' => [
-							'foo',
-						],
-						'mentionName' => bp_activity_get_user_mentionname( $this->admin ),
+						'link'        => bp_core_get_user_domain( self::$admin ),
+						'memberTypes' => [ 'foo' ],
+						'mentionName' => bp_activity_get_user_mentionname( self::$admin ),
 					],
 				],
 			],
@@ -61,12 +57,12 @@ class Test_Members_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_members_query() {
-		$u1 = $this->factory->user->create();
-		$u2 = $this->factory->user->create();
-		$u3 = $this->factory->user->create();
-		$u4 = $this->factory->user->create();
+		$u1 = self::$bp_factory->user->create();
+		$u2 = self::$bp_factory->user->create();
+		$u3 = self::$bp_factory->user->create();
+		$u4 = self::$bp_factory->user->create();
 
-		$this->bp->set_current_user( $this->admin );
+		self::$bp->set_current_user( self::$admin );
 
 		$results = $this->membersQuery(
 			[
@@ -90,14 +86,14 @@ class Test_Members_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_members_query_paginated() {
-		$u1 = $this->factory->user->create();
-		$u2 = $this->factory->user->create();
-		$u3 = $this->factory->user->create();
-		$u4 = $this->factory->user->create();
+		$u1 = self::$bp_factory->user->create();
+		$u2 = self::$bp_factory->user->create();
+		$u3 = self::$bp_factory->user->create();
+		$u4 = self::$bp_factory->user->create();
 
-		$this->bp->set_current_user( $this->admin );
+		self::$bp->set_current_user( self::$admin );
 
-		// Here we're querying the groups in our dataset.
+		// Here we're querying the members in our dataset.
 		$results = $this->membersQuery(
 			[
 				'first' => 2,
@@ -110,6 +106,7 @@ class Test_Members_Queries extends WP_UnitTestCase {
 		// Make sure the query didn't return any errors
 		$this->assertArrayNotHasKey( 'errors', $results );
 
+		// Confirm there is a next page since we are fetching 2 members per page.
 		$this->assertEquals( 1, $results['data']['members']['pageInfo']['hasNextPage'] );
 	}
 

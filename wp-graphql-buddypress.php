@@ -230,7 +230,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 */
 			add_filter(
 				'graphql_object_visibility',
-				function( $visibility, $model_name ) {
+				function ( $visibility, $model_name ) {
 					if ( 'UserObject' === $model_name && 'private' === $visibility ) {
 						return 'restricted';
 					}
@@ -239,6 +239,52 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 				},
 				10,
 				2
+			);
+
+			/**
+			 * Allow regular BuddyPress members to delete their own account, if allowed.
+			 */
+			add_filter(
+				'user_has_cap',
+				function ( $caps, $cap, $args ) {
+
+					// Apply to GraphQL request only.
+					if ( false === is_graphql_request() ) {
+						return $caps;
+					}
+
+					// Bail if not checking the 'delete_users' cap.
+					if ( 'delete_users' !== $args[0] ) {
+						return $caps;
+					}
+
+					// Bail if already with permissions (eg.: admins).
+					if ( isset( $caps['delete_users'] ) && true === $caps['delete_users'] ) {
+						return $caps;
+					}
+
+					// Check for settings to confirm if users can delete their own accounts.
+					if ( true === bp_disable_account_deletion() ) {
+						return $caps;
+					}
+
+					// Check if user is logged in.
+					if ( false === is_user_logged_in() ) {
+						return $caps;
+					}
+
+					// Confirm user to check against with logged in user.
+					if ( isset( $args[2] ) && bp_loggedin_user_id() !== absint( $args[2] ) ) {
+						return $caps;
+					}
+
+					// Allow for this one.
+					$caps[ $cap[0] ] = true;
+
+					return $caps;
+				},
+				10,
+				3
 			);
 		}
 	}
