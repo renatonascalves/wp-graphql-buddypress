@@ -18,9 +18,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 		self::$bp                 = new BP_UnitTestCase();
 		self::$client_mutation_id = 'someUniqueId';
 		self::$user               = self::factory()->user->create();
-		self::$admin              = self::factory()->user->create( [
-			'role' => 'administrator',
-		] );
+		self::$admin              = self::factory()->user->create( [ 'role' => 'administrator' ] );
 	}
 
 	public function test_member_can_delete_his_own_account() {
@@ -43,13 +41,11 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 					]
 				]
 			],
-			$this->delete_member( $guid )
+			$this->delete_member( $u )
 		);
 
-		$user_obj_after_delete = get_user_by( 'id', $u );
-
 		// Make sure the user actually got deleted.
-		$this->assertFalse( $user_obj_after_delete );
+		$this->assertFalse( get_user_by( 'id', $u ) );
 	}
 
 	public function test_admins_can_delete_members_account() {
@@ -72,21 +68,17 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 					]
 				]
 			],
-			$this->delete_member( $guid )
+			$this->delete_member( $u )
 		);
 
-		$user_obj_after_delete = get_user_by( 'id', $u );
-
 		// Make sure the user actually got deleted.
-		$this->assertFalse( $user_obj_after_delete );
+		$this->assertFalse( get_user_by( 'id', $u ) );
 	}
 
 	public function test_member_can_not_delete_other_members_account() {
 		self::$bp->set_current_user( self::$user );
 
-		$guid = \GraphQLRelay\Relay::toGlobalId( 'user', self::$admin );
-
-		$response = $this->delete_member( $guid );
+		$response = $this->delete_member( self::$admin );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
@@ -101,8 +93,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 
 		self::$bp->set_current_user( $u );
 
-		$guid     = \GraphQLRelay\Relay::toGlobalId( 'user', $u );
-		$response = $this->delete_member( $guid );
+		$response = $this->delete_member( $u );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
@@ -111,8 +102,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
     }
 
 	public function test_member_needs_to_be_loggin_to_delete_account() {
-		$guid     = \GraphQLRelay\Relay::toGlobalId( 'user', self::$user );
-		$response = $this->delete_member( $guid );
+		$response = $this->delete_member( self::$user );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
@@ -121,14 +111,13 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 	public function test_delete_member_with_invalid_id() {
 		self::$bp->set_current_user( self::$user );
 
-		$guid     = \GraphQLRelay\Relay::toGlobalId( 'user', 000000 );
-		$response = $this->delete_member( $guid );
+		$response = $this->delete_member( 000000 );
 
 		$this->assertArrayHasKey( 'errors', $response );
 		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
     }
 
-	protected function delete_member( $guid_id = 0 ) {
+	protected function delete_member( $u = 0 ) {
 		$mutation = '
 			mutation deleteUserTest( $clientMutationId: String!, $id: ID! ) {
 				deleteUser(
@@ -148,7 +137,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
         ';
 
 		$variables = [
-			'id'               => $guid_id,
+			'id'               => \GraphQLRelay\Relay::toGlobalId( 'user', $u ),
 			'clientMutationId' => self::$client_mutation_id,
 		];
 
