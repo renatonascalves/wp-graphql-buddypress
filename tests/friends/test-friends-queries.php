@@ -3,34 +3,34 @@
 /**
  * Test_Friendship_Queries Class.
  *
- * @group friendship
+ * @group friends
  */
 class Test_Friendship_Queries extends WP_UnitTestCase {
 
-	public $bp_factory;
-	public $bp;
-	public $user;
+	public static $bp_factory;
+	public static $user;
+	public static $bp;
 
-	public function setUp() {
-		parent::setUp();
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 
-		$this->bp_factory = new BP_UnitTest_Factory();
-		$this->bp         = new BP_UnitTestCase();
-		$this->user       = $this->factory->user->create();
+		self::$bp         = new BP_UnitTestCase();
+		self::$bp_factory = new BP_UnitTest_Factory();
+		self::$user       = self::factory()->user->create();
 	}
 
 	public function test_get_members_friends_query() {
-		$u1 = $this->bp_factory->user->create();
-		$u2 = $this->bp_factory->user->create();
-		$u3 = $this->bp_factory->user->create();
+		$u1 = self::$bp_factory->user->create();
+		$u2 = self::$bp_factory->user->create();
+		$u3 = self::$bp_factory->user->create();
 
-		$this->create_friendship( $u1, $this->user );
-		$this->create_friendship( $u2, $this->user );
-		$this->create_friendship( $u3, $this->user );
+		$this->create_friendship( $u1, self::$user );
+		$this->create_friendship( $u2, self::$user );
+		$this->create_friendship( $u3, self::$user );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $this->user );
+		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', self::$user );
 
-        $this->bp->set_current_user( $this->user );
+        self::$bp->set_current_user( self::$user );
 
 		// Create the query.
 		$query = "
@@ -50,20 +50,20 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 			}
 		";
 
-		$results = do_graphql_request( $query );
+		$response = do_graphql_request( $query );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertArrayNotHasKey( 'errors', $response );
 
 		// Check our four members.
-		$this->assertTrue( count( $results['data']['user']['friends']['nodes'] ) === 3 );
+		$this->assertTrue( count( $response['data']['user']['friends']['nodes'] ) === 3 );
 	}
 
 	public function test_getting_friendship_with_initiator() {
-		$u = $this->bp_factory->user->create();
-		$f = $this->create_friendship( $u, $this->user );
+		$u = self::$bp_factory->user->create();
+		$f = $this->create_friendship( $u, self::$user );
 
-		$this->bp->set_current_user( $this->user );
+		self::$bp->set_current_user( self::$user );
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
 
@@ -90,7 +90,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 						'friendshipId' => $f,
 						'isConfirmed' => false,
 						'initiator' => [
-							'userId' => $this->user,
+							'userId' => self::$user,
 						],
 						'friend' => [
 							'userId' => $u,
@@ -103,12 +103,12 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 	}
 
 	public function test_getting_friendship_with_invited_friend() {
-		$u1 = $this->bp_factory->user->create();
-		$u2 = $this->bp_factory->user->create();
+		$u1 = self::$bp_factory->user->create();
+		$u2 = self::$bp_factory->user->create();
 
 		$f = $this->create_friendship( $u1, $u2 );
 
-		$this->bp->set_current_user( $u1 );
+		self::$bp->set_current_user( $u1 );
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
 
@@ -165,12 +165,12 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 	public function test_friendship_with_unauthorized_member() {
 		$f = $this->create_friendship();
 
-		$u = $this->bp_factory->user->create();
-		$this->bp->set_current_user( $u );
+		self::$bp->set_current_user(
+			self::$bp_factory->user->create()
+		);
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
-
-		$query = "{
+		$query     = "{
 			friendshipBy( id: \"{$global_id}\" ) {
 				id
 			}
@@ -184,11 +184,11 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 
 	protected function create_friendship( $u = 0, $initiator = 0 ) {
 		if ( empty( $u ) ) {
-			$u = $this->factory->user->create();
+			$u = self::factory()->user->create();
 		}
 
 		if ( empty( $initiator ) ) {
-			$initiator = $this->factory->user->create();
+			$initiator = self::factory()->user->create();
 		}
 
 		$friendship                    = new BP_Friends_Friendship();

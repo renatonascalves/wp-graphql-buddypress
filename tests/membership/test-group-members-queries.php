@@ -7,32 +7,29 @@
  */
 class Test_Group_Members_Queries extends WP_UnitTestCase {
 
-	public $admin;
-	public $bp_factory;
-	public $bp;
+	public static $admin;
+	public static $bp;
+	public static $bp_factory;
 
-	public function setUp() {
-		parent::setUp();
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 
-		$this->bp_factory = new BP_UnitTest_Factory();
-		$this->bp         = new BP_UnitTestCase();
-		$this->admin      = $this->factory->user->create( [
-			'role'       => 'administrator',
-			'user_email' => 'admin@example.com',
-		] );
+		self::$bp         = new BP_UnitTestCase();
+		self::$bp_factory = new BP_UnitTest_Factory();
+		self::$admin      = self::factory()->user->create( [ 'role' => 'administrator' ] );
 	}
 
 	public function test_group_by_query() {
 		$group_id = $this->create_group_object();
 
-		$u1 = $this->factory->user->create();
-		$u2 = $this->factory->user->create();
+		$u1 = self::factory()->user->create();
+		$u2 = self::factory()->user->create();
 
 		$this->populate_group_with_members( [ $u1, $u2 ], $group_id );
 
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
 
-		$this->bp->set_current_user( $this->admin );
+		self::$bp->set_current_user( self::$admin );
 
 		// Create the query string to pass to the $query.
 		$query = "
@@ -158,13 +155,13 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 				'slug'         => 'group-test',
 				'name'         => 'Group Test',
 				'description'  => 'Group Description',
-				'creator_id'   => $this->admin,
+				'creator_id'   => self::$admin,
 			],
 			$args
 		);
 
 		// Create group.
-		return $this->bp_factory->group->create( $args );
+		return self::$bp_factory->group->create( $args );
 	}
 
 	/**
@@ -172,7 +169,7 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 	 */
 	protected function populate_group_with_members( $members, $group_id ) {
 		foreach ( $members as $member_id ) {
-			$this->bp->add_user_to_group( $member_id, $group_id );
+			self::$bp->add_user_to_group( $member_id, $group_id );
 		}
 	}
 }
