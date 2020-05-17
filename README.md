@@ -21,7 +21,6 @@ Docs (soon) • <a href="https://ralv.es" target="_blank">Renato Alves</a> • 
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
 3. Clone or download the zip of this repository into your WordPress plugin directory & activate the **WPGraphQL BuddyPress** plugin
 4. (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
-5. (Optional) Install & activate [WPGraphQL-CORS](https://github.com/funkhaus/wp-graphql-cors) to add an extra layer of security using HTTP CORS and some of WPGraphQL advanced functionality.
 
 ## Components Supported
 
