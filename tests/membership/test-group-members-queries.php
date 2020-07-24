@@ -87,8 +87,8 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 					}
 				}
 				nodes {
-				  id
-				  groupId
+					id
+					groupId
 				}
 			}
 		}';

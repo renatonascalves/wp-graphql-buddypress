@@ -16,7 +16,7 @@ use WPGraphQL\Type\WPEnumType;
 class MemberEnums {
 
 	/**
-	 * Registers enum type.
+	 * Registers member enum types.
 	 */
 	public static function register() {
 
@@ -70,7 +70,7 @@ class MemberEnums {
 	public static function member_types_enum() {
 		$types = [];
 
-		foreach ( bp_get_member_types() as $type ) {
+		foreach ( (array) bp_get_member_types() as $type ) {
 			$types[ WPEnumType::get_safe_name( $type ) ] = [
 				'description' => sprintf(
 					/* translators: member type */

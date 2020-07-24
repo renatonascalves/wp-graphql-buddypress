@@ -19,14 +19,16 @@ class Test_Member_Queries extends WP_UnitTestCase {
 		self::$bp_factory = new BP_UnitTest_Factory();
 		self::$user       = self::factory()->user->create();
 		self::$admin      = self::factory()->user->create( [ 'role' => 'administrator' ] );
+
+		bp_register_member_type( 'foo' );
+		bp_register_member_type( 'bar' );
 	}
 
 	public function test_member_query_as_unauthenticated_user() {
 		$user_id   = self::factory()->user->create( [ 'user_email' => 'test@test.com' ] );
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $user_id );
 
-		// Register and set member types.
-		bp_register_member_type( 'foo' );
+		// Set member types.
 		bp_set_member_type( $user_id, 'foo' );
 
 		// Get the user object.
@@ -130,7 +132,9 @@ class Test_Member_Queries extends WP_UnitTestCase {
 							'edges' => [],
 						],
 						'registeredDate'    => null,
-						'roles'             => null,
+						'roles'             => [
+							'nodes' => [],
+						],
 						'slug'              => $user->data->user_nicename,
 						'url'               => null,
 						'userId'            => $user_id,
@@ -146,8 +150,7 @@ class Test_Member_Queries extends WP_UnitTestCase {
 		$user_id   = self::factory()->user->create( [ 'user_email' => 'test@test.com' ] );
 		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $user_id );
 
-		// Register and set member types.
-		bp_register_member_type( 'foo' );
+		// Set member types.
 		bp_set_member_type( $user_id, 'foo' );
 
 		// Login the user.
@@ -300,81 +303,6 @@ class Test_Member_Queries extends WP_UnitTestCase {
 		$this->assertTrue( in_array( $u4, $ids, true ) );
 	}
 
-	public function test_members_query_with_where_params() {
-		$u1 = self::$bp_factory->user->create();
-		$u2 = self::$bp_factory->user->create();
-		self::$bp_factory->user->create();
-		self::$bp_factory->user->create();
-
-		// Register and set member types.
-		bp_register_member_type( 'foo' );
-		bp_set_member_type( $u1, 'foo' );
-
-		// Register and set member types.
-		bp_register_member_type( 'bar' );
-		bp_set_member_type( $u2, 'bar' );
-
-		// Query FOO members.
-		$results = $this->membersQuery(
-			[
-				'where' => [
-					'memberType' => 'FOO'
-				]
-			]
-		);
-
-		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertEquals( $u1, $results['data']['members']['nodes'][0]['userId'] );
-		$this->assertFalse( $results['data']['members']['pageInfo']['hasNextPage'] );
-
-		// Query FOO members.
-		$results = $this->membersQuery(
-			[
-				'where' => [
-					'memberTypeIn' => 'FOO'
-				]
-			]
-		);
-
-		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertEquals( $u1, $results['data']['members']['nodes'][0]['userId'] );
-		$this->assertFalse( $results['data']['members']['pageInfo']['hasNextPage'] );
-
-		// Query BAR members.
-		$results = $this->membersQuery(
-			[
-				'where' => [
-					'memberType' => 'BAR'
-				]
-			]
-		);
-
-		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertEquals( $u2, $results['data']['members']['nodes'][0]['userId'] );
-		$this->assertFalse( $results['data']['members']['pageInfo']['hasNextPage'] );
-
-		// Query BAR members.
-		$results = $this->membersQuery(
-			[
-				'where' => [
-					'memberTypeIn' => 'BAR'
-				]
-			]
-		);
-
-		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertEquals( $u2, $results['data']['members']['nodes'][0]['userId'] );
-		$this->assertFalse( $results['data']['members']['pageInfo']['hasNextPage'] );
-	}
-
 	public function test_members_query_paginated() {
 		self::$bp_factory->user->create();
 		self::$bp_factory->user->create();
@@ -417,7 +345,7 @@ class Test_Member_Queries extends WP_UnitTestCase {
 					}
 				}
 				nodes {
-				  userId
+					userId
 				}
 			}
 		}';
