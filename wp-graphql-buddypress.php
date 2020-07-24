@@ -212,7 +212,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		}
 
 		/**
-		 * Sets up filters.
+		 * Set up filters.
 		 *
 		 * @since 0.0.1-alpha
 		 */
@@ -225,8 +225,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 * Change the visibility of the user to `restricted`.
 			 *
 			 * BuddyPress users are "open" by default.
-			 *
-			 * @todo Confirm if we are not exposing sensitive field/information to the public.
 			 */
 			add_filter(
 				'graphql_object_visibility',
@@ -250,6 +248,11 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 					// Apply to GraphQL request only.
 					if ( false === is_graphql_request() ) {
+						return $caps;
+					}
+
+					// Required field.
+					if ( empty( $args[0] ) ) {
 						return $caps;
 					}
 

@@ -18,8 +18,7 @@ cache:
     - $HOME/.composer/cache
 
 env:
-  global:
-    PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+  global: PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
 
 matrix:
   include:
@@ -70,9 +69,6 @@ before_script:
     if [[ "$PHPCS" == "1" ]]; then
       composer install
       phpenv rehash
-
-      ./vendor/bin/phpcs --config-set installed_paths '../../wimg/php-compatibility/,../../wp-coding-standards/wpcs/'
-      ./vendor/bin/phpcs --config-set default_standard WordPress
     fi
 
 install:

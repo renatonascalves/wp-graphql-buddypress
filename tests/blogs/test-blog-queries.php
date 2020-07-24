@@ -219,7 +219,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 					}
 				}
 				nodes {
-				  blogId
+					blogId
 				}
 			}
 		}';

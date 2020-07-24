@@ -49,8 +49,12 @@
 		<severity>0</severity>
 	</rule>
 
-	<rule ref="WordPress">
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>0</severity>
+	</rule>
+
+	<rule ref="WordPress.Generic.Arrays.DisallowShortArraySyntax.Found">
+		<severity>0</severity>
 	</rule>
 
 </ruleset>
