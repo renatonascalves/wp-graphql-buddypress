@@ -11,7 +11,7 @@ Docs (soon) • <a href="https://ralv.es" target="_blank">Renato Alves</a> • 
 ## System Requirements
 
 * PHP >= 7.1
-* WP >= 4.8
+* WP >= 4.9
 * WPGraphQL >= latest
 * BuddyPress >= latest
 
