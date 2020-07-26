@@ -8,10 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
-use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
-use BP_XProfile_Field;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
 
 /**
@@ -23,12 +21,10 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @throws UserError User error.
-	 *
 	 * @param array $keys Array of keys.
 	 * @return array
 	 */
-	public function loadKeys( array $keys = [] ): array {
+	public function loadKeys( array $keys ): array {
 
 		if ( empty( $keys ) ) {
 			return $keys;

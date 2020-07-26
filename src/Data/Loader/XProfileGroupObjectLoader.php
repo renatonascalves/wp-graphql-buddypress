@@ -8,7 +8,6 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
-use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
@@ -22,8 +21,6 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
-	 *
-	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
 	 * @return array

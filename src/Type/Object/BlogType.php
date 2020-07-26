@@ -49,7 +49,7 @@ class BlogType {
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Blog $blog, array $args, AppContext $context ) {
 							return ! empty( $blog->admin )
-								? DataSource::resolve_user( $blog->admin, $context )
+								? $context->get_loader( 'user' )->load_deferred( $blog->admin )
 								: null;
 						},
 					],

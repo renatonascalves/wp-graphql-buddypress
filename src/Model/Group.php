@@ -42,8 +42,8 @@ class Group extends Model {
 	 */
 	protected function is_private(): bool {
 
-		// If it is not a hidden/private group, user can see it.
-		if ( 'public' === $this->data->status ) {
+		// If it is not a private group, user can see it.
+		if ( in_array( $this->data->status, [ 'hidden', 'public' ], true ) ) {
 			return false;
 		}
 

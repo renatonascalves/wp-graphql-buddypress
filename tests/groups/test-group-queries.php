@@ -339,32 +339,6 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertTrue( empty( $results['data']['groups']['edges'] ) );
 	}
 
-	public function test_getting_hidden_group_without_access() {
-		$u = $this->factory->user->create();
-		$this->bp->set_current_user( $u );
-
-		$hidden_group_id = $this->create_group_object(
-			[
-				'status' => 'hidden'
-			]
-		);
-
-		$results = $this->groupsQuery(
-			[
-				'where' => [
-					'include' => [ $hidden_group_id ],
-					'status'  => [ 'HIDDEN']
-				]
-			]
-		);
-
-		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		// Returns nothing.
-		$this->assertTrue( empty( $results['data']['groups']['edges'] ) );
-	}
-
 	public function test_groups_query_with_hidden_groups() {
 		$this->bp->set_current_user( $this->admin );
 
@@ -410,8 +384,8 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 					}
 				}
 				nodes {
-				  id
-				  groupId
+					id
+					groupId
 				}
 			}
 		}';

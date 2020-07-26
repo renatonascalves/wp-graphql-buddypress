@@ -21,12 +21,6 @@ class BlogObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * Note that order of returned values must match exactly the order of keys.
-	 * If some entry is not available for given key - it must include null for the missing key.
-	 *
-	 * For example:
-	 * loadKeys(['a', 'b', 'c']) -> ['a' => 'value1, 'b' => null, 'c' => 'value3']
-	 *
 	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
@@ -39,11 +33,7 @@ class BlogObjectLoader extends AbstractDataLoader {
 		}
 
 		// Execute the query, and prune the cache.
-		bp_blogs_get_blogs(
-			[
-				'include_blog_ids' => $keys,
-			]
-		);
+		bp_blogs_get_blogs( [ 'include_blog_ids' => $keys ] );
 
 		$loaded_blogs = [];
 
