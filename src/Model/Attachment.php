@@ -41,7 +41,7 @@ class Attachment extends Model {
 				'thumb' => function() {
 					return $this->data->thumb ?? null;
 				},
-				'full'  => function() {
+				'full' => function() {
 					return $this->data->full ?? null;
 				},
 			];
