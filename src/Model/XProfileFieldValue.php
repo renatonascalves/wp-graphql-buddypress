@@ -45,13 +45,12 @@ class XProfileFieldValue extends Model {
 			return false;
 		}
 
-		$hidden_user_fields = bp_xprofile_get_hidden_fields_for_user( $this->data->data->user_id ?? 0, $this->current_user->ID ?? 0 );
+		$hidden_user_fields = bp_xprofile_get_hidden_fields_for_user(
+			$this->data->data->user_id ?? 0,
+			$this->current_user->ID ?? 0
+		);
 
-		if ( in_array( $this->data->data->id, $hidden_user_fields, true ) ) {
-			return true;
-		}
-
-		return false;
+		return in_array( $this->data->data->id, (array) $hidden_user_fields, true );
 	}
 
 	/**
@@ -70,10 +69,6 @@ class XProfileFieldValue extends Model {
 					return $this->get_rendered_value( $this->data->data->value, $this->data->data->field_id );
 				},
 				'lastUpdated'  => function() {
-					if ( ! empty( $this->data->data->last_updated ) ) {
-						return null;
-					}
-
 					return Utils::prepare_date_response( $this->data->data->last_updated );
 				},
 			];
