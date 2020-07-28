@@ -1,4 +1,3 @@
-sudo: false
 dist: trusty
 
 language: php
@@ -10,7 +9,7 @@ notifications:
 
 branches:
   only:
-    - master
+    - main
 
 cache:
   directories:
@@ -20,7 +19,7 @@ cache:
 env:
   global: PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
 
-matrix:
+jobs:
   include:
     - php: 7.4
       env: WP_VERSION=master PHPCS=1
@@ -95,6 +94,7 @@ install:
   # set up database
   - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
 
+  # go to the plugin directory
   - cd $plugin_dir
 
 script:
