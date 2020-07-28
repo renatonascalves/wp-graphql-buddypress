@@ -59,7 +59,7 @@ class GroupType {
 						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 							return ! empty( $group->creator )
-								? DataSource::resolve_user( $group->creator, $context )
+								? $context->get_loader( 'user' )->load_deferred( $group->creator )
 								: null;
 						},
 					],
@@ -88,11 +88,11 @@ class GroupType {
 								return null;
 							}
 
-							$context->getLoader( 'user' )->buffer( $admins );
+							$context->get_loader( 'user' )->buffer( $admins );
 							return new Deferred(
 								function() use ( $context, $admins ) {
 									// @codingStandardsIgnoreLine.
-									return $context->getLoader( 'user' )->loadMany( $admins );
+									return $context->get_loader( 'user' )->loadMany( $admins );
 								}
 							);
 						},
@@ -122,11 +122,11 @@ class GroupType {
 								return null;
 							}
 
-							$context->getLoader( 'user' )->buffer( $mods );
+							$context->get_loader( 'user' )->buffer( $mods );
 							return new Deferred(
 								function() use ( $context, $mods ) {
 									// @codingStandardsIgnoreLine.
-									return $context->getLoader( 'user' )->loadMany( $mods );
+									return $context->get_loader( 'user' )->loadMany( $mods );
 								}
 							);
 						},

@@ -41,8 +41,10 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			'include'     => [],
 			'exclude'     => [],
 			'meta'        => [],
+			'order'       => 'DESC',
 			'orderby'     => 'date_created',
 			'type'        => 'active',
+			'status'      => [],
 		];
 
 		// Prepare for later use.
@@ -58,13 +60,9 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
-		if ( empty( $query_args['order'] ) ) {
-			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
-		}
-
-		if ( ! is_user_logged_in() && empty( $query_args['status'] ) ) {
-			$query_args['status'] = 'public';
+		// See if the user can see hidden groups.
+		if ( isset( $query_args['show_hidden'] ) && true === (bool) $query_args['show_hidden'] && ! $this->can_see_hidden_groups( $query_args['user_id'] ) ) {
+			$query_args['show_hidden'] = false;
 		}
 
 		// Adding correct value for the parent_id.
@@ -183,5 +181,22 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		return $query_args;
+	}
+
+	/**
+	 * Can this user see hidden groups?
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool
+	 */
+	protected function can_see_hidden_groups( int $user_id ): bool {
+		return (
+			bp_current_user_can( 'bp_moderate' )
+			|| (
+				is_user_logged_in()
+				&& isset( $user_id )
+				&& bp_loggedin_user_id() === $user_id
+			)
+		);
 	}
 }

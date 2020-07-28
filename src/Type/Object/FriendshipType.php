@@ -49,7 +49,7 @@ class FriendshipType {
 						'description' => __( 'The initiator of the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
 							return ! empty( $friendship->initiator )
-								? DataSource::resolve_user( $friendship->initiator, $context )
+								? $context->get_loader( 'user' )->load_deferred( $friendship->initiator )
 								: null;
 						},
 					],
@@ -58,7 +58,7 @@ class FriendshipType {
 						'description' => __( 'The friend, the one invited to the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
 							return ! empty( $friendship->friend )
-								? DataSource::resolve_user( $friendship->friend, $context )
+								? $context->get_loader( 'user' )->load_deferred( $friendship->friend )
 								: null;
 						},
 					],

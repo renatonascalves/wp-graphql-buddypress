@@ -28,7 +28,6 @@ use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use stdClass;
 use BP_Friends_Friendship;
-use BP_XProfile_ProfileData;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 
 /**
@@ -49,11 +48,11 @@ class Factory {
 		}
 
 		$group_id = absint( $id );
-		$context->getLoader( 'bp_group' )->buffer( [ $group_id ] );
+		$context->get_loader( 'bp_group' )->buffer( [ $group_id ] );
 
 		return new Deferred(
 			function () use ( $group_id, $context ) {
-				return $context->getLoader( 'bp_group' )->load( $group_id );
+				return $context->get_loader( 'bp_group' )->load( $group_id );
 			}
 		);
 	}
@@ -71,11 +70,11 @@ class Factory {
 		}
 
 		$xprofile_group_id = absint( $id );
-		$context->getLoader( 'bp_xprofile_group' )->buffer( [ $xprofile_group_id ] );
+		$context->get_loader( 'bp_xprofile_group' )->buffer( [ $xprofile_group_id ] );
 
 		return new Deferred(
 			function () use ( $xprofile_group_id, $context ) {
-				return $context->getLoader( 'bp_xprofile_group' )->load( $xprofile_group_id );
+				return $context->get_loader( 'bp_xprofile_group' )->load( $xprofile_group_id );
 			}
 		);
 	}
@@ -256,7 +255,6 @@ class Factory {
 	 * @param array       $args    Query args to pass to the connection resolver.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_blogs_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -270,7 +268,6 @@ class Factory {
 	 * @param array       $args    Query args to pass to the connection resolver.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_xprofile_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -284,7 +281,6 @@ class Factory {
 	 * @param array       $args    Query args to pass to the connection resolver.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_xprofile_fields_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -297,7 +293,6 @@ class Factory {
 	 * @param XProfileField $source  Source.
 	 * @param array         $args    Query args to pass to the connection resolver.
 	 * @param AppContext    $context The context of the query to pass along.
-	 *
 	 * @return array|null
 	 */
 	public static function resolve_xprofile_field_options_connection( XProfileField $source, array $args, AppContext $context ): ?array {
@@ -311,7 +306,6 @@ class Factory {
 	 * @param array       $args    Query args to pass to the connection resolver.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_groups_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -325,7 +319,6 @@ class Factory {
 	 * @param array       $args    Query args to pass to the connection resolver.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -339,7 +332,6 @@ class Factory {
 	 * @param array       $args    Array of args to be passed down to the resolve method.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
@@ -353,7 +345,6 @@ class Factory {
 	 * @param array       $args    Array of args to be passed down to the resolve method.
 	 * @param AppContext  $context The context of the query to pass along.
 	 * @param ResolveInfo $info    The ResolveInfo object.
-	 *
 	 * @return Deferred
 	 */
 	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
