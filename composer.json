@@ -21,7 +21,7 @@
   "authors": [
     {
       "name": "Renato Alves",
-      "email": "contato@ralv.es",
+      "homepage": "https://ralv.es",
       "role": "Lead developer"
     }
   ],
@@ -31,15 +31,20 @@
   },
   "require": {
     "php": ">=7.1",
-    "squizlabs/php_codesniffer": "^3.5.4"
+    "composer/installers": "^1.10.0",
+    "phpunit/phpunit": "^6"
   },
   "require-dev": {
-    "dealerdirect/phpcodesniffer-composer-installer": "*",
-    "phpcompatibility/phpcompatibility-wp": "*",
+    "squizlabs/php_codesniffer" : "^3.5.4",
+    "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
     "wp-coding-standards/wpcs": "*"
   },
   "scripts": {
-    "phpcs": "./vendor/bin/phpcs"
+    "phpcs" : "phpcs . --basepath=.",
+    "phpcbf": "phpcbf .",
+    "phpunit": "phpunit",
+    "phpunit:mu": "phpunit -c tests/multisite.xml"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,

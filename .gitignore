@@ -7,3 +7,6 @@
 .DS_Store
 
 /vendor/
+
+# Cache files
+.phpcs/*.json
