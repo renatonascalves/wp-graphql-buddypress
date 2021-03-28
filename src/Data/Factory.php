@@ -26,9 +26,9 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
-use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 
 /**
  * Class Factory.
@@ -108,12 +108,12 @@ class Factory {
 	 * @param XProfileField $xprofile_field XProfile field value or null.
 	 * @return XProfileFieldValue|null
 	 */
-	public static function resolve_xprofile_field_data_object( $xprofile_field ): ?XProfileFieldValue {
-		if ( empty( $xprofile_field ) ) {
+	public static function resolve_xprofile_field_data_object( XProfileField $xprofile_field ): ?XProfileFieldValue {
+		if ( empty( $xprofile_field->value ) ) {
 			return null;
 		}
 
-		return new XProfileFieldValue( $xprofile_field );
+		return new XProfileFieldValue( $xprofile_field->value );
 	}
 
 	/**
