@@ -2,11 +2,10 @@
 /phpunit.xml
 /node_modules
 /npm-debug.log
+/vendor
 
 # Operating system specific files
 .DS_Store
-
-/vendor/
 
 # Cache files
 .phpcs/*.json
