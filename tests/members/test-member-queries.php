@@ -234,7 +234,7 @@ class Test_Member_Queries extends WP_UnitTestCase {
 						'avatar'            => [
 							'size' => 96,
 						],
-						'capKey'            => 'wptests_capabilities',
+						'capKey'            => 'wp_capabilities',
 						'capabilities'      => [ 'read', 'level_0', 'subscriber' ],
 						'comments'          => [
 							'edges' => [],

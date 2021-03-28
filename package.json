@@ -1,0 +1,35 @@
+{
+  "name": "wp-graphql-buddypress",
+  "description": "Bringing the power of GraphQL to BuddyPress.",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
+  "author": {
+    "name": "Renato Alves",
+    "url": "https://ralv.es"
+  },
+  "keywords": [
+    "wordpress",
+    "graphql",
+    "api",
+    "wp-graphql",
+    "wp-graphql-buddypress",
+    "wp-graphql-extension",
+    "buddypress-extension",
+    "buddypress",
+    "community",
+    "bp",
+    "rest"
+  ],
+  "devDependencies": {
+    "@wordpress/env": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=14.15.0",
+    "npm": ">=6.14.8"
+  },
+  "scripts": {
+    "wp-env": "wp-env",
+    "phpunit": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/phpunit.xml.dist'",
+    "phpunit:mu": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/multisite.xml'"
+  }
+}

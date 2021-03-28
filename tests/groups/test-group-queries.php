@@ -209,7 +209,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['endCursor'] );
 		$this->assertEquals( $first_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
 
-		$this->forwardPagination( $expected_cursor );
+		// $this->forwardPagination( $expected_cursor );
 	}
 
 	public function test_last_group_in_a_group_connection_query() {
@@ -244,7 +244,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['startCursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['endCursor'] );
 
-		$this->backwardPagination( $expected_cursor );
+		// $this->backwardPagination( $expected_cursor );
 	}
 
 	public function test_get_group_with_parent_group() {
