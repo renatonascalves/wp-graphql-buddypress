@@ -14,41 +14,46 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	exit( 1 );
 }
 
+if ( ! defined( 'BP_TESTS_DIR' ) ) {
+	define( 'BP_TESTS_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/buddypress/tests/phpunit' );
+}
+
+if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR_TEST' ) ) {
+	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql' );
+}
+
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
-
-if ( ! defined( 'BP_TESTS_DIR' ) ) {
-	$bp_tests_dir = getenv( 'BP_TESTS_DIR' );
-	if ( $bp_tests_dir ) {
-		define( 'BP_TESTS_DIR', $bp_tests_dir );
-	} else {
-		define( 'BP_TESTS_DIR', dirname( __FILE__ ) . '/../../buddypress/tests/phpunit' );
-	}
-}
-
-if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR' ) ) {
-	$wpgraphql_tests_dir = getenv( 'WPGRAPHQL_PLUGIN_DIR' );
-	if ( $wpgraphql_tests_dir ) {
-		define( 'WPGRAPHQL_PLUGIN_DIR', $wpgraphql_tests_dir );
-	} else {
-		define( 'WPGRAPHQL_PLUGIN_DIR', dirname( __FILE__ ) . '/../../wp-graphql/' );
-	}
-}
 
 /**
  * Manually load the plugins being tested.
  */
-function _manually_load_plugin() {
-	// Make sure BP is installed and loaded first.
-	require BP_TESTS_DIR . '/includes/loader.php';
+tests_add_filter(
+	'muplugins_loaded',
+	function() {
 
-	// Load WP-GraphQL
-	require WPGRAPHQL_PLUGIN_DIR . '/wp-graphql.php';
+		// Make sure BP is installed and loaded first.
+		require BP_TESTS_DIR . '/includes/loader.php';
 
-	// Load our plugin.
-	require_once dirname( __FILE__ ) . '/../wp-graphql-buddypress.php';
-}
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+		// Load WP-GraphQL
+		require WPGRAPHQL_PLUGIN_DIR_TEST . '/wp-graphql.php';
+
+		// Load our plugin.
+		require_once dirname( __FILE__ ) . '/../wp-graphql-buddypress.php';
+	}
+);
+
+/**
+ * Remove Extensions.
+ */
+tests_add_filter(
+	'graphql_request_results',
+	function( $response ) {
+		unset( $response['extensions'] );
+
+		return $response;
+	}
+);
 
 // Start up the WP testing environment.
 echo "Loading WP testing environment...\n";
