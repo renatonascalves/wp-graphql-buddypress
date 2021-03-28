@@ -9,6 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use WPGraphQL\Model\Model;
+use stdClass;
 
 /**
  * Class Attachment - Models data.
@@ -16,7 +17,7 @@ use WPGraphQL\Model\Model;
 class Attachment extends Model {
 
 	/**
-	 * Stores the object.
+	 * Stores the object for the incoming data.
 	 *
 	 * @var stdClass
 	 */
@@ -27,7 +28,7 @@ class Attachment extends Model {
 	 *
 	 * @param stdClass $attachment The Attachment object.
 	 */
-	public function __construct( $attachment ) {
+	public function __construct( stdClass $attachment ) {
 		$this->data = $attachment;
 		parent::__construct();
 	}

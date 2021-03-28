@@ -62,9 +62,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 						'isRequired'      => false,
 						'isDefaultOption' => false,
 						'visibilityLevel' => 'PUBLIC',
-						'value'           => [
-							'raw' => null,
-						],
+						'value'           => null,
 					],
 				],
 			],
@@ -92,14 +90,11 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 					visibilityLevel
 					value {
 						raw
-            			unserialized
+						unserialized
 					}
 				}
 			}
 		";
-
-		// print_r( do_graphql_request( $query ) );
-		// return;
 
 		// Test.
 		$this->assertEquals(
@@ -183,7 +178,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 					}
 					value {
 						raw
-            			unserialized
+						unserialized
 					}
 				}
 			}
@@ -267,7 +262,7 @@ class Test_XProfile_Field_Queries extends WP_UnitTestCase {
 					}
 				}
 				nodes {
-				  id
+					id
 				}
 			}
 		}';

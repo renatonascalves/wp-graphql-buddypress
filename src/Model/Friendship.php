@@ -43,7 +43,7 @@ class Friendship extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'friendship', $this->data->id )
+						? Relay::toGlobalId( 'friendship', (string) $this->data->id )
 						: null;
 				},
 				'friendshipId' => function() {

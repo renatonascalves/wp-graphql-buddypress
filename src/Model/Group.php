@@ -73,7 +73,7 @@ class Group extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'group', $this->data->id )
+						? Relay::toGlobalId( 'group', (string) $this->data->id )
 						: null;
 				},
 				'groupId' => function() {

@@ -42,7 +42,7 @@ class XProfileField extends Model {
 			$this->fields = [
 				'id'              => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'bp_xprofile_field', $this->data->id )
+						? Relay::toGlobalId( 'bp_xprofile_field', (string) $this->data->id )
 						: null;
 				},
 				'fieldId'         => function() {
@@ -72,9 +72,6 @@ class XProfileField extends Model {
 				'optionOrder'     => function() {
 					return $this->data->option_order;
 				},
-				'groupOrder'      => function() {
-					return $this->data->group_order;
-				},
 				'orderBy'         => function() {
 					return $this->data->order_by ?? null;
 				},
@@ -82,7 +79,7 @@ class XProfileField extends Model {
 					return $this->data->is_default_option;
 				},
 				'visibilityLevel' => function() {
-					return $this->data->default_visibility;
+					return $this->data->get_default_visibility() ?? null;
 				},
 				'doAutolink'      => function() {
 					return $this->data->do_autolink;
@@ -94,7 +91,7 @@ class XProfileField extends Model {
 					return $this->data ?? null;
 				},
 				'value'           => function() {
-					return $this->data ?? null;
+					return $this->data->data ?? null;
 				},
 				'memberTypes'     => function() {
 					return $this->data->get_member_types() ?? null;

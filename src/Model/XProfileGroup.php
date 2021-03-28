@@ -61,7 +61,7 @@ class XProfileGroup extends Model {
 					return $this->data->can_delete;
 				},
 				'userId' => function() {
-					return $this->source->userId ?? null;
+					return $this->data->userId ?? null;
 				},
 			];
 		}

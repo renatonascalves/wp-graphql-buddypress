@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 
 use WPGraphQL\Model\Model;
 use WPGraphQL\Utils\Utils;
-use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use BP_XProfile_ProfileData;
 /**
  * Class XProfile Field Value - Models the data for the XProfile Field Value object type.
  */
@@ -19,17 +19,17 @@ class XProfileFieldValue extends Model {
 	/**
 	 * Stores the object for the incoming data.
 	 *
-	 * @var XProfileField
+	 * @var BP_XProfile_ProfileData
 	 */
 	protected $data;
 
 	/**
-	 * XProfile field value constructor.
+	 * XProfile Profile Data constructor.
 	 *
-	 * @param XProfileField $xprofile_field The XProfile Field object.
+	 * @param BP_XProfile_ProfileData $xprofile_field_data The XProfile Profile Data object.
 	 */
-	public function __construct( XProfileField $xprofile_field ) {
-		$this->data = $xprofile_field->value;
+	public function __construct( BP_XProfile_ProfileData $xprofile_field_data ) {
+		$this->data = $xprofile_field_data;
 		parent::__construct();
 	}
 
@@ -41,16 +41,16 @@ class XProfileFieldValue extends Model {
 	protected function is_private(): bool {
 
 		// Empty data/value is not private.
-		if ( empty( $this->data->data ) ) {
+		if ( empty( $this->data->value ) ) {
 			return false;
 		}
 
 		$hidden_user_fields = bp_xprofile_get_hidden_fields_for_user(
-			$this->data->data->user_id ?? 0,
+			$this->data->user_id ?? 0,
 			$this->current_user->ID ?? 0
 		);
 
-		return in_array( $this->data->data->id, (array) $hidden_user_fields, true );
+		return in_array( $this->data->id, (array) $hidden_user_fields, true );
 	}
 
 	/**
@@ -60,16 +60,16 @@ class XProfileFieldValue extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'raw'          => function() {
-					return $this->data->data->value ?? null;
+					return $this->data->value ?? null;
 				},
 				'unserialized' => function() {
-					return $this->get_unserialized_value( $this->data->data->value );
+					return $this->get_unserialized_value( $this->data->value );
 				},
 				'rendered'     => function() {
-					return $this->get_rendered_value( $this->data->data->value, $this->data->data->field_id );
+					return $this->get_rendered_value( $this->data->value, $this->data->field_id );
 				},
 				'lastUpdated'  => function() {
-					return Utils::prepare_date_response( $this->data->data->last_updated );
+					return Utils::prepare_date_response( $this->data->last_updated );
 				},
 			];
 		}
