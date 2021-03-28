@@ -269,7 +269,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 					}
 
 					foreach ( $caps as $key => $capability ) {
-						if ( $capability != 'do_not_allow' ) {
+						if ( 'do_not_allow' !== $capability ) {
 							continue;
 						}
 
