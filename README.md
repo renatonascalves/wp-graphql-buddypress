@@ -2,11 +2,7 @@
 
 Bringing the power of GraphQL to BuddyPress.
 
-[![Build Status](https://travis-ci.org/wp-graphql/wp-graphql-buddypress.svg?branch=master)](https://travis-ci.org/wp-graphql/wp-graphql-buddypress )
-
-Please, use and provide feedback!
-
-Docs (soon) • <a href="https://ralv.es" target="_blank">Renato Alves</a> • <a href="https://wpgql-slack.herokuapp.com/" target="_blank">Join Slack</a>
+Docs (soon) • [Renato Alves](https://ralv.es) • [Join Slack](https://wpgql-slack.herokuapp.com/)
 
 ## System Requirements
 
@@ -24,19 +20,19 @@ Docs (soon) • <a href="https://ralv.es" target="_blank">Renato Alves</a> • 
 
 ## Components Supported
 
-- [x] Groups (with Avatar and Cover Attachments)
-- [x] Members (with Avatar and Cover Attachments)
-- [x] Blogs (with Avatar and Cover Attachments)
-- [x] XProfile (Groups, Fields and Data)
-- [x] Friends
+* [x] Groups (with Avatar and Cover Attachments)
+* [x] Members (with Avatar and Cover Attachments)
+* [x] Blogs (with Avatar and Cover Attachments)
+* [x] XProfile (Groups, Fields and Data)
+* [x] Friends
 
-## Pending Components
+## Components Pending Support
 
-- [ ] Components
-- [ ] Notifications
-- [ ] Signup
-- [ ] Activity
-- [ ] Messages
-- [ ] Group Membership
-- [ ] Group Membership Request(s)
-- [ ] Group Invites
+* [ ] Components
+* [ ] Notifications
+* [ ] Signup
+* [ ] Activity
+* [ ] Messages
+* [ ] Group Membership
+* [ ] Group Membership Request(s)
+* [ ] Group Invites

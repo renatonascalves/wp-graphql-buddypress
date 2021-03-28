@@ -241,6 +241,54 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 			/**
 			 * Allow regular BuddyPress members to delete their own account, if allowed.
+			 *
+			 * Multisite uses this hook.
+			 */
+			add_filter(
+				'map_meta_cap',
+				function( $caps, $cap, $user_id ) {
+
+					// Apply to GraphQL request only.
+					if ( false === is_graphql_request() ) {
+						return $caps;
+					}
+
+					// Check for settings to confirm if users can delete their own accounts.
+					if ( true === bp_disable_account_deletion() ) {
+						return $caps;
+					}
+
+					// Check if user is logged in.
+					if ( false === is_user_logged_in() ) {
+						return $caps;
+					}
+
+					// Confirm user to check against with logged in user.
+					if ( bp_loggedin_user_id() !== $user_id ) {
+						return $caps;
+					}
+
+					foreach ( $caps as $key => $capability ) {
+						if ( 'do_not_allow' !== $capability ) {
+							continue;
+						}
+
+						switch ( $cap ) {
+							case 'delete_user':
+							case 'delete_users':
+								$caps[ $key ] = 'delete_users';
+								break;
+						}
+					}
+
+					return $caps;
+				},
+				1,
+				3
+			);
+
+			/**
+			 * Allow regular BuddyPress members to delete their own account, if allowed.
 			 */
 			add_filter(
 				'user_has_cap',
@@ -282,7 +330,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 					}
 
 					// Allow for this one.
-					$caps[ $cap[0] ] = true;
+					$caps[ $args[0] ] = true;
 
 					return $caps;
 				},
