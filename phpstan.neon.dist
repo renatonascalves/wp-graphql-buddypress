@@ -1,0 +1,12 @@
+parameters:
+	level: 5
+	inferPrivatePropertyTypeFromConstructor: true
+	checkMissingIterableValueType: false
+	bootstrapFiles:
+		- .phpstan/constants.php
+		- wp-graphql-buddypress.php
+	paths:
+		- wp-graphql-buddypress.php
+	ignoreErrors:
+		# Ignore any filters that are applied with more than 2 paramaters
+		- '#^Function apply_filters(_ref_array)? invoked with ([1-9]|1[0-2]) parameters, 2 required\.$#'

@@ -48,6 +48,33 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 		$this->assertFalse( get_user_by( 'id', $u ) );
 	}
 
+	public function test_admins_can_delete_members() {
+		$u = self::factory()->user->create();
+
+		self::$bp->set_current_user( self::$admin );
+
+		$guid = \GraphQLRelay\Relay::toGlobalId( 'user', $u );
+
+		$this->assertEquals(
+			[
+				'data' => [
+					'deleteUser' => [
+						'clientMutationId' => self::$client_mutation_id,
+						'deletedId'        => $guid,
+						'user'             => [
+							'userId' => $u,
+							'id'     => $guid,
+						]
+					]
+				]
+			],
+			$this->delete_member( $u )
+		);
+
+		// Make sure the user actually got deleted.
+		$this->assertFalse( get_user_by( 'id', $u ) );
+	}
+
 	public function test_member_can_not_delete_other_members_account() {
 		self::$bp->set_current_user( self::$user );
 
