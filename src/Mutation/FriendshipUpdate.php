@@ -61,12 +61,12 @@ class FriendshipUpdate {
 			'friendship' => [
 				'type'        => 'Friendship',
 				'description' => __( 'The friendship that was updated/accepted.', 'wp-graphql-buddypress' ),
-				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload ) {
 					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
 						return null;
 					}
 
-					return Factory::resolve_friendship_object( absint( $payload['id'] ), $context );
+					return Factory::resolve_friendship_object( absint( $payload['id'] ) );
 				},
 			],
 		];

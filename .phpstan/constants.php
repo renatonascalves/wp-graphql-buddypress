@@ -16,6 +16,10 @@ if ( ! defined( 'BP_DIR' ) ) {
 }
 require_once BP_DIR . '/bp-loader.php';
 require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';
+require_once BP_DIR . '/src/bp-friends/bp-friends-functions.php';
+
+require_once BP_DIR . '/src/bp-blogs/bp-blogs-functions.php';
+require_once BP_DIR . '/src/bp-blogs/bp-blogs-template.php';
 
 require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
 

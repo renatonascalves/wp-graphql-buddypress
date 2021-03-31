@@ -22,7 +22,7 @@ class GroupMutation {
 	 *
 	 * @throws UserError User error for invalid group.
 	 *
-	 * @param array $input Array of possible input fields.
+	 * @param array|int $input Array of possible input fields or a single integer.
 	 * @return BP_Groups_Group
 	 */
 	public static function get_group_from_input( $input ): BP_Groups_Group {
@@ -96,9 +96,9 @@ class GroupMutation {
 		/**
 		 * Allows changing output args.
 		 *
-		 * @param array                 $output_args Mutation output args.
-		 * @param array                 $input       Mutation input args.
-		 * @param \BP_Groups_Group|null $group       Group object.
+		 * @param array                $output_args Mutation output args.
+		 * @param array                $input       Mutation input args.
+		 * @param BP_Groups_Group|null $group       Group object.
 		 */
 		return apply_filters( "bp_graphql_groups_{$action}_mutation_args", $output_args, $input, $group );
 	}

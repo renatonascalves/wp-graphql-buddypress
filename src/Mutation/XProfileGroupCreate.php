@@ -88,13 +88,13 @@ class XProfileGroupCreate {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Create XProfile group and return the ID.
+			// Create XProfile group.
 			$xprofile_group_id = xprofile_insert_field_group(
 				XProfileGroupMutation::prepare_xprofile_group_args( $input, null, 'create' )
 			);
 
 			// Throw an exception if the XProfile group failed to be created.
-			if ( false === is_numeric( $xprofile_group_id ) ) {
+			if ( false === $xprofile_group_id ) {
 				throw new UserError( __( 'Cannot create XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
 
