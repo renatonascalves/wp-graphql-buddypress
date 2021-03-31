@@ -16,7 +16,7 @@ use stdClass;
 /**
  * Class Blog - Models the data for the Blog object type.
  *
- * @property int    $id ID.
+ * @property string $id ID.
  * @property int    $blogId Blog ID.
  * @property int    $admin ID of the group admin.
  * @property string $name Group name.
