@@ -15,6 +15,8 @@ use BP_Groups_Group;
 
 /**
  * Class Group - Models the data for the Group object type.
+ *
+ * @property int $groupId Group ID.
  */
 class Group extends Model {
 

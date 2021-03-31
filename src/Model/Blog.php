@@ -15,6 +15,16 @@ use stdClass;
 
 /**
  * Class Blog - Models the data for the Blog object type.
+ *
+ * @property int    $id ID.
+ * @property int    $blogId Blog ID.
+ * @property int    $admin ID of the group admin.
+ * @property string $name Group name.
+ * @property string $description Group description.
+ * @property string $permalink Group permalink.
+ * @property string $path Group path.
+ * @property string $domain Group domain.
+ * @property string $lastActivity Group's last activity.
  */
 class Blog extends Model {
 

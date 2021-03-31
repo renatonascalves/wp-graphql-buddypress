@@ -79,7 +79,7 @@ class GroupType {
 							);
 
 							foreach ( (array) $admin_mods['members'] as $admin ) {
-								if ( ! empty( $admin->is_admin ) ) {
+								if ( ! empty( $admin->is_admin ) && ! empty( $admin->ID ) ) {
 									$admins[] = $admin->ID;
 								}
 							}

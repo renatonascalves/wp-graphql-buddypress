@@ -17,6 +17,10 @@ if ( ! defined( 'BP_DIR' ) ) {
 require_once BP_DIR . '/bp-loader.php';
 require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';
 
+require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
+
+require_once BP_DIR . '/src/bp-members/bp-members-functions.php';
+
 require_once BP_DIR . '/src/bp-groups/classes/class-bp-groups-group.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-functions.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-template.php';
@@ -24,6 +28,7 @@ require_once BP_DIR . '/src/bp-groups/bp-groups-template.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-field.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-profiledata.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-group.php';
+
 require_once BP_DIR . '/src/bp-xprofile/bp-xprofile-functions.php';
 require_once BP_DIR . '/src/bp-xprofile/bp-xprofile-template.php';
 
