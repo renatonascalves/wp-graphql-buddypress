@@ -62,7 +62,7 @@ class AttachmentMutation {
 	 *
 	 * @param array  $input   Mutation input fields.
 	 * @param string $object  Object (members, groups, blogs, etc).
-	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
+	 * @param int    $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
 	public static function upload_cover_from_file( $input, $object, $item_id ) {
 
@@ -70,7 +70,7 @@ class AttachmentMutation {
 		$bp = buddypress();
 		switch ( $object ) {
 			case 'groups':
-				$bp->groups->current_group = groups_get_group( $item_id );
+				$bp->groups->current_group = groups_get_group( absint( $item_id ) );
 				break;
 
 			case 'members':
@@ -128,7 +128,7 @@ class AttachmentMutation {
 		);
 
 		// The BP Attachments Uploads Dir is not set, so stop here.
-		if ( false === $bp_attachments_uploads_dir ) {
+		if ( empty( $bp_attachments_uploads_dir ) ) {
 			throw new UserError( __( 'The BuddyPress attachments uploads directory is not set.', 'wp-graphql-buddypress' ) );
 		}
 
@@ -181,7 +181,7 @@ class AttachmentMutation {
 	 *
 	 * @param array  $input   Mutation input fields.
 	 * @param string $object  Object (user, group, blog, etc).
-	 * @param string $item_id Item. (user_id, group_id, blog_id, etc).
+	 * @param int    $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
 	public static function upload_avatar_from_file( $input, $object, $item_id ) {
 
@@ -249,8 +249,7 @@ class AttachmentMutation {
 	 * @return string
 	 */
 	protected static function resize( $file, $avatar_instance ): string {
-		$bp          = buddypress();
-		$upload_path = bp_core_avatar_upload_path();
+		$bp = buddypress();
 
 		if ( ! isset( $bp->avatar_admin ) ) {
 			$bp->avatar_admin = new stdClass();
@@ -266,27 +265,23 @@ class AttachmentMutation {
 
 		$resized = $avatar_instance->shrink( $file, $ui_available_width );
 
-		// We only want to handle one image after resize.
-		if ( empty( $resized ) ) {
-			$image_file = $file;
-			$img_dir    = str_replace( $upload_path, '', $file );
-		} else {
-			$image_file = $resized['path'];
-			$img_dir    = str_replace( $upload_path, '', $resized['path'] );
-		}
-
 		// Check for WP_Error on what should be an image.
-		if ( is_wp_error( $img_dir ) ) {
+		if ( is_wp_error( $resized ) ) {
 			throw new UserError(
 				sprintf(
 					/* translators: %s is replaced with the error. */
 					__( 'Upload failed! Error was: %s.', 'wp-graphql-buddypress' ),
-					$img_dir->get_error_message()
+					$resized->get_error_message()
 				)
 			);
 		}
 
-		return $image_file;
+		// We only want to handle one image after resize.
+		if ( empty( $resized ) || empty( $resized['path'] ) ) {
+			return $file;
+		}
+
+		return $resized['path'];
 	}
 
 	/**

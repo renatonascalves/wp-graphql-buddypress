@@ -13,6 +13,9 @@ use stdClass;
 
 /**
  * Class Attachment - Models data.
+ *
+ * @property string $thumb Thumbnail size.
+ * @property string $full Full size.
  */
 class Attachment extends Model {
 

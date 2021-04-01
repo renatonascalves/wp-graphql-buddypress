@@ -15,6 +15,19 @@ use BP_Groups_Group;
 
 /**
  * Class Group - Models the data for the Group object type.
+ *
+ * @property string $id ID.
+ * @property int $groupId Group ID.
+ * @property int $parent Group parent ID.
+ * @property int $creator Group creator ID.
+ * @property string $name Group name.
+ * @property string $slug Group slug.
+ * @property string $description Group description.
+ * @property string $link Group link.
+ * @property bool $hasForum Group has forum.
+ * @property int $totalMemberCount Total number of group member.
+ * @property string $dateCreated Date group was created.
+ * @property string $status Group status.
  */
 class Group extends Model {
 

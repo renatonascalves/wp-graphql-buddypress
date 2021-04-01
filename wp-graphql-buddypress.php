@@ -159,7 +159,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 				}
 
 				// Bail if installed incorrectly.
-				if ( ! class_exists( 'WPGraphQL\Extensions\BuddyPress' ) ) {
+				if ( ! class_exists( 'WPGraphQL\Extensions\BuddyPress\TypeRegistry' ) ) {
 					add_action( 'admin_notices', array( $this, 'wp_graphql_buddypress_missing_notice' ) );
 					return false;
 				}

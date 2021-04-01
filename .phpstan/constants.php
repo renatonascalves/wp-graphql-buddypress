@@ -14,13 +14,17 @@ define( 'WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR', true );
 if ( ! defined( 'BP_DIR' ) ) {
 	define( 'BP_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/BuddyPress' );
 }
-require_once BP_DIR . '/bp-loader.php';
-require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';
 
+require_once BP_DIR . '/bp-loader.php';
+require_once BP_DIR . '/src/bp-friends/bp-friends-functions.php';
+require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';
+require_once BP_DIR . '/src/bp-blogs/bp-blogs-functions.php';
+require_once BP_DIR . '/src/bp-blogs/bp-blogs-template.php';
+require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
+require_once BP_DIR . '/src/bp-members/bp-members-functions.php';
 require_once BP_DIR . '/src/bp-groups/classes/class-bp-groups-group.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-functions.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-template.php';
-
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-field.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-profiledata.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-group.php';

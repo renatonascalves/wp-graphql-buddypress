@@ -15,6 +15,13 @@ use BP_Friends_Friendship;
 
 /**
  * Class Friendship - Models the data for the Friendship object type.
+ *
+ * @property string $id ID.
+ * @property int $friendshipId Friendship ID.
+ * @property int $initiator ID of the user.
+ * @property int $friend ID of the user.
+ * @property bool $isConfirmed Friendship confirmation status.
+ * @property string $dateCreated Date of the friendship.
  */
 class Friendship extends Model {
 
