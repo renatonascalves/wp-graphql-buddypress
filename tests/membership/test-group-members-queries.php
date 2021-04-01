@@ -5,7 +5,7 @@
  *
  * @group group-membership
  */
-class Test_Group_Members_Queries extends WP_UnitTestCase {
+class Test_Group_Members_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public static $admin;
 	public static $bp;
@@ -27,7 +27,7 @@ class Test_Group_Members_Queries extends WP_UnitTestCase {
 
 		$this->populate_group_with_members( [ $u1, $u2 ], $group_id );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', $group_id );
 
 		self::$bp->set_current_user( self::$admin );
 

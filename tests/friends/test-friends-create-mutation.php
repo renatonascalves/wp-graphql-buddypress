@@ -5,7 +5,7 @@
  *
  * @group friends
  */
-class Test_Friendship_Create_Mutation extends WP_UnitTestCase {
+class Test_Friendship_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public static $bp_factory;
 	public static $user;

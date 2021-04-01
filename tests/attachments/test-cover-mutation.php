@@ -5,7 +5,7 @@
  *
  * @group attachment-cover
  */
-class Test_Attachment_Cover_Mutation extends WP_UnitTestCase {
+class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $bp_factory;
 	public $bp;

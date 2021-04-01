@@ -6,7 +6,7 @@
  * @group xprofile-field
  * @group xprofile
  */
-class Test_XProfile_Field_Update_Mutation extends WP_UnitTestCase {
+class Test_XProfile_Field_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $bp_factory;

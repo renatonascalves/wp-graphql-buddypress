@@ -5,7 +5,7 @@
  *
  * @group blogs
  */
-class Test_Blogs_Queries extends WP_UnitTestCase {
+class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $bp_factory;
 	public $bp;
@@ -30,7 +30,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 
 		$b1 = $this->bp_factory->blog->create();
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'blog', $b1 );
+		$global_id = $this->toRelayId( 'blog', $b1 );
 
 		$query = "{
 			blogBy( id: \"{$global_id}\" ) {
@@ -71,7 +71,7 @@ class Test_Blogs_Queries extends WP_UnitTestCase {
 		$u2 = $this->bp_factory->user->create();
 		$this->bp->set_current_user( $u2 );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'blog', $b1 );
+		$global_id = $this->toRelayId( 'blog', $b1 );
 
 		$query = "{
 			blogBy( id: \"{$global_id}\" ) {

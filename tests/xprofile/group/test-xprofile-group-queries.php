@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Queries extends WP_UnitTestCase {
+class Test_XProfile_Group_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -45,7 +45,7 @@ class Test_XProfile_Group_Queries extends WP_UnitTestCase {
 			]
 		);
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'bp_xprofile_group', $u1 );
+		$global_id = $this->toRelayId( 'bp_xprofile_group', $u1 );
 
 		$query = "
 			query {

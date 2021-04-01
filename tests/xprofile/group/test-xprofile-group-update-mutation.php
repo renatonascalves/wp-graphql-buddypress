@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Update_Mutation extends WP_UnitTestCase {
+class Test_XProfile_Group_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $xprofile_group_id;

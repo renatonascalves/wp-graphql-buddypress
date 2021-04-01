@@ -5,7 +5,7 @@
  *
  * @group members
  */
-class Test_Member_Queries extends WP_UnitTestCase {
+class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase  {
 
 	public static $admin;
 	public static $user;
@@ -26,7 +26,7 @@ class Test_Member_Queries extends WP_UnitTestCase {
 
 	public function test_member_query_as_unauthenticated_user() {
 		$user_id   = self::factory()->user->create( [ 'user_email' => 'test@test.com' ] );
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $user_id );
+		$global_id = $this->toRelayId( 'user', $user_id );
 
 		// Set member types.
 		bp_set_member_type( $user_id, 'foo' );
@@ -148,7 +148,7 @@ class Test_Member_Queries extends WP_UnitTestCase {
 
 	public function test_member_query_as_authenticated_user() {
 		$user_id   = self::factory()->user->create( [ 'user_email' => 'test@test.com' ] );
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', $user_id );
+		$global_id = $this->toRelayId( 'user', $user_id );
 
 		// Set member types.
 		bp_set_member_type( $user_id, 'foo' );

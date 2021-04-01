@@ -5,7 +5,7 @@
  *
  * @group groups
  */
-class Test_Groups_Create_Mutation extends WP_UnitTestCase {
+class Test_Groups_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $bp_factory;

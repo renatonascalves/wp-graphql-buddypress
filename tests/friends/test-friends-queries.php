@@ -5,7 +5,7 @@
  *
  * @group friends
  */
-class Test_Friendship_Queries extends WP_UnitTestCase {
+class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public static $bp_factory;
 	public static $user;
@@ -28,7 +28,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 		$this->create_friendship( $u2, self::$user );
 		$this->create_friendship( $u3, self::$user );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'user', self::$user );
+		$global_id = $this->toRelayId( 'user', self::$user );
 
         self::$bp->set_current_user( self::$user );
 
@@ -65,7 +65,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 
 		self::$bp->set_current_user( self::$user );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
+		$global_id = $this->toRelayId( 'friendship', $f );
 
 		$query = "{
 			friendshipBy( id: \"{$global_id}\" ) {
@@ -110,7 +110,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 
 		self::$bp->set_current_user( $u1 );
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
+		$global_id = $this->toRelayId( 'friendship', $f );
 
 		$query = "{
 			friendshipBy( id: \"{$global_id}\" ) {
@@ -149,7 +149,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 
 	public function test_getting_friendship_with_non_logged_in_user() {
 		$f         = $this->create_friendship();
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
+		$global_id = $this->toRelayId( 'friendship', $f );
 		$query     = "{
 			friendshipBy( id: \"{$global_id}\" ) {
 				id
@@ -169,7 +169,7 @@ class Test_Friendship_Queries extends WP_UnitTestCase {
 			self::$bp_factory->user->create()
 		);
 
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'friendship', $f );
+		$global_id = $this->toRelayId( 'friendship', $f );
 		$query     = "{
 			friendshipBy( id: \"{$global_id}\" ) {
 				id

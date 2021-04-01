@@ -5,7 +5,7 @@
  *
  * @group attachment-avatar
  */
-class Test_Attachment_Avatar_Mutation extends WP_UnitTestCase {
+class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $bp_factory;
 	public $bp;

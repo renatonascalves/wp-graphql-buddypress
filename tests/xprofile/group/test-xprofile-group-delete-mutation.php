@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Delete_Mutation extends WP_UnitTestCase {
+class Test_XProfile_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $bp_factory;

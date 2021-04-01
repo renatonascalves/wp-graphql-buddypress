@@ -5,7 +5,7 @@
  *
  * @group groups
  */
-class Test_Groups_Queries extends WP_UnitTestCase {
+class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -25,7 +25,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	public function test_group_query() {
 
 		$group_id  = $this->create_group_object();
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', $group_id );
 
 		/**
 		 * Create the query string to pass to the $query
@@ -92,7 +92,7 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 	public function test_group_by_query_with_id_param() {
 
 		$group_id  = $this->create_group_object();
-		$global_id = \GraphQLRelay\Relay::toGlobalId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', $group_id );
 
 		// Create the query string to pass to the $query
 		$query = "
@@ -254,8 +254,8 @@ class Test_Groups_Queries extends WP_UnitTestCase {
 			'parent_id' => $parent_id,
 		] );
 
-		$global_id       = \GraphQLRelay\Relay::toGlobalId( 'group', $parent_id );
-		$global_child_id = \GraphQLRelay\Relay::toGlobalId( 'group', $child_id );
+		$global_id       = $this->toRelayId( 'group', $parent_id );
+		$global_child_id = $this->toRelayId( 'group', $child_id );
 
 		$query = "{
 			groupBy(id: \"{$global_child_id}\") {

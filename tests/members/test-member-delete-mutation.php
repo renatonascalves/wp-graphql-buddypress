@@ -5,7 +5,7 @@
  *
  * @group members
  */
-class Test_Member_Delete_Mutation extends WP_UnitTestCase {
+class Test_Member_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase  {
 
 	public static $admin;
 	public static $user;
@@ -26,7 +26,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 
 		self::$bp->set_current_user( $u );
 
-		$guid = \GraphQLRelay\Relay::toGlobalId( 'user', $u );
+		$guid = $this->toRelayId( 'user', $u );
 
 		$this->assertEquals(
 			[
@@ -53,7 +53,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
 
 		self::$bp->set_current_user( self::$admin );
 
-		$guid = \GraphQLRelay\Relay::toGlobalId( 'user', $u );
+		$guid = $this->toRelayId( 'user', $u );
 
 		$this->assertEquals(
 			[
@@ -137,7 +137,7 @@ class Test_Member_Delete_Mutation extends WP_UnitTestCase {
         ';
 
 		$variables = [
-			'id'               => \GraphQLRelay\Relay::toGlobalId( 'user', $u ),
+			'id'               => $this->toRelayId( 'user', $u ),
 			'clientMutationId' => self::$client_mutation_id,
 		];
 
