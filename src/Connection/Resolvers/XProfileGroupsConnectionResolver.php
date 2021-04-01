@@ -63,10 +63,10 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 		// Setting fields from user and parent profile group.
 		if ( true === is_object( $this->source ) ) {
 			switch ( true ) {
-				case $this->source instanceof User:
+				case ( $this->source instanceof User ):
 					$query_args['user_id'] = $this->source->userId;
 					break;
-				case $this->source instanceof XProfileGroup:
+				case ( $this->source instanceof XProfileGroup ):
 					$query_args['profile_group_id'] = $this->source->groupId;
 					break;
 				default:

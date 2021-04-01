@@ -190,13 +190,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	protected function can_see_hidden_groups( int $user_id ): bool {
-		return (
-			bp_current_user_can( 'bp_moderate' )
-			|| (
-				is_user_logged_in()
-				&& isset( $user_id )
-				&& bp_loggedin_user_id() === $user_id
-			)
-		);
+		return bp_current_user_can( 'bp_moderate' ) || ( is_user_logged_in() && bp_loggedin_user_id() === $user_id );
 	}
 }

@@ -14,6 +14,7 @@ use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
 use WPGraphQL\Model\User;
+use BP_Friends_Friendship;
 
 /**
  * Class FriendshipsConnectionResolver
@@ -96,7 +97,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_query(): array {
-		return \BP_Friends_Friendship::get_friendships( $this->source->userId ?? 0, $this->query_args );
+		return BP_Friends_Friendship::get_friendships( $this->source->userId ?? 0, $this->query_args );
 	}
 
 	/**
@@ -135,13 +136,15 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid.
+	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return FriendshipMutation::friendship_exists( $offset );
+		return FriendshipMutation::friendship_exists(
+			current( BP_Friends_Friendship::get_friendships_by_id( $offset ) )
+		);
 	}
 
 	/**

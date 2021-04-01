@@ -14,6 +14,14 @@ use stdClass;
 
 /**
  * Class XProfile Group - Models the data for the XProfile Group object type.
+ *
+ * @property string $id ID.
+ * @property int $groupId XProfile group ID.
+ * @property string $name XProfile group name.
+ * @property string $description XProfile group description.
+ * @property int $groupOrder XProfile group order.
+ * @property bool $canDelete Can delete XProfile group.
+ * @property int $userId User ID.
  */
 class XProfileGroup extends Model {
 

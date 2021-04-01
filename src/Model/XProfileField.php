@@ -11,9 +11,13 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
 use BP_XProfile_Field;
+use BP_XProfile_ProfileData;
 
 /**
  * Class XProfile Field - Models the data for the XProfile Field object type.
+ *
+ * @property string $id ID.
+ * @property BP_XProfile_ProfileData $options XProfile field options.
  */
 class XProfileField extends Model {
 
