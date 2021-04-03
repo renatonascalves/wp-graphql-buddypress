@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -88,7 +88,7 @@ class Test_XProfile_Group_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -102,10 +102,8 @@ class Test_XProfile_Group_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 			}
 		";
 
-		$response = do_graphql_request( $query );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'The "id" is invalid.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
+			->expectedErrorMessage( 'The "id" is invalid.' );
 
 		$query = "
 			query {
@@ -115,39 +113,7 @@ class Test_XProfile_Group_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 			}
 		";
 
-		$response = do_graphql_request( $query );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Internal server error', $response['errors'][0]['message'] );
-	}
-
-	/**
-	 * @todo
-	 */
-	protected function xprofileGroupsQuery( $variables ) {
-		$query = 'query xprofileGroupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToXProfileGroupConnectionWhereArgs) {
-			xprofileGroups( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						id
-						groupId
-						name
-					}
-				}
-				nodes {
-				  id
-				  groupId
-				}
-			}
-		}';
-
-		return do_graphql_request( $query, 'xprofileGroupsQuery', $variables );
+		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
+			->expectedErrorMessage( 'Internal server error' );
 	}
 }

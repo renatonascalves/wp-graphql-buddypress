@@ -6,7 +6,7 @@
  * @group xprofile-field
  * @group xprofile
  */
-class Test_XProfile_Field_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Field_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -63,7 +63,7 @@ class Test_XProfile_Field_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	}
 
     public function test_update_xprofile_field_with_no_input() {
-		$mutation = '
+		$query = '
 			mutation updateXProfileFieldTest( $clientMutationId: String! ) {
 				updateXProfileField(
 					input: {
@@ -83,27 +83,24 @@ class Test_XProfile_Field_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 			'clientMutationId' => $this->client_mutation_id,
 		];
 
-		$response = do_graphql_request( $mutation, 'updateXProfileFieldTest', $variables );
+		$operation_name = 'updateXProfileFieldTest';
 
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile field does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) )
+			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 
 	public function test_update_invalid_xprofile_field_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->update_xprofile_field( 99999999 );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile field does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->update_xprofile_field( 99999999 ) )
+			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 
 	public function test_update_xprofile_field_user_not_logged_in() {
         $field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
-		$response = $this->update_xprofile_field( $field_id );
 
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->update_xprofile_field( $field_id ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
     }
 
     public function test_update_xprofile_field_user_without_permission() {
@@ -112,38 +109,7 @@ class Test_XProfile_Field_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 		$u1 = $this->factory->user->create( array( 'role' => 'subscriber' ) );
         $this->bp->set_current_user( $u1 );
 
-		$response = $this->update_xprofile_field( $field_id );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function update_xprofile_field( $field_id = null, $name = null ) {
-		$mutation = '
-			mutation updateXProfileFieldTest( $clientMutationId: String!, $fieldId: Int, $name: String ) {
-				updateXProfileField(
-					input: {
-						clientMutationId: $clientMutationId
-						fieldId: $fieldId
-                        name: $name
-					}
-				)
-				{
-					clientMutationId
-					field {
-						fieldId
-                        name
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'fieldId'          => $field_id,
-            'name'             => $name ?? 'Updated XProfile Group',
-		];
-
-		return do_graphql_request( $mutation, 'updateXProfileFieldTest', $variables );
+		$this->assertQueryFailed( $this->update_xprofile_field( $field_id ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 }

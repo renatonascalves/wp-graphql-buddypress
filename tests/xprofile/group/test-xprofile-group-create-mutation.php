@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Group_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -30,8 +30,6 @@ class Test_XProfile_Group_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	public function test_create_xprofile_group() {
 		$this->bp->set_current_user( $this->admin );
 
-		$mutation = $this->create_xprofile_group();
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -44,61 +42,19 @@ class Test_XProfile_Group_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 					],
 				],
 			],
-			do_graphql_request( $mutation[0], 'createXProfileGroupTest', $mutation[1] )
+			$this->create_xprofile_group()
 		);
 	}
 
 	public function test_create_xprofile_group_user_not_logged_in() {
-		$mutation = $this->create_xprofile_group();
-		$response = do_graphql_request( $mutation[0], 'createXProfileGroupTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->create_xprofile_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_create_xprofile_group_without_permission() {
 		$this->bp->set_current_user( $this->factory->user->create() );
 
-		$mutation = $this->create_xprofile_group();
-		$response = do_graphql_request( $mutation[0], 'createXProfileGroupTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function create_xprofile_group( $name = null, $desc = null ) {
-
-		$mutation = '
-		mutation createXProfileGroupTest(
-			$clientMutationId:String!,
-			$name:String!,
-			$description:String
-		) {
-			createXProfileGroup(
-				input: {
-					clientMutationId: $clientMutationId
-					name: $name
-					description: $description
-				}
-			)
-          	{
-				clientMutationId
-		    	group {
-					name
-					description
-		    	}
-          	}
-        }
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'name'             => $name ?? 'XProfile Group Test',
-				'description'      => $desc ?? 'Description',
-			]
-		);
-
-		return [ $mutation, $variables ];
+		$this->assertQueryFailed( $this->create_xprofile_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 }

@@ -5,7 +5,7 @@
  *
  * @group attachment-avatar
  */
-class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Attachment_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $bp_factory;
 	public $bp;
@@ -43,8 +43,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
-		$mutation = $this->upload_avatar( 'USER', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = $this->upload_avatar( 'USER', $this->user );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -71,37 +70,27 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	 * @group member-avatar
 	 */
 	public function test_member_avatar_upload_with_upload_disabled() {
-		$mutation = $this->upload_avatar( 'USER', $this->user );
-
 		// Disabling avatar upload.
 		add_filter( 'bp_disable_avatar_uploads', '__return_true' );
 
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, member avatar upload is disabled.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', $this->user ) )
+			->expectedErrorMessage( 'Sorry, member avatar upload is disabled.' );
 	}
 
 	/**
 	 * @group member-avatar
 	 */
 	public function test_member_avatar_upload_without_a_loggin_in_user() {
-		$mutation = $this->upload_avatar( 'USER', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', $this->user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
 	 * @group member-avatar
 	 */
 	public function test_member_avatar_upload_with_an_invalid_member_id() {
-		$mutation = $this->upload_avatar( 'USER', 99999999 );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', 99999999 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -110,11 +99,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	public function test_member_avatar_upload_with_member_without_permissions() {
 		$this->bp->set_current_user( $this->user );
 
-		$mutation = $this->upload_avatar( 'USER', $this->bp_factory->user->create() );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', $this->bp_factory->user->create() ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -123,11 +109,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	public function test_member_avatar_delete_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->delete_avatar( 'USER', $this->user );
-		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_avatar( 'USER', $this->user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -144,8 +127,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$mutation = $this->upload_avatar( 'USER', $u );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = $this->upload_avatar( 'USER', $u );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -167,9 +149,6 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 			$response
 		);
 
-		$mutation = $this->delete_avatar( 'USER', $u );
-		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -183,7 +162,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 					],
 				],
 			],
-			$response
+			$this->delete_avatar( 'USER', $u )
 		);
 
 		// Confirm that the default avatar IS present.
@@ -202,8 +181,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
-		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = $this->upload_avatar( 'GROUP', $this->group );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -233,37 +211,27 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	 * @group group-avatar
 	 */
 	public function test_group_avatar_upload_with_upload_disabled() {
-		$mutation = $this->upload_avatar( 'GROUP', $this->user );
-
 		// Disabling avatar upload.
 		add_filter( 'bp_disable_group_avatar_uploads', '__return_true' );
 
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, group avatar upload is disabled.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'GROUP', $this->user ) )
+			->expectedErrorMessage( 'Sorry, group avatar upload is disabled.' );
 	}
 
 	/**
 	 * @group group-avatar
 	 */
 	public function test_group_avatar_upload_without_a_loggin_in_user() {
-		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'GROUP', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
 	 * @group group-avatar
 	 */
 	public function test_group_avatar_upload_with_an_invalid_group_id() {
-		$mutation = $this->upload_avatar( 'GROUP', 99999999 );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'GROUP', 99999999 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -272,11 +240,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	public function test_group_avatar_upload_with_member_without_group_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'GROUP', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -285,11 +250,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 	public function test_group_avatar_delete_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->delete_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_avatar( 'GROUP', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -304,8 +266,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
-		$mutation = $this->upload_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = $this->upload_avatar( 'GROUP', $this->group );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -327,9 +288,6 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 			$response
 		);
 
-		$mutation = $this->delete_avatar( 'GROUP', $this->group );
-		$response = do_graphql_request( $mutation[0], 'deleteAvatarTest', $mutation[1] );
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -343,7 +301,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 					],
 				],
 			],
-			$response
+			$this->delete_avatar( 'GROUP', $this->group )
 		);
 
 		// Confirm that the group default avatar IS present.
@@ -375,8 +333,7 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
-		$mutation = $this->upload_avatar( 'BLOG', $blog );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
+		$response = $this->upload_avatar( 'BLOG', $blog );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -409,15 +366,11 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		$this->bp->set_current_user( $this->user );
 
-		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
-
 		// Disabling blog avatar upload.
 		buddypress()->avatar->show_avatars = false;
 
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, blog avatar upload is disabled.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() ) )
+			->expectedErrorMessage( 'Sorry, blog avatar upload is disabled.' );
 
 		// Enable it.
 		buddypress()->avatar->show_avatars = true;
@@ -431,11 +384,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 			$this->markTestSkipped();
 		}
 
-		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -446,11 +396,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 			$this->markTestSkipped();
 		}
 
-		$mutation = $this->upload_avatar( 'BLOG', 99999999 );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', 99999999 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -463,79 +410,8 @@ class Test_Attachment_Avatar_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQ
 
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() );
-		$response = do_graphql_request( $mutation[0], 'uploadAvatarTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function upload_avatar( string $object, int $objectId ): array {
-		$mutation = '
-		mutation uploadAvatarTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
-			uploadAttachmentAvatar(
-				input: {
-					clientMutationId: $clientMutationId
-					file: $file
-					object: $object
-					objectId: $objectId
-				}
-			)
-		  	{
-				clientMutationId
-				attachment {
-					full
-					thumb
-				}
-		  	}
-		}
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'object'           => $object,
-				'objectId'         => $objectId,
-				'file'              => [
-					'fileName'  => $this->image_file,
-					'mimeType' => 'IMAGE_JPEG'
-				],
-			]
-		);
-
-		return [ $mutation, $variables ];
-	}
-
-	protected function delete_avatar( string $object, int $objectId ): array {
-		$mutation = '
-		mutation deleteAvatarTest( $clientMutationId: String!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
-			deleteAttachmentAvatar(
-				input: {
-					clientMutationId: $clientMutationId
-					object: $object
-					objectId: $objectId
-				}
-			)
-		  	{
-				clientMutationId
-				deleted
-				attachment {
-					full
-					thumb
-				}
-		  	}
-		}
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'object'           => $object,
-				'objectId'         => $objectId,
-			]
-		);
-
-		return [ $mutation, $variables ];
+		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	protected function get_avatar_image( $size, $object, $item_id ): string {

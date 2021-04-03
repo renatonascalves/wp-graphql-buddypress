@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a761b688337d7184ac90a0140b54c97",
+    "content-hash": "7c87e5bfab3e2a829fbf976d7616f017",
     "packages": [
         {
             "name": "composer/installers",
@@ -951,16 +951,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.82",
+            "version": "0.12.83",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11"
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
-                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4a967cec6efb46b500dd6d768657336a3ffe699f",
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f",
                 "shasum": ""
             },
             "require": {
@@ -991,7 +991,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.82"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.83"
             },
             "funding": [
                 {
@@ -1007,7 +1007,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-19T06:08:17+00:00"
+            "time": "2021-04-03T15:35:45+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2490,69 +2490,6 @@
             "time": "2020-05-13T23:57:56+00:00"
         },
         {
-            "name": "wp-graphql/wp-graphql-testcase",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wp-graphql/wp-graphql-testcase.git",
-                "reference": "79e48d563da86bc5c46ebdee1ad7024b067a3642"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wp-graphql/wp-graphql-testcase/zipball/79e48d563da86bc5c46ebdee1ad7024b067a3642",
-                "reference": "79e48d563da86bc5c46ebdee1ad7024b067a3642",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1",
-                "phpunit/phpunit": "^7.5"
-            },
-            "require-dev": {
-                "automattic/vipwpcs": "^2.2",
-                "composer/installers": "^1.9",
-                "johnpbloch/wordpress": "^5.4",
-                "simpod/php-coveralls-mirror": "^3.0",
-                "wp-coding-standards/wpcs": "^2.3",
-                "wp-graphql/wp-graphql": "^1.1.8"
-            },
-            "suggest": {
-                "codeception/module-asserts": "Needed for \\Tests\\WPGraphQL\\TestCase\\WPGraphQLTestcase to work.",
-                "codeception/module-rest": "Needed for \\Tests\\WPGraphQL\\TestCase\\WPGraphQLTestcase to work.",
-                "codeception/util-universalframework": "Needed for \\Tests\\WPGraphQL\\TestCase\\WPGraphQLTestcase to work.",
-                "lucatume/wp-browser": "Needed for \\Tests\\WPGraphQL\\TestCase\\WPGraphQLTestcase to work.",
-                "wp-phpunit/wp-phpunit": "Needed for \\Tests\\WPGraphQL\\TestCase\\WPGraphQLUnitTestcase to work."
-            },
-            "type": "library",
-            "extra": {
-                "wordpress-install-dir": "local/public",
-                "installer-paths": {
-                    "local/public/wp-content/plugins/{$name}/": [
-                        "type:wordpress-plugin"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Tests\\WPGraphQL\\": "src/"
-                },
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Geoff Taylor",
-                    "email": "geoffrey.taylor@outlook.com"
-                }
-            ],
-            "description": "Codeception module for WPGraphQL API testing",
-            "time": "2021-03-31T07:58:46+00:00"
-        },
-        {
             "name": "wp-phpunit/wp-phpunit",
             "version": "5.7.0",
             "source": {
@@ -2610,5 +2547,5 @@
         "php": ">=7.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

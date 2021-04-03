@@ -5,20 +5,20 @@
  *
  * @group members
  */
-class Test_Member_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase  {
+class Test_Member_Delete_Mutation extends WPGraphQL_BuddyPress_UnitTestCase  {
 
-	public static $admin;
-	public static $user;
-	public static $bp;
-	public static $client_mutation_id;
+	public $bp_factory;
+	public $bp;
+	public $admin;
+	public $client_mutation_id;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public function setUp() {
+		parent::setUp();
 
-		self::$bp                 = new BP_UnitTestCase();
-		self::$client_mutation_id = 'someUniqueId';
-		self::$user               = self::factory()->user->create();
-		self::$admin              = self::factory()->user->create( [ 'role' => 'administrator' ] );
+		$this->bp_factory         = new BP_UnitTest_Factory();
+		$this->bp                 = new BP_UnitTestCase();
+		$this->admin              = $this->factory->user->create();
+		$this->client_mutation_id = 'someUniqueId';
 	}
 
 	public function test_member_can_delete_his_own_account() {
@@ -32,7 +32,7 @@ class Test_Member_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 			[
 				'data' => [
 					'deleteUser' => [
-						'clientMutationId' => self::$client_mutation_id,
+						'clientMutationId' => $this->client_mutation_id,
 						'deletedId'        => $guid,
 						'user'             => [
 							'userId' => $u,
@@ -59,7 +59,7 @@ class Test_Member_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 			[
 				'data' => [
 					'deleteUser' => [
-						'clientMutationId' => self::$client_mutation_id,
+						'clientMutationId' => $this->client_mutation_id,
 						'deletedId'        => $guid,
 						'user'             => [
 							'userId' => $u,
@@ -78,69 +78,32 @@ class Test_Member_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 	public function test_member_can_not_delete_other_members_account() {
 		self::$bp->set_current_user( self::$user );
 
-		$response = $this->delete_member( self::$admin );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_member( self::$admin ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 	}
 
 	public function test_member_can_not_delete_his_account_with_account_deletion_disabled() {
 		bp_update_option( 'bp-disable-account-deletion', true );
-
 		$this->assertTrue( bp_disable_account_deletion() );
 
 		$u = self::$user;
-
 		self::$bp->set_current_user( $u );
 
-		$response = $this->delete_member( $u );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_member( $u ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 
 		bp_update_option( 'bp-disable-account-deletion', false );
     }
 
 	public function test_member_needs_to_be_loggin_to_delete_account() {
-		$response = $this->delete_member( self::$user );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_member( self::$user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
     }
 
 	public function test_delete_member_with_invalid_id() {
 		self::$bp->set_current_user( self::$user );
 
-		$response = $this->delete_member( 000000 );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to delete users.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_member( 0000 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
     }
-
-	protected function delete_member( $u = 0 ) {
-		$mutation = '
-			mutation deleteUserTest( $clientMutationId: String!, $id: ID! ) {
-				deleteUser(
-					input: {
-						clientMutationId: $clientMutationId
-						id: $id
-					}
-				) {
-					clientMutationId
-					deletedId
-					user {
-						userId
-						id
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'id'               => $this->toRelayId( 'user', $u ),
-			'clientMutationId' => self::$client_mutation_id,
-		];
-
-		return do_graphql_request( $mutation, 'deleteUserTest', $variables );
-	}
 }

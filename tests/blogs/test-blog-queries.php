@@ -5,7 +5,7 @@
  *
  * @group blogs
  */
-class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $bp_factory;
 	public $bp;
@@ -55,7 +55,7 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -96,7 +96,7 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -115,9 +115,7 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 		$results = $this->blogsQuery();
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertTrue( ! empty( $results['data'] ) );
+		$this->assertQuerySuccessful( $results );
 
 		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
 
@@ -147,7 +145,7 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 		);
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertQuerySuccessful( $results );
 
 		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
 
@@ -186,10 +184,7 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 		);
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		// Confirm emptiness.
-		$this->assertNotEmpty( $results );
+		$this->assertQuerySuccessful( $results );
 
 		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
 
@@ -201,29 +196,5 @@ class Test_Blogs_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase
 		$this->assertTrue( count( $blogs_ids ) === 2 );
 
 		// @todo confirm second pagination.
-	}
-
-	protected function blogsQuery( $variables = '' ) {
-		$query = 'query blogsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToBlogConnectionWhereArgs) {
-			blogs( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						blogId
-					}
-				}
-				nodes {
-					blogId
-				}
-			}
-		}';
-
-		return do_graphql_request( $query, 'blogsQuery', $variables );
 	}
 }

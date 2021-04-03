@@ -6,7 +6,7 @@
  * @group xprofile-field
  * @group xprofile
  */
-class Test_XProfile_Field_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Field_Delete_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -53,53 +53,20 @@ class Test_XProfile_Field_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	public function test_delete_invalid_xprofile_field_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->delete_xprofile_field( 99999999 );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile field does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_xprofile_field( 99999999 ) )
+			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 
 	public function test_delete_xprofile_field_user_not_logged_in() {
-		$response = $this->delete_xprofile_field( $this->xprofile_field_id );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_xprofile_field( $this->xprofile_field_id ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
     }
 
     public function test_delete_xprofile_field_user_without_permission() {
 		$u1 = $this->factory->user->create( array( 'role' => 'subscriber' ) );
         $this->bp->set_current_user( $u1 );
 
-		$response = $this->delete_xprofile_field( $this->xprofile_field_id );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function delete_xprofile_field( $field_id = null ) {
-		$mutation = '
-			mutation deleteXProfileFieldTest( $clientMutationId: String!, $fieldId: Int ) {
-				deleteXProfileField(
-					input: {
-						clientMutationId: $clientMutationId
-						fieldId: $fieldId
-					}
-				)
-				{
-					clientMutationId
-					deleted
-					field {
-						fieldId
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'fieldId'          => $field_id,
-		];
-
-		return do_graphql_request( $mutation, 'deleteXProfileFieldTest', $variables );
+		$this->assertQueryFailed( $this->delete_xprofile_field( $this->xprofile_field_id ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 }

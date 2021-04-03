@@ -1,6 +1,9 @@
 <?php
 /**
  * PHPUnit bootstrap file
+ *
+ * @since 0.0.1-alpha
+ * @package WPGraphQL\Extensions\BuddyPress
  */
 
 // Use WP PHPUnit.
@@ -31,11 +34,11 @@ tests_add_filter(
 	'muplugins_loaded',
 	function() {
 
+		// Load BuddyPress
+		require_once BP_TESTS_DIR . '/includes/loader.php';
+
 		// Load WP-GraphQL
 		require_once WPGRAPHQL_PLUGIN_DIR_TEST . '/wp-graphql.php';
-
-		// Make sure BP is installed and loaded first.
-		require_once BP_TESTS_DIR . '/includes/loader.php';
 
 		// Load our plugin.
 		require_once dirname( __FILE__ ) . '/../wp-graphql-buddypress.php';
@@ -56,6 +59,9 @@ tests_add_filter(
 
 echo "Loading WP testing environment...\n";
 require_once WP_TESTS_DIR . '/includes/bootstrap.php';
+
+echo "Loading WPGraphQL BuddyPress testcase...\n";
+require( dirname( __FILE__ ) . '/plugin-testcase.php' );
 
 // Load the BP test files.
 echo "Loading BuddyPress testcase...\n";

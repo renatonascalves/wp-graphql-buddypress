@@ -5,7 +5,7 @@
  *
  * @group groups
  */
-class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -23,13 +23,10 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 	}
 
 	public function test_group_query() {
-
 		$group_id  = $this->create_group_object();
 		$global_id = $this->toRelayId( 'group', $group_id );
 
-		/**
-		 * Create the query string to pass to the $query
-		 */
+		// Create the query string to pass to the $query.
 		$query = "
 			query {
 				groupBy(id: \"{$global_id}\") {
@@ -85,12 +82,11 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
 	public function test_group_by_query_with_id_param() {
-
 		$group_id  = $this->create_group_object();
 		$global_id = $this->toRelayId( 'group', $group_id );
 
@@ -116,20 +112,20 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
 	public function test_group_by_query_with_groupid_param() {
-
 		$group_id = $this->create_group_object();
 		$query    = "
-		query {
-			groupBy(groupId: {$group_id}) {
-				groupId
-				name
+			query {
+				groupBy(groupId: {$group_id}) {
+					groupId
+					name
+				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -141,25 +137,23 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
 	public function test_group_by_query_with_slug_param() {
-
 		$slug     = 'group-test';
 		$group_id = $this->create_group_object();
 
-		/**
-		 * Create the query string to pass to the $query
-		 */
+		// Create the query string to pass to the $query
 		$query = "
-		query {
-			groupBy(slug: \"{$slug}\") {
-				groupId
-				slug
+			query {
+				groupBy(slug: \"{$slug}\") {
+					groupId
+					slug
+				}
 			}
-		}";
+		";
 
 		// Test.
 		$this->assertEquals(
@@ -171,36 +165,25 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
 	public function test_first_group_in_a_group_connection_query() {
-
 		$this->create_group_object();
 		$this->create_group_object();
 
 		// Here we're querying the first group in our dataset.
-		$results = $this->groupsQuery(
-			[
-				'first' => 1,
-			]
-		);
+		$results = $this->groupsQuery( [ 'first' => 1 ] );
 
 		// Let's query the first group in our data set so we can test against it.
-		$first_group = groups_get_groups(
-			[
-				'per_page' => 1,
-			]
-		);
+		$first_group = groups_get_groups( [ 'per_page' => 1 ] );
 
-		$first_group_id   = $first_group['groups'][0]->id;
+		$first_group_id  = $first_group['groups'][0]->id;
 		$expected_cursor = \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $first_group_id );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertNotEmpty( $results );
+		$this->assertQuerySuccessful( $results );
 
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
 		$this->assertEquals( $first_group_id, $results['data']['groups']['edges'][0]['node']['groupId'] );
@@ -235,9 +218,7 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		$expected_cursor = \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $last_group_id );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-
-		$this->assertNotEmpty( $results );
+		$this->assertQuerySuccessful( $results );
 
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );
@@ -248,7 +229,6 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 	}
 
 	public function test_get_group_with_parent_group() {
-
 		$parent_id = $this->create_group_object();
 		$child_id  = $this->bp_factory->group->create( [
 			'parent_id' => $parent_id,
@@ -271,7 +251,7 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		$actual = do_graphql_request( $query );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $actual );
+		$this->assertQuerySuccessful( $actual );
 
 		$parent = $actual['data']['groupBy']['parent'];
 		$child  = $actual['data']['groupBy'];
@@ -308,7 +288,7 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		);
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertQuerySuccessful( $results );
 
 		$this->assertEquals( $private_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
 	}
@@ -333,7 +313,7 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		);
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertQuerySuccessful( $results );
 
 		// Returns nothing.
 		$this->assertTrue( empty( $results['data']['groups']['edges'] ) );
@@ -361,36 +341,9 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		);
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertQuerySuccessful( $results );
 
 		$this->assertEquals( $hidden_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
-	}
-
-	protected function groupsQuery( $variables = [] ) {
-		$query = 'query groupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToGroupConnectionWhereArgs) {
-			groups( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						id
-						groupId
-						name
-					}
-				}
-				nodes {
-					id
-					groupId
-				}
-			}
-		}';
-
-		return do_graphql_request( $query, 'groupsQuery', $variables );
 	}
 
 	protected function forwardPagination( $cursor ) {
@@ -411,7 +364,7 @@ class Test_Groups_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		$second_group_id = $second_group['groups'][0]->id;
 		$expected_cursor = \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $second_group_id );
 
-		$this->assertNotEmpty( $results );
+		$this->assertQuerySuccessful( $results );
 		$this->assertEquals( 1, count( $results['data']['groups']['edges'] ) );
 		$this->assertEquals( $second_group_id, $results['data']['groups']['edges'][0]['node']['groupId'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );

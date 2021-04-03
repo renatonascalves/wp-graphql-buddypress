@@ -5,7 +5,7 @@
  *
  * @group groups
  */
-class Test_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Group_Delete_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -51,17 +51,13 @@ class Test_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnit
 	public function test_delete_group_invalid_group_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->delete_group( 99999999 );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This group does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_group( 99999999 ) )
+			->expectedErrorMessage( 'This group does not exist.' );
 	}
 
 	public function test_delete_group_user_not_logged_in() {
-		$response = $this->delete_group();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_group_user_without_permission() {
@@ -69,10 +65,8 @@ class Test_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnit
 
 		$this->bp->set_current_user( $u );
 
-		$response = $this->delete_group();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_group_moderators_can_delete() {
@@ -89,29 +83,5 @@ class Test_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnit
 			],
 			$this->delete_group()
 		);
-	}
-
-	protected function delete_group( $group_id = null ) {
-		$mutation = '
-			mutation deleteGroupTest( $clientMutationId: String!, $groupId: Int ) {
-				deleteGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						groupId: $groupId
-					}
-				)
-				{
-					clientMutationId
-					deleted
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $group_id ?? $this->group_id,
-		];
-
-		return do_graphql_request( $mutation, 'deleteGroupTest', $variables );
 	}
 }

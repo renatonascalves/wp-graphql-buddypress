@@ -6,7 +6,7 @@
  * @group xprofile-field
  * @group xprofile
  */
-class Test_XProfile_Field_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Field_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -49,59 +49,14 @@ class Test_XProfile_Field_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	}
 
 	public function test_create_xprofile_field_user_not_logged_in() {
-		$response = $this->create_xprofile_field();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->create_xprofile_field() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
     }
 
     public function test_create_xprofile_field_without_permission() {
         $this->bp->set_current_user( $this->factory->user->create() );
 
-		$response = $this->create_xprofile_field();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->create_xprofile_field() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
     }
-
-	protected function create_xprofile_field( $xprofile_group_id = null ) {
-		$mutation = '
-			mutation createXProfileFieldTest(
-				$clientMutationId:String!,
-				$name:String!,
-				$description:String,
-				$groupId:Int!,
-				$type:XProfileFieldTypesEnum!,
-			) {
-				createXProfileField(
-					input: {
-						clientMutationId: $clientMutationId
-						name: $name
-						description: $description
-						groupId: $groupId
-						type: $type
-					}
-				)
-				{
-					clientMutationId
-					field {
-						name
-						description
-					}
-				}
-			}
-        ';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'name'             => 'XProfile Field Test',
-                'description'      => 'Description',
-                'groupId'          => $xprofile_group_id ?? (int) $this->xprofile_group_id,
-                'type'             => 'TEXTBOX',
-			]
-        );
-
-		return do_graphql_request( $mutation, 'createXProfileFieldTest', $variables );
-	}
 }

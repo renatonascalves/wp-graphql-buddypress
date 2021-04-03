@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $xprofile_group_id;
@@ -54,26 +54,20 @@ class Test_XProfile_Group_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	public function test_update_xprofile_group_with_invalid_group_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->update_xprofile_group( 99999999 );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile group does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->update_xprofile_group( 99999999 ) )
+			->expectedErrorMessage( 'This XProfile group does not exist.' );
 	}
 
 	public function test_update_xprofile_group_user_not_logged_in() {
-		$response = $this->update_xprofile_group( $this->xprofile_group_id );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->update_xprofile_group( $this->xprofile_group_id ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_update_xprofile_group_without_permission() {
 		$this->bp->set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
 
-		$response = $this->update_xprofile_group( $this->xprofile_group_id, 'Updated XProfile Group' );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->update_xprofile_group( $this->xprofile_group_id, 'Updated XProfile Group' ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -84,7 +78,7 @@ class Test_XProfile_Group_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	}
 
 	public function test_update_xprofile_group_with_no_input() {
-		$mutation = '
+		$query = '
 			mutation updateXProfileGroupTest( $clientMutationId: String! ) {
 				updateXProfileGroup(
 					input: {
@@ -104,37 +98,9 @@ class Test_XProfile_Group_Update_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 			'clientMutationId' => $this->client_mutation_id,
 		];
 
-		$response = do_graphql_request( $mutation, 'updateXProfileGroupTest', $variables );
+		$operation_name = 'updateXProfileGroupTest';
 
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function update_xprofile_group( $group_id = 0, $name = null ) {
-		$mutation = '
-			mutation updateXProfileGroupTest( $clientMutationId: String!, $groupId: Int, $name: String ) {
-				updateXProfileGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						groupId: $groupId
-						name: $name
-					}
-				)
-				{
-					clientMutationId
-					group {
-						name
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $group_id,
-			'name'             => $name ?? 'Updated XProfile Group',
-		];
-
-		return do_graphql_request( $mutation, 'updateXProfileGroupTest', $variables );
+		$this->assertQueryFailed( $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 }

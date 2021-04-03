@@ -6,7 +6,7 @@
  * @group xprofile-group
  * @group xprofile
  */
-class Test_XProfile_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Group_Delete_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -32,8 +32,6 @@ class Test_XProfile_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 	public function test_delete_xprofile_group() {
 		$this->bp->set_current_user( $this->admin );
 
-		$mutation = $this->delete_xprofile_group();
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -43,59 +41,26 @@ class Test_XProfile_Group_Delete_Mutation extends \Tests\WPGraphQL\TestCase\WPGr
 					],
 				],
 			],
-			do_graphql_request( $mutation[0], 'deleteXProfileGroupTest', $mutation[1] )
+			$this->delete_xprofile_group()
 		);
 	}
 
 	public function test_delete_xprofile_group_invalid_group_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$mutation = $this->delete_xprofile_group( 99999999 );
-        $response = do_graphql_request( $mutation[0], 'deleteXProfileGroupTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile group does not exist.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_xprofile_group( 99999999 ) )
+			->expectedErrorMessage( 'This XProfile group does not exist.' );
 	}
 
 	public function test_delete_xprofile_group_user_not_logged_in() {
-        $mutation = $this->delete_xprofile_group();
-        $response = do_graphql_request( $mutation[0], 'deleteXProfileGroupTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+        $this->assertQueryFailed( $this->delete_xprofile_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_xprofile_group_user_without_permission() {
 		$this->bp->set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
 
-        $mutation = $this->delete_xprofile_group();
-        $response = do_graphql_request( $mutation[0], 'deleteXProfileGroupTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
-	}
-
-	protected function delete_xprofile_group( $xprofile_group_id = null ): array {
-		$mutation = '
-            mutation deleteXProfileGroupTest( $clientMutationId: String!, $groupId: Int ) {
-                deleteXProfileGroup(
-                    input: {
-                        clientMutationId: $clientMutationId
-                        groupId: $groupId
-                    }
-                )
-                {
-                    clientMutationId
-                    deleted
-                }
-            }
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $xprofile_group_id ?? $this->xprofile_group_id,
-		];
-
-		return [ $mutation, $variables ];
+        $this->assertQueryFailed( $this->delete_xprofile_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 }

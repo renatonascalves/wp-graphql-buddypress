@@ -6,7 +6,7 @@
  * @group xprofile-field
  * @group xprofile
  */
-class Test_XProfile_Field_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_XProfile_Field_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -66,7 +66,7 @@ class Test_XProfile_Field_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -118,7 +118,7 @@ class Test_XProfile_Field_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -223,7 +223,7 @@ class Test_XProfile_Field_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -236,37 +236,7 @@ class Test_XProfile_Field_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 			}
 		";
 
-		$response = do_graphql_request( $query  );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'This XProfile field does not exist.', $response['errors'][0]['message'] );
-	}
-
-	/**
-	 * @todo
-	 */
-	protected function xprofileFieldsQuery( $variables ) {
-		$query = 'query xprofileFieldsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToXProfileFieldsConnectionWhereArgs) {
-			xprofileFields( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						id
-						name
-					}
-				}
-				nodes {
-					id
-				}
-			}
-		}';
-
-		return do_graphql_request( $query, 'xprofileFieldsQuery', $variables );
+		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
+			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 }

@@ -5,7 +5,7 @@
  *
  * @group friends
  */
-class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public static $bp_factory;
 	public static $user;
@@ -50,10 +50,10 @@ class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTes
 			}
 		";
 
-		$response = do_graphql_request( $query );
+		$response = $this->graphql( compact( 'query') );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $response );
+		$this->assertQuerySuccessful( $response );
 
 		// Check our four members.
 		$this->assertTrue( count( $response['data']['user']['friends']['nodes'] ) === 3 );
@@ -98,7 +98,7 @@ class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTes
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query') )
 		);
 	}
 
@@ -143,7 +143,7 @@ class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTes
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query') )
 		);
 	}
 
@@ -156,10 +156,8 @@ class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTes
 			}
 		}";
 
-		$response = do_graphql_request( $query );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you need to be logged in to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->graphql( compact( 'query') ) )
+			->expectedErrorMessage( 'Sorry, you need to be logged in to perform this action.' );
 	}
 
 	public function test_friendship_with_unauthorized_member() {
@@ -176,10 +174,8 @@ class Test_Friendship_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTes
 			}
 		}";
 
-		$response = do_graphql_request( $query );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you don\'t have permission to see this friendship.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->graphql( compact( 'query') ) )
+			->expectedErrorMessage( 'Sorry, you don\'t have permission to see this friendship.' );
 	}
 
 	protected function create_friendship( $u = 0, $initiator = 0 ) {

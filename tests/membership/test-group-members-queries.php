@@ -5,7 +5,7 @@
  *
  * @group group-membership
  */
-class Test_Group_Members_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public static $admin;
 	public static $bp;
@@ -69,7 +69,7 @@ class Test_Group_Members_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnit
 		);
 	}
 
-	protected function groupsQuery( $variables ) {
+	protected function groupsQuery( $variables = [] ) {
 		$query = 'query groupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToGroupConnectionWhereArgs) {
 			groups( first:$first last:$last after:$after before:$before where:$where ) {
 				pageInfo {
@@ -93,7 +93,9 @@ class Test_Group_Members_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnit
 			}
 		}';
 
-		return do_graphql_request( $query, 'groupsQuery', $variables );
+		$operation_name = 'groupsQuery';
+
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
 	protected function forwardPagination( $cursor ) {

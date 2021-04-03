@@ -5,7 +5,7 @@
  *
  * @group groups
  */
-class Test_Groups_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $admin;
 	public $bp_factory;
@@ -70,10 +70,8 @@ class Test_Groups_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 	}
 
 	public function test_create_group_user_not_logged_in() {
-		$response = $this->create_group();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->create_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_create_group_when_disabled() {
@@ -81,10 +79,8 @@ class Test_Groups_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 
 		add_filter( 'bp_user_can_create_groups', '__return_false' );
 
-		$response = $this->create_group();
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->create_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_create_group_with_valid_status() {
@@ -110,48 +106,7 @@ class Test_Groups_Create_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUni
 	public function test_create_group_with_invalid_status() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->create_group( 'random-status' );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Variable "$status" got invalid value "random-status"; Expected type GroupStatusEnum.', $response['errors'][0]['message'] );
-	}
-
-	protected function create_group( $slug = null ) {
-		$mutation = '
-			mutation createGroupTest(
-				$clientMutationId:String!,
-				$name:String!
-				$slug:String
-				$status:GroupStatusEnum
-			) {
-				createGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						name: $name
-						slug: $slug
-						status: $status
-					}
-				)
-				{
-					clientMutationId
-					group {
-						name
-						slug
-						status
-					}
-				}
-			}
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'name'             => 'Group Test',
-				'slug'             => 'group-slug',
-				'status'           => $slug ?? 'PUBLIC',
-			]
-		);
-
-		return do_graphql_request( $mutation, 'createGroupTest', $variables );
+		$this->assertQueryFailed( $this->create_group( 'random-status' ) )
+			->expectedErrorMessage( 'Variable "$status" got invalid value "random-status"; Expected type GroupStatusEnum.' );
 	}
 }

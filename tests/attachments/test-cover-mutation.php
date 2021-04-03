@@ -5,7 +5,7 @@
  *
  * @group attachment-cover
  */
-class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase {
+class Test_Attachment_Cover_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public $bp_factory;
 	public $bp;
@@ -43,8 +43,7 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+		$response = $this->upload_cover( 'MEMBERS', $this->user );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -72,37 +71,26 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	 * @group member-cover
 	 */
 	public function test_member_cover_upload_with_upload_disabled() {
-		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
-
-		// Disabling avatar upload.
 		add_filter( 'bp_disable_cover_image_uploads', '__return_true' );
 
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, member cover upload is disabled.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', $this->user ) )
+			->expectedErrorMessage( 'Sorry, member cover upload is disabled.' );
 	}
 
 	/**
 	 * @group member-cover
 	 */
 	public function test_member_cover_upload_without_a_loggin_in_user() {
-		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', $this->user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
 	 * @group member-cover
 	 */
 	public function test_member_cover_upload_with_an_invalid_member_id() {
-		$mutation = $this->upload_cover( 'MEMBERS', 99999999 );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', 99999999 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -111,11 +99,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_member_cover_upload_with_member_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', $this->user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -124,11 +109,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_member_cover_delete_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->delete_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', $this->user ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -137,11 +119,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_member_cover_delete_without_uploaded_covers() {
 		$this->bp->set_current_user( $this->user );
 
-		$mutation = $this->delete_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, there are no uploaded covers to delete.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', $this->user ) )
+			->expectedErrorMessage( 'Sorry, there are no uploaded covers to delete.' );
 	}
 
 	/**
@@ -156,8 +135,7 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$mutation = $this->upload_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+		$response = $this->upload_cover( 'MEMBERS', $this->user );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -178,9 +156,6 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 			$response
 		);
 
-		$mutation = $this->delete_cover( 'MEMBERS', $this->user );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -194,7 +169,7 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 					],
 				],
 			],
-			$response
+			$this->delete_cover( 'MEMBERS', $this->user )
 		);
 	}
 
@@ -210,8 +185,7 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$mutation = $this->upload_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+		$response = $this->upload_cover( 'GROUPS', $this->group );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -239,37 +213,27 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	 * @group group-cover
 	 */
 	public function test_group_cover_upload_with_upload_disabled() {
-
 		// Disabling group cover upload.
 		add_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );
 
-		$mutation = $this->upload_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, group cover upload is disabled.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'GROUPS', $this->group ) )
+			->expectedErrorMessage( 'Sorry, group cover upload is disabled.' );
 	}
 
 	/**
 	 * @group group-cover
 	 */
 	public function test_group_cover_upload_without_a_loggin_in_user() {
-		$mutation = $this->upload_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'GROUPS', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
 	 * @group group-cover
 	 */
 	public function test_group_cover_upload_with_an_invalid_group_id() {
-		$mutation = $this->upload_cover( 'MEMBERS', 99999999 );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', 99999999 ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -278,11 +242,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_group_cover_upload_with_member_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->upload_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->upload_cover( 'GROUPS', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -291,11 +252,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_group_cover_delete_without_permissions() {
 		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
-		$mutation = $this->delete_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, you are not allowed to perform this action.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_cover( 'GROUPS', $this->group ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	/**
@@ -304,11 +262,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 	public function test_group_cover_delete_without_uploaded_covers() {
 		$this->bp->set_current_user( $this->user );
 
-		$mutation = $this->delete_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
-		$this->assertArrayHasKey( 'errors', $response );
-		$this->assertSame( 'Sorry, there are no uploaded covers to delete.', $response['errors'][0]['message'] );
+		$this->assertQueryFailed( $this->delete_cover( 'GROUPS', $this->group ) )
+			->expectedErrorMessage( 'Sorry, there are no uploaded covers to delete.' );
 	}
 
 	/**
@@ -323,8 +278,7 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$mutation = $this->upload_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'uploadCoverTest', $mutation[1] );
+		$response = $this->upload_cover( 'GROUPS', $this->group );
 
 		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
 
@@ -345,9 +299,6 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 			$response
 		);
 
-		$mutation = $this->delete_cover( 'GROUPS', $this->group );
-		$response = do_graphql_request( $mutation[0], 'deleteCoverTest', $mutation[1] );
-
 		$this->assertEquals(
 			[
 				'data' => [
@@ -361,76 +312,8 @@ class Test_Attachment_Cover_Mutation extends \Tests\WPGraphQL\TestCase\WPGraphQL
 					],
 				],
 			],
-			$response
+			$this->delete_cover( 'GROUPS', $this->group )
 		);
-	}
-
-	protected function delete_cover( string $object, int $objectId ): array {
-		$mutation = '
-		mutation deleteCoverTest( $clientMutationId: String!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
-			deleteAttachmentCover(
-				input: {
-					clientMutationId: $clientMutationId
-					object: $object
-					objectId: $objectId
-				}
-			)
-		  	{
-				clientMutationId
-				deleted
-				attachment {
-					full
-					thumb
-				}
-		  	}
-		}
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'object'           => $object,
-				'objectId'         => $objectId,
-			]
-		);
-
-		return [ $mutation, $variables ];
-	}
-
-	protected function upload_cover( string $object, int $objectId ) {
-		$mutation = '
-		mutation uploadCoverTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
-			uploadAttachmentCover(
-				input: {
-					clientMutationId: $clientMutationId
-					file: $file
-					object: $object
-					objectId: $objectId
-				}
-			)
-		  	{
-				clientMutationId
-				attachment {
-					full
-					thumb
-				}
-		  	}
-		}
-		';
-
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'object'           => $object,
-				'objectId'         => $objectId,
-				'file'              => [
-					'fileName'  => $this->image_file,
-					'mimeType' => 'IMAGE_JPEG'
-				],
-			]
-		);
-
-		return [ $mutation, $variables ];
 	}
 
 	protected function get_cover_image( $object, $item_id ): string {

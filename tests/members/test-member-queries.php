@@ -5,20 +5,21 @@
  *
  * @group members
  */
-class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCase  {
+class Test_Member_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
 
-	public static $admin;
-	public static $user;
-	public static $bp;
-	public static $bp_factory;
+	public $bp_factory;
+	public $bp;
+	public $admin;
+	public $client_mutation_id;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public function setUp() {
+		parent::setUp();
 
-		self::$bp         = new BP_UnitTestCase();
-		self::$bp_factory = new BP_UnitTest_Factory();
-		self::$user       = self::factory()->user->create();
-		self::$admin      = self::factory()->user->create( [ 'role' => 'administrator' ] );
+		$this->bp_factory         = new BP_UnitTest_Factory();
+		$this->bp                 = new BP_UnitTestCase();
+		$this->user               = $this->factory->user->create();
+		$this->admin              = $this->factory->user->create( [ 'role' => 'administrator' ] );
+		$this->client_mutation_id = 'someUniqueId';
 
 		bp_register_member_type( 'foo' );
 		bp_register_member_type( 'bar' );
@@ -142,7 +143,7 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -223,7 +224,6 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 			}
 		";
 
-		// Test.
 		$this->assertEquals(
 			[
 				'data' => [
@@ -272,7 +272,7 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 					],
 				],
 			],
-			do_graphql_request( $query )
+			$this->graphql( compact( 'query' ) )
 		);
 	}
 
@@ -288,7 +288,7 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		$results = $this->membersQuery();
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
+		$this->assertQuerySuccessful( $results );
 
 		$ids = wp_list_pluck(
 			$results['data']['members']['nodes'],
@@ -304,18 +304,19 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 	}
 
 	public function test_members_query_paginated() {
-		self::$bp_factory->user->create();
-		self::$bp_factory->user->create();
-		self::$bp_factory->user->create();
-		self::$bp_factory->user->create();
+		self::$bp_factory->user->create_many( 4 );
 
 		// Query members.
 		$results = $this->membersQuery( [ 'first' => 2 ] );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-		$this->assertEquals( 1, $results['data']['members']['pageInfo']['hasNextPage'] );
+		$this->assertQuerySuccessful( $results );
+		$this->assertTrue( $results['data']['members']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['members']['pageInfo']['hasPreviousPage'] );
+	}
+
+	public function test_members_query_paginated_logged_in() {
+		self::$bp_factory->user->create_many( 4 );
 
 		// Try logged in.
 		self::$bp->set_current_user( self::$admin );
@@ -324,32 +325,8 @@ class Test_Member_Queries extends \Tests\WPGraphQL\TestCase\WPGraphQLUnitTestCas
 		$results = $this->membersQuery( [ 'first' => 2 ] );
 
 		// Make sure the query didn't return any errors
-		$this->assertArrayNotHasKey( 'errors', $results );
-		$this->assertEquals( 1, $results['data']['members']['pageInfo']['hasNextPage'] );
+		$this->assertQuerySuccessful( $results );
+		$this->assertTrue( $results['data']['members']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['members']['pageInfo']['hasPreviousPage'] );
-	}
-
-	protected function membersQuery( $variables =[] ) {
-		$query = 'query membersQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToMembersConnectionWhereArgs) {
-			members( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						userId
-					}
-				}
-				nodes {
-					userId
-				}
-			}
-		}';
-
-		return do_graphql_request( $query, 'membersQuery', $variables );
 	}
 }
