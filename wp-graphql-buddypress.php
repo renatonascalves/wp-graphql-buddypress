@@ -56,9 +56,10 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 				self::$instance = new self();
 				self::$instance->setup_constants();
 				self::$instance->dependencies();
-				self::$instance->includes();
-				self::$instance->actions();
-				self::$instance->filters();
+				if ( self::$instance->includes() ) {
+					self::$instance->actions();
+					self::$instance->filters();
+				}
 			}
 
 			/**
@@ -159,7 +160,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 				}
 
 				// Bail if installed incorrectly.
-				if ( ! class_exists( 'WPGraphQL\Extensions\BuddyPress\TypeRegistry' ) ) {
+				if ( ! class_exists( '\WPGraphQL\Extensions\BuddyPress\TypeRegistry' ) ) {
 					add_action( 'admin_notices', array( $this, 'wp_graphql_buddypress_missing_notice' ) );
 					return false;
 				}
