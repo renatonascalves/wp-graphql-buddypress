@@ -97,7 +97,9 @@ class Test_XProfile_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
 			->expectedErrorMessage( 'The "id" is invalid.' );
+	}
 
+	public function test_xprofile_group_by_inexistent_id() {
 		$query = "
 			query {
 				xprofileGroupBy(groupId: 111) {
@@ -107,6 +109,6 @@ class Test_XProfile_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		";
 
 		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'Internal server error' );
+			->expectedErrorMessage( 'This XProfile group does not exist.' );
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
-/**Test_Attachment_Blog_Avatar_Mutation
- * Test_Attachment_Group_Avatar_Mutation Class.
+/**
+ * Test_Attachment_Blog_Avatar_Mutation
  *
  * @group attachment-avatar
  * @group attachment-blog-avatar

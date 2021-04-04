@@ -19,9 +19,9 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
 
-		$this->create_friendship( $u1, $this->user );
-		$this->create_friendship( $u2, $this->user );
-		$this->create_friendship( $u3, $this->user );
+		$this->create_friendship_object( $u1, $this->user );
+		$this->create_friendship_object( $u2, $this->user );
+		$this->create_friendship_object( $u3, $this->user );
 
 		$global_id = $this->toRelayId( 'user', $this->user );
 
@@ -56,7 +56,7 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_getting_friendship_with_initiator() {
 		$u = $this->bp_factory->user->create();
-		$f = $this->create_friendship( $u, $this->user );
+		$f = $this->create_friendship_object( $u, $this->user );
 
 		$this->bp->set_current_user( $this->user );
 
@@ -101,7 +101,7 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
-		$f = $this->create_friendship( $u1, $u2 );
+		$f = $this->create_friendship_object( $u1, $u2 );
 
 		$this->bp->set_current_user( $u1 );
 
@@ -143,7 +143,7 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_getting_friendship_with_non_logged_in_user() {
-		$f         = $this->create_friendship();
+		$f         = $this->create_friendship_object();
 		$global_id = $this->toRelayId( 'friendship', $f );
 		$query     = "{
 			friendshipBy( id: \"{$global_id}\" ) {
@@ -156,11 +156,9 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_friendship_with_unauthorized_member() {
-		$f = $this->create_friendship();
+		$f = $this->create_friendship_object();
 
-		$this->bp->set_current_user(
-			$this->bp_factory->user->create()
-		);
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$global_id = $this->toRelayId( 'friendship', $f );
 		$query     = "{
@@ -173,7 +171,7 @@ class Test_Friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->expectedErrorMessage( 'Sorry, you don\'t have permission to see this friendship.' );
 	}
 
-	protected function create_friendship( $u = 0, $initiator = 0 ) {
+	protected function create_friendship_object( $u = 0, $initiator = 0 ) {
 		if ( empty( $u ) ) {
 			$u = $this->factory->user->create();
 		}

@@ -17,7 +17,7 @@ use GraphQLRelay\Relay;
 class XProfileGroupMutation {
 
 	/**
-	 * Get XProfile group ID helper.
+	 * Get XProfile group helper.
 	 *
 	 * @throws UserError User error for invalid XProfile group.
 	 *

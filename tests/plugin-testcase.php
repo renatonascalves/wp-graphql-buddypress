@@ -20,6 +20,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public $admin;
 	public $group;
 
+	/**
+	 * Set up.
+	 */
 	public function setUp() {
 		parent::setUp();
 

@@ -15,7 +15,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_group_by_query() {
-		$group_id = $this->create_group_object();
+		$group_id = $this->group;
 
 		$u1 = $this->factory->user->create();
 		$u2 = $this->factory->user->create();
@@ -116,21 +116,6 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['edges'][0]['cursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['startCursor'] );
 		$this->assertEquals( $expected_cursor, $results['data']['groups']['pageInfo']['endCursor'] );
-	}
-
-	protected function create_group_object( $args = [] ) {
-		$args = array_merge(
-			[
-				'slug'         => 'group-test',
-				'name'         => 'Group Test',
-				'description'  => 'Group Description',
-				'creator_id'   => $this->admin,
-			],
-			$args
-		);
-
-		// Create group.
-		return $this->bp_factory->group->create( $args );
 	}
 
 	/**
