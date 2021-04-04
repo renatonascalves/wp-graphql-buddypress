@@ -61,9 +61,7 @@ class Test_Friendship_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->create_friendship_object( $u1, $u2 );
 
-		$u3 = $this->bp_factory->user->create();
-
-		$this->bp->set_current_user( $u3 );
+		$this->bp->set_current_user( $this->bp_factory->user->create() );
 
 		$this->assertQueryFailed( $this->update_friendship( $u1, $u2 ) )
 			->expectedErrorMessage( 'Sorry, you do not have permission to perform this action.' );
@@ -79,7 +77,7 @@ class Test_Friendship_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			->expectedErrorMessage( 'Sorry, you do not have permission to perform this action.' );
 	}
 
-	public function test_accept_friendship_with_invalid_users() {
+	public function test_accept_friendship_with_invalid_friend() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -90,6 +88,13 @@ class Test_Friendship_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		// Invalid friend.
 		$this->assertQueryFailed( $this->update_friendship( $u1, 111 ) )
 			->expectedErrorMessage( 'There was a problem confirming if user is valid.' );
+	}
+
+	public function test_accept_friendship_with_invalid_initiator() {
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+
+		$this->create_friendship_object( $u1, $u2 );
 
 		$this->bp->set_current_user( $u2 );
 

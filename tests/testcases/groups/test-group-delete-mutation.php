@@ -48,9 +48,7 @@ class Test_Group_Delete_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_delete_group_user_without_permission() {
-		$u = $this->factory->user->create( array( 'role' => 'subscriber' ) );
-
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $this->factory->user->create() );
 
 		$this->assertQueryFailed( $this->delete_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

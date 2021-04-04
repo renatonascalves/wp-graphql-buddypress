@@ -8,10 +8,9 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 
 /**
@@ -111,21 +110,9 @@ class XProfileGroupType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_group_id = 0;
+					$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $args );
 
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$xprofile_group_id = absint( $id_components['id'] );
-					} elseif ( ! empty( $args['groupId'] ) ) {
-						$xprofile_group_id = absint( $args['groupId'] );
-					}
-
-					return Factory::resolve_xprofile_group_object( $xprofile_group_id, $context );
+					return Factory::resolve_xprofile_group_object( $xprofile_group_object->id, $context );
 				},
 			]
 		);

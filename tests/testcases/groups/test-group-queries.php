@@ -18,7 +18,6 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$group_id  = $this->create_group_object();
 		$global_id = $this->toRelayId( 'group', $group_id );
 
-		// Create the query string to pass to the $query.
 		$query = "
 			query {
 				groupBy(id: \"{$global_id}\") {
@@ -81,9 +80,7 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_group_by_query_with_id_param() {
 		$group_id  = $this->create_group_object();
 		$global_id = $this->toRelayId( 'group', $group_id );
-
-		// Create the query string to pass to the $query
-		$query = "
+		$query     = "
 			query {
 				groupBy(id: \"{$global_id}\") {
 					id,
@@ -136,8 +133,7 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_group_by_query_with_slug_param() {
 		$slug     = 'group-test';
 		$group_id = $this->create_group_object();
-
-		$query = "
+		$query    = "
 			query {
 				groupBy(slug: \"{$slug}\") {
 					groupId
@@ -218,11 +214,8 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_group_with_parent_group() {
-		$parent_id = $this->create_group_object();
-		$child_id  = $this->bp_factory->group->create( [
-			'parent_id' => $parent_id,
-		] );
-
+		$parent_id       = $this->create_group_object();
+		$child_id        = $this->bp_factory->group->create( [ 'parent_id' => $parent_id ] );
 		$global_id       = $this->toRelayId( 'group', $parent_id );
 		$global_child_id = $this->toRelayId( 'group', $child_id );
 
@@ -237,7 +230,7 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			}
 		}";
 
-		$actual = do_graphql_request( $query );
+		$actual = $this->graphql( compact( 'query' ) );
 
 		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $actual );
@@ -245,9 +238,7 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$parent = $actual['data']['groupBy']['parent'];
 		$child  = $actual['data']['groupBy'];
 
-		/**
-		 * Make sure the child and parent data matches what we expect
-		 */
+		// Make sure the child and parent data matches what we expect.
 		$this->assertEquals( $global_id, $parent['id'] );
 		$this->assertEquals( $parent_id, $parent['groupId'] );
 		$this->assertEquals( $global_child_id, $child['id'] );
@@ -255,18 +246,11 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_private_group_with_access() {
-
 		$this->bp->set_current_user( $this->admin );
 
-		$private_group_id = $this->create_group_object(
-			[
-				'status' => 'private'
-			]
-		);
+		$private_group_id = $this->create_group_object( [ 'status' => 'private' ] );
 
-		/**
-		 * Here we're querying the groups in our dataset.
-		 */
+		// Here we're querying the groups in our dataset.
 		$results = $this->groupsQuery(
 			[
 				'where' => [
@@ -278,24 +262,16 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
-
 		$this->assertEquals( $private_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
 	}
 
 	public function test_getting_private_group_without_access() {
-		$private_group_id = $this->create_group_object(
-			[
-				'status' => 'private'
-			]
-		);
-
-		$u = $this->factory->user->create();
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $this->factory->user->create() );
 
 		$results = $this->groupsQuery(
 			[
 				'where' => [
-					'include' => [ $private_group_id ],
+					'include' => [ $this->create_group_object( [ 'status' => 'private' ] ) ],
 					'status'  => [ 'PRIVATE']
 				]
 			]
