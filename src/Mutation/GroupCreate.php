@@ -63,6 +63,12 @@ class GroupCreate {
 				'type'        => 'GroupStatusEnum',
 				'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 			],
+			'types'      => [
+				'type'        => [
+					'list_of' => 'GroupTypeEnum',
+				],
+				'description' => __( 'The type(s) of the group.', 'wp-graphql-buddypress' ),
+			],
 			'hasForum'      => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the group has a forum enabled.', 'wp-graphql-buddypress' ),
@@ -85,7 +91,7 @@ class GroupCreate {
 				'type'        => 'Group',
 				'description' => __( 'The group object that was created.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -103,6 +109,11 @@ class GroupCreate {
 	public static function mutate_and_get_payload() {
 		return function( $input ) {
 
+			// Check empty group name.
+			if ( empty( $input['name'] ) ) {
+				throw new UserError( __( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
+			}
+
 			// Check if user can create a group.
 			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
@@ -110,12 +121,17 @@ class GroupCreate {
 
 			// Create group and return its newly created ID.
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, null, 'create' )
+				GroupMutation::prepare_group_args( $input, 'create' )
 			);
 
 			// Throw an exception if the group failed to be created.
-			if ( false === is_numeric( $group_id ) ) {
+			if ( empty( $group_id ) ) {
 				throw new UserError( __( 'Could not create Group.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Set group type(s).
+			if ( ! empty( $input['types'] ) ) {
+				bp_groups_set_group_type( $group_id, $input['types'] );
 			}
 
 			// Return the group ID.

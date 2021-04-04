@@ -28,6 +28,7 @@ use BP_Groups_Group;
  * @property int $totalMemberCount Total number of group member.
  * @property string $dateCreated Date group was created.
  * @property string $status Group status.
+ * @property array $types Group types.
  */
 class Group extends Model {
 
@@ -130,6 +131,15 @@ class Group extends Model {
 				},
 				'status' => function() {
 					return bp_get_group_status( $this->data );
+				},
+				'types' => function() {
+					$types = bp_groups_get_group_type( $this->data->id, false );
+
+					if ( empty( $types ) || ! is_array( $types ) ) {
+						return null;
+					}
+
+					return $types;
 				},
 			];
 		}

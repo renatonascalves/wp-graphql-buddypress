@@ -64,10 +64,9 @@ class Test_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_update_group_moderators_can_update() {
-		$u        = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		$group_id = $this->bp_factory->group->create( array(
 			'name'        => 'Group',
-			'creator_id'  => $u,
+			'creator_id'  => $this->user,
 		) );
 
 		$this->bp->set_current_user( $this->admin );
@@ -78,7 +77,7 @@ class Test_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 					'updateGroup' => [
 						'clientMutationId' => $this->client_mutation_id,
 						'group'            => [
-							'name' => 'Updated Group',
+							'name'   => 'Updated Group',
 							'status' => 'PUBLIC',
 						],
 					],

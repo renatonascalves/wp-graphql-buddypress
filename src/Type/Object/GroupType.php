@@ -9,11 +9,9 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use GraphQL\Deferred;
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
-use WPGraphQL\Data\DataSource;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
@@ -184,6 +182,12 @@ class GroupType {
 						'type'        => 'GroupStatusEnum',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 					],
+					'types'           => [
+						'type'        => [
+							'list_of' => 'GroupTypeEnum',
+						],
+						'description' => __( 'The types of the group.', 'wp-graphql-buddypress' ),
+					],
 					'attachmentAvatar' => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
@@ -241,25 +245,9 @@ class GroupType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$group_id = 0;
+					$group = GroupMutation::get_group_from_input( $args );
 
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$group_id = absint( $id_components['id'] );
-					} elseif ( ! empty( $args['slug'] ) ) {
-						$group_id = groups_get_id( esc_html( $args['slug'] ) );
-					} elseif ( ! empty( $args['previousSlug'] ) ) {
-						$group_id = groups_get_id_by_previous_slug( esc_html( $args['previousSlug'] ) );
-					} elseif ( ! empty( $args['groupId'] ) ) {
-						$group_id = absint( $args['groupId'] );
-					}
-
-					return Factory::resolve_group_object( $group_id, $context );
+					return Factory::resolve_group_object( $group->id, $context );
 				},
 			]
 		);

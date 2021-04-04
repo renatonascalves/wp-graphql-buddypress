@@ -57,11 +57,11 @@ class XProfileFieldMutation {
 	 * Mapping XProfile field params.
 	 *
 	 * @param array                  $input          The input for the mutation.
-	 * @param BP_XProfile_Field|null $xprofile_field XProfile field object.
 	 * @param string                 $action         Hook action.
+	 * @param BP_XProfile_Field|null $xprofile_field XProfile field object.
 	 * @return array
 	 */
-	public static function prepare_xprofile_field_args( array $input, $xprofile_field = null, string $action ): array {
+	public static function prepare_xprofile_field_args( array $input, string $action, $xprofile_field = null ): array {
 		$output_args = [
 			'field_id'          => empty( $input['fieldId'] )
 				? $xprofile_field->id ?? null

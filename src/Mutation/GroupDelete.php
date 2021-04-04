@@ -11,7 +11,6 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
-use BP_Groups_Group;
 
 /**
  * GroupDelete Class.
