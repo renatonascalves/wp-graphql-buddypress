@@ -7,21 +7,44 @@
  */
 
 /**
- * Traits
+ * WPGraphQL_BuddyPress_UnitTestCase Class.
  */
 class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 	public $response;
+	public $bp_factory;
+	public $bp;
+	public $client_mutation_id;
+	public $image_file;
+	public $user;
+	public $admin;
+	public $group;
+
+	public function setUp() {
+		parent::setUp();
+
+		$this->bp_factory         = new BP_UnitTest_Factory();
+		$this->bp                 = new BP_UnitTestCase();
+		$this->client_mutation_id = 'someUniqueId';
+		$this->image_file         = __DIR__ . '/assets/test-image.jpeg';
+		$this->user               = $this->bp_factory->user->create();
+		$this->admin              = $this->bp_factory->user->create( [ 'role' => 'administrator' ] );
+		$this->group              = $this->bp_factory->group->create(
+			[
+				'name'        => 'Group Test',
+				'description' => 'Group Description',
+				'creator_id'  => $this->user,
+			]
+		);
+	}
 
 	/**
-	 * Wrapper for the "graphql()" function.
+	 * Wrapper for the "graphql()" function...
 	 *
 	 * @return array
 	 */
-	public function graphql(): array {
-		$results = graphql( ...func_get_args() );
-
-		return $results;
+	public function graphql() {
+		return graphql( ...func_get_args() );
 	}
 
 	/**
@@ -35,24 +58,22 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 	public function assertQuerySuccessful( $response ) {
 		$this->response = $response;
-		$this->assertNotEmpty( $response );
-		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( ! empty( $response['data'] ) );
+		$this->assertNotEmpty( $this->response );
+		$this->assertTrue( ! empty( $this->response['data'] ) );
 
 		return $this;
 	}
 
 	public function assertQueryFailed( $response ) {
 		$this->response = $response;
-		$this->assertArrayHasKey( 'errors', $response );
+		$this->assertArrayHasKey( 'errors', $this->response );
 
 		return $this;
 	}
 
 	public function expectedErrorMessage( $message ) {
+		$this->assertNotEmpty( $this->response );
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
-
-		return $this;
 	}
 
 	protected function membersQuery( $variables = [] ) {
@@ -75,6 +96,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 				}
 			}
 		}';
+
+		$variables = $variables;
 
 		$operation_name = 'membersQuery';
 
@@ -513,7 +536,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function delete_cover( string $object, int $objectId ): array {
+	protected function delete_cover( $object, $objectId ) {
 		$query = '
 			mutation deleteCoverTest( $clientMutationId: String!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
 				deleteAttachmentCover(
@@ -534,54 +557,20 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			}
 		';
 
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'object'           => $object,
-			'objectId'         => $objectId,
-		];
+		$variables = wp_json_encode(
+			[
+				'clientMutationId' => $this->client_mutation_id,
+				'object'           => $object,
+				'objectId'         => $objectId,
+			]
+		);
 
 		$operation_name = 'deleteCoverTest';
 
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function upload_cover( string $object, int $objectId ) {
-		$query = '
-			mutation uploadCoverTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
-				uploadAttachmentCover(
-					input: {
-						clientMutationId: $clientMutationId
-						file: $file
-						object: $object
-						objectId: $objectId
-					}
-				)
-				{
-					clientMutationId
-					attachment {
-						full
-						thumb
-					}
-				}
-			}
-		';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'object'           => $object,
-			'objectId'         => $objectId,
-			'file'              => [
-				'fileName'  => $this->image_file,
-				'mimeType' => 'IMAGE_JPEG'
-			],
-		];
-
-		$operation_name = 'uploadCoverTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function upload_avatar( string $object, int $objectId ): array {
+	protected function upload_avatar( $object, $objectId ) {
 		$query = '
 			mutation uploadAvatarTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
 				uploadAttachmentAvatar(
@@ -617,7 +606,43 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function delete_avatar( string $object, int $objectId ) {
+	protected function upload_cover( $object, $objectId ) {
+		$query = '
+			mutation uploadCoverTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
+				uploadAttachmentCover(
+					input: {
+						clientMutationId: $clientMutationId
+						file: $file
+						object: $object
+						objectId: $objectId
+					}
+				)
+				{
+					clientMutationId
+					attachment {
+						full
+						thumb
+					}
+				}
+			}
+		';
+
+		$variables = [
+			'clientMutationId' => $this->client_mutation_id,
+			'object'           => $object,
+			'objectId'         => $objectId,
+			'file'              => [
+				'fileName'  => $this->image_file,
+				'mimeType' => 'IMAGE_JPEG'
+			],
+		];
+
+		$operation_name = 'uploadCoverTest';
+
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+	}
+
+	protected function delete_avatar( $object, $objectId ) {
 		$query = '
 			mutation deleteAvatarTest( $clientMutationId: String!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
 				deleteAttachmentAvatar(
@@ -755,5 +780,29 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$operation_name = 'updateFriendshipTest';
 
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
+	}
+
+	protected function get_avatar_image( $size, $object, $item_id ) {
+		return bp_core_fetch_avatar([
+			'object'  => $object,
+			'type'    => $size,
+			'item_id' => $item_id,
+			'html'    => false,
+			'no_grav' => true,
+		]);
+	}
+
+	protected function get_cover_image( $object, $item_id ) {
+		return bp_attachments_get_attachment(
+			'url',
+			[
+				'object_dir' => $object,
+				'item_id'    => $item_id,
+			]
+		);
+	}
+
+	public function copy_file( $return = null, $file, $new_file ) {
+		return @copy( $file['tmp_name'], $new_file );
 	}
 }

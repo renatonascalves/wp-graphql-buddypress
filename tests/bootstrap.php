@@ -61,7 +61,7 @@ echo "Loading WP testing environment...\n";
 require_once WP_TESTS_DIR . '/includes/bootstrap.php';
 
 echo "Loading WPGraphQL BuddyPress testcase...\n";
-require( dirname( __FILE__ ) . '/plugin-testcase.php' );
+require_once dirname( __FILE__ ) . '/plugin-testcase.php';
 
 // Load the BP test files.
 echo "Loading BuddyPress testcase...\n";
