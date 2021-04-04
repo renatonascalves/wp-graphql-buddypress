@@ -78,10 +78,9 @@ class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_create_group_as_a_regular_user() {
 		$this->bp->set_current_user( $this->user );
 
-		$response = $this->create_group();
-
-		$this->assertQuerySuccessful( $response );
-		$this->assertSame( 'Group Test', $response['data']['createGroup']['group']['name'] );
+		$this->assertQuerySuccessful( $this->create_group() )
+			->hasField( 'name', 'Group Test' )
+			->notHasField( 'random' );
 	}
 
 	public function test_create_group_user_not_logged_in() {
@@ -101,10 +100,8 @@ class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_create_group_with_valid_status() {
 		$this->bp->set_current_user( $this->user );
 
-		$response = $this->create_group( [ 'status' => 'PRIVATE' ] );
-
-		$this->assertQuerySuccessful( $response );
-		$this->assertSame( 'PRIVATE', $response['data']['createGroup']['group']['status'] );
+		$this->assertQuerySuccessful( $this->create_group( [ 'status' => 'PRIVATE' ] ) )
+			->hasField( 'status', 'PRIVATE' );
 	}
 
 	public function test_create_group_with_invalid_status() {
@@ -131,10 +128,8 @@ class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_create_group_with_types() {
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->create_group_type( [ 'types' => [ 'FOO' ] ] );
-
-		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( in_array( 'FOO', $response['data']['createGroup']['group']['types'], true ) );
+		$this->assertQuerySuccessful( $this->create_group_type( [ 'types' => [ 'FOO' ] ] ) )
+			->hasField( 'types', [ 'FOO' ] );
 	}
 
 	public function test_create_group_with_invalid_type() {

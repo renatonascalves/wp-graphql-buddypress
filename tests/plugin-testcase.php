@@ -83,6 +83,37 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
 	}
 
+	public function hasField( string $field, $match ) {
+		$object = $this->get_object_from_response();
+
+		$this->assertEquals( $match, $object[ $field ] );
+
+		return $this;
+	}
+
+	public function notHasField( string $field ) {
+		$object = $this->get_object_from_response();
+
+		$this->assertTrue( empty( $object[ $field ] ), 'Unexpected field exist.' );
+
+		return $this;
+	}
+
+	protected function get_object_from_response() {
+		foreach( $this->response['data'] as $operationName ) {
+			foreach( $operationName as $field => $value ) {
+
+				if ('clientMutationId' === $field) {
+					continue;
+				}
+
+				$object = $value;
+			}
+		}
+
+		return $object ?? '';
+	}
+
 	protected function membersQuery( $variables = [] ) {
 		$query = 'query membersQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToMembersConnectionWhereArgs) {
 			members( first:$first last:$last after:$after before:$before where:$where ) {
