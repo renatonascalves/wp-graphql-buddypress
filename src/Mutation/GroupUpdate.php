@@ -71,6 +71,24 @@ class GroupUpdate {
 				'type'        => 'GroupStatusEnum',
 				'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 			],
+			'types'      => [
+				'type'        => [
+					'list_of' => 'GroupTypeEnum',
+				],
+				'description' => __( 'The type(s) of the group.', 'wp-graphql-buddypress' ),
+			],
+			'appendTypes'      => [
+				'type'        => [
+					'list_of' => 'GroupTypeEnum',
+				],
+				'description' => __( 'The type(s) of the group to append.', 'wp-graphql-buddypress' ),
+			],
+			'removeTypes'      => [
+				'type'        => [
+					'list_of' => 'GroupTypeEnum',
+				],
+				'description' => __( 'The type(s) of the group to remove.', 'wp-graphql-buddypress' ),
+			],
 			'hasForum'      => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the group has a forum enabled.', 'wp-graphql-buddypress' ),
@@ -127,6 +145,26 @@ class GroupUpdate {
 			// Throw an exception if the group failed to be updated.
 			if ( empty( $group_id ) ) {
 				throw new UserError( __( 'Could not update existing group.', 'wp-graphql-buddypress' ) );
+			}
+
+			// Add group type(s).
+			if ( ! empty( $input['types'] ) ) {
+				bp_groups_set_group_type( $group_id, $input['types'], false );
+			}
+
+			// Append group type(s).
+			if ( ! empty( $input['appendTypes'] ) ) {
+				bp_groups_set_group_type( $group_id, $input['appendTypes'], true );
+			}
+
+			// Remove group type(s).
+			if ( ! empty( $input['removeTypes'] ) && ! empty( bp_groups_get_group_type( $group_id, false ) ) ) {
+				array_map(
+					function( $type ) use ( $group_id ) {
+						bp_groups_remove_group_type( $group_id, $type );
+					},
+					(array) $input['removeTypes']
+				);
 			}
 
 			// Return the group ID.

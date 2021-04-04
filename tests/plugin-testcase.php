@@ -11,7 +11,13 @@
  */
 class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
+	/**
+	 * Query response.
+	 *
+	 * @var array
+	 */
 	public $response;
+
 	public $bp_factory;
 	public $bp;
 	public $client_mutation_id;
@@ -31,6 +37,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->client_mutation_id = 'someUniqueId';
 		$this->image_file         = __DIR__ . '/assets/test-image.jpeg';
 		$this->user               = $this->bp_factory->user->create();
+		$this->random_user        = $this->bp_factory->user->create();
 		$this->admin              = $this->bp_factory->user->create( [ 'role' => 'administrator' ] );
 		$this->group              = $this->bp_factory->group->create(
 			[
@@ -42,10 +49,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 		// Add group type.
 		bp_groups_register_group_type( 'foo' );
+		bp_groups_register_group_type( 'bar' );
 	}
 
 	/**
-	 * Wrapper for the "graphql()" function...
+	 * Wrapper for the "graphql()" function.
+	 *
+	 * @todo add per query debug log.
 	 *
 	 * @return array
 	 */
@@ -62,7 +72,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return \GraphQLRelay\Relay::toGlobalId( ...func_get_args() );
 	}
 
-	public function assertQuerySuccessful( $response ) {
+	/**
+	 * Assert query was successfull.
+	 *
+	 * @param array $response Query response.
+	 * @return self
+	 */
+	public function assertQuerySuccessful( array $response ) {
 		$this->response = $response;
 		$this->assertIsArray( $this->response );
 		$this->assertNotEmpty( $this->response );
@@ -71,40 +87,73 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this;
 	}
 
-	public function assertQueryFailed( $response ) {
+	/**
+	 * Assert query failed.
+	 *
+	 * @param array $response Query response.
+	 * @return self
+	 */
+	public function assertQueryFailed( array $response ) {
 		$this->response = $response;
 		$this->assertArrayHasKey( 'errors', $this->response );
 
 		return $this;
 	}
 
-	public function expectedErrorMessage( $message ) {
+	/**
+	 * Check the expected error message.
+	 *
+	 * @param string $message Error Message.
+	 * @return self
+	 */
+	public function expectedErrorMessage( string $message ) {
 		$this->assertNotEmpty( $this->response );
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
-	}
-
-	public function hasField( string $field, $match ) {
-		$object = $this->get_object_from_response();
-
-		$this->assertEquals( $match, $object[ $field ] );
 
 		return $this;
 	}
 
+	/**
+	 * Check if field exists in the response.
+	 *
+	 * @param string $field Field.
+	 * @param mixed  $field_content Field Content.
+	 * @return self
+	 */
+	public function hasField( string $field, $field_content ) {
+		$object = $this->get_field_value_from_response( $field );
+
+		$this->assertEquals( $field_content, $object[ $field ] );
+
+		return $this;
+	}
+
+	/**
+	 * Check if field does not exist in a response.
+	 *
+	 * @param string $field Response Field.
+	 * @return self
+	 */
 	public function notHasField( string $field ) {
-		$object = $this->get_object_from_response();
+		$object = $this->get_field_value_from_response( $field );
 
-		$this->assertTrue( empty( $object[ $field ] ), 'Unexpected field exist.' );
+		$this->assertTrue( empty( $object[ $field ] ) );
 
 		return $this;
 	}
 
-	protected function get_object_from_response() {
+	/**
+	 * Get a field value from response.
+	 *
+	 * @param string $object_field Object field.
+	 * @return mixed
+	 */
+	protected function get_field_value_from_response( string $object_field ) {
 		foreach( $this->response['data'] as $operationName ) {
 			foreach( $operationName as $field => $value ) {
-
-				if ('clientMutationId' === $field) {
-					continue;
+				if ($object_field === $field) {
+					$object = [ $field => $value ];
+					break;
 				}
 
 				$object = $value;
@@ -196,65 +245,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		}';
 
 		$operation_name = 'groupsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function update_group( $status = null, $group_id = null, $name = null ) {
-		$query = '
-			mutation updateGroupTest( $clientMutationId: String!, $name: String, $groupId: Int, $status:GroupStatusEnum ) {
-				updateGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						groupId: $groupId
-						name: $name
-						status: $status
-					}
-				)
-				{
-					clientMutationId
-					group {
-						name
-						status
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $group_id ?? $this->group_id,
-			'status'           => $status ?? 'PUBLIC',
-			'name'             => $name ?? 'Group',
-		];
-
-		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function delete_group( $group_id = null ) {
-		$query = '
-			mutation deleteGroupTest( $clientMutationId: String!, $groupId: Int ) {
-				deleteGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						groupId: $groupId
-					}
-				)
-				{
-					clientMutationId
-					deleted
-				}
-			}
-        ';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $group_id ?? $this->group_id,
-		];
-
-		$operation_name = 'deleteGroupTest';
 
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}

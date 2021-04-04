@@ -11,6 +11,9 @@ if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR_TEST' ) ) {
 	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql' );
 }
 
+// My version of REST_TESTS_IMPOSSIBLY_HIGH_NUMBER.
+define( 'GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER', 99999999 );
+
 /**
  * Determine where the WP test suite lives. Three options are supported:
  *

@@ -288,7 +288,6 @@ class Test_Member_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
 		);
 
 		// Check our four members.
-		$this->assertTrue( count( $ids ) === 6 );
 		$this->assertTrue( in_array( $u1, $ids, true ) );
 		$this->assertTrue( in_array( $u2, $ids, true ) );
 		$this->assertTrue( in_array( $u3, $ids, true ) );
