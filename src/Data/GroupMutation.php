@@ -38,6 +38,8 @@ class GroupMutation {
 			$group_id = absint( $id_components['id'] );
 		} elseif ( ! empty( $input['slug'] ) ) {
 			$group_id = groups_get_id( esc_html( $input['slug'] ) );
+		} elseif ( ! empty( $input['previousSlug'] ) ) {
+			$group_id = groups_get_id_by_previous_slug( esc_html( $input['previousSlug'] ) );
 		} elseif ( ! empty( $input['groupId'] ) ) {
 			$group_id = absint( $input['groupId'] );
 		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
@@ -57,14 +59,13 @@ class GroupMutation {
 	/**
 	 * Mapping group params.
 	 *
-	 * @param array                 $input  The input for the mutation.
-	 * @param \BP_Groups_Group|null $group  Group object.
-	 * @param string                $action Hook action.
-	 *
+	 * @param array                $input  The input for the mutation.
+	 * @param string               $action Hook action.
+	 * @param BP_Groups_Group|null $group  Group object.
 	 * @return array
 	 */
-	public static function prepare_group_args( array $input, $group = null, string $action ): array {
-		$output_args = [
+	public static function prepare_group_args( array $input, string $action, $group = null ): array {
+		$mutation_args = [
 			'name'        => empty( $input['name'] )
 				? $group->name ?? ''
 				: $input['name'],
@@ -78,8 +79,8 @@ class GroupMutation {
 				? $group->parent_id ?? null
 				: $input['parentId'],
 			'slug'        => empty( $input['slug'] )
-				? $group->slug ? groups_check_slug( sanitize_title( esc_attr( $group->slug ) ) ) : false
-				: $input['slug'],
+				? $group->slug ?? null
+				: groups_check_slug( sanitize_title( esc_attr( $input['slug'] ) ) ),
 			'status'      => empty( $input['status'] )
 				? $group->status ?? null
 				: $input['status'],
@@ -90,17 +91,17 @@ class GroupMutation {
 
 		// Setting the group ID.
 		if ( ! empty( $group->id ) ) {
-			$output_args['group_id'] = $group->id;
+			$mutation_args['group_id'] = $group->id;
 		}
 
 		/**
-		 * Allows changing output args.
+		 * Allows updating mutation args.
 		 *
-		 * @param array                $output_args Mutation output args.
-		 * @param array                $input       Mutation input args.
-		 * @param BP_Groups_Group|null $group       Group object.
+		 * @param array                $mutation_args Mutation output args.
+		 * @param array                $input         Mutation input args.
+		 * @param BP_Groups_Group|null $group         Group object.
 		 */
-		return apply_filters( "bp_graphql_groups_{$action}_mutation_args", $output_args, $input, $group );
+		return apply_filters( "bp_graphql_groups_{$action}_mutation_args", $mutation_args, $input, $group );
 	}
 
 	/**
@@ -109,7 +110,7 @@ class GroupMutation {
 	 * @param int $creator_id Creator ID.
 	 * @return bool
 	 */
-	public static function can_update_or_delete_group( $creator_id ): bool {
+	public static function can_update_or_delete_group( int $creator_id ): bool {
 		return ( bp_current_user_can( 'bp_moderate' ) || absint( bp_loggedin_user_id() ) === absint( $creator_id ) );
 	}
 }

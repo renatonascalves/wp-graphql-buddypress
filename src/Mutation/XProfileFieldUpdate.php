@@ -156,7 +156,7 @@ class XProfileFieldUpdate {
 
 			// Update XProfile field and return the ID.
 			$xprofile_field_id = xprofile_insert_field(
-				XProfileFieldMutation::prepare_xprofile_field_args( $input, $xprofile_field_object, 'update' )
+				XProfileFieldMutation::prepare_xprofile_field_args( $input, 'update', $xprofile_field_object )
 			);
 
 			// Throw an exception if the XProfile field failed to be updated.

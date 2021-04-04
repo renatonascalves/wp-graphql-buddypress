@@ -12,7 +12,6 @@ use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
-use BP_Groups_Group;
 
 /**
  * GroupUpdate Class.
@@ -122,11 +121,11 @@ class GroupUpdate {
 
 			// Update group.
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, $group, 'update' )
+				GroupMutation::prepare_group_args( $input, 'update', $group )
 			);
 
 			// Throw an exception if the group failed to be updated.
-			if ( false === is_numeric( $group_id ) ) {
+			if ( empty( $group_id ) ) {
 				throw new UserError( __( 'Could not update existing group.', 'wp-graphql-buddypress' ) );
 			}
 

@@ -109,19 +109,15 @@ class GroupEnums {
 		$group_stati = buddypress()->groups->valid_status;
 
 		if ( ! empty( $group_stati ) && is_array( $group_stati ) ) {
-			/**
-			 * Reset the array
-			 */
+			// Reset the array.
 			$group_status_enum_values = [];
 
-			/**
-			 * Loop through the group_stati
-			 */
+			// Loop through the group_stati.
 			foreach ( $group_stati as $status ) {
 				$group_status_enum_values[ WPEnumType::get_safe_name( $status ) ] = [
 					'description' => sprintf(
-						/* translators: group status */
-						__( 'Objects with the %1$s status', 'wp-graphql-buddypress' ),
+						/* translators: %1$s: group status */
+						__( 'Group with the %1$s status', 'wp-graphql-buddypress' ),
 						$status
 					),
 					'value'       => $status,
@@ -132,7 +128,7 @@ class GroupEnums {
 		register_graphql_enum_type(
 			'GroupStatusEnum',
 			[
-				'description' => __( 'The status of the object.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 				'values'      => $group_status_enum_values,
 			]
 		);
@@ -146,14 +142,12 @@ class GroupEnums {
 		$group_types             = bp_groups_get_group_types();
 
 		if ( ! empty( $group_types ) && is_array( $group_types ) ) {
-			/**
-			 * Loop through the group_stati
-			 */
+			// Loop through the group types.
 			foreach ( $group_types as $type ) {
 				$group_types_enum_values[ WPEnumType::get_safe_name( $type ) ] = [
 					'description' => sprintf(
-						/* translators: group type */
-						__( 'Objects with the %1$s type', 'wp-graphql-buddypress' ),
+						/* translators: the %1$s: group type */
+						__( 'Group with the %1$s type', 'wp-graphql-buddypress' ),
 						$type
 					),
 					'value' => $type,
@@ -164,7 +158,7 @@ class GroupEnums {
 		register_graphql_enum_type(
 			'GroupTypeEnum',
 			[
-				'description' => __( 'The type of the object.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The type of the group.', 'wp-graphql-buddypress' ),
 				'values'      => $group_types_enum_values,
 			]
 		);

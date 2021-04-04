@@ -39,6 +39,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 				'creator_id'  => $this->user,
 			]
 		);
+
+		// Add group type.
+		bp_groups_register_group_type( 'foo' );
 	}
 
 	/**
@@ -61,8 +64,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 	public function assertQuerySuccessful( $response ) {
 		$this->response = $response;
+		$this->assertIsArray( $this->response );
 		$this->assertNotEmpty( $this->response );
-		$this->assertTrue( ! empty( $this->response['data'] ) );
+		$this->assertTrue( in_array( 'data', array_keys( $response ), true ) );
 
 		return $this;
 	}
@@ -194,45 +198,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		];
 
 		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function create_group( $slug = null ) {
-		$query = '
-			mutation createGroupTest(
-				$clientMutationId:String!,
-				$name:String!
-				$slug:String
-				$status:GroupStatusEnum
-			) {
-				createGroup(
-					input: {
-						clientMutationId: $clientMutationId
-						name: $name
-						slug: $slug
-						status: $status
-					}
-				)
-				{
-					clientMutationId
-					group {
-						name
-						slug
-						status
-					}
-				}
-			}
-		';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'name'             => 'Group Test',
-			'slug'             => 'group-slug',
-			'status'           => $slug ?? 'PUBLIC',
-		];
-
-		$operation_name = 'createGroupTest';
 
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}

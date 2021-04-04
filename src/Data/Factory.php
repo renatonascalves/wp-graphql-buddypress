@@ -84,7 +84,7 @@ class Factory {
 	 *
 	 * @throws UserError User error.
 	 *
-	 * @param int|null   $id      XProfile field ID or null.
+	 * @param int        $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
 	 * @return XProfileField|null
 	 */
