@@ -276,19 +276,13 @@ class Test_Member_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
 
 		$this->bp->set_current_user( $this->admin );
 
-		// Query.
 		$results = $this->membersQuery();
 
-		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 
-		$ids = wp_list_pluck(
-			$results['data']['members']['nodes'],
-			'userId'
-		);
+		$ids = wp_list_pluck( $results['data']['members']['nodes'], 'userId' );
 
 		// Check our four members.
-		$this->assertTrue( count( $ids ) === 6 );
 		$this->assertTrue( in_array( $u1, $ids, true ) );
 		$this->assertTrue( in_array( $u2, $ids, true ) );
 		$this->assertTrue( in_array( $u3, $ids, true ) );
@@ -301,7 +295,6 @@ class Test_Member_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
 		// Query members.
 		$results = $this->membersQuery( [ 'first' => 2 ] );
 
-		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 		$this->assertTrue( $results['data']['members']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['members']['pageInfo']['hasPreviousPage'] );
@@ -316,7 +309,6 @@ class Test_Member_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
 		// Query members.
 		$results = $this->membersQuery( [ 'first' => 2 ] );
 
-		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 		$this->assertTrue( $results['data']['members']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['members']['pageInfo']['hasPreviousPage'] );
