@@ -220,35 +220,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function groupsQuery( $variables = [] ) {
-		$query = 'query groupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToGroupConnectionWhereArgs) {
-			groups( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						id
-						groupId
-						name
-					}
-				}
-				nodes {
-					id
-					groupId
-				}
-			}
-		}';
-
-		$operation_name = 'groupsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
 	protected function create_xprofile_field( $xprofile_group_id = null ) {
 		$query = '
 			mutation createXProfileFieldTest(

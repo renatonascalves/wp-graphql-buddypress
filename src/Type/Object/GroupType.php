@@ -67,6 +67,12 @@ class GroupType {
 						],
 						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+
+							// Only logged users can see these values.
+							if ( false === is_user_logged_in() ) {
+								return null;
+							}
+
 							$admins     = [];
 							$admin_mods = groups_get_group_members(
 								[
@@ -101,6 +107,11 @@ class GroupType {
 						],
 						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+
+							if ( false === is_user_logged_in() ) {
+								return null;
+							}
+
 							$mods       = [];
 							$admin_mods = groups_get_group_members(
 								[
