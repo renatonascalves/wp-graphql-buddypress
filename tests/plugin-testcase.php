@@ -75,6 +75,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		// Add group type.
 		bp_groups_register_group_type( 'foo' );
 		bp_groups_register_group_type( 'bar' );
+
+		// Add member type.
+		bp_register_member_type( 'foo' );
 	}
 
 	/**
@@ -197,63 +200,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		}
 
 		return $object ?? '';
-	}
-
-	protected function membersQuery( $variables = [] ) {
-		$query = 'query membersQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToMembersConnectionWhereArgs) {
-			members( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						userId
-					}
-				}
-				nodes {
-					userId
-				}
-			}
-		}';
-
-		$variables = $variables;
-
-		$operation_name = 'membersQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function delete_member( $u = 0 ) {
-		$query = '
-			mutation deleteUserTest( $clientMutationId: String!, $id: ID! ) {
-				deleteUser(
-					input: {
-						clientMutationId: $clientMutationId
-						id: $id
-					}
-				) {
-					clientMutationId
-					deletedId
-					user {
-						userId
-						id
-					}
-				}
-			}
-        ';
-
-		$variables = [
-			'id'               => $this->toRelayId( 'user', $u ),
-			'clientMutationId' => $this->client_mutation_id,
-		];
-
-		$operation_name = 'deleteUserTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
 	protected function create_xprofile_field( $xprofile_group_id = null ) {

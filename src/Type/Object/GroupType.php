@@ -108,6 +108,7 @@ class GroupType {
 						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 
+							// Only logged users can see these values.
 							if ( false === is_user_logged_in() ) {
 								return null;
 							}
@@ -203,6 +204,12 @@ class GroupType {
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
+
+							// Bail early, if disabled.
+							if ( false === buddypress()->avatar->show_avatars ) {
+								return null;
+							}
+
 							return Factory::resolve_attachment( $group->groupId ?? 0, 'group' );
 						},
 					],
