@@ -87,7 +87,7 @@ class MemberType {
 						'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( User $source ) {
+				'resolve'     => function( User $source, array $args ) {
 					if ( ! bp_is_active( 'activity' ) ) {
 						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
