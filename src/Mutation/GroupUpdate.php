@@ -133,7 +133,7 @@ class GroupUpdate {
 			$group = GroupMutation::get_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to update a group.
-			if ( false === GroupMutation::can_update_or_delete_group( $group->creator_id ) ) {
+			if ( false === GroupMutation::can_update_or_delete_group( $group ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

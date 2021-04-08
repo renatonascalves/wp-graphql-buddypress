@@ -105,12 +105,19 @@ class GroupMutation {
 	}
 
 	/**
-	 * Check if user can delete groups.
+	 * Check if user can update or delete groups.
 	 *
-	 * @param int $creator_id Creator ID.
+	 * @param BP_Groups_Group $group Group object.
 	 * @return bool
 	 */
-	public static function can_update_or_delete_group( int $creator_id ): bool {
-		return ( bp_current_user_can( 'bp_moderate' ) || absint( bp_loggedin_user_id() ) === absint( $creator_id ) );
+	public static function can_update_or_delete_group( BP_Groups_Group $group ): bool {
+		$group_id          = $group->id;
+		$current_logged_id = absint( bp_loggedin_user_id() );
+
+		if ( groups_is_user_mod( $current_logged_id, $group_id ) || groups_is_user_admin( $current_logged_id, $group_id ) ) {
+			return true;
+		}
+
+		return ( bp_current_user_can( 'bp_moderate' ) || absint( $group->creator_id ) === $current_logged_id );
 	}
 }

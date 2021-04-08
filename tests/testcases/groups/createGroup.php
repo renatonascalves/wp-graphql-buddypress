@@ -1,12 +1,13 @@
 <?php
 
 use WPGraphQL\Utils\Utils;
+
 /**
- * Test_Groups_Create_Mutation Class.
+ * Test_Groups_createGroup_Mutation Class.
  *
  * @group groups
  */
-class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -89,9 +90,9 @@ class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_create_group_when_disabled() {
-		$this->bp->set_current_user( $this->user );
-
 		add_filter( 'bp_user_can_create_groups', '__return_false' );
+
+		$this->bp->set_current_user( $this->user );
 
 		$this->assertQueryFailed( $this->create_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -126,7 +127,7 @@ class Test_Groups_Create_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_create_group_with_types() {
-		$this->bp->set_current_user( $this->admin );
+		$this->bp->set_current_user( $this->user );
 
 		$this->assertQuerySuccessful( $this->create_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField( 'types', [ 'FOO' ] );

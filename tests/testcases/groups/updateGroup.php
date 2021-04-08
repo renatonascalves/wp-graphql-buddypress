@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Group_Update_Mutation Class.
+ * Test_Group_updateGroup_Mutation Class.
  *
  * @group groups
  */
-class Test_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -40,11 +40,54 @@ class Test_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
-	public function test_update_group_moderators_can_update() {
+	public function test_update_group_regular_group_member_can_not_update_group() {
+		// Add user to group.
+		$this->bp->add_user_to_group( $this->random_user, $this->group );
+
+		$this->bp->set_current_user( $this->random_user );
+
+		$this->assertQueryFailed( $this->update_group( [ 'name' => 'Regular User Updated Group' ] ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
+	}
+
+	public function test_update_group_banned_group_members_can_not_update() {
+		// Add user to group.
+		$this->bp->add_user_to_group( $this->random_user, $this->group );
+
+		// Ban member.
+		( new BP_Groups_Member( $this->random_user, $this->group ) )->ban();
+
+		$this->bp->set_current_user( $this->random_user );
+
+		$this->assertQueryFailed( $this->update_group( [ 'name' => 'Regular User Updated Group' ] ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
+	}
+
+	public function test_update_group_non_member_group_but_admin_site_admin_can_update() {
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated' ] ) )
-			->hasField( 'name', 'Updated' );
+		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated by Site Admin' ] ) )
+			->hasField( 'name', 'Updated by Site Admin' );
+	}
+
+	public function test_update_group_admins_can_update() {
+		// Add user to group as an admin.
+		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_admin' => true ] );
+
+		$this->bp->set_current_user( $this->random_user );
+
+		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated by Admin' ] ) )
+			->hasField( 'name', 'Updated by Admin' );
+	}
+
+	public function test_update_group_moderators_can_update() {
+		// Add user to group as an moderator.
+		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_mod' => true ] );
+
+		$this->bp->set_current_user( $this->random_user );
+
+		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated by Mod' ] ) )
+			->hasField( 'name', 'Updated by Mod' );
 	}
 
 	public function test_update_group_with_valid_status() {
@@ -118,9 +161,9 @@ class Test_Group_Update_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 	protected function update_group( $args = [] ) {
 		$query = '
 			mutation updateGroupTest(
-				$clientMutationId: String!,
-				$name: String,
-				$groupId: Int,
+				$clientMutationId:String!
+				$name:String
+				$groupId:Int
 				$status:GroupStatusEnum
 			) {
 				updateGroup(
