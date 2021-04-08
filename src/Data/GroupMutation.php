@@ -114,7 +114,7 @@ class GroupMutation {
 		$group_id          = $group->id;
 		$current_logged_id = absint( bp_loggedin_user_id() );
 
-		if ( groups_is_user_mod( $current_logged_id, $group_id ) || groups_is_user_admin( $current_logged_id, $group_id ) ) {
+		if ( groups_is_user_admin( $current_logged_id, $group_id ) ) {
 			return true;
 		}
 

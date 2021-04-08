@@ -72,14 +72,14 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
-	public function test_delete_group_moderators_can_delete() {
+	public function test_delete_group_moderators_can_not_delete_group() {
 		// Add user to group as a moderator.
 		$this->bp->add_user_to_group( $this->random_user, $this->group_id, [ 'is_mod' => true ] );
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQuerySuccessful( $this->delete_group() )
-			->hasField( 'deleted', true );
+		$this->assertQueryFailed( $this->delete_group() )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_group_admins_can_delete() {

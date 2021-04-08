@@ -80,14 +80,14 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			->hasField( 'name', 'Updated by Admin' );
 	}
 
-	public function test_update_group_moderators_can_update() {
+	public function test_update_group_moderators_can_not_update() {
 		// Add user to group as an moderator.
 		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_mod' => true ] );
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated by Mod' ] ) )
-			->hasField( 'name', 'Updated by Mod' );
+		$this->assertQueryFailed( $this->update_group( [ 'name' => 'Moderator Updated Group' ] ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_update_group_with_valid_status() {
