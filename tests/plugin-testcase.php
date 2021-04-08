@@ -452,32 +452,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function blogsQuery( $variables = [] ) {
-		$query = 'query blogsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToBlogConnectionWhereArgs) {
-			blogs( first:$first last:$last after:$after before:$before where:$where ) {
-				pageInfo {
-					hasNextPage
-					hasPreviousPage
-					startCursor
-					endCursor
-				}
-				edges {
-					cursor
-					node {
-						blogId
-					}
-				}
-				nodes {
-					blogId
-				}
-			}
-		}';
-
-		$operation_name = 'blogsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
 	protected function delete_cover( $object, $objectId ) {
 		$query = '
 			mutation deleteCoverTest( $clientMutationId: String!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
