@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Groups_Group_Queries Class.
+ * Test_Groups_Group_By_Queries Class.
  *
  * @group groups
  */
-class Test_Groups_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -73,8 +73,7 @@ class Test_Groups_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_group_by_query_with_id_param() {
-		$group_id  = $this->create_group_object();
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', $this->create_group_object() );
 		$query     = "
 			query {
 				groupBy(id: \"{$global_id}\") {
@@ -214,9 +213,7 @@ class Test_Groups_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_hidden_group() {
 		$u = $this->user;
-		$g = $this->bp_factory->group->create( array(
-			'status' => 'hidden',
-		) );
+		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
 		$this->bp->add_user_to_group( $u, $g );
 		$this->bp->set_current_user( $u );
@@ -237,9 +234,7 @@ class Test_Groups_Group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_hidden_group_without_being_from_group() {
 		$u = $this->user;
-		$g = $this->bp_factory->group->create( array(
-			'status' => 'hidden',
-		) );
+		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
 		$this->bp->set_current_user( $u );
 

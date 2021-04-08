@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Groups_Queries Class.
+ * Test_Groups_groupsQuery_Query Class.
  *
  * @group groups
  */
-class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -151,8 +151,20 @@ class Test_Groups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	protected function groupsQuery( $variables = [] ) {
-		$query = 'query groupsQuery($first:Int $last:Int $after:String $before:String $where:RootQueryToGroupConnectionWhereArgs) {
-			groups(first:$first last:$last after:$after before:$before where:$where) {
+		$query = 'query groupsQuery(
+			$first:Int
+			$last:Int
+			$after:String
+			$before:String
+			$where:RootQueryToGroupConnectionWhereArgs
+		) {
+			groups(
+				first:$first
+				last:$last
+				after:$after
+				before:$before
+				where:$where
+			) {
 				pageInfo {
 					hasNextPage
 					hasPreviousPage

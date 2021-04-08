@@ -22,8 +22,33 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public $bp;
 	public $client_mutation_id;
 	public $image_file;
+
+	/**
+	 * Regular user.
+	 *
+	 * @var WP_User
+	 */
 	public $user;
+
+	/**
+	 * Random regular user.
+	 *
+	 * @var WP_User
+	 */
+	public $random_user;
+
+	/**
+	 * Admin user.
+	 *
+	 * @var WP_User
+	 */
 	public $admin;
+
+	/**
+	 * Group object.
+	 *
+	 * @var BP_Groups_Group
+	 */
 	public $group;
 
 	/**
@@ -109,6 +134,17 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function expectedErrorMessage( string $message ) {
 		$this->assertNotEmpty( $this->response );
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
+
+		return $this;
+	}
+
+	/**
+	 * Log response.
+	 *
+	 * @return self
+	 */
+	public function debug() {
+		var_dump( $this->response );
 
 		return $this;
 	}
