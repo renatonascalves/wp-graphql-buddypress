@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Blogs_Queries Class.
+ * Test_Blogs_blogsQuery_Queries Class.
  *
  * @group blogs
  */
-class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -14,96 +14,6 @@ class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		parent::setUp();
 	}
 
-	/**
-	 * @group blog
-	 */
-	public function test_blog_query_with_body_by() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
-
-		$u = $this->bp_factory->user->create();
-
-		$this->bp->set_current_user( $u );
-
-		$b1 = $this->bp_factory->blog->create();
-
-		$global_id = $this->toRelayId( 'blog', $b1 );
-
-		$query = "{
-			blogBy( id: \"{$global_id}\" ) {
-				id
-				blogId
-				blogAdmin {
-					userId
-				}
-			}
-		}";
-
-		// Test.
-		$this->assertEquals(
-			[
-				'data' => [
-					'blogBy' => [
-						'id'        => $global_id,
-						'blogId'    => $b1,
-						'blogAdmin' => [
-							'userId' => $u,
-						],
-					],
-				],
-			],
-			$this->graphql( compact( 'query' ) )
-		);
-	}
-
-	/**
-	 * @group blog
-	 */
-	public function test_blog_query_with_another_logged_in_user() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
-
-		$u1 = $this->bp_factory->user->create();
-		$this->bp->set_current_user( $u1 );
-		$b1 = $this->bp_factory->blog->create();
-
-		$u2 = $this->bp_factory->user->create();
-		$this->bp->set_current_user( $u2 );
-
-		$global_id = $this->toRelayId( 'blog', $b1 );
-
-		$query = "{
-			blogBy( id: \"{$global_id}\" ) {
-				id
-				blogId
-				blogAdmin {
-					userId
-				}
-			}
-		}";
-
-		// Test.
-		$this->assertEquals(
-			[
-				'data' => [
-					'blogBy' => [
-						'id'        => $global_id,
-						'blogId'    => $b1,
-						'blogAdmin' => [
-							'userId' => $u1,
-						],
-					],
-				],
-			],
-			$this->graphql( compact( 'query' ) )
-		);
-	}
-
-	/**
-	 * @group blog
-	 */
 	public function test_blogs_query() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
@@ -128,9 +38,6 @@ class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertContains( $b2, $blogs_ids );
 	}
 
-	/**
-	 * @group blog
-	 */
 	public function test_blogs_query_using_where_include() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
@@ -168,9 +75,6 @@ class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertNotContains( $u4, $blogs_ids );
 	}
 
-	/**
-	 * @group blog
-	 */
 	public function test_blogs_query_paginated() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
@@ -204,7 +108,49 @@ class Test_Blogs_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Confirm total count.
 		$this->assertTrue( count( $blogs_ids ) === 2 );
+	}
 
-		// @todo confirm second pagination.
+	/**
+	 * Blogs Query.
+	 *
+	 * @param array $variables
+	 * @return array
+	 */
+	protected function blogsQuery( array $variables = [] ) {
+		$query = 'query blogsQuery(
+			$first:Int
+			$last:Int
+			$after:String
+			$before:String
+			$where:RootQueryToBlogConnectionWhereArgs
+		) {
+			blogs(
+				first:$first
+				last:$last
+				after:$after
+				before:$before
+				where:$where
+			) {
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					startCursor
+					endCursor
+				}
+				edges {
+					cursor
+					node {
+						blogId
+					}
+				}
+				nodes {
+					blogId
+				}
+			}
+		}';
+
+		$operation_name = 'blogsQuery';
+
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 }
