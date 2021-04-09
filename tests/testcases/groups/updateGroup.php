@@ -81,7 +81,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_moderators_can_not_update() {
-		// Add user to group as an moderator.
+		// Add user to group as a moderator.
 		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_mod' => true ] );
 
 		$this->bp->set_current_user( $this->random_user );

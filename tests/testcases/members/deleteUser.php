@@ -82,7 +82,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	/**
 	 * Delete member helper.
 	 *
-	 * @param integer $user_id User ID.
+	 * @param int $user_id User ID.
 	 * @return array
 	 */
 	protected function delete_member( $user_id = 0 ) {
