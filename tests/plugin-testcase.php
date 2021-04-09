@@ -110,7 +110,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->response = $response;
 		$this->assertIsArray( $this->response );
 		$this->assertNotEmpty( $this->response );
-		$this->assertTrue( in_array( 'data', array_keys( $response ), true ) );
+		$this->assertArrayHasKey( 'data', $this->response );
 
 		return $this;
 	}
@@ -123,6 +123,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function assertQueryFailed( array $response ) {
 		$this->response = $response;
+		$this->assertIsArray( $this->response );
+		$this->assertNotEmpty( $this->response );
 		$this->assertArrayHasKey( 'errors', $this->response );
 
 		return $this;
@@ -698,17 +700,34 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
 	}
 
-	protected function get_avatar_image( $size, $object, $item_id ) {
-		return bp_core_fetch_avatar([
-			'object'  => $object,
-			'type'    => $size,
-			'item_id' => $item_id,
-			'html'    => false,
-			'no_grav' => true,
-		]);
+	/**
+	 * Get avatar image.
+	 *
+	 * @param string $size Image size.
+	 * @param string $object Object (group/blog/user).
+	 * @param int $item_id Item ID.
+	 * @return string
+	 */
+	protected function get_avatar_image( string $size, string $object, int $item_id ) {
+		return bp_core_fetch_avatar(
+			[
+				'object'  => $object,
+				'type'    => $size,
+				'item_id' => $item_id,
+				'html'    => false,
+				'no_grav' => true,
+			]
+		);
 	}
 
-	protected function get_cover_image( $object, $item_id ) {
+	/**
+	 * Get cover image.
+	 *
+	 * @param string $object Object (members/groups).
+	 * @param int $item_id Item ID.
+	 * @return string
+	 */
+	protected function get_cover_image( string $object, int $item_id ) {
 		return bp_attachments_get_attachment(
 			'url',
 			[

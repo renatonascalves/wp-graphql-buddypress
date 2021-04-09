@@ -18,13 +18,13 @@ use stdClass;
  *
  * @property string $id ID.
  * @property int    $blogId Blog ID.
- * @property int    $admin ID of the group admin.
- * @property string $name Group name.
- * @property string $description Group description.
- * @property string $permalink Group permalink.
- * @property string $path Group path.
- * @property string $domain Group domain.
- * @property string $lastActivity Group's last activity.
+ * @property int    $admin ID of the blog admin.
+ * @property string $name Blog name.
+ * @property string $description Blog description.
+ * @property string $permalink Blog permalink.
+ * @property string $path Blog path.
+ * @property string $domain Blog domain.
+ * @property string $lastActivity Blog's last activity.
  */
 class Blog extends Model {
 

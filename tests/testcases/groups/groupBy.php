@@ -1,98 +1,55 @@
 <?php
 
 /**
- * Test_Groups_Group_By_Queries Class.
+ * Test_Groups_groupBy_Queries Class.
  *
  * @group groups
  */
 class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
+	 * Global ID.
+	 *
+	 * @var int
+	 */
+	public $global_id;
+
+	/**
 	 * Set up.
 	 */
 	public function setUp() {
 		parent::setUp();
+
+		$this->global_id = $this->toRelayId( 'group', $this->group );
 	}
 
 	public function test_group_query() {
-		$group_id  = $this->create_group_object();
-		$global_id = $this->toRelayId( 'group', $group_id );
-		$query     = "
-			query {
-				groupBy(id: \"{$global_id}\") {
-					id,
-					groupId
-					name
-					status
-					description(format: RAW)
-					totalMemberCount
-					lastActivity
-					hasForum
-					link
-					creator {
-						userId
-					}
-					mods {
-						userId
-					}
-					admins {
-						userId
-					}
-					parent {
-						groupId
-					}
-				}
-			}
-		";
-
-		// Test.
-		$this->assertEquals(
-			[
-				'data' => [
-					'groupBy' => [
-						'id'               => $global_id,
-						'groupId'          => $group_id,
-						'name'             => 'Group Test',
-						'status'           => 'PUBLIC',
-						'totalMemberCount' => null,
-						'description'      => 'Group Description',
-						'lastActivity'     => null,
-						'hasForum'         => 1,
-						'link'             => bp_get_group_permalink( new \BP_Groups_Group( $group_id ) ),
-						'creator'          => [
-							'userId' => $this->admin,
-						],
-						'mods'             => null,
-						'admins'           => null,
-						'parent'           => null,
-					],
-				],
-			],
-			$this->graphql( compact( 'query' ) )
-		);
-	}
-
-	public function test_group_by_query_with_id_param() {
-		$global_id = $this->toRelayId( 'group', $this->create_group_object() );
-		$query     = "
-			query {
-				groupBy(id: \"{$global_id}\") {
-					id,
-					name
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
+		$this->assertQuerySuccessful( $this->get_a_group() )
+			->hasField( 'id', $this->global_id )
+			->hasField( 'groupId', $this->group )
 			->hasField( 'name', 'Group Test' )
-			->hasField( 'id', $global_id );
+			->hasField( 'status', 'PUBLIC' )
+			->hasField( 'description', 'Group Description' )
+			->hasField( 'totalMemberCount', null )
+			->hasField( 'lastActivity', null )
+			->hasField( 'hasForum', 1 )
+			->hasField( 'parent', null )
+			->hasField( 'admins', null )
+			->hasField( 'mods', null )
+			->hasField( 'creator', [ 'userId' => $this->user ] )
+			->hasField( 'link', bp_get_group_permalink( new \BP_Groups_Group( $this->group ) ) );
 	}
 
 	public function test_group_by_query_with_groupid_param() {
-		$group_id = $this->create_group_object();
-		$query    = "
+		$this->assertQuerySuccessful( $this->get_a_group() )
+			->hasField( 'name', 'Group Test' )
+			->hasField( 'id', $this->global_id );
+	}
+
+	public function test_group_by_query_with_id_param() {
+		$query = "
 			query {
-				groupBy(groupId: {$group_id}) {
+				groupBy(id: \"{$this->global_id}\") {
 					groupId
 					name
 				}
@@ -101,7 +58,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'name', 'Group Test' )
-			->hasField( 'groupId', $group_id );
+			->hasField( 'groupId', $this->group );
 	}
 
 	public function test_group_by_query_with_slug_param() {
@@ -188,14 +145,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_group_with_invalid_group_id() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			groupBy(groupId: {$id}) {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
+		$this->assertQueryFailed( $this->get_a_group( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This group does not exist.' );
 	}
 
@@ -211,47 +161,43 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->expectedErrorMessage( 'Unknown argument "groupID" on field "groupBy" of type "RootQuery". Did you mean "groupId"?' );
 	}
 
-	public function test_hidden_group() {
-		$u = $this->user;
+	public function test_get_group_with_avatar_disabled() {
+		buddypress()->avatar->show_avatars = false;
+
+		$this->assertQuerySuccessful( $this->get_a_group() )
+			->hasField( 'attachmentAvatar', null );
+
+		buddypress()->avatar->show_avatars = true;
+	}
+
+	public function test_get_hidden_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->add_user_to_group( $u, $g );
-		$this->bp->set_current_user( $u );
+		$this->bp->add_user_to_group( $this->user, $g );
 
-		$query    = "
-			query {
-				groupBy(groupId: {$g}) {
-					groupId
-					status
-				}
-			}
-		";
+		$this->bp->set_current_user( $this->user );
 
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
+		$this->assertQuerySuccessful( $this->get_a_group( $g ) )
 			->hasField( 'status', 'HIDDEN' )
 			->hasField( 'groupId', $g );
 	}
 
-	public function test_hidden_group_without_being_from_group() {
-		$u = $this->user;
+	public function test_get_hidden_group_without_being_from_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $this->user );
 
-		$query    = "
-			query {
-				groupBy(groupId: {$g}) {
-					groupId
-					status
-				}
-			}
-		";
-
-		$response = $this->graphql( compact( 'query' ) );
+		$response = $this->get_a_group( $g );
 
 		$this->assertEmpty( $response['data']['groupBy'] );
 	}
 
+	/**
+	 * Create group object.
+	 *
+	 * @param array $args Arguments.
+	 * @return array
+	 */
 	protected function create_group_object( $args = [] ) {
 		return $this->bp_factory->group->create(
 			array_merge(
@@ -264,5 +210,47 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				$args
 			)
 		);
+	}
+
+	/**
+	 * Get a group.
+	 *
+	 * @param int|null $group_id Group ID.
+	 * @return array
+	 */
+	protected function get_a_group( $group_id = null ) {
+		$group = $group_id ?? $this->group;
+		$query = "
+			query {
+				groupBy(groupId: {$group}) {
+					id,
+					groupId
+					name
+					status
+					description(format: RAW)
+					totalMemberCount
+					lastActivity
+					hasForum
+					link
+					creator {
+						userId
+					}
+					mods {
+						userId
+					}
+					admins {
+						userId
+					}
+					parent {
+						groupId
+					}
+					attachmentAvatar {
+						full
+					}
+				}
+			}
+		";
+
+		return $this->graphql( compact( 'query' ) );
 	}
 }
