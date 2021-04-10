@@ -119,8 +119,8 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	public function should_execute(): bool {
 
 		// Check if group object is there.
-		if ( ! $this->source instanceof Group ) {
-			return false;
+		if ( $this->source instanceof Group ) {
+			return true;
 		}
 
 		// It is okay for public groups.
@@ -133,7 +133,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			return true;
 		}
 
-		// User is a member of the group.
+		// Current user is a member of the group.
 		if ( groups_is_user_member( bp_loggedin_user_id(), $this->source->groupId ) ) {
 			return true;
 		}
@@ -145,7 +145,6 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
@@ -163,8 +162,15 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ): array {
 
-		// Only admins and mods can filter those.
-		if ( ! empty( $args['excludeBanned'] ) && ! bp_current_user_can( 'bp_moderate' ) ) {
+		// Only admins can filter those.
+		// @todo update so that mods are not blocked as weel.
+		if (
+			(
+				( ! empty( $args['groupMemberRoles'] ) && 'banned' === $args['groupMemberRoles'][0] )
+				|| ! empty( $args['excludeBanned'] )
+			)
+			&& ! bp_current_user_can( 'bp_moderate' )
+		) {
 			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
 		}
 

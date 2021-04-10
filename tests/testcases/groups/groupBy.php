@@ -198,7 +198,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * @param array $args Arguments.
 	 * @return array
 	 */
-	protected function create_group_object( $args = [] ) {
+	protected function create_group_object( array $args = [] ): array {
 		return $this->bp_factory->group->create(
 			array_merge(
 				[

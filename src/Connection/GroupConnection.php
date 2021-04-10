@@ -45,7 +45,7 @@ class GroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_connection_config( $args = [] ): array {
+	public static function get_connection_config( array $args = [] ): array {
 		return array_merge(
 			[
 				'fromType'       => 'RootQuery',
@@ -66,7 +66,7 @@ class GroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_group_members_connection_config( $args = [] ): array {
+	public static function get_group_members_connection_config( array $args = [] ): array {
 		return array_merge(
 			[
 				'fromType'       => 'Group',

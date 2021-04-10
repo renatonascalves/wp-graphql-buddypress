@@ -113,7 +113,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Blogs Query.
 	 *
-	 * @param array $variables
+	 * @param array $variables Query variables.
 	 * @return array
 	 */
 	protected function blogsQuery( array $variables = [] ) {
