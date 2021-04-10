@@ -22,11 +22,12 @@ class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		$u3 = $this->bp_factory->user->create();
 		$u4 = $this->bp_factory->user->create();
 
-		$results = $this->membersQuery();
+		// Query members.
+		$response = $this->membersQuery();
 
-		$this->assertQuerySuccessful( $results );
+		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $results['data']['members']['nodes'], 'userId' );
+		$ids = wp_list_pluck( $response['data']['members']['nodes'], 'userId' );
 
 		// Check our four members.
 		$this->assertTrue( in_array( $u1, $ids, true ) );
@@ -39,11 +40,11 @@ class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		$this->bp_factory->user->create_many( 4 );
 
 		// Query members.
-		$results = $this->membersQuery( [ 'first' => 2 ] );
+		$response = $this->membersQuery( [ 'first' => 2 ] );
 
-		$this->assertQuerySuccessful( $results );
-		$this->assertTrue( $results['data']['members']['pageInfo']['hasNextPage'] );
-		$this->assertFalse( $results['data']['members']['pageInfo']['hasPreviousPage'] );
+		$this->assertQuerySuccessful( $response );
+		$this->assertTrue( $response['data']['members']['pageInfo']['hasNextPage'] );
+		$this->assertFalse( $response['data']['members']['pageInfo']['hasPreviousPage'] );
 	}
 
 	/**
@@ -52,7 +53,7 @@ class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	 * @param array $variables Variables.
 	 * @return array
 	 */
-	protected function membersQuery( $variables = [] ) {
+	protected function membersQuery( array $variables = [] ): array {
 		$query = 'query membersQuery(
 			$first:Int
 			$last:Int

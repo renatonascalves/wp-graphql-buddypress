@@ -74,11 +74,11 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
 		 * the GraphQL Query have been applied and has the potential to override the GraphQL Query Input Args.
 		 *
-		 * @param array       $query_args array of query_args being passed to the
+		 * @param array       $query_args An array of query_args being passed to the resolve tree
 		 * @param mixed       $source     Source passed down from the resolve tree
-		 * @param array       $args       array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    object passed down zthe resolve tree
-		 * @param ResolveInfo $info       info about fields passed down the resolve tree
+		 * @param array       $args       An array of argument inputs in the field as part of the GraphQL query
+		 * @param AppContext  $context    Object passed down the resolve tree
+		 * @param ResolveInfo $info       Info about fields passed down the resolve tree
 		 */
 		return apply_filters(
 			'graphql_group_members_connection_query_args',
@@ -133,7 +133,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			return true;
 		}
 
-		// User is a member of the group.
+		// Current user is a member of the group.
 		if ( groups_is_user_member( bp_loggedin_user_id(), $this->source->groupId ) ) {
 			return true;
 		}
@@ -145,7 +145,6 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
-	 *
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
@@ -163,8 +162,15 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function sanitize_input_fields( array $args ): array {
 
-		// Only admins and mods can filter those.
-		if ( ! empty( $args['excludeBanned'] ) && ! bp_current_user_can( 'bp_moderate' ) ) {
+		// Only admins can filter those.
+		// @todo update so that mods are not blocked as weel.
+		if (
+			(
+				( ! empty( $args['groupMemberRoles'] ) && 'banned' === $args['groupMemberRoles'][0] )
+				|| ! empty( $args['excludeBanned'] )
+			)
+			&& ! bp_current_user_can( 'bp_moderate' )
+		) {
 			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
 		}
 

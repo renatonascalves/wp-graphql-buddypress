@@ -28,7 +28,7 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 			->hasField( 'link', bp_core_get_user_domain( $this->user ) )
 			->hasField( 'totalFriendCount', 1 )
 			->hasField( 'latestUpdate', null )
-			->hasField( 'attachmentAvatar', [ 'full'  => $this->get_avatar_image( 'full', 'user', $this->user ) ] )
+			->hasField( 'attachmentAvatar', [ 'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ) ] )
 			->hasField( 'attachmentCover', null );
 	}
 
@@ -60,11 +60,11 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 	}
 
 	/**
-	 * Get member.
+	 * Get a member.
 	 *
 	 * @return array
 	 */
-	protected function get_a_member( $user_id = null ) {
+	protected function get_a_member( $user_id = null ): array {
 		$global_id = $this->toRelayId( 'user', $user_id ?? $this->user );
 		$query     = "
 			query {

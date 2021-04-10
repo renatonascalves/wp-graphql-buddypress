@@ -196,9 +196,9 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * Create group object.
 	 *
 	 * @param array $args Arguments.
-	 * @return array
+	 * @return int
 	 */
-	protected function create_group_object( $args = [] ) {
+	protected function create_group_object( array $args = [] ): int {
 		return $this->bp_factory->group->create(
 			array_merge(
 				[
@@ -218,7 +218,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * @param int|null $group_id Group ID.
 	 * @return array
 	 */
-	protected function get_a_group( $group_id = null ) {
+	protected function get_a_group( $group_id = null ): array {
 		$group = $group_id ?? $this->group;
 		$query = "
 			query {
