@@ -74,11 +74,11 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
 		 * the GraphQL Query have been applied and has the potential to override the GraphQL Query Input Args.
 		 *
-		 * @param array       $query_args array of query_args being passed to the
+		 * @param array       $query_args An array of query_args being passed to the resolve tree
 		 * @param mixed       $source     Source passed down from the resolve tree
-		 * @param array       $args       array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    object passed down zthe resolve tree
-		 * @param ResolveInfo $info       info about fields passed down the resolve tree
+		 * @param array       $args       An array of argument inputs in the field as part of the GraphQL query
+		 * @param AppContext  $context    Object passed down the resolve tree
+		 * @param ResolveInfo $info       Info about fields passed down the resolve tree
 		 */
 		return apply_filters(
 			'graphql_group_members_connection_query_args',
@@ -119,8 +119,8 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	public function should_execute(): bool {
 
 		// Check if group object is there.
-		if ( $this->source instanceof Group ) {
-			return true;
+		if ( ! $this->source instanceof Group ) {
+			return false;
 		}
 
 		// It is okay for public groups.

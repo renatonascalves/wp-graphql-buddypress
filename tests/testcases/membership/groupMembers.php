@@ -20,9 +20,9 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u1, $this->group );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members( [ 'id' => $global_id ] );
+		$response  = $this->get_group_members( [ 'id' => $global_id ] );
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $u1 ] ]
@@ -41,14 +41,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		( new BP_Groups_Member( $this->random_user, $this->group ) )->ban();
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'excludeBanned' => true ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $u1 ] ]
@@ -60,14 +60,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->user );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'excludeBanned' => true ]
 			]
 		);
 
-		$this->assertQueryFailed( $results )
+		$this->assertQueryFailed( $response )
 			->expectedErrorMessage( 'Sorry, you do not have the necessary permissions to filter with this param.' );
 	}
 
@@ -80,14 +80,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
 		$global_id = $this->toRelayId( 'group', $group_id );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'exclude' => $u1 ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
@@ -107,14 +107,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
 		$global_id = $this->toRelayId( 'group', $group_id );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'excludeAdminsMods' => true ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
@@ -134,14 +134,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
 		$global_id = $this->toRelayId( 'group', $group_id );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'groupMemberRoles' => 'MOD' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $u2 ] ]
@@ -155,14 +155,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
 		$global_id = $this->toRelayId( 'group', $group_id );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'groupMemberRoles' => 'MEMBER' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
@@ -183,14 +183,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 
 		$global_id = $this->toRelayId( 'group', $group_id );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'groupMemberRoles' => 'BANNED' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
@@ -211,14 +211,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $u2 );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'groupMemberRoles' => 'BANNED' ]
 			]
 		);
 
-		$this->assertQueryFailed( $results )
+		$this->assertQueryFailed( $response )
 			->expectedErrorMessage( 'Sorry, you do not have the necessary permissions to filter with this param.' );
 	}
 
@@ -231,14 +231,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u2, $this->group );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'type' => 'ALPHABETICAL' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [
@@ -258,14 +258,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u2, $this->group );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'type' => 'FIRST_JOINED' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [
@@ -285,14 +285,14 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u2, $this->group );
 
 		$global_id = $this->toRelayId( 'group', $this->group );
-		$results   = $this->get_group_members(
+		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
 				'where' => [ 'type' => 'LAST_JOINED' ]
 			]
 		);
 
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
 			->hasField( 'members', [
 					'nodes' => [
@@ -306,7 +306,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get group members.
 	 *
-	 * @param array $variables Varialbes.
+	 * @param array $variables Variables.
 	 * @return array
 	 */
 	protected function get_group_members( array $variables = [] ): array {

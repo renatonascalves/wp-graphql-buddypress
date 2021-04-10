@@ -19,7 +19,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$guid = $this->toRelayId( 'user', $this->user );
 
-		$this->assertQuerySuccessful( $this->delete_member( $this->user ) )
+		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
 			->hasField( 'user', [
 				'userId' => $this->user,
@@ -35,7 +35,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$guid = $this->toRelayId( 'user', $this->user );
 
-		$this->assertQuerySuccessful( $this->delete_member( $this->user ) )
+		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
 			->hasField( 'user', [
 				'userId' => $this->user,
@@ -49,7 +49,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	public function test_member_can_not_delete_other_members_account() {
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQueryFailed( $this->delete_member( $this->admin ) )
+		$this->assertQueryFailed( $this->delete_member( absint( $this->admin ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 	}
 
@@ -61,14 +61,14 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQueryFailed( $this->delete_member( $this->user ) )
+		$this->assertQueryFailed( $this->delete_member( absint( $this->user ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 
 		bp_update_option( 'bp-disable-account-deletion', false );
     }
 
 	public function test_member_needs_to_be_loggin_to_delete_account() {
-		$this->assertQueryFailed( $this->delete_member( $this->user ) )
+		$this->assertQueryFailed( $this->delete_member( absint( $this->user ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
     }
 
@@ -80,12 +80,12 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
     }
 
 	/**
-	 * Delete member helper.
+	 * Delete a member.
 	 *
 	 * @param int $user_id User ID.
 	 * @return array
 	 */
-	protected function delete_member( $user_id = 0 ) {
+	protected function delete_member( int $user_id = 0 ): array {
 		$query = '
 			mutation deleteUserTest(
 				$clientMutationId: String!

@@ -74,7 +74,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * @param int|null $blog_id Blog ID.
 	 * @return array
 	 */
-	protected function get_a_blog( $blog_id = null ) {;
+	protected function get_a_blog( $blog_id = null ): array {;
 		$query  = "
 			query {
 				blogBy(blogId: {$blog_id}) {
