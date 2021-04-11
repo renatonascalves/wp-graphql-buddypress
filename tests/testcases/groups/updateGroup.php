@@ -158,7 +158,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	 * @param array $args Arguments.
 	 * @return array
 	 */
-	protected function update_group( $args = [] ) {
+	protected function update_group( array $args = [] ): array {
 		$query = '
 			mutation updateGroupTest(
 				$clientMutationId:String!
@@ -205,11 +205,11 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	 * @param array $args Arguments.
 	 * @return array
 	 */
-	protected function update_group_type( $args = [] ) {
+	protected function update_group_type( array $args = [] ): array {
 		$query = '
 			mutation updateGroupTest(
-				$clientMutationId: String!,
-				$types:[GroupTypeEnum],
+				$clientMutationId: String!
+				$types:[GroupTypeEnum]
 				$groupId: Int
 			) {
 				updateGroup(
@@ -248,11 +248,11 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	 * @param array $args Arguments.
 	 * @return array
 	 */
-	protected function append_group_type( $args = [] ) {
+	protected function append_group_type( array $args = [] ): array {
 		$query = '
 			mutation updateGroupTest(
-				$clientMutationId: String!,
-				$appendTypes:[GroupTypeEnum],
+				$clientMutationId: String!
+				$appendTypes:[GroupTypeEnum]
 				$groupId: Int
 			) {
 				updateGroup(
@@ -290,11 +290,11 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	 *
 	 * @return array
 	 */
-	protected function remove_group_type() {
+	protected function remove_group_type(): array {
 		$query = '
 			mutation updateGroupTest(
-				$clientMutationId: String!,
-				$removeTypes:[GroupTypeEnum],
+				$clientMutationId: String!
+				$removeTypes:[GroupTypeEnum]
 				$groupId: Int
 			) {
 				updateGroup(
