@@ -123,8 +123,8 @@ class Factory {
 	 * @param string $object Object (user, group, blog, etc). Default: 'user'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment( $id, $object = 'user' ): ?Attachment {
-		if ( empty( $id ) || ! absint( $id ) ) {
+	public static function resolve_attachment( $id, string $object = 'user' ): ?Attachment {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -165,8 +165,8 @@ class Factory {
 	 * @param string $object Object (members, groups, blogs, etc). Default: 'members'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment_cover( $id, $object = 'members' ): ?Attachment {
-		if ( empty( $id ) || ! absint( $id ) ) {
+	public static function resolve_attachment_cover( $id, string $object = 'members' ): ?Attachment {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -191,8 +191,6 @@ class Factory {
 	/**
 	 * Return a Blog object.
 	 *
-	 * @throws UserError User error.
-	 *
 	 * @param int $id Blog ID.
 	 * @return Blog|null
 	 */
@@ -201,21 +199,7 @@ class Factory {
 			return null;
 		}
 
-		// Get the blog object.
-		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $id ) ] ) );
-		$blog_object = $blogs[0] ?? 0;
-
-		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
-			throw new UserError(
-				sprintf(
-					// translators: %d is the blog ID.
-					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
-					absint( $id )
-				)
-			);
-		}
-
-		return new Blog( $blog_object );
+		return new Blog( BlogMutation::get_blog_from_input( $id ) );
 	}
 
 	/**

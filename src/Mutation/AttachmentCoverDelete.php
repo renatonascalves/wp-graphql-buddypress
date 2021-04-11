@@ -80,10 +80,10 @@ class AttachmentCoverDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
-			$object_id = $input['objectId'];
 			$object    = $input['object'];
+			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
 
 			// Stop now if a user isn't allowed to delete an attachment cover.
 			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {

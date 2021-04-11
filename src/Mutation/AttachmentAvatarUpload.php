@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 
 /**
  * AttachmentAvatarUpload Class.
@@ -76,11 +77,10 @@ class AttachmentAvatarUpload {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
-			$object_id    = $input['objectId'];
-			$object       = $input['object'];
-			$show_avatars = buddypress()->avatar->show_avatars;
+			$object    = $input['object'];
+			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
 
 			// Check if upload is enabled for member.
 			if ( 'user' === $object && true === bp_disable_avatar_uploads() ) {
@@ -93,7 +93,7 @@ class AttachmentAvatarUpload {
 			}
 
 			// Check if upload is enabled for blog.
-			if ( 'blog' === $object && false === $show_avatars ) {
+			if ( 'blog' === $object && false === buddypress()->avatar->show_avatars ) {
 				throw new UserError( __( 'Sorry, blog avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 

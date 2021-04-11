@@ -19,6 +19,45 @@ use BP_Attachment_Cover_Image;
 class AttachmentMutation {
 
 	/**
+	 * Check object ID.
+	 *
+	 * @throws UserError User error for invalid user.
+	 *
+	 * @param string $object Object.
+	 * @param int    $object_id Object ID.
+	 * @return int
+	 */
+	public static function check_object_id( string $object, int $object_id ): int {
+		switch ( $object ) {
+			// Get the group id.
+			case 'group':
+			case 'groups':
+				$group = GroupMutation::get_group_from_input( $object_id );
+				return $group->id;
+
+			// Get the user id.
+			case 'user':
+			case 'members':
+				$user = get_user_by( 'id', $object_id );
+
+				// Check if user is valid.
+				if ( ! $user ) {
+					throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
+				}
+
+				return $user->ID;
+
+			// Get the blog id.
+			case 'blog':
+				$blog = BlogMutation::get_blog_from_input( $object_id );
+				return $blog->blog_id;
+
+			default:
+				return $object_id;
+		}
+	}
+
+	/**
 	 * Check if user can manage an attachment.
 	 *
 	 * @param int    $object_id Attachment Object ID.
@@ -26,7 +65,7 @@ class AttachmentMutation {
 	 * @param bool   $cover     Is it a cover image? Default: false.
 	 * @return bool
 	 */
-	public static function can_update_or_delete_attachment( $object_id, $object, $cover = false ): bool {
+	public static function can_update_or_delete_attachment( int $object_id, string $object, bool $cover = false ): bool {
 
 		// Mapping object for verification.
 		if ( $cover ) {
@@ -64,7 +103,7 @@ class AttachmentMutation {
 	 * @param string $object  Object (members, groups, blogs, etc).
 	 * @param int    $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
-	public static function upload_cover_from_file( $input, $object, $item_id ) {
+	public static function upload_cover_from_file( array $input, string $object, int $item_id ) {
 
 		// Set global variables.
 		$bp = buddypress();

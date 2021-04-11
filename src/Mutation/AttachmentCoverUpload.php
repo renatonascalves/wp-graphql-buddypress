@@ -76,10 +76,10 @@ class AttachmentCoverUpload {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
-			$object_id = $input['objectId'];
 			$object    = $input['object'];
+			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
 
 			// Check if cover upload is enabled for members.
 			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {

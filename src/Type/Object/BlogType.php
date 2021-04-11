@@ -8,9 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
@@ -148,21 +147,7 @@ class BlogType {
 					],
 				],
 				'resolve'     => function ( $source, array $args ) {
-					$blog_id = 0;
-
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$blog_id = absint( $id_components['id'] );
-					} elseif ( ! empty( $args['blogId'] ) ) {
-						$blog_id = absint( $args['blogId'] );
-					}
-
-					return Factory::resolve_blog_object( $blog_id );
+					return Factory::resolve_blog_object( BlogMutation::get_blog_from_input( $args ) );
 				},
 			]
 		);
