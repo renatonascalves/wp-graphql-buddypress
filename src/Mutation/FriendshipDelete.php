@@ -47,6 +47,10 @@ class FriendshipDelete {
 				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'User ID of the `friend` - the one invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
+			'force' => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether to force friendship removal.', 'wp-graphql-buddypress' ),
+			],
 		];
 	}
 
@@ -80,7 +84,7 @@ class FriendshipDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
 			$friend_id    = get_user_by( 'id', $input['friendId'] );
@@ -111,20 +115,25 @@ class FriendshipDelete {
 			// Get and save the friendship object before it is deleted.
 			$previous_friendship = new Friendship( $friendship );
 
-			/**
-			 * If this change is being initiated by the initiator,
-			 * use the `reject` function.
-			 *
-			 * This is the user who requested the friendship, and is doing the withdrawing.
-			 */
-			if ( bp_loggedin_user_id() === $friendship->initiator_user_id ) {
-				$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
+			// Remove a friendship.
+			if ( true === $input['force'] ) {
+				$deleted = friends_remove_friend( $friendship->initiator_user_id, $friendship->friend_user_id );
 			} else {
 				/**
-				 * Otherwise, this change is being initiated by the user, friend,
-				 * who received the friendship reject.
+				 * If this change is being initiated by the initiator,
+				 * use the `reject` function.
+				 *
+				 * This is the user who requested the friendship, and is doing the withdrawing.
 				 */
-				$deleted = friends_reject_friendship( $friendship->id );
+				if ( absint( bp_loggedin_user_id() ) === $friendship->initiator_user_id ) {
+					$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
+				} else {
+					/**
+					 * Otherwise, this change is being initiated by the user, friend,
+					 * who received the friendship reject.
+					 */
+					$deleted = friends_reject_friendship( $friendship->id );
+				}
 			}
 
 			// Trying to delete the friendship.

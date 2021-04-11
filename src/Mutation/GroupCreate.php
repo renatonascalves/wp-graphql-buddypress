@@ -107,7 +107,7 @@ class GroupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input ) {
+		return function( array $input ) {
 
 			// Check empty group name.
 			if ( empty( $input['name'] ) ) {
