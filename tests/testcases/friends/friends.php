@@ -25,7 +25,7 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$global_id = $this->toRelayId( 'user', $this->user );
 
-        $this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user );
 
 		// Create the query.
 		$query = "

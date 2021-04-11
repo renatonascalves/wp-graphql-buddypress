@@ -93,7 +93,6 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $results );
 		$this->assertTrue( $results['data']['groups']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['groups']['pageInfo']['hasPreviousPage'] );
-		$this->assertEquals( $this->group, $results['data']['groups']['nodes'][0]['groupId'] );
 	}
 
 	public function test_group_query_paginated_logged_in() {
