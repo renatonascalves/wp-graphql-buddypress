@@ -111,13 +111,6 @@ class GroupMutation {
 	 * @return bool
 	 */
 	public static function can_update_or_delete_group( BP_Groups_Group $group ): bool {
-		$group_id          = $group->id;
-		$current_logged_id = absint( bp_loggedin_user_id() );
-
-		if ( groups_is_user_admin( $current_logged_id, $group_id ) ) {
-			return true;
-		}
-
-		return ( bp_current_user_can( 'bp_moderate' ) || absint( $group->creator_id ) === $current_logged_id );
+		return ( bp_current_user_can( 'bp_moderate' ) || groups_is_user_admin( bp_loggedin_user_id(), $group->id ) );
 	}
 }
