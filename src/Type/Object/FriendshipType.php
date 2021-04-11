@@ -70,7 +70,7 @@ class FriendshipType {
 						'description' => __( 'The date the friendship was created, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type ) {
+				'resolve_node'      => function( $node, $id, string $type ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_friendship_object( $id );
 					}

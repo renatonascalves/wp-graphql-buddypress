@@ -113,9 +113,9 @@ class BlogType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type ) {
+				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
-						$node = Factory::resolve_blog_object( $id );
+						$node = Factory::resolve_blog_object( $id, $context );
 					}
 
 					return $node;
@@ -146,9 +146,9 @@ class BlogType {
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( $source, array $args ) {
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$blog = BlogMutation::get_blog_from_input( $args );
-					return Factory::resolve_blog_object( $blog->blog_id ?? null );
+					return Factory::resolve_blog_object( $blog->blog_id, $context );
 				},
 			]
 		);

@@ -96,6 +96,19 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 			->expectedErrorMessage( 'Sorry, group cover upload is disabled.' );
 	}
 
+	/**
+	 * @todo this should not work at all. Investigate.
+	 */
+	public function test_group_cover_image_feature_is_disabled() {
+		// Disabling group cover feature.
+		add_filter( 'bp_is_groups_cover_image_active', '__return_false' );
+
+		$this->assertQueryFailed( $this->upload_cover( 'GROUPS', absint( $this->group ) ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
+
+		remove_filter( 'bp_is_groups_cover_image_active', '__return_false' );
+	}
+
 	public function test_group_members_can_not_upload_group_cover() {
 		// Add regular group member.
 		$this->bp->add_user_to_group( $this->random_user, $this->group );

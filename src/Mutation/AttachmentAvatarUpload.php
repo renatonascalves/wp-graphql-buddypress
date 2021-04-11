@@ -11,7 +11,6 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
 
 /**
  * AttachmentAvatarUpload Class.

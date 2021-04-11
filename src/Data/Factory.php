@@ -24,7 +24,6 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionRe
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
-use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use stdClass;
@@ -191,15 +190,23 @@ class Factory {
 	/**
 	 * Return a Blog object.
 	 *
-	 * @param int $id Blog ID.
-	 * @return Blog|null
+	 * @param int        $id Blog ID.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
 	 */
-	public static function resolve_blog_object( $id ): ?Blog {
+	public static function resolve_blog_object( $id, AppContext $context ): ?Deferred {
 		if ( empty( $id ) ) {
 			return null;
 		}
 
-		return new Blog( BlogMutation::get_blog_from_input( $id ) );
+		$blog_id = absint( $id );
+		$context->get_loader( 'bp_blog' )->buffer( [ $blog_id ] );
+
+		return new Deferred(
+			function () use ( $blog_id, $context ) {
+				return $context->get_loader( 'bp_blog' )->load( $blog_id );
+			}
+		);
 	}
 
 	/**

@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
@@ -44,19 +45,9 @@ class BlogObjectLoader extends AbstractDataLoader {
 		foreach ( $keys as $key ) {
 
 			// Get the blog object.
-			$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $key ) ] ) );
-			$blog_object = $blogs[0] ?? 0;
+			$blog_object = BlogMutation::get_blog_from_input( absint( $key ) );
 
-			if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
-				throw new UserError(
-					sprintf(
-						// translators: %d is the blog ID.
-						__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
-						absint( $key )
-					)
-				);
-			}
-
+			// Pass object to our model.
 			$loaded_blogs[ $key ] = new Blog( $blog_object );
 		}
 

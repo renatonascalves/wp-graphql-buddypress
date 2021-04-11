@@ -140,8 +140,10 @@ class TypeRegistry {
 		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarDelete::register_mutation();
 
 		// Attachment Cover Mutations.
-		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverUpload::register_mutation();
-		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverDelete::register_mutation();
+		if ( bp_is_active( 'members', 'cover_image' ) || bp_is_active( 'groups', 'cover_image' ) ) {
+			\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverUpload::register_mutation();
+			\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverDelete::register_mutation();
+		}
 	}
 
 	/**
