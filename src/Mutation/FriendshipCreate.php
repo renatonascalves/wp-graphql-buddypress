@@ -47,6 +47,10 @@ class FriendshipCreate {
 				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'User ID of the `friend` - the one being invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
+			'force' => [
+				'type'        => 'Boolean',
+				'description' => __( 'Whether to force the friendship agreement.', 'wp-graphql-buddypress' ),
+			],
 		];
 	}
 
@@ -77,15 +81,9 @@ class FriendshipCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
-			// Throw an exception if there's no input.
-			if ( empty( $input ) || ! is_array( $input ) ) {
-				throw new UserError( __( 'Mutation not processed. There was no input for the mutation.', 'wp-graphql-buddypress' ) );
-			}
-
-			$logged_id    = bp_loggedin_user_id();
-			$initiator_id = get_user_by( 'id', $input['initiatorId'] ?? $logged_id );
+			$initiator_id = get_user_by( 'id', $input['initiatorId'] ?? absint( bp_loggedin_user_id() ) );
 			$friend_id    = get_user_by( 'id', $input['friendId'] );
 
 			// Check if users are valid.
@@ -94,7 +92,7 @@ class FriendshipCreate {
 			}
 
 			// Check if user can create friendship.
-			if ( $logged_id !== $initiator_id->ID ) {
+			if ( FriendshipMutation::can_create_friendship( $initiator_id->ID, $friend_id->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -111,8 +109,11 @@ class FriendshipCreate {
 				throw new UserError( __( 'You already have a pending friendship request with this user.', 'wp-graphql-buddypress' ) );
 			}
 
+			// Only admins can force a friendship request.
+			$force = ( true === (bool) $input['force'] && bp_current_user_can( 'bp_moderate' ) );
+
 			// Adding friendship.
-			if ( false === friends_add_friend( $initiator_id->ID, $friend_id->ID ) ) {
+			if ( false === friends_add_friend( $initiator_id->ID, $friend_id->ID, $force ) ) {
 				throw new UserError( __( 'There was a problem requesting the friendship.', 'wp-graphql-buddypress' ) );
 			}
 

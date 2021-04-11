@@ -592,112 +592,30 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function create_friendship( $initiator, $friend ) {
-		$query = '
-			mutation createFriendshipTest( $clientMutationId: String!, $initiatorId: Int, $friendId: Int! ) {
-				createFriendship(
-					input: {
-						clientMutationId: $clientMutationId
-						initiatorId: $initiatorId
-						friendId: $friendId
-					}
-				)
-				{
-					clientMutationId
-					friendship {
-						isConfirmed
-						initiator {
-							userId
-						}
-						friend {
-							userId
-						}
-					}
-				}
-			}
-		';
+	/**
+	 * Create a friendship object.
+	 *
+	 * @param int $user_1 Initiator ID.
+	 * @param int $user_2 Friend ID.
+	 * @return int
+	 */
+	protected function create_friendship_object( $user_1 = 0, $user_2 = 0 ): int {
+		if ( empty( $user_1 ) ) {
+			$user_1 = $this->factory->user->create();
+		}
 
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'initiatorId'      => $initiator,
-			'friendId'         => $friend,
-		];
+		if ( empty( $user_2 ) ) {
+			$user_2 = $this->factory->user->create();
+		}
 
-		$operation_name = 'createFriendshipTest';
+		$friendship                    = new BP_Friends_Friendship();
+		$friendship->initiator_user_id = $user_1;
+		$friendship->friend_user_id    = $user_2;
+		$friendship->is_confirmed      = 0;
+		$friendship->date_created      = bp_core_current_time();
+		$friendship->save();
 
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function delete_friendship( $initiator, $friend ) {
-		$query = '
-			mutation deleteFriendshipTest( $clientMutationId: String!, $initiatorId: Int!, $friendId: Int! ) {
-				deleteFriendship(
-					input: {
-						clientMutationId: $clientMutationId
-						initiatorId: $initiatorId
-						friendId: $friendId
-					}
-				)
-				{
-					clientMutationId
-					deleted
-					friendship {
-						initiator {
-							userId
-						}
-						friend {
-							userId
-						}
-					}
-				}
-			}
-		';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'initiatorId'      => $initiator,
-			'friendId'         => $friend,
-		];
-
-		$operation_name = 'deleteFriendshipTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
-	}
-
-	protected function update_friendship( $initiator, $friend ) {
-		$query = '
-			mutation updateFriendshipTest( $clientMutationId: String!, $initiatorId: Int!, $friendId: Int! ) {
-				updateFriendship(
-					input: {
-						clientMutationId: $clientMutationId
-						initiatorId: $initiatorId
-						friendId: $friendId
-					}
-				)
-				{
-					clientMutationId
-					friendship {
-						isConfirmed
-						initiator {
-							userId
-						}
-						friend {
-							userId
-						}
-					}
-				}
-			}
-		';
-
-		$variables = [
-			'clientMutationId' => $this->client_mutation_id,
-			'initiatorId'      => $initiator,
-			'friendId'         => $friend,
-		];
-
-		$operation_name = 'updateFriendshipTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
+		return $friendship->id;
 	}
 
 	/**
@@ -708,7 +626,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param int $item_id Item ID.
 	 * @return string
 	 */
-	protected function get_avatar_image( string $size, string $object, int $item_id ) {
+	protected function get_avatar_image( string $size, string $object, int $item_id ): string {
 		return bp_core_fetch_avatar(
 			[
 				'object'  => $object,
@@ -727,7 +645,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param int $item_id Item ID.
 	 * @return string
 	 */
-	protected function get_cover_image( string $object, int $item_id ) {
+	protected function get_cover_image( string $object, int $item_id ): string {
 		return bp_attachments_get_attachment(
 			'url',
 			[

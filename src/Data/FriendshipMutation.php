@@ -30,11 +30,34 @@ class FriendshipMutation {
 	 *
 	 * Only the friendship initiator and the friend, the one invited to the friendship can see it.
 	 *
-	 * @param int $initiator Friendship initiator ID.
-	 * @param int $friend    Friendship friend ID.
+	 * @param int $initiator_id Initiator ID.
+	 * @param int $friend_id Friend ID.
 	 * @return bool
 	 */
-	public static function can_update_or_delete_friendship( $initiator, $friend ): bool {
-		return in_array( bp_loggedin_user_id(), [ $initiator, $friend ], true );
+	public static function can_update_or_delete_friendship( int $initiator_id, int $friend_id ): bool {
+		return in_array( bp_loggedin_user_id(), [ $initiator_id, $friend_id ], true );
+	}
+
+	/**
+	 * Check if user can create friendship.
+	 *
+	 * @param int $initiator_id Initiator ID.
+	 * @param int $friend_id Friend ID.
+	 * @return bool
+	 */
+	public static function can_create_friendship( int $initiator_id, int $friend_id ): bool {
+		$is_moderator = bp_current_user_can( 'bp_moderate' );
+		$logged_id    = bp_loggedin_user_id();
+
+		/**
+		 * - Only admins can create friendship requests for other people.
+		 * - Admins can't create friendship requests to themselves from other people.
+		 * - Users can't create friendship requests to themselves from other people.
+		 */
+		return (
+			( $logged_id !== $initiator_id && ! $is_moderator )
+			|| ( $logged_id === $friend_id && $is_moderator )
+			|| ( ! in_array( $logged_id, array( $initiator_id, $friend_id ), true ) && ! $is_moderator )
+		);
 	}
 }

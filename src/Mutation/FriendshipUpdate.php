@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
 use BP_Friends_Friendship;
@@ -78,7 +77,7 @@ class FriendshipUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
 			$friend_id    = get_user_by( 'id', $input['friendId'] );
@@ -88,7 +87,7 @@ class FriendshipUpdate {
 				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Stop now if a user isn't allowed to see this friendship.
+			// Stop now if an user isn't allowed to see this friendship.
 			if ( false === FriendshipMutation::can_update_or_delete_friendship( $initiator_id->ID, $friend_id->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
@@ -97,7 +96,7 @@ class FriendshipUpdate {
 			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
 
 			// Confirm status.
-			if ( ! in_array( $friendship_status, [ 'pending', 'awaiting_response' ], true ) ) {
+			if ( false === in_array( $friendship_status, [ 'pending', 'awaiting_response' ], true ) ) {
 				throw new UserError( __( 'There is no friendship request or users are already friends.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -107,7 +106,7 @@ class FriendshipUpdate {
 			);
 
 			// Confirm if friendship exists.
-			if ( ! FriendshipMutation::friendship_exists( $friendship ) ) {
+			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
 				throw new UserError( __( 'No Friendship requested was found.', 'wp-graphql-buddypress' ) );
 			}
 
