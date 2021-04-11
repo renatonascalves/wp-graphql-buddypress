@@ -36,8 +36,8 @@ class BlogMutation {
 			}
 
 			$blog_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $args['blogId'] ) ) {
-			$blog_id = absint( $args['blogId'] );
+		} elseif ( ! empty( $input['blogId'] ) ) {
+			$blog_id = absint( $input['blogId'] );
 		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
 			$blog_id = absint( $input );
 		}

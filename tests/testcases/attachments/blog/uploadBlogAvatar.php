@@ -79,7 +79,12 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 		}
 
 		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
-			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
+			->expectedErrorMessage(
+				sprintf(
+					'No Blog was found with ID: %d',
+					GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER
+				)
+			);
 	}
 
 	public function test_blog_avatar_upload_with_member_without_permissions() {

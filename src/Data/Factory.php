@@ -43,7 +43,7 @@ class Factory {
 	 * @return Deferred|null
 	 */
 	public static function resolve_group_object( $id, AppContext $context ): ?Deferred {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -65,7 +65,7 @@ class Factory {
 	 * @return Deferred|null
 	 */
 	public static function resolve_xprofile_group_object( $id, AppContext $context ): ?Deferred {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -89,7 +89,7 @@ class Factory {
 	 * @return XProfileField|null
 	 */
 	public static function resolve_xprofile_field_object( $id, AppContext $context ): ?XProfileField {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -195,7 +195,7 @@ class Factory {
 	 * @return Blog|null
 	 */
 	public static function resolve_blog_object( $id ): ?Blog {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -211,7 +211,7 @@ class Factory {
 	 * @return Friendship|null
 	 */
 	public static function resolve_friendship_object( $id ): ?Friendship {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 

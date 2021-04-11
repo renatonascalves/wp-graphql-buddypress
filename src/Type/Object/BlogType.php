@@ -147,7 +147,8 @@ class BlogType {
 					],
 				],
 				'resolve'     => function ( $source, array $args ) {
-					return Factory::resolve_blog_object( BlogMutation::get_blog_from_input( $args ) );
+					$blog = BlogMutation::get_blog_from_input( $args );
+					return Factory::resolve_blog_object( $blog->blog_id ?? null );
 				},
 			]
 		);

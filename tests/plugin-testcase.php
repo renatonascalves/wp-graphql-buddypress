@@ -129,8 +129,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
-		$this->assertIsArray( $this->response );
-		$this->assertNotEmpty( $this->response );
 		$this->assertArrayHasKey( 'data', $this->response );
 
 		return $this;
@@ -144,8 +142,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function assertQueryFailed( array $response ): self {
 		$this->response = $response;
-		$this->assertIsArray( $this->response );
-		$this->assertNotEmpty( $this->response );
 		$this->assertArrayHasKey( 'errors', $this->response );
 
 		return $this;
@@ -158,7 +154,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return self
 	 */
 	public function expectedErrorMessage( string $message ): self {
-		$this->assertNotEmpty( $this->response );
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
 
 		return $this;
@@ -686,7 +681,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param int $user_2 Friend ID.
 	 * @return int
 	 */
-	protected function create_friendship_object( $user_1 = 0, $user_2 = 0 ): int {
+	protected function create_friendship_object( int $user_1 = 0, int $user_2 = 0 ): int {
 		if ( empty( $user_1 ) ) {
 			$user_1 = $this->factory->user->create();
 		}

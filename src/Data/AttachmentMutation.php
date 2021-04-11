@@ -49,6 +49,7 @@ class AttachmentMutation {
 
 			// Get the blog id.
 			case 'blog':
+			case 'blogs':
 				$blog = BlogMutation::get_blog_from_input( $object_id );
 				return $blog->blog_id;
 
@@ -131,7 +132,7 @@ class AttachmentMutation {
 		];
 
 		// Hacky solution to use correct values in the file upload.
-		\add_filter(
+		add_filter(
 			'bp_after_cover_image_upload_dir_parse_args',
 			function () use ( $object, $item_id ) {
 				return [

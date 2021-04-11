@@ -96,7 +96,7 @@ class AttachmentCoverUpload {
 				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Check if user has access to upload it.
+			// Check if user can to upload.
 			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
