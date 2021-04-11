@@ -204,6 +204,26 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $object ?? '';
 	}
 
+	/**
+	 * Create group object.
+	 *
+	 * @param array $args Arguments.
+	 * @return int
+	 */
+	protected function create_group_object( array $args = [] ): int {
+		return $this->bp_factory->group->create(
+			array_merge(
+				[
+					'slug'         => 'group-test',
+					'name'         => 'Group Test',
+					'description'  => 'Group Description',
+					'creator_id'   => $this->admin,
+				],
+				$args
+			)
+		);
+	}
+
 	protected function create_xprofile_field( $xprofile_group_id = null ) {
 		$query = '
 			mutation createXProfileFieldTest(

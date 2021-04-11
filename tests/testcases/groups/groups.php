@@ -135,21 +135,13 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertEquals( [ 'FOO' ], $results['data']['groups']['nodes'][0]['types'] );
 	}
 
-	protected function create_group_object( $args = [] ) {
-		return $this->bp_factory->group->create(
-			array_merge(
-				[
-					'slug'         => 'group-test',
-					'name'         => 'Group Test',
-					'description'  => 'Group Description',
-					'creator_id'   => $this->admin,
-				],
-				$args
-			)
-		);
-	}
-
-	protected function groupsQuery( $variables = [] ) {
+	/**
+	 * Groups query.
+	 *
+	 * @param array $variables Variables.
+	 * @return array
+	 */
+	protected function groupsQuery( array $variables = [] ): array {
 		$query = 'query groupsQuery(
 			$first:Int
 			$last:Int

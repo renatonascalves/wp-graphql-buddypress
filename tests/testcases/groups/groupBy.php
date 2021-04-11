@@ -193,26 +193,6 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	/**
-	 * Create group object.
-	 *
-	 * @param array $args Arguments.
-	 * @return int
-	 */
-	protected function create_group_object( array $args = [] ): int {
-		return $this->bp_factory->group->create(
-			array_merge(
-				[
-					'slug'         => 'group-test',
-					'name'         => 'Group Test',
-					'description'  => 'Group Description',
-					'creator_id'   => $this->admin,
-				],
-				$args
-			)
-		);
-	}
-
-	/**
 	 * Get a group.
 	 *
 	 * @param int|null $group_id Group ID.

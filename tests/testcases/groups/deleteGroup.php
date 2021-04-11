@@ -99,7 +99,13 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			->hasField( 'deleted', true );
 	}
 
-	protected function delete_group( $group_id = null ) {
+	/**
+	 * Delete group mutation.
+	 *
+	 * @param int|null $group_id Group ID.
+	 * @return array
+	 */
+	protected function delete_group( $group_id = null ): array {
 		$query = '
 			mutation deleteGroupTest(
 				$clientMutationId:String!

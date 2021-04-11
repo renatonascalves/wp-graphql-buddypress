@@ -28,7 +28,7 @@ class Test_Friendship_updateFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'friend', [ 'userId' => $u2 ] );
 	}
 
-	public function test_initiator_can_not_accept_his_own_friendship_request() {
+	public function test_friendship_initiator_can_not_accept_his_own_friendship_request() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -52,7 +52,7 @@ class Test_Friendship_updateFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			->expectedErrorMessage( 'Sorry, you do not have permission to perform this action.' );
 	}
 
-	public function test_accept_friendship_with_user_not_logged_in() {
+	public function test_accept_friendship_without_logged_in_user() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 

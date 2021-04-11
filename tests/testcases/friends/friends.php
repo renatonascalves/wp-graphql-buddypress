@@ -14,7 +14,7 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		parent::setUp();
 	}
 
-	public function test_get_members_friends_query() {
+	public function test_get_friends_from_member() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
@@ -27,10 +27,10 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->bp->set_current_user( $this->user );
 
-		// Create the query.
 		$query = "
 			query {
 				user(id: \"{$global_id}\") {
+					id,
 					friends {
 						nodes {
 							initiator {
@@ -48,9 +48,9 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->graphql( compact( 'query') );
 
 		// Make sure the query didn't return any errors
-		$this->assertQuerySuccessful( $response );
+		$this->assertQuerySuccessful( $response )
+			->hasField( 'id', $global_id );
 
-		// Check our four members.
 		$this->assertTrue( count( $response['data']['user']['friends']['nodes'] ) === 3 );
 	}
 }

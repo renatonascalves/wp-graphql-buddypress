@@ -42,7 +42,7 @@ class Test_Friendship_deleteFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'friend', [ 'userId' => $u2 ] );
 	}
 
-	public function test_reject_and_remove_item_from_database_using_initiator() {
+	public function test_reject_and_remove_friendship_from_database_using_initiator() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -56,7 +56,7 @@ class Test_Friendship_deleteFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'friend', [ 'userId' => $u2 ] );
 	}
 
-	public function test_reject_and_remove_item_from_database_using_friend() {
+	public function test_reject_and_remove_friendship_from_database_using_friend() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -70,7 +70,7 @@ class Test_Friendship_deleteFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'friend', [ 'userId' => $u2 ] );
 	}
 
-	public function test_reject_friendship_with_user_not_logged_in() {
+	public function test_reject_friendship_without_logged_in_user() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 

@@ -15,30 +15,27 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	}
 
 	public function test_getting_friendship_with_initiator() {
-		$u = $this->bp_factory->user->create();
-		$f = $this->create_friendship_object( $u, $this->user );
+		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
 
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQuerySuccessful( $this->get_friendship( $f ) )
-			->hasField( 'friendshipId', $f )
+		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
+			->hasField( 'friendshipId', $friendship )
 			->hasField( 'isConfirmed', false )
 			->hasField( 'friend', [ 'userId' => $this->user ] )
-			->hasField( 'initiator', [ 'userId' => $u ] );
+			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
 	}
 
-	public function test_getting_friendship_with_invited_friend() {
-		$u1 = $this->bp_factory->user->create();
-		$u2 = $this->bp_factory->user->create();
-		$f  = $this->create_friendship_object( $u1, $u2 );
+	public function test_getting_friendship_with_friendship_initiator() {
+		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
 
-		$this->bp->set_current_user( $u1 );
+		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQuerySuccessful( $this->get_friendship( $f ) )
-			->hasField( 'friendshipId', $f )
+		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
+			->hasField( 'friendshipId', $friendship )
 			->hasField( 'isConfirmed', false )
-			->hasField( 'friend', [ 'userId' => $u2 ] )
-			->hasField( 'initiator', [ 'userId' => $u1 ] );
+			->hasField( 'friend', [ 'userId' => $this->user ] )
+			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
 	}
 
 	public function test_getting_friendship_with_invalid_id() {
@@ -53,19 +50,19 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 			);
 	}
 
-	public function test_getting_friendship_with_non_logged_in_user() {
-		$f = $this->create_friendship_object();
+	public function test_getting_friendship_without_logged_in_user() {
+		$friendship = $this->create_friendship_object();
 
-		$this->assertQueryFailed( $this->get_friendship( $f ) )
+		$this->assertQueryFailed( $this->get_friendship( $friendship ) )
 			->expectedErrorMessage( 'Sorry, you need to be logged in to perform this action.' );
 	}
 
 	public function test_friendship_with_unauthorized_member() {
-		$f = $this->create_friendship_object();
+		$friendship = $this->create_friendship_object();
 
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQueryFailed( $this->get_friendship( $f ) )
+		$this->assertQueryFailed( $this->get_friendship( $friendship ) )
 			->expectedErrorMessage( 'Sorry, you don\'t have permission to see this friendship.' );
 	}
 
