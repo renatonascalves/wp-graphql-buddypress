@@ -35,6 +35,9 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			] )
 			->hasField( 'attachmentCover', null )
 			->hasField( 'blogId', $blog_id );
+
+		// Confirm that the default blog avatar IS present.
+		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'blog', $blog_id ), 'mystery-blog' ) );
 	}
 
 	public function test_blog_query_invalid_blog_id() {

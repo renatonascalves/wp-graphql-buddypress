@@ -24,7 +24,6 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionRe
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
-use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use stdClass;
@@ -43,7 +42,7 @@ class Factory {
 	 * @return Deferred|null
 	 */
 	public static function resolve_group_object( $id, AppContext $context ): ?Deferred {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -65,7 +64,7 @@ class Factory {
 	 * @return Deferred|null
 	 */
 	public static function resolve_xprofile_group_object( $id, AppContext $context ): ?Deferred {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -89,7 +88,7 @@ class Factory {
 	 * @return XProfileField|null
 	 */
 	public static function resolve_xprofile_field_object( $id, AppContext $context ): ?XProfileField {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -123,8 +122,8 @@ class Factory {
 	 * @param string $object Object (user, group, blog, etc). Default: 'user'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment( $id, $object = 'user' ): ?Attachment {
-		if ( empty( $id ) || ! absint( $id ) ) {
+	public static function resolve_attachment( $id, string $object = 'user' ): ?Attachment {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -165,8 +164,8 @@ class Factory {
 	 * @param string $object Object (members, groups, blogs, etc). Default: 'members'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment_cover( $id, $object = 'members' ): ?Attachment {
-		if ( empty( $id ) || ! absint( $id ) ) {
+	public static function resolve_attachment_cover( $id, string $object = 'members' ): ?Attachment {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
@@ -191,31 +190,23 @@ class Factory {
 	/**
 	 * Return a Blog object.
 	 *
-	 * @throws UserError User error.
-	 *
-	 * @param int $id Blog ID.
-	 * @return Blog|null
+	 * @param int        $id Blog ID.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
 	 */
-	public static function resolve_blog_object( $id ): ?Blog {
-		if ( empty( $id ) || ! absint( $id ) ) {
+	public static function resolve_blog_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
 			return null;
 		}
 
-		// Get the blog object.
-		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $id ) ] ) );
-		$blog_object = $blogs[0] ?? 0;
+		$blog_id = absint( $id );
+		$context->get_loader( 'bp_blog' )->buffer( [ $blog_id ] );
 
-		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
-			throw new UserError(
-				sprintf(
-					// translators: %d is the blog ID.
-					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
-					absint( $id )
-				)
-			);
-		}
-
-		return new Blog( $blog_object );
+		return new Deferred(
+			function () use ( $blog_id, $context ) {
+				return $context->get_loader( 'bp_blog' )->load( $blog_id );
+			}
+		);
 	}
 
 	/**
@@ -227,7 +218,7 @@ class Factory {
 	 * @return Friendship|null
 	 */
 	public static function resolve_friendship_object( $id ): ?Friendship {
-		if ( empty( $id ) || ! absint( $id ) ) {
+		if ( empty( $id ) ) {
 			return null;
 		}
 

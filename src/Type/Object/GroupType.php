@@ -221,7 +221,7 @@ class GroupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type, $context ) {
+				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_group_object( $id, $context );
 					}

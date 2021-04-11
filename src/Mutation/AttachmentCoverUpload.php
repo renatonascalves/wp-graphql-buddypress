@@ -76,10 +76,10 @@ class AttachmentCoverUpload {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
-			$object_id = $input['objectId'];
 			$object    = $input['object'];
+			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
 
 			// Check if cover upload is enabled for members.
 			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {
@@ -96,7 +96,7 @@ class AttachmentCoverUpload {
 				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Check if user has access to upload it.
+			// Check if user can to upload.
 			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}

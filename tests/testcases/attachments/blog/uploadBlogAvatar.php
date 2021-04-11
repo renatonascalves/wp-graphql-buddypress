@@ -4,7 +4,7 @@
  * Test_Attachment_Blog_Avatar_Mutation
  *
  * @group attachment-avatar
- * @group attachment-blog-avatar
+ * @group blog-avatar
  */
 class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
@@ -15,9 +15,6 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 		parent::setUp();
 	}
 
-	/**
-	 * @group blog-avatar
-	 */
 	public function test_blog_upload_avatar() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
@@ -32,40 +29,24 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 
 		$blog = $this->bp_factory->blog->create();
 
-		$this->bp->set_current_user(
-			$this->bp_factory->user->create(
-				[ 'role' => 'administrator' ]
-			)
-		);
+		$this->bp->set_current_user( $this->admin );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'BLOG', $blog );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$this->assertEquals(
-			[
-				'data' => [
-					'uploadAttachmentAvatar' => [
-						'clientMutationId' => $this->client_mutation_id,
-						'attachment'       => [
-							'full'  => $this->get_avatar_image( 'full', 'blog', $blog ),
-							'thumb' => $this->get_avatar_image( 'thumb', 'blog', $blog ),
-						],
-					],
-				],
-			],
-			$response
-		);
+		$this->assertQuerySuccessful( $response )
+			->hasField( 'attachment', [
+				'full'  => $this->get_avatar_image( 'full', 'blog', $blog ),
+				'thumb' => $this->get_avatar_image( 'thumb', 'blog', $blog ),
+			]);
 
 		// Confirm that the default avatar is not present.
 		$this->assertTrue( false === strpos( $response['data']['uploadAttachmentAvatar']['attachment']['full'], 'mistery-man' ) );
 	}
 
-	/**
-	 * @group blog-avatar
-	 */
 	public function test_blog_avatar_upload_with_upload_disabled() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
@@ -83,10 +64,7 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 		buddypress()->avatar->show_avatars = true;
 	}
 
-	/**
-	 * @group blog-avatar
-	 */
-	public function test_blog_avatar_upload_without_a_loggin_in_user() {
+	public function test_blog_avatar_upload_without_loggin_in_user() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
 		}
@@ -95,27 +73,26 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
-	/**
-	 * @group blog-avatar
-	 */
 	public function test_blog_avatar_upload_with_an_invalid_blog_id() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
 		}
 
-		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', 99999999 ) )
-			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
+		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
+			->expectedErrorMessage(
+				sprintf(
+					'No Blog was found with ID: %d',
+					GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER
+				)
+			);
 	}
 
-	/**
-	 * @group blog-avatar
-	 */
 	public function test_blog_avatar_upload_with_member_without_permissions() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped();
 		}
 
-		$this->bp->set_current_user( $this->bp_factory->user->create() );
+		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQueryFailed( $this->upload_avatar( 'BLOG', $this->bp_factory->blog->create() ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

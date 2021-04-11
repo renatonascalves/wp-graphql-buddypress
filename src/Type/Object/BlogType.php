@@ -8,9 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
@@ -114,9 +113,9 @@ class BlogType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type ) {
+				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
-						$node = Factory::resolve_blog_object( $id );
+						$node = Factory::resolve_blog_object( $id, $context );
 					}
 
 					return $node;
@@ -147,22 +146,9 @@ class BlogType {
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function ( $source, array $args ) {
-					$blog_id = 0;
-
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$blog_id = absint( $id_components['id'] );
-					} elseif ( ! empty( $args['blogId'] ) ) {
-						$blog_id = absint( $args['blogId'] );
-					}
-
-					return Factory::resolve_blog_object( $blog_id );
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
+					$blog = BlogMutation::get_blog_from_input( $args );
+					return Factory::resolve_blog_object( $blog->blog_id, $context );
 				},
 			]
 		);

@@ -12,15 +12,38 @@
 class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 	/**
+	 * BuddyPress unit test factory class.
+	 *
+	 * @var BP_UnitTest_Factory
+	 */
+	public $bp_factory;
+
+	/**
+	 * BuddyPress unit test case.
+	 *
+	 * @var BP_UnitTestCase
+	 */
+	public $bp;
+
+	/**
 	 * Query response.
 	 *
 	 * @var array
 	 */
 	public $response;
 
-	public $bp_factory;
-	public $bp;
+	/**
+	 * Mutation ID.
+	 *
+	 * @var string
+	 */
 	public $client_mutation_id;
+
+	/**
+	 * Image file.
+	 *
+	 * @var string
+	 */
 	public $image_file;
 
 	/**
@@ -83,11 +106,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Wrapper for the "graphql()" function.
 	 *
-	 * @todo add per query debug log.
-	 *
 	 * @return array
 	 */
-	public function graphql() {
+	public function graphql(): array {
 		return graphql( ...func_get_args() );
 	}
 
@@ -96,7 +117,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @return string
 	 */
-	public function toRelayId() {
+	public function toRelayId(): string {
 		return \GraphQLRelay\Relay::toGlobalId( ...func_get_args() );
 	}
 
@@ -106,10 +127,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param array $response Query response.
 	 * @return self
 	 */
-	public function assertQuerySuccessful( array $response ) {
+	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
-		$this->assertIsArray( $this->response );
-		$this->assertNotEmpty( $this->response );
 		$this->assertArrayHasKey( 'data', $this->response );
 
 		return $this;
@@ -121,10 +140,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param array $response Query response.
 	 * @return self
 	 */
-	public function assertQueryFailed( array $response ) {
+	public function assertQueryFailed( array $response ): self {
 		$this->response = $response;
-		$this->assertIsArray( $this->response );
-		$this->assertNotEmpty( $this->response );
 		$this->assertArrayHasKey( 'errors', $this->response );
 
 		return $this;
@@ -136,8 +153,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $message Error Message.
 	 * @return self
 	 */
-	public function expectedErrorMessage( string $message ) {
-		$this->assertNotEmpty( $this->response );
+	public function expectedErrorMessage( string $message ): self {
 		$this->assertSame( $message, $this->response['errors'][0]['message'] );
 
 		return $this;
@@ -148,7 +164,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @return self
 	 */
-	public function debug() {
+	public function debug(): self {
 		var_dump( $this->response );
 
 		return $this;
@@ -161,7 +177,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param mixed  $field_content Field Content.
 	 * @return self
 	 */
-	public function hasField( string $field, $field_content ) {
+	public function hasField( string $field, $field_content ): self {
 		$object = $this->get_field_value_from_response( $field );
 
 		$this->assertEquals( $field_content, $object[ $field ] );
@@ -175,7 +191,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $field Response Field.
 	 * @return self
 	 */
-	public function notHasField( string $field ) {
+	public function notHasField( string $field ): self {
 		$object = $this->get_field_value_from_response( $field );
 
 		$this->assertTrue( empty( $object[ $field ] ) );
@@ -474,9 +490,20 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function delete_cover( $object, $objectId ) {
+	/**
+	 * Delete cover.
+	 *
+	 * @param string $object Object.
+	 * @param int $objectId Object ID.
+	 * @return array
+	 */
+	protected function delete_cover( string $object, int $objectId ): array {
 		$query = '
-			mutation deleteCoverTest( $clientMutationId: String!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
+			mutation deleteCoverTest(
+				$clientMutationId: String!
+				$object: AttachmentCoverEnum!
+				$objectId: Int!
+			) {
 				deleteAttachmentCover(
 					input: {
 						clientMutationId: $clientMutationId
@@ -508,9 +535,21 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function upload_avatar( $object, $objectId ) {
+	/**
+	 * Upload avatar mutation.
+	 *
+	 * @param string $object Object.
+	 * @param int $objectId Object ID.
+	 * @return array
+	 */
+	protected function upload_avatar( string $object, int $objectId ): array {
 		$query = '
-			mutation uploadAvatarTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
+			mutation uploadAvatarTest(
+				$clientMutationId: String!
+				$file: Upload!
+				$object: AttachmentAvatarEnum!
+				$objectId: Int!
+			) {
 				uploadAttachmentAvatar(
 					input: {
 						clientMutationId: $clientMutationId
@@ -533,8 +572,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'clientMutationId' => $this->client_mutation_id,
 			'object'           => $object,
 			'objectId'         => $objectId,
-			'file'              => [
-				'fileName'  => $this->image_file,
+			'file'             => [
+				'fileName' => $this->image_file,
 				'mimeType' => 'IMAGE_JPEG'
 			],
 		];
@@ -544,9 +583,21 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function upload_cover( $object, $objectId ) {
+	/**
+	 * Upload cover mutation.
+	 *
+	 * @param string $object Object.
+	 * @param int $objectId Object ID.
+	 * @return array
+	 */
+	protected function upload_cover( string $object, int $objectId ): array {
 		$query = '
-			mutation uploadCoverTest( $clientMutationId: String!, $file: Upload!, $object: AttachmentCoverEnum!, $objectId: Int! ) {
+			mutation uploadCoverTest(
+				$clientMutationId: String!
+				$file: Upload!
+				$object: AttachmentCoverEnum!
+				$objectId: Int!
+			) {
 				uploadAttachmentCover(
 					input: {
 						clientMutationId: $clientMutationId
@@ -569,8 +620,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'clientMutationId' => $this->client_mutation_id,
 			'object'           => $object,
 			'objectId'         => $objectId,
-			'file'              => [
-				'fileName'  => $this->image_file,
+			'file'             => [
+				'fileName' => $this->image_file,
 				'mimeType' => 'IMAGE_JPEG'
 			],
 		];
@@ -580,9 +631,20 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 
-	protected function delete_avatar( $object, $objectId ) {
+	/**
+	 * Delete avatar mutation.
+	 *
+	 * @param string $object Object.
+	 * @param int $objectId Object ID.
+	 * @return array
+	 */
+	protected function delete_avatar( string $object, int $objectId ): array {
 		$query = '
-			mutation deleteAvatarTest( $clientMutationId: String!, $object: AttachmentAvatarEnum!, $objectId: Int! ) {
+			mutation deleteAvatarTest(
+				$clientMutationId: String!
+				$object: AttachmentAvatarEnum!
+				$objectId: Int!
+			) {
 				deleteAttachmentAvatar(
 					input: {
 						clientMutationId: $clientMutationId
@@ -619,7 +681,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param int $user_2 Friend ID.
 	 * @return int
 	 */
-	protected function create_friendship_object( $user_1 = 0, $user_2 = 0 ): int {
+	protected function create_friendship_object( int $user_1 = 0, int $user_2 = 0 ): int {
 		if ( empty( $user_1 ) ) {
 			$user_1 = $this->factory->user->create();
 		}
