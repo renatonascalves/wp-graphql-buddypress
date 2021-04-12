@@ -83,7 +83,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->bp_factory         = new BP_UnitTest_Factory();
 		$this->bp                 = new BP_UnitTestCase();
 		$this->client_mutation_id = 'someUniqueId';
-		$this->image_file         = __DIR__ . '/assets/test-image.jpeg';
+		$this->image_file         = dirname( dirname( __FILE__ ) ) . '/assets/test-image.jpeg';
 		$this->user               = $this->bp_factory->user->create();
 		$this->random_user        = $this->bp_factory->user->create();
 		$this->admin              = $this->bp_factory->user->create( [ 'role' => 'administrator' ] );

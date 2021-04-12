@@ -4,11 +4,11 @@
  */
 
 if ( ! defined( 'BP_TESTS_DIR' ) ) {
-	define( 'BP_TESTS_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/BuddyPress/tests/phpunit' );
+	define( 'BP_TESTS_DIR', dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/BuddyPress/tests/phpunit' );
 }
 
 if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR_TEST' ) ) {
-	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql' );
+	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/wp-graphql' );
 }
 
 // My version of REST_TESTS_IMPOSSIBLY_HIGH_NUMBER.

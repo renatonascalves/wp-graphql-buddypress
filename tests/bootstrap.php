@@ -10,7 +10,7 @@
 require_once dirname( dirname( __FILE__ ) ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
 
 // Define constants.
-require( dirname( __FILE__ ) . '/define-constants.php' );
+require( dirname( __FILE__ ) . '/includes/define-constants.php' );
 
 if ( ! file_exists( WP_TESTS_DIR . '/includes/functions.php' ) ) {
 	die( "The WordPress PHPUnit test suite could not be found.\n" );
@@ -61,8 +61,7 @@ echo "Loading WP testing environment...\n";
 require_once WP_TESTS_DIR . '/includes/bootstrap.php';
 
 echo "Loading WPGraphQL BuddyPress testcase...\n";
-require_once dirname( __FILE__ ) . '/plugin-testcase.php';
+require_once dirname( __FILE__ ) . '/includes/testcase.php';
 
-// Load the BP test files.
 echo "Loading BuddyPress testcase...\n";
 require_once BP_TESTS_DIR . '/includes/testcase.php';
