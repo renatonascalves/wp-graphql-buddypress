@@ -8,10 +8,9 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
@@ -93,7 +92,7 @@ class XProfileFieldType {
 						'description' => __( 'Who may see the saved value for this profile field.', 'wp-graphql-buddypress' ),
 					],
 					'doAutolink'             => [
-						'type'        => 'Boolean',
+						'type'        => 'String',
 						'description' => __( 'Is autolink enabled for this profile field.', 'wp-graphql-buddypress' ),
 					],
 					'memberTypes'             => [
@@ -129,7 +128,7 @@ class XProfileFieldType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type, AppContext $context ) {
+				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_field_object( $id, $context );
 					}
@@ -163,21 +162,9 @@ class XProfileFieldType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_field_id = 0;
+					$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $args );
 
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$xprofile_field_id = absint( $id_components['id'] );
-					} elseif ( ! empty( $args['fieldId'] ) ) {
-						$xprofile_field_id = absint( $args['fieldId'] );
-					}
-
-					return Factory::resolve_xprofile_field_object( $xprofile_field_id, $context );
+					return Factory::resolve_xprofile_field_object( $xprofile_field_object->id, $context );
 				},
 			]
 		);

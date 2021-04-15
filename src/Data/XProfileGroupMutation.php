@@ -56,11 +56,12 @@ class XProfileGroupMutation {
 	 * Mapping XProfile group params.
 	 *
 	 * @param array       $input          The input for the mutation.
-	 * @param object|null $xprofile_group XProfile Group object.
 	 * @param string      $action         Hook action.
+	 * @param object|null $xprofile_group XProfile Group object.
 	 * @return array
 	 */
-	public static function prepare_xprofile_group_args( array $input, $xprofile_group = null, string $action ): array {
+	public static function prepare_xprofile_group_args( array $input, string $action, $xprofile_group = null ): array {
+
 		$output_args = [
 			'name'           => empty( $input['name'] )
 				? $xprofile_group->name ?? ''
@@ -70,7 +71,7 @@ class XProfileGroupMutation {
 				: $input['description'],
 			'can_delete'     => empty( $input['canDelete'] )
 				? $xprofile_group->can_delete ?? false
-				: $input['canDelete'],
+				: (bool) $input['canDelete'],
 			'field_group_id' => empty( $input['field_group_id'] )
 				? $xprofile_group->id ?? null
 				: $input['field_group_id'],

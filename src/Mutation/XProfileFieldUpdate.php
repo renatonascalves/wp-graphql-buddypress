@@ -123,7 +123,7 @@ class XProfileFieldUpdate {
 				'type'        => 'XProfileField',
 				'description' => __( 'The XProfile field that was updated.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -139,7 +139,7 @@ class XProfileFieldUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input ) {
+		return function( array $input ) {
 
 			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
@@ -160,14 +160,14 @@ class XProfileFieldUpdate {
 			);
 
 			// Throw an exception if the XProfile field failed to be updated.
-			if ( false === is_numeric( $xprofile_field_id ) ) {
+			if ( ! $xprofile_field_id ) {
 				throw new UserError( __( 'Could not update XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Save additional information.
 			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
 
-			// Return the XProfile field ID.
+			// Return updated XProfile field ID.
 			return [
 				'id' => $xprofile_field_id,
 			];

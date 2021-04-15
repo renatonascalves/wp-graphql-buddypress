@@ -233,6 +233,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * @since 0.0.1-alpha
 		 */
 		public function wpgraphql_missing_notice() {
+
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
@@ -387,7 +388,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 endif;
 
 /**
- * Function that instantiates the plugins main class.
+ * Function that instantiates the plugin main class.
  *
  * @since 0.0.1-alpha
  */

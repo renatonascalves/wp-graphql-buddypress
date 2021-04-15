@@ -26,7 +26,7 @@ class XProfileGroupType {
 	public static $type_name = 'XProfileGroup';
 
 	/**
-	 * Register XProfile object and fields to the WPGraphQL schema.
+	 * Register XProfile Group object and its fields to the WPGraphQL schema.
 	 */
 	public static function register() {
 		register_graphql_object_type(
@@ -76,7 +76,7 @@ class XProfileGroupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, $type, AppContext $context ) {
+				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_group_object( $id, $context );
 					}

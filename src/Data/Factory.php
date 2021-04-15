@@ -95,8 +95,11 @@ class Factory {
 		// Get the user ID if available.
 		$user_id = $context->config['userId'] ?? null;
 
-		// Get the XPofile field object.
-		$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $id ), $user_id );
+		// Get the XProfile field object.
+		$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input(
+			absint( $id ),
+			absint( $user_id )
+		);
 
 		return new XProfileField( $xprofile_field_object );
 	}

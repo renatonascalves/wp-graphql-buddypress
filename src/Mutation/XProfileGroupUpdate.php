@@ -77,7 +77,7 @@ class XProfileGroupUpdate {
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was updated.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -93,7 +93,7 @@ class XProfileGroupUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the XProfile group.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
@@ -105,7 +105,7 @@ class XProfileGroupUpdate {
 
 			// Update XProfile group and return the ID.
 			$xprofile_group = xprofile_insert_field_group(
-				XProfileGroupMutation::prepare_xprofile_group_args( $input, $xprofile_group_object, 'update' )
+				XProfileGroupMutation::prepare_xprofile_group_args( $input, 'update', $xprofile_group_object )
 			);
 
 			// Throw an exception if the XProfile group failed to be updated.

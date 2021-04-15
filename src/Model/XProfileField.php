@@ -86,7 +86,7 @@ class XProfileField extends Model {
 					return $this->data->get_default_visibility() ?? null;
 				},
 				'doAutolink'      => function() {
-					return $this->data->do_autolink;
+					return bp_xprofile_get_meta( $this->data->id, 'field', 'do_autolink' );
 				},
 				'description'     => function() {
 					return $this->data->description ?? null;

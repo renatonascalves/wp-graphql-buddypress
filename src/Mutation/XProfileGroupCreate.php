@@ -65,7 +65,7 @@ class XProfileGroupCreate {
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was created.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -81,7 +81,7 @@ class XProfileGroupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input ) {
+		return function( array $input ) {
 
 			// Check if user can create a XProfile group.
 			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
@@ -90,7 +90,7 @@ class XProfileGroupCreate {
 
 			// Create XProfile group.
 			$xprofile_group_id = xprofile_insert_field_group(
-				XProfileGroupMutation::prepare_xprofile_group_args( $input, null, 'create' )
+				XProfileGroupMutation::prepare_xprofile_group_args( $input, 'create' )
 			);
 
 			// Throw an exception if the XProfile group failed to be created.
