@@ -115,7 +115,7 @@ class XProfileFieldCreate {
 				'type'        => 'XProfileField',
 				'description' => __( 'The XProfile field that was created.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -131,7 +131,7 @@ class XProfileFieldCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( $input ) {
+		return function( array $input ) {
 
 			// Check if user can create a XProfile field.
 			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
@@ -144,7 +144,7 @@ class XProfileFieldCreate {
 			);
 
 			// Throw an exception if the XProfile field failed to be created.
-			if ( false === is_numeric( $xprofile_field_id ) ) {
+			if ( ! $xprofile_field_id ) {
 				throw new UserError( __( 'Could not create XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 

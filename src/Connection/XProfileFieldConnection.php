@@ -34,16 +34,24 @@ class XProfileFieldConnection {
 			]
 		);
 
-		// Connection for the XProfile group fields.
+		// Connection for the XProfile Group fields.
 		register_graphql_connection(
 			[
 				'fromType'       => 'XProfileGroup',
 				'toType'         => 'XProfileField',
 				'fromFieldName'  => 'fields',
 				'connectionArgs' => [
+					'memberType'     => [
+						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
+						'description' => __( 'Limit results set to certain member type(s).', 'wp-graphql-buddypress' ),
+					],
 					'hideEmptyFields' => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether to hide XProfile fields where the user has no provided data.', 'wp-graphql-buddypress' ),
+					],
+					'userId'  => [
+						'type'        => 'Int',
+						'description' => __( 'User ID to get XProfile fields data.', 'wp-graphql-buddypress' ),
 					],
 					'excludeFields'   => [
 						'type'        => [ 'list_of' => 'Int' ],

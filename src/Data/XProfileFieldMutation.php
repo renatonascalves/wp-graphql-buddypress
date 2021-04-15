@@ -81,15 +81,15 @@ class XProfileFieldMutation {
 			'parent_id'         => empty( $input['parentId'] )
 				? $xprofile_field->parent_id ?? null
 				: $input['parentId'],
-			'can_delete'        => empty( $input['canDelete'] )
+			'can_delete'        => ! isset( $input['canDelete'] )
 				? $xprofile_field->can_delete ?? true
-				: $input['canDelete'],
-			'is_required'       => empty( $input['isRequired'] )
+				: (bool) $input['canDelete'],
+			'is_required'       => ! isset( $input['isRequired'] )
 				? $xprofile_field->is_required ?? false
-				: $input['isRequired'],
-			'is_default_option' => empty( $input['isDefaultOption'] )
+				: (bool) $input['isRequired'],
+			'is_default_option' => ! isset( $input['isDefaultOption'] )
 				? $xprofile_field->is_default_option ?? false
-				: $input['isDefaultOption'],
+				: (bool) $input['isDefaultOption'],
 			'order_by'          => empty( $input['orderBy'] )
 				? $xprofile_field->order_by ?? 'asc'
 				: $input['orderBy'],
@@ -132,10 +132,10 @@ class XProfileFieldMutation {
 		$default_visibility = $input['defaultVisibility'] ?? 'public';
 		bp_xprofile_update_field_meta( $xprofile_field_id, 'default_visibility', $default_visibility );
 
-		$allow_custom_visibility = ! empty( $input['allowCustomVisibility'] ) ? 'allowed' : 'disabled';
+		$allow_custom_visibility = ( isset( $input['allowCustomVisibility'] ) && true === $input['allowCustomVisibility'] ) ? 'allowed' : 'disabled';
 		bp_xprofile_update_field_meta( $xprofile_field_id, 'allow_custom_visibility', $allow_custom_visibility );
 
-		$do_autolink = ! empty( $input['doAutolink'] ) ? 'on' : 'off';
+		$do_autolink = ( isset( $input['doAutolink'] ) && true === $input['doAutolink'] ) ? 'on' : 'off';
 		bp_xprofile_update_field_meta( $xprofile_field_id, 'do_autolink', $do_autolink );
 	}
 

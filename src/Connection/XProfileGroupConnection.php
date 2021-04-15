@@ -45,7 +45,7 @@ class XProfileGroupConnection {
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_connection_config( $args = [] ): array {
+	public static function get_connection_config( array $args = [] ): array {
 		return array_merge(
 			[
 				'fromType'       => 'RootQuery',
@@ -74,6 +74,10 @@ class XProfileGroupConnection {
 			'profileGroupId'  => [
 				'type'        => 'Int',
 				'description' => __( 'Limit results to a single XProfile group.', 'wp-graphql-buddypress' ),
+			],
+			'userId'  => [
+				'type'        => 'Int',
+				'description' => __( 'User ID to get XProfile fields data.', 'wp-graphql-buddypress' ),
 			],
 			'hideEmptyGroups'  => [
 				'type'        => 'Boolean',

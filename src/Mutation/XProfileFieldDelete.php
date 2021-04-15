@@ -83,7 +83,7 @@ class XProfileFieldDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );

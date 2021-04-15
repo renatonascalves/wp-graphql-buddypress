@@ -12,7 +12,9 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
+use BP_XProfile_Field;
 
 /**
  * Class XProfileFieldsConnectionResolver
@@ -35,8 +37,12 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'profile_group_id' => false,
-			'fetch_fields'     => true,
+			'profile_group_id'  => false,
+			'member_type'       => false,
+			'user_id'           => 0,
+			'fetch_field_data'  => true,
+			'fetch_fields'      => true,
+			'hide_empty_fields' => false,
 		];
 
 		// Prepare for later use.
@@ -85,7 +91,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns the XProfile groups query, with fields.
+	 * Returns the XProfile groups query, with its fields.
 	 *
 	 * @return array
 	 */
@@ -105,6 +111,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 				$ids[] = $field->id;
 			}
 		}
+
 		return array_map( 'absint', $ids );
 	}
 
@@ -118,15 +125,15 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid.
-	 *
-	 * @todo Find a way to pass the user ID.
+	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return true;
+		$object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $offset ) );
+
+		return ( $object instanceof BP_XProfile_Field );
 	}
 
 	/**
@@ -140,6 +147,8 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		$arg_mapping = [
 			'hideEmptyFields' => 'hide_empty_fields',
 			'excludeFields'   => 'exclude_fields',
+			'memberType'      => 'member_type',
+			'userId'          => 'user_id',
 		];
 
 		// Map and sanitize the input args.

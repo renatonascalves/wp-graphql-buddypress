@@ -122,7 +122,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid.
+	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
 	 * @return bool
@@ -143,6 +143,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 			'profileGroupId'  => 'profile_group_id',
 			'hideEmptyGroups' => 'hide_empty_groups',
 			'excludeGroups'   => 'exclude_groups',
+			'userId'          => 'user_id',
 		];
 
 		// Map and sanitize the input args.

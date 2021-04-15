@@ -79,7 +79,7 @@ class XProfileGroupDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the XProfile group object.
 			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
