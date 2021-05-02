@@ -15,7 +15,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	}
 
 	public function test_getting_friendship_with_initiator() {
-		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
 
 		$this->bp->set_current_user( $this->user );
 
@@ -27,7 +27,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	}
 
 	public function test_getting_friendship_with_friendship_initiator() {
-		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
 
 		$this->bp->set_current_user( $this->random_user );
 
