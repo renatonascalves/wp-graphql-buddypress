@@ -17,7 +17,7 @@ use stdClass;
  * Class Blog - Models the data for the Blog object type.
  *
  * @property string $id ID.
- * @property int    $blogId Blog ID.
+ * @property int    $databaseId Blog ID.
  * @property int    $admin ID of the blog admin.
  * @property string $name Blog name.
  * @property string $description Blog description.
@@ -56,8 +56,8 @@ class Blog extends Model {
 						? Relay::toGlobalId( 'blog', $this->data->blog_id )
 						: null;
 				},
-				'blogId' => function() {
-					return $this->data->blog_id ?? null;
+				'databaseId' => function() {
+					return ! empty( $this->data->blog_id ) ? absint( $this->data->blog_id ) : null;
 				},
 				'admin' => function() {
 					return $this->data->admin_user_id ?? null;

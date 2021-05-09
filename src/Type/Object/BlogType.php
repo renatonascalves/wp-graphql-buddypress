@@ -33,15 +33,8 @@ class BlogType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress Blog.', 'wp-graphql-buddypress' ),
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'id' => [
-						'type'        => [ 'non_null' => 'ID' ],
-						'description' => __( 'The globally unique identifier for the blog.', 'wp-graphql-buddypress' ),
-					],
-					'blogId' => [
-						'type'        => 'Int',
-						'description' => __( 'The id field that matches the BP_Blogs_Blog->blog_id field.', 'wp-graphql-buddypress' ),
-					],
 					'blogAdmin' => [
 						'type'        => 'User',
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
@@ -102,14 +95,14 @@ class BlogType {
 								return null;
 							}
 
-							return Factory::resolve_attachment( $blog->blogId ?? 0, 'blog' );
+							return Factory::resolve_attachment( $blog->databaseId ?? 0, 'blog' );
 						},
 					],
 					'attachmentCover' => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Cover of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Blog $blog ) {
-							return Factory::resolve_attachment_cover( $blog->blogId ?? 0, 'blogs' );
+							return Factory::resolve_attachment_cover( $blog->databaseId ?? 0, 'blogs' );
 						},
 					],
 				],

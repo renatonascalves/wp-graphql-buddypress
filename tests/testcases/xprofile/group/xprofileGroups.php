@@ -25,7 +25,7 @@ class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $response['data']['xprofileGroups']['nodes'], 'groupId' );
+		$ids = wp_list_pluck( $response['data']['xprofileGroups']['nodes'], 'databaseId' );
 
 		// Check our four XProfile groups.
 		$this->assertTrue( in_array( $u1, $ids, true ) );
@@ -76,13 +76,13 @@ class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					cursor
 					node {
 						id
-						groupId
+						databaseId
 						name
 					}
 				}
 				nodes {
 					id
-					groupId
+					databaseId
 				}
 			}
 		}';

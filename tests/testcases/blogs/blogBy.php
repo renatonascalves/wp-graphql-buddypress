@@ -34,7 +34,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'full'  => $this->get_avatar_image( 'full', 'blog', $blog_id ),
 			] )
 			->hasField( 'attachmentCover', null )
-			->hasField( 'blogId', $blog_id );
+			->hasField( 'databaseId', $blog_id );
 
 		// Confirm that the default blog avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'blog', $blog_id ), 'mystery-blog' ) );
@@ -82,7 +82,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			query {
 				blogBy(blogId: {$blog_id}) {
 					id
-					blogId
+					databaseId
 					blogAdmin {
 						userId
 					}

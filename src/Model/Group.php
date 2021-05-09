@@ -19,6 +19,8 @@ use BP_Groups_Group;
  * @property string $id ID.
  * @property int $databaseId Group ID.
  * @property int $parent Group parent ID.
+ * @property string $parentId Group parent ID.
+ * @property int $parentDatabaseId Group parent ID.
  * @property int $creator Group creator ID.
  * @property string $name Group name.
  * @property string $slug Group slug.
@@ -91,10 +93,18 @@ class Group extends Model {
 						: null;
 				},
 				'databaseId' => function() {
-					return $this->data->id ?? null;
+					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'parent' => function() {
-					return $this->data->parent_id ?? null;
+					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
+				},
+				'parentId' => function() {
+					return ! empty( $this->data->parent_id )
+						? Relay::toGlobalId( 'group', (string) $this->data->parent_id )
+						: null;
+				},
+				'parentDatabaseId' => function() {
+					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
 				'creator' => function() {
 					return $this->data->creator_id ?? null;

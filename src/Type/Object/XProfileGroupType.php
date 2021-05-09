@@ -33,24 +33,17 @@ class XProfileGroupType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress XProfile group.', 'wp-graphql-buddypress' ),
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'id'               => [
-						'type'        => [ 'non_null' => 'ID' ],
-						'description' => __( 'The globally unique identifier for the XProfile group.', 'wp-graphql-buddypress' ),
-					],
-					'groupId'          => [
-						'type'        => 'Int',
-						'description' => __( 'The id field that matches the BP_XProfile_Group->id field.', 'wp-graphql-buddypress' ),
-					],
 					'name'             => [
 						'type'        => 'String',
 						'description' => __( 'XProfile group name.', 'wp-graphql-buddypress' ),
 					],
-					'groupOrder'             => [
+					'groupOrder'      => [
 						'type'        => 'Int',
 						'description' => __( 'Order of the group relative to other groups.', 'wp-graphql-buddypress' ),
 					],
-					'canDelete'             => [
+					'canDelete'       => [
 						'type'        => 'Boolean',
 						'description' => __( 'Can this group be deleted?', 'wp-graphql-buddypress' ),
 					],
@@ -76,7 +69,7 @@ class XProfileGroupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node' => function( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_group_object( $id, $context );
 					}

@@ -31,7 +31,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 
-		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
+		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'databaseId' );
 
 		$this->assertTrue( count( $blogs_ids ) === 5 );
 		$this->assertContains( $b1, $blogs_ids );
@@ -61,7 +61,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 
-		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
+		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'databaseId' );
 
 		// Confirm total count.
 		$this->assertTrue( count( $blogs_ids ) === 2 );
@@ -100,7 +100,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Make sure the query didn't return any errors
 		$this->assertQuerySuccessful( $results );
 
-		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'blogId' );
+		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'databaseId' );
 
 		// Confirm pagination.
 		$this->assertTrue( $results['data']['blogs']['pageInfo']['hasNextPage'] );
@@ -140,11 +140,11 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				edges {
 					cursor
 					node {
-						blogId
+						databaseId
 					}
 				}
 				nodes {
-					blogId
+					databaseId
 				}
 			}
 		}';

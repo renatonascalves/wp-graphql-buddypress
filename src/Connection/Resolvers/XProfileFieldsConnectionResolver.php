@@ -67,7 +67,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 
 		// Setting profile group ID.
 		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
-			$query_args['profile_group_id'] = $this->source->groupId;
+			$query_args['profile_group_id'] = $this->source->databaseId;
 		}
 
 		/**

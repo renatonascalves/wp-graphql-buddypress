@@ -17,6 +17,9 @@ use BP_XProfile_ProfileData;
  * Class XProfile Field - Models the data for the XProfile Field object type.
  *
  * @property string $id ID.
+ * @property int $databaseId XProfile Field ID.
+ * @property int $groupId Group of the XProfile Field ID.
+ * @property int $parent Parent XProfile Field ID.
  * @property BP_XProfile_ProfileData $options XProfile field options.
  */
 class XProfileField extends Model {
@@ -49,14 +52,22 @@ class XProfileField extends Model {
 						? Relay::toGlobalId( 'bp_xprofile_field', (string) $this->data->id )
 						: null;
 				},
-				'fieldId'         => function() {
-					return $this->data->id ?? null;
+				'databaseId'      => function() {
+					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'groupId'         => function() {
-					return $this->data->group_id ?? null;
+					return ! empty( $this->data->group_id ) ? absint( $this->data->group_id ) : null;
 				},
 				'parent'          => function() {
-					return $this->data->parent_id ?? null;
+					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
+				},
+				'parentId'          => function() {
+					! empty( $this->data->parent_id )
+						? Relay::toGlobalId( 'bp_xprofile_field', (string) $this->data->parent_id )
+						: null;
+				},
+				'parentDatabaseId'          => function() {
+					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
 				'name'            => function() {
 					return $this->data->name ?? null;

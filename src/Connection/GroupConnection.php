@@ -30,7 +30,7 @@ class GroupConnection {
 			self::get_connection_config(
 				[
 					'fromType'      => 'Group',
-					'fromFieldName' => 'children',
+					'fromFieldName' => 'childGroups',
 				]
 			)
 		);

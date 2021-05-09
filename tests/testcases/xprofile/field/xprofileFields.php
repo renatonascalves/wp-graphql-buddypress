@@ -37,16 +37,16 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_xprofile_group( [ 'id' => $global_id ] );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'groupId', $this->xprofile_group_id )
+			->hasField( 'databaseId', $this->xprofile_group_id )
 			->hasField( 'fields', [
 				'nodes' => [
 					0 => [
-						'fieldId' => $field_id_1,
-						'groupId' => $this->xprofile_group_id,
+						'databaseId' => $field_id_1,
+						'groupId'    => $this->xprofile_group_id,
 					],
 					1 => [
-						'fieldId' => $field_id_2,
-						'groupId' => $this->xprofile_group_id,
+						'databaseId' => $field_id_2,
+						'groupId'    => $this->xprofile_group_id,
 					]
 				]
 			] );
@@ -67,12 +67,12 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		] );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'groupId', $this->xprofile_group_id )
+			->hasField( 'databaseId', $this->xprofile_group_id )
 			->hasField( 'fields', [
 				'nodes' => [
 					0 => [
-						'fieldId' => $field_id_2,
-						'groupId' => $this->xprofile_group_id,
+						'databaseId' => $field_id_2,
+						'groupId'    => $this->xprofile_group_id,
 					]
 				]
 			] );
@@ -92,12 +92,12 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		] );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'groupId', $this->xprofile_group_id )
+			->hasField( 'databaseId', $this->xprofile_group_id )
 			->hasField( 'fields', [
 				'nodes' => [
 					0 => [
-						'fieldId' => $field_id_1,
-						'groupId' => $this->xprofile_group_id,
+						'databaseId' => $field_id_1,
+						'groupId'    => $this->xprofile_group_id,
 					]
 				]
 			] );
@@ -124,12 +124,12 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		] );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'groupId', $this->xprofile_group_id )
+			->hasField( 'databaseId', $this->xprofile_group_id )
 			->hasField( 'fields', [
 				'nodes' => [
 					0 => [
-						'fieldId' => $field_id_1,
-						'groupId' => $this->xprofile_group_id,
+						'databaseId' => $field_id_1,
+						'groupId'    => $this->xprofile_group_id,
 					]
 				]
 			] );
@@ -151,7 +151,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			$where:XProfileGroupToXProfileFieldConnectionWhereArgs
 		) {
 			xprofileGroupBy(id: $id) {
-				groupId
+				databaseId
 				fields(
 					first:$first
 					last:$last
@@ -160,7 +160,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					where:$where
 				) {
 					nodes {
-						fieldId
+						databaseId
 						groupId
 					}
 				}

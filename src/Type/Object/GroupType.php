@@ -34,15 +34,8 @@ class GroupType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress group.', 'wp-graphql-buddypress' ),
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'id'               => [
-						'type'        => [ 'non_null' => 'ID' ],
-						'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
-					],
-					'databaseId'      => [
-						'type'        => 'Int',
-						'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
-					],
 					'parent'           => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),

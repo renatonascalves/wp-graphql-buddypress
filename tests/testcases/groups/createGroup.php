@@ -32,7 +32,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						'clientMutationId' => $this->client_mutation_id,
 						'group' => [
 							'id'               => $this->toRelayId( 'group', $group->id ),
-							'databaseId'          => $group->id,
+							'databaseId'       => $group->id,
 							'name'             => 'Group Test',
 							'slug'             => 'group-slug',
 							'description'      => bp_get_group_description( $group ),
