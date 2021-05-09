@@ -67,7 +67,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 
 		// Assign group when trying to get group members from a group.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
-			$query_args['group_id'] = $this->source->groupId;
+			$query_args['group_id'] = $this->source->databaseId;
 		}
 
 		/**
@@ -134,7 +134,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// Current user is a member of the group.
-		if ( groups_is_user_member( bp_loggedin_user_id(), $this->source->groupId ) ) {
+		if ( groups_is_user_member( bp_loggedin_user_id(), $this->source->databaseId ) ) {
 			return true;
 		}
 

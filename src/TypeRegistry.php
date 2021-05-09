@@ -9,6 +9,50 @@
 namespace WPGraphQL\Extensions\BuddyPress;
 
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\GroupCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType;
 
 /**
  * Class TypeRegistry
@@ -19,7 +63,7 @@ class TypeRegistry {
 	 * Registers actions related to the type registry.
 	 */
 	public static function add_actions() {
-		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 10 );
+		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 99 );
 	}
 
 	/**
@@ -34,115 +78,116 @@ class TypeRegistry {
 	 */
 	public static function graphql_register_types() {
 
-		// Enum(s).
-		\WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums::register();
+		// General Enum(s).
+		GeneralEnums::register();
 
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
 
 			// Enum(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums::register();
+			MemberEnums::register();
 
 			// Fields.
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType::register();
+			MemberType::register();
 
 			// Connections.
-			\WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection::register_connections();
+			MemberConnection::register_connections();
 		}
 
 		// Groups component.
 		if ( bp_is_active( 'groups' ) ) {
 
 			// Enum(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums::register();
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums::register();
+			GroupEnums::register();
+			GroupMembersEnums::register();
 
 			// Object(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType::register();
+			GroupType::register();
 
 			// Connections.
-			\WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection::register_connections();
+			GroupConnection::register_connections();
 
 			// Mutations.
-			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupCreate::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupDelete::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\GroupUpdate::register_mutation();
+			GroupCreate::register_mutation();
+			GroupDelete::register_mutation();
+			GroupUpdate::register_mutation();
 		}
 
 		// XProfile component.
 		if ( bp_is_active( 'xprofile' ) ) {
 
 			// Enum(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums::register();
+			XProfileFieldEnums::register();
 
 			// Object(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType::register();
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType::register();
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType::register();
+			XProfileGroupType::register();
+			XProfileFieldType::register();
+			XProfileFieldValueType::register();
 
 			// Connections.
-			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection::register_connections();
-			\WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection::register_connections();
+			XProfileGroupConnection::register_connections();
+			XProfileFieldConnection::register_connections();
 
 			// XProfile Group Mutations.
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupCreate::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupDelete::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileGroupUpdate::register_mutation();
+			XProfileGroupCreate::register_mutation();
+			XProfileGroupDelete::register_mutation();
+			XProfileGroupUpdate::register_mutation();
 
 			// XProfile Field Mutations.
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldCreate::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldDelete::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\XProfileFieldUpdate::register_mutation();
+			XProfileFieldCreate::register_mutation();
+			XProfileFieldDelete::register_mutation();
+			XProfileFieldUpdate::register_mutation();
 		}
 
 		// Blog component.
 		if ( bp_is_active( 'blogs' ) ) {
 
 			// Enum(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums::register();
+			BlogEnums::register();
 
 			// Object(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType::register();
+			BlogType::register();
 
 			// Connections.
-			\WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection::register_connections();
+			BlogConnection::register_connections();
 		}
 
 		// Friends component.
 		if ( bp_is_active( 'friends' ) ) {
 
 			// Enum(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums::register();
+			FriendshipEnums::register();
 
 			// Object(s).
-			\WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType::register();
+			FriendshipType::register();
 
 			// Connections.
-			\WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection::register_connections();
+			FriendshipConnection::register_connections();
 
 			// Mutations.
-			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipDelete::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipUpdate::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\FriendshipCreate::register_mutation();
+			FriendshipDelete::register_mutation();
+			FriendshipUpdate::register_mutation();
+			FriendshipCreate::register_mutation();
 		}
 
 		// Attachment Type/Object.
-		\WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType::register();
+		AttachmentType::register();
 
 		// Attachment Input, aka, Upload input type.
-		\WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput::register();
+		// @todo will be deprecated soon.
+		AttachmentInput::register();
 
 		// Attachment Enum(s).
-		\WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums::register();
+		AttachmentEnums::register();
 
 		// Attachment Avatar Mutations.
-		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarUpload::register_mutation();
-		\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentAvatarDelete::register_mutation();
+		AttachmentAvatarUpload::register_mutation();
+		AttachmentAvatarDelete::register_mutation();
 
 		// Attachment Cover Mutations.
 		if ( bp_is_active( 'members', 'cover_image' ) || bp_is_active( 'groups', 'cover_image' ) ) {
-			\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverUpload::register_mutation();
-			\WPGraphQL\Extensions\BuddyPress\Mutation\AttachmentCoverDelete::register_mutation();
+			AttachmentCoverUpload::register_mutation();
+			AttachmentCoverDelete::register_mutation();
 		}
 	}
 
@@ -157,11 +202,11 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
-				'bp_group'          => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader( $context ),
-				'bp_xprofile_group' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader( $context ),
-				'bp_xprofile_field' => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader( $context ),
-				'bp_friend'         => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader( $context ),
-				'bp_blog'           => new \WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader( $context ),
+				'bp_group'          => new GroupObjectLoader( $context ),
+				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
+				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
+				'bp_friend'         => new FriendshipObjectLoader( $context ),
+				'bp_blog'           => new BlogObjectLoader( $context ),
 			]
 		);
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * MembersConnectionResolver Class
+ * MembersConnectionResolver Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
@@ -41,7 +41,6 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 			'exclude'             => false,
 			'xprofile_query'      => false,
 			'member_type'         => '',
-			'member_type__in'     => '',
 			'member_type__not_in' => '',
 		];
 
@@ -140,7 +139,6 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 			'exclude'         => 'exclude',
 			'xprofile'        => 'xprofile_query',
 			'memberType'      => 'member_type',
-			'memberTypeIn'    => 'member_type__in',
 			'memberTypeNotIn' => 'member_type__not_in',
 			'search'          => 'search_terms',
 		];

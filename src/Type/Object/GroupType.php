@@ -39,7 +39,7 @@ class GroupType {
 						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
 					],
-					'groupId'          => [
+					'databaseId'      => [
 						'type'        => 'Int',
 						'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
 					],
@@ -47,9 +47,7 @@ class GroupType {
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
-							return ! empty( $group->parent )
-								? Factory::resolve_group_object( $group->parent, $context )
-								: null;
+							return Factory::resolve_group_object( $group->parent, $context );
 						},
 					],
 					'creator'        => [
@@ -62,9 +60,7 @@ class GroupType {
 						},
 					],
 					'admins'         => [
-						'type'        => [
-							'list_of' => 'User',
-						],
+						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 
@@ -77,7 +73,7 @@ class GroupType {
 							$admin_mods = groups_get_group_members(
 								[
 									// @codingStandardsIgnoreLine.
-									'group_id'   => $group->groupId,
+									'group_id'   => $group->databaseId,
 									'group_role' => [ 'admin' ],
 								]
 							);
@@ -102,9 +98,7 @@ class GroupType {
 						},
 					],
 					'mods'         => [
-						'type'        => [
-							'list_of' => 'User',
-						],
+						'type'        => [ 'list_of' => 'User' ],
 						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 
@@ -117,7 +111,7 @@ class GroupType {
 							$admin_mods = groups_get_group_members(
 								[
 									// @codingStandardsIgnoreLine.
-									'group_id'   => $group->groupId,
+									'group_id'   => $group->databaseId,
 									'group_role' => [ 'mod' ],
 								]
 							);
@@ -195,9 +189,7 @@ class GroupType {
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 					],
 					'types'           => [
-						'type'        => [
-							'list_of' => 'GroupTypeEnum',
-						],
+						'type'        => [ 'list_of' => 'GroupTypeEnum' ],
 						'description' => __( 'The types of the group.', 'wp-graphql-buddypress' ),
 					],
 					'attachmentAvatar' => [
@@ -210,14 +202,14 @@ class GroupType {
 								return null;
 							}
 
-							return Factory::resolve_attachment( $group->groupId ?? 0, 'group' );
+							return Factory::resolve_attachment( $group->databaseId ?? 0, 'group' );
 						},
 					],
 					'attachmentCover' => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Cover of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
-							return Factory::resolve_attachment_cover( $group->groupId ?? 0, 'groups' );
+							return Factory::resolve_attachment_cover( $group->databaseId ?? 0, 'groups' );
 						},
 					],
 				],

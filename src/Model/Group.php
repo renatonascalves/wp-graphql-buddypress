@@ -17,7 +17,7 @@ use BP_Groups_Group;
  * Class Group - Models the data for the Group object type.
  *
  * @property string $id ID.
- * @property int $groupId Group ID.
+ * @property int $databaseId Group ID.
  * @property int $parent Group parent ID.
  * @property int $creator Group creator ID.
  * @property string $name Group name.
@@ -90,7 +90,7 @@ class Group extends Model {
 						? Relay::toGlobalId( 'group', (string) $this->data->id )
 						: null;
 				},
-				'groupId' => function() {
+				'databaseId' => function() {
 					return $this->data->id ?? null;
 				},
 				'parent' => function() {

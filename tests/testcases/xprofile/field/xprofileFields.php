@@ -157,7 +157,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					last:$last
 					after:$after
 					before:$before
-					where: $where
+					where:$where
 				) {
 					nodes {
 						fieldId

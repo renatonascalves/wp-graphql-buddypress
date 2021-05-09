@@ -16,7 +16,6 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupMembersConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
@@ -28,6 +27,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
 
 /**
  * Class Factory.
@@ -320,19 +320,6 @@ class Factory {
 	}
 
 	/**
-	 * Wrapper for the MembersConnectionResolver class.
-	 *
-	 * @param mixed       $source  Source.
-	 * @param array       $args    Array of args to be passed down to the resolve method.
-	 * @param AppContext  $context The context of the query to pass along.
-	 * @param ResolveInfo $info    The ResolveInfo object.
-	 * @return Deferred
-	 */
-	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
-		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
-	}
-
-	/**
 	 * Wrapper for the FriendshipConnectionResolver class.
 	 *
 	 * @param mixed       $source  Source.
@@ -343,5 +330,18 @@ class Factory {
 	 */
 	public static function resolve_friendship_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new FriendshipsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the MembersConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }

@@ -155,9 +155,7 @@ class GroupConnection {
 				'description' => __( 'Sort the order of results by the status of the group members.', 'wp-graphql-buddypress' ),
 			],
 			'exclude'     => [
-				'type'        => [
-					'list_of' => 'Int',
-				],
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes specific member IDs.', 'wp-graphql-buddypress' ),
 			],
 			'excludeBanned'        => [
@@ -169,9 +167,7 @@ class GroupConnection {
 				'description' => __( 'Whether results should exclude group admins and mods.', 'wp-graphql-buddypress' ),
 			],
 			'groupMemberRoles'     => [
-				'type'        => [
-					'list_of' => 'GroupMemberRolesEnum',
-				],
+				'type'        => [ 'list_of' => 'GroupMemberRolesEnum' ],
 				'description' => __( 'Ensure result set includes specific Group member roles.', 'wp-graphql-buddypress' ),
 			],
 		];

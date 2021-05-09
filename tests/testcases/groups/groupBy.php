@@ -26,7 +26,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_group_query() {
 		$this->assertQuerySuccessful( $this->get_a_group() )
 			->hasField( 'id', $this->global_id )
-			->hasField( 'groupId', $this->group )
+			->hasField( 'databaseId', $this->group )
 			->hasField( 'name', 'Group Test' )
 			->hasField( 'status', 'PUBLIC' )
 			->hasField( 'description', 'Group Description' )
@@ -50,7 +50,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$query = "
 			query {
 				groupBy(id: \"{$this->global_id}\") {
-					groupId
+					databaseId
 					name
 				}
 			}
@@ -58,7 +58,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'name', 'Group Test' )
-			->hasField( 'groupId', $this->group );
+			->hasField( 'databaseId', $this->group );
 	}
 
 	public function test_group_by_query_with_slug_param() {
@@ -67,7 +67,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$query    = "
 			query {
 				groupBy(slug: \"{$slug}\") {
-					groupId
+					databaseId
 					slug
 				}
 			}
@@ -75,7 +75,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'slug', 'group-test' )
-			->hasField( 'groupId', $group_id );
+			->hasField( 'databaseId', $group_id );
 	}
 
 	public function test_group_by_query_with_previous_slug_param() {
@@ -95,7 +95,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			query {
 				groupBy(previousSlug: \"{$previous_slug}\") {
 					id
-					groupId
+					databaseId
 					slug
 				}
 			}
@@ -103,7 +103,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'slug', 'newslug' )
-			->hasField( 'groupId', $group_id )
+			->hasField( 'databaseId', $group_id )
 			->hasField( 'id', $global_id );
 	}
 
@@ -115,20 +115,20 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$query           = "{
 			groupBy(id: \"{$global_child_id}\") {
 				id
-				groupId
+				databaseId
 				parent {
 					id
-					groupId
+					databaseId
 				}
 			}
 		}";
 
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'id', $global_child_id )
-			->hasField( 'groupId', $child_id )
+			->hasField( 'databaseId', $child_id )
 			->hasField( 'parent', [
 				'id'      => $global_id,
-				'groupId' => $parent_id
+				'databaseId' => $parent_id
 			] );
 	}
 
@@ -179,7 +179,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->get_a_group( $g ) )
 			->hasField( 'status', 'HIDDEN' )
-			->hasField( 'groupId', $g );
+			->hasField( 'databaseId', $g );
 	}
 
 	public function test_get_hidden_group_without_being_from_group() {
@@ -204,7 +204,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			query {
 				groupBy(groupId: {$group}) {
 					id,
-					groupId
+					databaseId
 					name
 					status
 					description(format: RAW)
@@ -222,7 +222,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						userId
 					}
 					parent {
-						groupId
+						databaseId
 					}
 					attachmentAvatar {
 						full
