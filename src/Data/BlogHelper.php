@@ -1,6 +1,6 @@
 <?php
 /**
- * BlogMutation Class.
+ * BlogHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -13,9 +13,9 @@ use GraphQLRelay\Relay;
 use stdClass;
 
 /**
- * BlogMutation Class.
+ * BlogHelper Class.
  */
-class BlogMutation {
+class BlogHelper {
 
 	/**
 	 * Get blog ID helper.

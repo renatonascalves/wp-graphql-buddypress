@@ -29,7 +29,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		);
 
 		$this->assertQuerySuccessful( $results );
-		$this->assertEquals( $private_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
+		$this->assertEquals( $private_group_id, $results['data']['groups']['nodes'][0]['databaseId'] );
 	}
 
 	public function test_getting_private_group_with_unauthenticated_user() {
@@ -63,7 +63,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		);
 
 		$this->assertQuerySuccessful( $results );
-		$this->assertEquals( $hidden_group_id, $results['data']['groups']['nodes'][0]['groupId'] );
+		$this->assertEquals( $hidden_group_id, $results['data']['groups']['nodes'][0]['databaseId'] );
 	}
 
 	public function test_groups_query() {
@@ -77,7 +77,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $results );
 
-		$ids = wp_list_pluck( $results['data']['groups']['nodes'], 'groupId' );
+		$ids = wp_list_pluck( $results['data']['groups']['nodes'], 'databaseId' );
 
 		// Check groups.
 		$this->assertTrue( in_array( $u1, $ids, true ) );
@@ -103,7 +103,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $results );
 		$this->assertTrue( $results['data']['groups']['pageInfo']['hasNextPage'] );
 		$this->assertFalse( $results['data']['groups']['pageInfo']['hasPreviousPage'] );
-		$this->assertEquals( $this->group, $results['data']['groups']['nodes'][0]['groupId'] );
+		$this->assertEquals( $this->group, $results['data']['groups']['nodes'][0]['databaseId'] );
 	}
 
 	public function test_group_query_with_admins_unauthenticated_user() {
@@ -166,13 +166,13 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 					cursor
 					node {
 						id
-						groupId
+						databaseId
 						name
 					}
 				}
 				nodes {
 					id
-					groupId
+					databaseId
 					admins {
 						userId
 					}

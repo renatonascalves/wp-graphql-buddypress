@@ -2,15 +2,15 @@
 /**
  * FriendshipCreate Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Friendship
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Friendship;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use BP_Friends_Friendship;
 
 /**
@@ -65,7 +65,7 @@ class FriendshipCreate {
 				'type'        => 'Friendship',
 				'description' => __( 'The friendship that was created.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -83,21 +83,21 @@ class FriendshipCreate {
 	public static function mutate_and_get_payload() {
 		return function ( array $input ) {
 
-			$initiator_id = get_user_by( 'id', $input['initiatorId'] ?? absint( bp_loggedin_user_id() ) );
-			$friend_id    = get_user_by( 'id', $input['friendId'] );
+			$initiator = get_user_by( 'id', $input['initiatorId'] ?? absint( bp_loggedin_user_id() ) );
+			$friend    = get_user_by( 'id', $input['friendId'] );
 
 			// Check if users are valid.
-			if ( ! $initiator_id || ! $friend_id ) {
+			if ( ! $initiator || ! $friend ) {
 				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user can create friendship.
-			if ( FriendshipMutation::can_create_friendship( $initiator_id->ID, $friend_id->ID ) ) {
+			if ( FriendshipHelper::can_create_friendship( $initiator->ID, $friend->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
-			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator->ID, $friend->ID );
 
 			// Already friends.
 			if ( 'is_friend' === $friendship_status ) {
@@ -113,17 +113,17 @@ class FriendshipCreate {
 			$force = ( true === (bool) $input['force'] && bp_current_user_can( 'bp_moderate' ) );
 
 			// Adding friendship.
-			if ( false === friends_add_friend( $initiator_id->ID, $friend_id->ID, $force ) ) {
+			if ( false === friends_add_friend( $initiator->ID, $friend->ID, $force ) ) {
 				throw new UserError( __( 'There was a problem requesting the friendship.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get friendship object.
 			$friendship = new BP_Friends_Friendship(
-				BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+				BP_Friends_Friendship::get_friendship_id( $initiator->ID, $friend->ID )
 			);
 
 			// Confirm if friendship exists after creation.
-			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
+			if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
 				throw new UserError( __( 'Friendship was not requested.', 'wp-graphql-buddypress' ) );
 			}
 

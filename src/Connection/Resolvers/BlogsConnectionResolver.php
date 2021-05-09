@@ -127,7 +127,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	public function is_valid_offset( $offset ): bool {
 		$blogs = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $offset ) ] ) );
 
-		return ! empty( $blogs[0] );
+		return ( ! empty( $blogs[0] ) && is_object( $blogs[0] ) );
 	}
 
 	/**

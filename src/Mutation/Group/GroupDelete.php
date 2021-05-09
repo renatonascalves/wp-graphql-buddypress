@@ -2,14 +2,14 @@
 /**
  * GroupDelete Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
@@ -83,13 +83,13 @@ class GroupDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the group object.
-			$group = GroupMutation::get_group_from_input( $input );
+			$group = GroupHelper::get_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to delete a group.
-			if ( false === GroupMutation::can_update_or_delete_group( $group ) ) {
+			if ( false === GroupHelper::can_update_or_delete_group( $group ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

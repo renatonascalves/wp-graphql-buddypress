@@ -10,13 +10,30 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
-
+use stdClass;
 /**
  * Class BlogObjectLoader
  */
 class BlogObjectLoader extends AbstractDataLoader {
+
+	/**
+	 * Get model.
+	 *
+	 * @param mixed $entry The object.
+	 * @param mixed $key   The Key to identify the object by.
+	 * @return null|Blog
+	 */
+	protected function get_model( $entry, $key ): ?Blog {
+
+		// Check if friendship exists.
+		if ( ! $entry instanceof stdClass ) {
+			return null;
+		}
+
+		return new Blog( $entry );
+	}
 
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
@@ -38,17 +55,9 @@ class BlogObjectLoader extends AbstractDataLoader {
 
 		$loaded_blogs = [];
 
-		/**
-		 * Loop over the keys and return an array of loaded_blogs, where the key is the ID and the value
-		 * is the Blog object, passed through the Model layer.
-		 */
+		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-
-			// Get the blog object.
-			$blog_object = BlogMutation::get_blog_from_input( absint( $key ) );
-
-			// Pass object to our model.
-			$loaded_blogs[ $key ] = new Blog( $blog_object );
+			$loaded_blogs[ $key ] = BlogHelper::get_blog_from_input( absint( $key ) );
 		}
 
 		return $loaded_blogs;

@@ -10,12 +10,29 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
+use BP_XProfile_Field;
 
 /**
  * Class XProfileFieldObjectLoader
  */
 class XProfileFieldObjectLoader extends AbstractDataLoader {
+
+	/**
+	 * Get model.
+	 *
+	 * @param mixed $entry The object.
+	 * @param mixed $key   The Key to identify the object by.
+	 * @return null|XProfileField
+	 */
+	protected function get_model( $entry, $key ): ?XProfileField {
+
+		if ( empty( $entry ) || ! $entry instanceof BP_XProfile_Field ) {
+			return null;
+		}
+
+		return new XProfileField( $entry );
+	}
 
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
@@ -35,17 +52,9 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 		// Get the user ID if available.
 		$user_id = $this->context->config['userId'] ?? null;
 
-		/**
-		 * Loop over the keys and return an array of loaded_xprofile_fields, where the key is the ID and the value
-		 * is the XProfile field object, passed through the Model layer.
-		 */
+		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-
-			// Get the XPofile field object.
-			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $key ), $user_id );
-
-			// Pass object to our model.
-			$loaded_xprofile_fields[ $key ] = new XProfileField( $xprofile_field_object );
+			$loaded_xprofile_fields[ $key ] = XProfileFieldHelper::get_xprofile_field_from_input( absint( $key ), $user_id );
 		}
 
 		return $loaded_xprofile_fields;

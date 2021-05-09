@@ -8,9 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
-use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use BP_Friends_Friendship;
 
@@ -20,10 +19,25 @@ use BP_Friends_Friendship;
 class FriendshipObjectLoader extends AbstractDataLoader {
 
 	/**
+	 * Get model.
+	 *
+	 * @param mixed $entry The object.
+	 * @param mixed $key   The Key to identify the object.
+	 * @return null|Friendship
+	 */
+	protected function get_model( $entry, $key ): ?Friendship {
+
+		// Check if friendship exists.
+		if ( false === FriendshipHelper::friendship_exists( $entry ) ) {
+			return null;
+		}
+
+		return new Friendship( $entry );
+	}
+
+	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
-	 *
-	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
 	 * @return array
@@ -36,27 +50,9 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 
 		$loaded_friends = [];
 
-		/**
-		 * Loop over the keys and return an array of loaded_friends, where the key is the ID and the value
-		 * is the Friendship object, passed through the Model layer.
-		 */
+		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-
-			// Get the friendship object.
-			$friendship = new BP_Friends_Friendship( absint( $key ) ); // This is cached.
-
-			// Check if friendship exists.
-			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
-				throw new UserError(
-					sprintf(
-						// translators: %d is the friendship ID.
-						__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
-						absint( $key )
-					)
-				);
-			}
-
-			$loaded_friends[ $key ] = new Friendship( $friendship );
+			$loaded_friends[ $key ] = new BP_Friends_Friendship( absint( $key ) ); // This is cached.
 		}
 
 		return $loaded_friends;

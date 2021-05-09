@@ -36,7 +36,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'name' => 'Updated' ] ) )
-			->hasField( 'fieldId', $this->xprofile_field_id )
+			->hasField( 'databaseId', $this->xprofile_field_id )
 			->hasField( 'name', 'Updated' );
 	}
 
@@ -47,12 +47,12 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'fieldId' => $field_id, 'fieldOrder' => 1 ] ) )
 			->hasField( 'fieldOrder', 1 )
-			->hasField( 'fieldId', $field_id );
+			->hasField( 'databaseId', $field_id );
 
 		// Update Order.
 		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'fieldId' => $this->xprofile_field_id, 'fieldOrder' => 1 ] ) )
 			->hasField( 'fieldOrder', 1 )
-			->hasField( 'fieldId', $this->xprofile_field_id );
+			->hasField( 'databaseId', $this->xprofile_field_id );
 	}
 
 	public function test_update_using_invalid_xprofile_field_id() {
@@ -99,7 +99,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 				{
 					clientMutationId
 					field {
-						fieldId
+						databaseId
                         name
 						fieldOrder
 					}

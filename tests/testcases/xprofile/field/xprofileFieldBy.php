@@ -34,7 +34,7 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 
 	public function test_xprofile_field_by_query() {
 		$this->assertQuerySuccessful( $this->get_xprofile_field() )
-			->hasField( 'fieldId', $this->xprofile_field_id )
+			->hasField( 'databaseId', $this->xprofile_field_id )
 			->hasField( 'groupId', $this->xprofile_group_id )
 			->hasField( 'parent', null )
 			->hasField( 'canDelete', true )
@@ -51,7 +51,7 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 		xprofile_set_field_data( $this->xprofile_field_id, $this->admin, 'foo' );
 
 		$this->assertQuerySuccessful( $this->get_xprofile_field() )
-			->hasField( 'fieldId', $this->xprofile_field_id )
+			->hasField( 'databaseId', $this->xprofile_field_id )
 			->hasField( 'groupId', $this->xprofile_group_id )
 			->hasField( 'parent', null )
 			->hasField( 'canDelete', true )
@@ -114,7 +114,7 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 		xprofile_set_field_data( $xprofile_field_id, $this->admin, [ 'Option 1', 'Option 3' ] );
 
 		$this->assertQuerySuccessful( $this->get_xprofile_field( $xprofile_field_id ) )
-			->hasField( 'fieldId', $xprofile_field_id )
+			->hasField( 'databaseId', $xprofile_field_id )
 			->hasField( 'groupId', $this->xprofile_group_id )
 			->hasField( 'value', [
 				'raw'          => 'a:2:{i:0;s:8:"Option 1";i:1;s:8:"Option 3";}',
@@ -127,19 +127,19 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 				'nodes' => [
 					[
 						'name'       => 'Option 1',
-						'fieldId'    => $option1,
+						'databaseId'    => $option1,
 						'groupId'    => $this->xprofile_group_id,
 						'isRequired' => false,
 					],
 					[
 						'name'       => 'Option 2',
-						'fieldId'    => $option2,
+						'databaseId'    => $option2,
 						'groupId'    => $this->xprofile_group_id,
 						'isRequired' => true,
 					],
 					[
 						'name'       => 'Option 3',
-						'fieldId'    => $option3,
+						'databaseId'    => $option3,
 						'groupId'    => $this->xprofile_group_id,
 						'isRequired' => false,
 					],
@@ -158,7 +158,7 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 		$query             = "
 			query {
 				xprofileFieldBy(fieldId: {$xprofile_field_id}) {
-					fieldId
+					databaseId
 					groupId
 					parent {
 						name
@@ -166,7 +166,7 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 					options {
 						nodes {
 							name
-							fieldId
+							databaseId
 							groupId
 							isRequired
 						}

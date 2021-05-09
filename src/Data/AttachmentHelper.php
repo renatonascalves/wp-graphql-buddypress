@@ -1,6 +1,6 @@
 <?php
 /**
- * AttachmentMutation Class.
+ * AttachmentHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -14,9 +14,9 @@ use BP_Attachment_Avatar;
 use BP_Attachment_Cover_Image;
 
 /**
- * AttachmentMutation Class.
+ * AttachmentHelper Class.
  */
-class AttachmentMutation {
+class AttachmentHelper {
 
 	/**
 	 * Check object ID.
@@ -32,7 +32,7 @@ class AttachmentMutation {
 			// Get the group id.
 			case 'group':
 			case 'groups':
-				$group = GroupMutation::get_group_from_input( $object_id );
+				$group = GroupHelper::get_group_from_input( $object_id );
 				return $group->id;
 
 			// Get the user id.
@@ -50,7 +50,7 @@ class AttachmentMutation {
 			// Get the blog id.
 			case 'blog':
 			case 'blogs':
-				$blog = BlogMutation::get_blog_from_input( $object_id );
+				$blog = BlogHelper::get_blog_from_input( $object_id );
 				return $blog->blog_id;
 
 			default:

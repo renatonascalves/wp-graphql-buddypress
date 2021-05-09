@@ -1,6 +1,6 @@
 <?php
 /**
- * XProfileGroupMutation Class.
+ * XProfileGroupHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -12,9 +12,9 @@ use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 
 /**
- * XProfileGroupMutation Class.
+ * XProfileGroupHelper Class.
  */
-class XProfileGroupMutation {
+class XProfileGroupHelper {
 
 	/**
 	 * Get XProfile group helper.

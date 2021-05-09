@@ -23,7 +23,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 
 		$this->assertQuerySuccessful( $response );
 
-		$group = groups_get_group( $response['data']['createGroup']['group']['groupId'] );
+		$group = groups_get_group( $response['data']['createGroup']['group']['databaseId'] );
 
 		$this->assertEquals(
 			[
@@ -32,7 +32,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						'clientMutationId' => $this->client_mutation_id,
 						'group' => [
 							'id'               => $this->toRelayId( 'group', $group->id ),
-							'groupId'          => $group->id,
+							'databaseId'       => $group->id,
 							'name'             => 'Group Test',
 							'slug'             => 'group-slug',
 							'description'      => bp_get_group_description( $group ),
@@ -168,7 +168,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 					clientMutationId
 					group {
 						id
-						groupId
+						databaseId
 						name
 						slug
 						description

@@ -15,24 +15,24 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	}
 
 	public function test_getting_friendship_with_initiator() {
-		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
 
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
-			->hasField( 'friendshipId', $friendship )
+			->hasField( 'databaseId', $friendship )
 			->hasField( 'isConfirmed', false )
 			->hasField( 'friend', [ 'userId' => $this->user ] )
 			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
 	}
 
 	public function test_getting_friendship_with_friendship_initiator() {
-		$friendship = $this->create_friendship_object( $this->random_user, $this->user );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
 
 		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
-			->hasField( 'friendshipId', $friendship )
+			->hasField( 'databaseId', $friendship )
 			->hasField( 'isConfirmed', false )
 			->hasField( 'friend', [ 'userId' => $this->user ] )
 			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
@@ -77,7 +77,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 		$query     = "{
 			friendshipBy(id: \"{$global_id}\") {
 				id
-				friendshipId
+				databaseId
 				isConfirmed
 				friend {
 					userId

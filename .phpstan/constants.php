@@ -12,7 +12,7 @@ define( 'WPGRAPHQL_PLUGIN_URL', true );
 define( 'WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR', true );
 
 if ( ! defined( 'BP_DIR' ) ) {
-	define( 'BP_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/BuddyPress' );
+	define( 'BP_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/buddypress' );
 }
 
 require_once BP_DIR . '/bp-loader.php';

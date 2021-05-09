@@ -1,6 +1,6 @@
 <?php
 /**
- * XProfileFieldMutation Class.
+ * XProfileFieldHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -13,9 +13,9 @@ use GraphQLRelay\Relay;
 use BP_XProfile_Field;
 
 /**
- * XProfileFieldMutation Class.
+ * XProfileFieldHelper Class.
  */
-class XProfileFieldMutation {
+class XProfileFieldHelper {
 
 	/**
 	 * Get XProfile field ID helper.

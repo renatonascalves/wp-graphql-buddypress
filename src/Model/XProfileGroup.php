@@ -16,7 +16,7 @@ use stdClass;
  * Class XProfile Group - Models the data for the XProfile Group object type.
  *
  * @property string $id ID.
- * @property int $groupId XProfile group ID.
+ * @property int $databaseId XProfile group ID.
  * @property string $name XProfile group name.
  * @property string $description XProfile group description.
  * @property int $groupOrder XProfile group order.
@@ -53,8 +53,8 @@ class XProfileGroup extends Model {
 						? Relay::toGlobalId( 'bp_xprofile_group', $this->data->id )
 						: null;
 				},
-				'groupId' => function() {
-					return $this->data->id ?? null;
+				'databaseId' => function() {
+					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'name' => function() {
 					return $this->data->name ?? null;

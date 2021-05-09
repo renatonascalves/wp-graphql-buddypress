@@ -2,15 +2,15 @@
 /**
  * FriendshipUpdate Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Friendship
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Friendship;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use BP_Friends_Friendship;
 
 /**
@@ -61,7 +61,7 @@ class FriendshipUpdate {
 				'type'        => 'Friendship',
 				'description' => __( 'The friendship that was updated/accepted.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -79,21 +79,21 @@ class FriendshipUpdate {
 	public static function mutate_and_get_payload() {
 		return function ( array $input ) {
 
-			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
-			$friend_id    = get_user_by( 'id', $input['friendId'] );
+			$initiator = get_user_by( 'id', $input['initiatorId'] );
+			$friend    = get_user_by( 'id', $input['friendId'] );
 
 			// Check if users are valid.
-			if ( ! $initiator_id || ! $friend_id ) {
+			if ( ! $initiator || ! $friend ) {
 				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Stop now if an user isn't allowed to see this friendship.
-			if ( false === FriendshipMutation::can_update_or_delete_friendship( $initiator_id->ID, $friend_id->ID ) ) {
+			// Stop now if a user isn't allowed to see this friendship.
+			if ( false === FriendshipHelper::can_update_or_delete_friendship( $initiator->ID, $friend->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
-			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator->ID, $friend->ID );
 
 			// Confirm status.
 			if ( false === in_array( $friendship_status, [ 'pending', 'awaiting_response' ], true ) ) {
@@ -102,11 +102,11 @@ class FriendshipUpdate {
 
 			// Get friendship.
 			$friendship = new BP_Friends_Friendship(
-				BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+				BP_Friends_Friendship::get_friendship_id( $initiator->ID, $friend->ID )
 			);
 
 			// Confirm if friendship exists.
-			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
+			if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
 				throw new UserError( __( 'No Friendship requested was found.', 'wp-graphql-buddypress' ) );
 			}
 

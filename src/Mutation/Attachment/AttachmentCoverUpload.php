@@ -2,14 +2,14 @@
 /**
  * AttachmentCoverUpload Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Attachment
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Attachment;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\AttachmentHelper;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
@@ -79,7 +79,7 @@ class AttachmentCoverUpload {
 		return function ( array $input ) {
 
 			$object    = $input['object'];
-			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
+			$object_id = AttachmentHelper::check_object_id( $object, $input['objectId'] );
 
 			// Check if cover upload is enabled for members.
 			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {
@@ -97,12 +97,12 @@ class AttachmentCoverUpload {
 			}
 
 			// Check if user can to upload.
-			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object, true ) ) {
+			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object, true ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Try to upload the cover image file.
-			AttachmentMutation::upload_cover_from_file( $input, $object, $object_id );
+			AttachmentHelper::upload_cover_from_file( $input, $object, $object_id );
 
 			return [
 				'id'     => $object_id,

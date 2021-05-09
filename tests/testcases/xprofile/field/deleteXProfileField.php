@@ -36,7 +36,7 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_xprofile_field() )
-			->hasField( 'fieldId', $this->xprofile_field_id )
+			->hasField( 'databaseId', $this->xprofile_field_id )
 			->hasField( 'deleted', true );
 	}
 
@@ -81,7 +81,7 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 					clientMutationId
 					deleted
 					field {
-						fieldId
+						databaseId
 					}
 				}
 			}

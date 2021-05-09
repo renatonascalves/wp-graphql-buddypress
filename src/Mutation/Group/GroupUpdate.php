@@ -2,16 +2,16 @@
 /**
  * GroupUpdate Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 
 /**
  * GroupUpdate Class.
@@ -111,7 +111,7 @@ class GroupUpdate {
 				'type'        => 'Group',
 				'description' => __( 'The group that was updated.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -127,19 +127,19 @@ class GroupUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the group.
-			$group = GroupMutation::get_group_from_input( $input );
+			$group = GroupHelper::get_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to update a group.
-			if ( false === GroupMutation::can_update_or_delete_group( $group ) ) {
+			if ( false === GroupHelper::can_update_or_delete_group( $group ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update group.
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, 'update', $group )
+				GroupHelper::prepare_group_args( $input, 'update', $group )
 			);
 
 			// Throw an exception if the group failed to be updated.

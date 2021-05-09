@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
@@ -33,15 +33,8 @@ class XProfileFieldType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress XProfile field.', 'wp-graphql-buddypress' ),
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'id'               => [
-						'type'        => [ 'non_null' => 'ID' ],
-						'description' => __( 'The globally unique identifier for the XProfile field.', 'wp-graphql-buddypress' ),
-					],
-					'fieldId'          => [
-						'type'        => 'Int',
-						'description' => __( 'The id field that matches the BP_XProfile_Field->id field.', 'wp-graphql-buddypress' ),
-					],
 					'groupId'          => [
 						'type'        => 'Int',
 						'description' => __( 'The id field that matches the BP_XProfile_Field->group_id field.', 'wp-graphql-buddypress' ),
@@ -50,9 +43,7 @@ class XProfileFieldType {
 						'type'        => self::$type_name,
 						'description' => __( 'Parent field of the current field. This field is equivalent to the BP_XProfile_Field object matching the BP_XProfile_Field->parent_id ID.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( XProfileField $field, array $args, AppContext $context ) {
-							return ! empty( $field->parent )
-								? Factory::resolve_xprofile_field_object( $field->parent, $context )
-								: null;
+							return Factory::resolve_xprofile_field_object( $field->parent, $context );
 						},
 					],
 					'name'             => [
@@ -162,7 +153,7 @@ class XProfileFieldType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $args );
+					$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $args );
 
 					return Factory::resolve_xprofile_field_object( $xprofile_field_object->id, $context );
 				},

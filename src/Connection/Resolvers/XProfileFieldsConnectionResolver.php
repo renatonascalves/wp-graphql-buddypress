@@ -12,7 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 use BP_XProfile_Field;
 
@@ -67,7 +67,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 
 		// Setting profile group ID.
 		if ( true === is_object( $this->source ) && $this->source instanceof XProfileGroup ) {
-			$query_args['profile_group_id'] = $this->source->groupId;
+			$query_args['profile_group_id'] = $this->source->databaseId;
 		}
 
 		/**
@@ -131,7 +131,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		$object = XProfileFieldMutation::get_xprofile_field_from_input( absint( $offset ) );
+		$object = XProfileFieldHelper::get_xprofile_field_from_input( absint( $offset ) );
 
 		return ( $object instanceof BP_XProfile_Field );
 	}

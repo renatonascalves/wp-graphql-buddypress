@@ -67,7 +67,7 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 					$query_args['user_id'] = $this->source->userId;
 					break;
 				case ( $this->source instanceof XProfileGroup ):
-					$query_args['profile_group_id'] = $this->source->groupId;
+					$query_args['profile_group_id'] = $this->source->databaseId;
 					break;
 				default:
 					break;

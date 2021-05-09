@@ -1,6 +1,6 @@
 <?php
 /**
- * FriendshipMutation Class.
+ * FriendshipHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -11,9 +11,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Data;
 use BP_Friends_Friendship;
 
 /**
- * FriendshipMutation Class.
+ * FriendshipHelper Class.
  */
-class FriendshipMutation {
+class FriendshipHelper {
 
 	/**
 	 * Check if friendship exists.

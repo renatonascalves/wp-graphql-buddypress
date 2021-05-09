@@ -79,7 +79,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 		// Setting parent group.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
-			$query_args['parent_id'] = $this->source->groupId;
+			$query_args['parent_id'] = $this->source->databaseId;
 		}
 
 		/**

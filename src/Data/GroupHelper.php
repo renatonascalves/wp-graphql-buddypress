@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupMutation Class.
+ * GroupHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
  * @since 0.0.1-alpha
@@ -13,9 +13,9 @@ use GraphQLRelay\Relay;
 use BP_Groups_Group;
 
 /**
- * GroupMutation Class.
+ * GroupHelper Class.
  */
-class GroupMutation {
+class GroupHelper {
 
 	/**
 	 * Get group ID helper.

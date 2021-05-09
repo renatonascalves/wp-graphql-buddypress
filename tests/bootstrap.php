@@ -46,7 +46,7 @@ tests_add_filter(
 );
 
 /**
- * Remove Extensions.
+ * Remove Extensions from the response.
  */
 tests_add_filter(
 	'graphql_request_results',

@@ -19,9 +19,9 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
 
-		$this->create_friendship_object( $u1, $this->user );
-		$this->create_friendship_object( $u2, $this->user );
-		$this->create_friendship_object( $u3, $this->user );
+		$this->create_friendship_object( $u1, absint( $this->user ) );
+		$this->create_friendship_object( $u2, absint( $this->user ) );
+		$this->create_friendship_object( $u3, absint( $this->user ) );
 
 		$global_id = $this->toRelayId( 'user', $this->user );
 

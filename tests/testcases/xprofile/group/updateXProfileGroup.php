@@ -67,12 +67,12 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$this->assertQuerySuccessful( $this->update_xprofile_group( [ 'groupId' => $xprofile_group_id, 'groupOrder' => 1 ] ) )
 			->hasField( 'groupOrder', 1 )
-			->hasField( 'groupId', $xprofile_group_id );
+			->hasField( 'databaseId', $xprofile_group_id );
 
 		// Update order.
 		$this->assertQuerySuccessful( $this->update_xprofile_group( [ 'groupOrder' => 1 ] ) )
 			->hasField( 'groupOrder', 1 )
-			->hasField( 'groupId', $this->xprofile_group_id );
+			->hasField( 'databaseId', $this->xprofile_group_id );
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 					group {
 						name
 						groupOrder
-						groupId
+						databaseId
 						canDelete
 					}
 				}

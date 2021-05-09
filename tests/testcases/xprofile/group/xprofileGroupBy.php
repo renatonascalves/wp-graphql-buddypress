@@ -63,7 +63,7 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		);
 
 		$this->assertQuerySuccessful( $this->get_xprofile_group( $u1 ) )
-			->hasField( 'groupId', $u1 )
+			->hasField( 'databaseId', $u1 )
 			->hasField( 'groupOrder', 0 )
 			->hasField( 'canDelete', true )
 			->hasField( 'name', $this->name )
@@ -71,14 +71,14 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'fields', [
 				'nodes' => [
 					0 => [
-						'name'    => $this->field_name,
-						'fieldId' => $field_id_1,
-						'groupId' => $u1,
+						'name'       => $this->field_name,
+						'databaseId' => $field_id_1,
+						'groupId'    => $u1,
 					],
 					1 => [
-						'name'    => 'Another field.',
-						'fieldId' => $field_id_2,
-						'groupId' => $u1,
+						'name'       => 'Another field.',
+						'databaseId' => $field_id_2,
+						'groupId'    => $u1,
 					]
 				]
 			] );
@@ -101,7 +101,7 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			query {
 				xprofileGroupBy(id: \"{$global_id}\") {
 					id,
-					groupId
+					databaseId
 					groupOrder
 					canDelete
 					name
@@ -109,7 +109,7 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					fields {
 						nodes {
 							name
-							fieldId
+							databaseId
 							groupId
 						}
 					}
