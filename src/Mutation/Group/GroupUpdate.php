@@ -2,11 +2,11 @@
 /**
  * GroupUpdate Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
@@ -111,7 +111,7 @@ class GroupUpdate {
 				'type'        => 'Group',
 				'description' => __( 'The group that was updated.', 'wp-graphql-buddypress' ),
 				'resolve'     => function( array $payload, array $args, AppContext $context ) {
-					if ( ! isset( $payload['id'] ) || ! absint( $payload['id'] ) ) {
+					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
 
@@ -127,7 +127,7 @@ class GroupUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the group.
 			$group = GroupMutation::get_group_from_input( $input );

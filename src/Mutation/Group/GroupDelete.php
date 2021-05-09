@@ -2,11 +2,11 @@
 /**
  * GroupDelete Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
@@ -83,7 +83,7 @@ class GroupDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function ( $input ) {
+		return function ( array $input ) {
 
 			// Get the group object.
 			$group = GroupMutation::get_group_from_input( $input );

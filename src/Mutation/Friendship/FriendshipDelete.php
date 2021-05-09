@@ -2,11 +2,11 @@
 /**
  * FriendshipDelete Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Friendship
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Friendship;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
@@ -86,21 +86,21 @@ class FriendshipDelete {
 	public static function mutate_and_get_payload() {
 		return function ( array $input ) {
 
-			$initiator_id = get_user_by( 'id', $input['initiatorId'] );
-			$friend_id    = get_user_by( 'id', $input['friendId'] );
+			$initiator = get_user_by( 'id', $input['initiatorId'] );
+			$friend    = get_user_by( 'id', $input['friendId'] );
 
 			// Check if users are valid.
-			if ( ! $initiator_id || ! $friend_id ) {
+			if ( ! $initiator || ! $friend ) {
 				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Stop now if a user isn't allowed to see this friendship.
-			if ( false === FriendshipMutation::can_update_or_delete_friendship( $initiator_id->ID, $friend_id->ID ) ) {
+			if ( false === FriendshipMutation::can_update_or_delete_friendship( $initiator->ID, $friend->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
-			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator_id->ID, $friend_id->ID );
+			$friendship_status = BP_Friends_Friendship::check_is_friend( $initiator->ID, $friend->ID );
 
 			// Confirm status.
 			if ( 'not_friends' === $friendship_status ) {
@@ -109,7 +109,7 @@ class FriendshipDelete {
 
 			// Get friendship.
 			$friendship = new BP_Friends_Friendship(
-				BP_Friends_Friendship::get_friendship_id( $initiator_id->ID, $friend_id->ID )
+				BP_Friends_Friendship::get_friendship_id( $initiator->ID, $friend->ID )
 			);
 
 			// Get and save the friendship object before it is deleted.

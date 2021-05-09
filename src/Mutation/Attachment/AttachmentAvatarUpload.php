@@ -2,11 +2,11 @@
 /**
  * AttachmentAvatarUpload Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Attachment
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Attachment;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;

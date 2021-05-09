@@ -2,11 +2,11 @@
 /**
  * XProfileFieldDelete Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\XProfile
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;

@@ -2,11 +2,11 @@
 /**
  * GroupCreate Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
