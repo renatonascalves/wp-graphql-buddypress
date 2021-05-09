@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 use GraphQL\Deferred;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
@@ -248,7 +248,7 @@ class GroupType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$group = GroupMutation::get_group_from_input( $args );
+					$group = GroupHelper::get_group_from_input( $args );
 
 					return Factory::resolve_group_object( $group->id, $context );
 				},

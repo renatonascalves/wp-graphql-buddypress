@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
@@ -153,7 +153,7 @@ class XProfileFieldType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $args );
+					$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $args );
 
 					return Factory::resolve_xprofile_field_object( $xprofile_field_object->id, $context );
 				},

@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 
 /**
  * XProfileFieldCreate Class.
@@ -134,13 +134,13 @@ class XProfileFieldCreate {
 		return function( array $input ) {
 
 			// Check if user can create a XProfile field.
-			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
+			if ( false === XProfileFieldHelper::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create XProfile field and return its ID.
 			$xprofile_field_id = xprofile_insert_field(
-				XProfileFieldMutation::prepare_xprofile_field_args( $input, 'create' )
+				XProfileFieldHelper::prepare_xprofile_field_args( $input, 'create' )
 			);
 
 			// Throw an exception if the XProfile field failed to be created.
@@ -149,7 +149,7 @@ class XProfileFieldCreate {
 			}
 
 			// Save additional information.
-			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
+			XProfileFieldHelper::set_additional_fields( $xprofile_field_id, $input );
 
 			// Return the XProfile field ID.
 			return [

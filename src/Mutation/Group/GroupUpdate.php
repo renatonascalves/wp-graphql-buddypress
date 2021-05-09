@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 
 /**
  * GroupUpdate Class.
@@ -130,16 +130,16 @@ class GroupUpdate {
 		return function ( array $input ) {
 
 			// Get the group.
-			$group = GroupMutation::get_group_from_input( $input );
+			$group = GroupHelper::get_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to update a group.
-			if ( false === GroupMutation::can_update_or_delete_group( $group ) ) {
+			if ( false === GroupHelper::can_update_or_delete_group( $group ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update group.
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, 'update', $group )
+				GroupHelper::prepare_group_args( $input, 'update', $group )
 			);
 
 			// Throw an exception if the group failed to be updated.

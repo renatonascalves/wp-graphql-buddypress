@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use stdClass;
 /**
@@ -57,7 +57,7 @@ class BlogObjectLoader extends AbstractDataLoader {
 
 		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-			$loaded_blogs[ $key ] = BlogMutation::get_blog_from_input( absint( $key ) );
+			$loaded_blogs[ $key ] = BlogHelper::get_blog_from_input( absint( $key ) );
 		}
 
 		return $loaded_blogs;

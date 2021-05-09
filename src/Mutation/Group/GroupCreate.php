@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\GroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 
 /**
  * GroupCreate Class.
@@ -121,7 +121,7 @@ class GroupCreate {
 
 			// Create group and return its newly created ID.
 			$group_id = groups_create_group(
-				GroupMutation::prepare_group_args( $input, 'create' )
+				GroupHelper::prepare_group_args( $input, 'create' )
 			);
 
 			// Throw an exception if the group failed to be created.

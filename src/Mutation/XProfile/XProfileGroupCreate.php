@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 
 /**
  * XProfileGroupCreate Class.
@@ -84,13 +84,13 @@ class XProfileGroupCreate {
 		return function( array $input ) {
 
 			// Check if user can create a XProfile group.
-			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
+			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create XProfile group.
 			$xprofile_group_id = xprofile_insert_field_group(
-				XProfileGroupMutation::prepare_xprofile_group_args( $input, 'create' )
+				XProfileGroupHelper::prepare_xprofile_group_args( $input, 'create' )
 			);
 
 			// Throw an exception if the XProfile group failed to be created.

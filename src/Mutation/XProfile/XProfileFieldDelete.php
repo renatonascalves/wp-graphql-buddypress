@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
 
 /**
@@ -86,10 +86,10 @@ class XProfileFieldDelete {
 		return function ( array $input ) {
 
 			// Get the XProfile field object.
-			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
+			$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $input );
 
 			// Stop now if a user isn't allowed to delete a XProfile field.
-			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
+			if ( false === XProfileFieldHelper::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use BP_Friends_Friendship;
 
@@ -28,7 +28,7 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 	protected function get_model( $entry, $key ): ?Friendship {
 
 		// Check if friendship exists.
-		if ( false === FriendshipMutation::friendship_exists( $entry ) ) {
+		if ( false === FriendshipHelper::friendship_exists( $entry ) ) {
 			return null;
 		}
 

@@ -12,7 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use WPGraphQL\Model\User;
 use BP_Friends_Friendship;
 
@@ -132,7 +132,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return FriendshipMutation::friendship_exists(
+		return FriendshipHelper::friendship_exists(
 			current( BP_Friends_Friendship::get_friendships_by_id( $offset ) )
 		);
 	}

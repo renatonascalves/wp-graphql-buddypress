@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 
 /**
@@ -103,7 +103,7 @@ class XProfileGroupType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $args );
+					$xprofile_group_object = XProfileGroupHelper::get_xprofile_group_from_input( $args );
 
 					return Factory::resolve_xprofile_group_object( $xprofile_group_object->id, $context );
 				},

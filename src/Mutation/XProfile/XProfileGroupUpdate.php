@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 
 /**
  * XProfileGroupUpdate Class.
@@ -96,16 +96,16 @@ class XProfileGroupUpdate {
 		return function ( array $input ) {
 
 			// Get the XProfile group.
-			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
+			$xprofile_group_object = XProfileGroupHelper::get_xprofile_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to update a XProfile group.
-			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
+			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update XProfile group and return the ID.
 			$xprofile_group = xprofile_insert_field_group(
-				XProfileGroupMutation::prepare_xprofile_group_args( $input, 'update', $xprofile_group_object )
+				XProfileGroupHelper::prepare_xprofile_group_args( $input, 'update', $xprofile_group_object )
 			);
 
 			// Throw an exception if the XProfile group failed to be updated.

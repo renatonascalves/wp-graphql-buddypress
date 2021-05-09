@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 
 /**
@@ -82,10 +82,10 @@ class XProfileGroupDelete {
 		return function ( array $input ) {
 
 			// Get the XProfile group object.
-			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( $input );
+			$xprofile_group_object = XProfileGroupHelper::get_xprofile_group_from_input( $input );
 
 			// Stop now if a user isn't allowed to delete a XProfile group.
-			if ( false === XProfileGroupMutation::can_manage_xprofile_group() ) {
+			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

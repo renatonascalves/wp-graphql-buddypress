@@ -96,7 +96,7 @@ class Factory {
 		$user_id = $context->config['userId'] ?? null;
 
 		// Get the XProfile field object.
-		$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input(
+		$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input(
 			absint( $id ),
 			absint( $user_id )
 		);
@@ -229,7 +229,7 @@ class Factory {
 		$friendship = new BP_Friends_Friendship( $id ); // This is cached.
 
 		// Check if friendship exists.
-		if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
+		if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
 			throw new UserError(
 				sprintf(
 					// translators: %d is the friendship ID.

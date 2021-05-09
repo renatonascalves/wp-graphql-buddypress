@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Attachment;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\AttachmentMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\AttachmentHelper;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 
@@ -83,10 +83,10 @@ class AttachmentAvatarDelete {
 		return function ( array $input ) {
 
 			$object    = $input['object'];
-			$object_id = AttachmentMutation::check_object_id( $object, $input['objectId'] );
+			$object_id = AttachmentHelper::check_object_id( $object, $input['objectId'] );
 
 			// Stop now if a user isn't allowed to delete the attachment.
-			if ( false === AttachmentMutation::can_update_or_delete_attachment( $object_id, $object ) ) {
+			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

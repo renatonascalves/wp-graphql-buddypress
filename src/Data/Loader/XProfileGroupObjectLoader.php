@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 use BP_XProfile_Group;
 
@@ -54,7 +54,7 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 
 		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-			$loaded_xprofile_groups[ $key ] = XProfileGroupMutation::get_xprofile_group_from_input( absint( $key ) );
+			$loaded_xprofile_groups[ $key ] = XProfileGroupHelper::get_xprofile_group_from_input( absint( $key ) );
 		}
 
 		return $loaded_xprofile_groups;

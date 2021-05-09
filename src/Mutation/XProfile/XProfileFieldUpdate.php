@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\XProfile;
 use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 
 /**
  * XProfileFieldUpdate Class.
@@ -142,10 +142,10 @@ class XProfileFieldUpdate {
 		return function( array $input ) {
 
 			// Get the XProfile field object.
-			$xprofile_field_object = XProfileFieldMutation::get_xprofile_field_from_input( $input );
+			$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $input );
 
 			// Check if user can update a XProfile field.
-			if ( false === XProfileFieldMutation::can_manage_xprofile_field() ) {
+			if ( false === XProfileFieldHelper::can_manage_xprofile_field() ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -156,7 +156,7 @@ class XProfileFieldUpdate {
 
 			// Update XProfile field and return the ID.
 			$xprofile_field_id = xprofile_insert_field(
-				XProfileFieldMutation::prepare_xprofile_field_args( $input, 'update', $xprofile_field_object )
+				XProfileFieldHelper::prepare_xprofile_field_args( $input, 'update', $xprofile_field_object )
 			);
 
 			// Throw an exception if the XProfile field failed to be updated.
@@ -165,7 +165,7 @@ class XProfileFieldUpdate {
 			}
 
 			// Save additional information.
-			XProfileFieldMutation::set_additional_fields( $xprofile_field_id, $input );
+			XProfileFieldHelper::set_additional_fields( $xprofile_field_id, $input );
 
 			// Return updated XProfile field ID.
 			return [

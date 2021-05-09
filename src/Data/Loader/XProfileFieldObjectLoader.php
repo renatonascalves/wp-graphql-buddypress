@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use BP_XProfile_Field;
 
 /**
@@ -54,7 +54,7 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 
 		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-			$loaded_xprofile_fields[ $key ] = XProfileFieldMutation::get_xprofile_field_from_input( absint( $key ), $user_id );
+			$loaded_xprofile_fields[ $key ] = XProfileFieldHelper::get_xprofile_field_from_input( absint( $key ), $user_id );
 		}
 
 		return $loaded_xprofile_fields;

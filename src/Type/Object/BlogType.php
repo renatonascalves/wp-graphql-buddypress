@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Data\BlogMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
@@ -140,7 +140,7 @@ class BlogType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$blog = BlogMutation::get_blog_from_input( $args );
+					$blog = BlogHelper::get_blog_from_input( $args );
 					return Factory::resolve_blog_object( $blog->blog_id, $context );
 				},
 			]

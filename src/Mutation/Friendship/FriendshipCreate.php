@@ -10,7 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Mutation\Friendship;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use BP_Friends_Friendship;
 
 /**
@@ -92,7 +92,7 @@ class FriendshipCreate {
 			}
 
 			// Check if user can create friendship.
-			if ( FriendshipMutation::can_create_friendship( $initiator->ID, $friend->ID ) ) {
+			if ( FriendshipHelper::can_create_friendship( $initiator->ID, $friend->ID ) ) {
 				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
@@ -123,7 +123,7 @@ class FriendshipCreate {
 			);
 
 			// Confirm if friendship exists after creation.
-			if ( false === FriendshipMutation::friendship_exists( $friendship ) ) {
+			if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
 				throw new UserError( __( 'Friendship was not requested.', 'wp-graphql-buddypress' ) );
 			}
 
