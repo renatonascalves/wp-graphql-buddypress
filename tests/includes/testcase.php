@@ -186,23 +186,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Check if field exists in the response.
-	 *
-	 * @param string $field Field.
-	 * @param mixed  $field_content Field Content.
-	 * @return self
-	 */
-	public function hasNodes( string $field, $field_content ): self {
-		$object = $this->get_field_value_from_response( $field );
-
-		var_dump( $object[ $field ] );
-
-		$this->assertContains( $field_content, $object[ $field ] );
-
-		return $this;
-	}
-
-	/**
 	 * Check if field does not exist in a response.
 	 *
 	 * @param string $field Response Field.
