@@ -8,7 +8,6 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
-use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\FriendshipMutation;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;

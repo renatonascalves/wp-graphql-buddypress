@@ -99,10 +99,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return wp_list_pluck(
-			array_values( $this->query->results ),
-			'ID'
-		);
+		return wp_list_pluck( array_values( $this->query->results ), 'ID' );
 	}
 
 	/**
