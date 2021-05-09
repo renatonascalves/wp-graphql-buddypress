@@ -19,6 +19,22 @@ use BP_Groups_Group;
 class GroupObjectLoader extends AbstractDataLoader {
 
 	/**
+	 * Get model.
+	 *
+	 * @param mixed $entry The object.
+	 * @param mixed $key   The Key to identify the object by.
+	 * @return null|Group
+	 */
+	protected function get_model( $entry, $key ): ?Group {
+
+		if ( empty( $entry ) || ! $entry instanceof BP_Groups_Group ) {
+			return null;
+		}
+
+		return new Group( $entry );
+	}
+
+	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
@@ -43,26 +59,9 @@ class GroupObjectLoader extends AbstractDataLoader {
 
 		$loaded_groups = [];
 
-		/**
-		 * Loop over the keys and return an array of loaded_groups, where the key is the ID and the value
-		 * is the group object, passed through the Model layer.
-		 */
+		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-
-			// Get the group object from cache.
-			$group_object = groups_get_group( absint( $key ) );
-
-			if ( empty( $group_object ) || ! $group_object instanceof BP_Groups_Group ) {
-				throw new UserError(
-					sprintf(
-						// translators: %d is the Group ID.
-						__( 'No group was found with ID: %d', 'wp-graphql-buddypress' ),
-						absint( $key )
-					)
-				);
-			}
-
-			$loaded_groups[ $key ] = new Group( $group_object );
+			$loaded_groups[ $key ] = groups_get_group( absint( $key ) );
 		}
 
 		return $loaded_groups;

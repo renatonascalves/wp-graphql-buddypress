@@ -225,8 +225,8 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_group_members_aphabetically() {
 		$this->bp->set_current_user( $this->admin );
 
-		$u1 = $this->bp_factory->user->create( [ 'name' => 'Alfred' ]);
-		$u2 = $this->bp_factory->user->create( [ 'name' => 'Jorge' ]);
+		$u1 = $this->bp_factory->user->create( [ 'name' => 'Jorge' ]);
+		$u2 = $this->bp_factory->user->create( [ 'name' => 'Alfred' ]);
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 
@@ -281,6 +281,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
+
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 

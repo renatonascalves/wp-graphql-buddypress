@@ -19,6 +19,22 @@ use BP_XProfile_Group;
 class XProfileGroupObjectLoader extends AbstractDataLoader {
 
 	/**
+	 * Get model.
+	 *
+	 * @param mixed $entry The object.
+	 * @param mixed $key   The Key to identify the object by.
+	 * @return null|XProfileGroup
+	 */
+	protected function get_model( $entry, $key ): ?XProfileGroup {
+
+		if ( empty( $entry ) || ! is_object( $entry ) ) {
+			return null;
+		}
+
+		return new XProfileGroup( $entry );
+	}
+
+	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
@@ -36,17 +52,9 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 
 		$loaded_xprofile_groups = [];
 
-		/**
-		 * Loop over the keys and return an array of loaded_xprofile_groups, where the key is the ID and the value
-		 * is the XProfile group object, passed through the Model layer.
-		 */
+		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-
-			// Get the XPofile group object.
-			$xprofile_group_object = XProfileGroupMutation::get_xprofile_group_from_input( absint( $key ) );
-
-			// Pass object to our model.
-			$loaded_xprofile_groups[ $key ] = new XProfileGroup( $xprofile_group_object );
+			$loaded_xprofile_groups[ $key ] = XProfileGroupMutation::get_xprofile_group_from_input( absint( $key ) );
 		}
 
 		return $loaded_xprofile_groups;
