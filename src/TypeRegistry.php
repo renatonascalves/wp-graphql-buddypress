@@ -117,7 +117,9 @@ class TypeRegistry {
 							continue;
 						}
 
-						return $context->get_loader( 'bp_blog' )->load( $blog->blog_id );
+						if ( ! empty( $blog->blog_id ) ) {
+							return $context->get_loader( 'bp_blog' )->load( $blog->blog_id );
+						}
 					}
 				}
 

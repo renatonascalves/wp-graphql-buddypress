@@ -43,7 +43,6 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'full'  => $this->get_avatar_image( 'full', 'blog', $blog_id ),
 			] )
 			->hasField( 'attachmentCover', null )
-			->hasField( 'latestPost', null )
 			->hasField( 'databaseId', $blog_id );
 
 		// Confirm that the default blog avatar IS present.
@@ -106,9 +105,6 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					}
 					attachmentCover {
 						full
-					}
-					latestPost {
-						databaseId
 					}
 				}
 			}
