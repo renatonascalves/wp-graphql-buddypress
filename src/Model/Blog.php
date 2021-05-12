@@ -21,10 +21,11 @@ use stdClass;
  * @property int    $admin ID of the blog admin.
  * @property string $name Blog name.
  * @property string $description Blog description.
- * @property string $permalink Blog permalink.
+ * @property string $uri Blog permalink.
  * @property string $path Blog path.
  * @property string $domain Blog domain.
  * @property string $lastActivity Blog's last activity.
+ * @property int    $postId Latest post ID from Blog.
  */
 class Blog extends Model {
 
@@ -60,7 +61,7 @@ class Blog extends Model {
 					return ! empty( $this->data->blog_id ) ? absint( $this->data->blog_id ) : null;
 				},
 				'admin' => function() {
-					return $this->data->admin_user_id ?? null;
+					return ! empty( $this->data->admin_user_id ) ? absint( $this->data->admin_user_id ) : null;
 				},
 				'name' => function() {
 					return $this->data->name ?? null;
@@ -68,7 +69,7 @@ class Blog extends Model {
 				'description' => function() {
 					return $this->data->description ?? null;
 				},
-				'permalink' => function() {
+				'uri' => function() {
 					return $this->get_blog_domain( $this->data );
 				},
 				'path' => function() {
@@ -79,6 +80,9 @@ class Blog extends Model {
 				},
 				'lastActivity' => function() {
 					return Utils::prepare_date_response( $this->data->last_activity );
+				},
+				'postId' => function() {
+					return ! empty( $this->data->latest_post->ID ) ? absint( $this->data->latest_post->ID ) : null;
 				},
 			];
 		}

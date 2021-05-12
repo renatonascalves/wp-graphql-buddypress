@@ -34,7 +34,7 @@ class GroupType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress group.', 'wp-graphql-buddypress' ),
-				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
 				'fields'            => [
 					'parent'           => [
 						'type'        => self::$type_name,
@@ -157,10 +157,6 @@ class GroupType {
 							return bp_get_group_description( $group );
 						},
 					],
-					'link'             => [
-						'type'        => 'String',
-						'description' => __( 'The link of the group.', 'wp-graphql-buddypress' ),
-					],
 					'hasForum'         => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether forums are enabled for the group.', 'wp-graphql-buddypress' ),
@@ -202,6 +198,12 @@ class GroupType {
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Cover of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
+
+							// Bail early, if disabled.
+							if ( false === bp_is_active( 'groups', 'cover_image' ) ) {
+								return null;
+							}
+
 							return Factory::resolve_attachment_cover( $group->databaseId ?? 0, 'groups' );
 						},
 					],

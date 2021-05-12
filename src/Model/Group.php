@@ -8,8 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;
 
-use WPGraphQL\Utils\Utils;
 use GraphQLRelay\Relay;
+use WPGraphQL\Utils\Utils;
 use WPGraphQL\Model\Model;
 use BP_Groups_Group;
 
@@ -118,7 +118,7 @@ class Group extends Model {
 				'description' => function() {
 					return $this->data->description ?? null;
 				},
-				'link' => function() {
+				'uri' => function() {
 					return bp_get_group_permalink( $this->data ) ?? null;
 				},
 				'hasForum' => function() {

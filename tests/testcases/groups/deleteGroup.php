@@ -34,7 +34,7 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		$this->assertQuerySuccessful( $this->delete_group() )
 			->hasField( 'deleted', true )
 			->hasField( 'name', 'Deleted Group' )
-			->notHasField( 'link' );
+			->notHasField( 'uri' );
 	}
 
 	public function test_delete_group_invalid_group_id() {
