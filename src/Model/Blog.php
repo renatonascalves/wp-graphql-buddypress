@@ -21,10 +21,11 @@ use stdClass;
  * @property int    $admin ID of the blog admin.
  * @property string $name Blog name.
  * @property string $description Blog description.
- * @property string $permalink Blog permalink.
+ * @property string $uri Blog permalink.
  * @property string $path Blog path.
  * @property string $domain Blog domain.
  * @property string $lastActivity Blog's last activity.
+ * @property int    $latestPostId Latest post ID from Blog.
  */
 class Blog extends Model {
 
@@ -57,7 +58,7 @@ class Blog extends Model {
 						: null;
 				},
 				'databaseId' => function() {
-					return ! empty( $this->data->blog_id ) ? absint( $this->data->blog_id ) : null;
+					return $this->data->blog_id ?? null;
 				},
 				'admin' => function() {
 					return $this->data->admin_user_id ?? null;
@@ -68,8 +69,8 @@ class Blog extends Model {
 				'description' => function() {
 					return $this->data->description ?? null;
 				},
-				'permalink' => function() {
-					return $this->get_blog_domain( $this->data );
+				'uri' => function() {
+					return $this->get_blog_uri( $this->data );
 				},
 				'path' => function() {
 					return $this->data->path ?? null;
@@ -80,17 +81,21 @@ class Blog extends Model {
 				'lastActivity' => function() {
 					return Utils::prepare_date_response( $this->data->last_activity );
 				},
+				// @todo Pending implementation.
+				'latestPostId' => function() {
+					return $this->data->latest_post->ID ?? null;
+				},
 			];
 		}
 	}
 
 	/**
-	 * Get blog permalink.
+	 * Get blog uri/permalink.
 	 *
 	 * @param stdClass $blog Blog object.
 	 * @return string|null
 	 */
-	protected function get_blog_domain( stdClass $blog ): ?string {
+	protected function get_blog_uri( stdClass $blog ): ?string {
 
 		// Bail early.
 		if ( empty( $blog->domain ) && empty( $blog->path ) ) {

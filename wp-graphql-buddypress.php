@@ -267,24 +267,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_filters();
 
 			/**
-			 * Change the visibility of the user to `restricted`.
-			 *
-			 * BuddyPress users are "open" by default.
-			 */
-			add_filter(
-				'graphql_object_visibility',
-				function ( $visibility, $model_name ) {
-					if ( 'UserObject' === $model_name && 'private' === $visibility ) {
-						return 'restricted';
-					}
-
-					return $visibility;
-				},
-				10,
-				2
-			);
-
-			/**
 			 * Allow regular BuddyPress members to delete their own account, if allowed.
 			 *
 			 * Multisite uses this hook.

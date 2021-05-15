@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\Extensions\BuddyPress;
 
+use WP_User;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
@@ -20,6 +21,8 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -70,7 +73,102 @@ class TypeRegistry {
 	 * Registers filters related to the type registry.
 	 */
 	public static function add_filters() {
+
+		// Register custom autoloaders.
 		add_filter( 'graphql_data_loaders', [ __CLASS__, 'graphql_register_autoloaders' ], 10, 2 );
+
+		// Add our custom types to the list of supported node types.
+		add_filter(
+			'graphql_resolve_uniform_resource_identifiable_node_type',
+			function ( $type, $node, $type_registry ) {
+
+				if ( bp_is_active( 'groups' ) && $node instanceof Group ) {
+					return $type_registry->get_type( 'Group' );
+				}
+
+				if ( bp_is_active( 'blogs' ) && $node instanceof Blog ) {
+					return $type_registry->get_type( 'Blog' );
+				}
+
+				return $type;
+			},
+			10,
+			3
+		);
+
+		// Resolve URI.
+		add_filter(
+			'graphql_pre_resolve_uri',
+			function ( $node, $uri, $context ) {
+
+				// Parse URI.
+				$parsed_url = wp_parse_url( $uri );
+
+				if ( bp_is_active( 'blogs' ) && '/' === $parsed_url['path'] ) {
+					$blogs = bp_blogs_get_blogs();
+
+					foreach ( $blogs['blogs'] ?? [] as $blog ) {
+
+						if ( empty( $blog->domain ) ) {
+							continue;
+						}
+
+						if ( $parsed_url['host'] !== $blog->domain ) {
+							continue;
+						}
+
+						if ( ! empty( $blog->blog_id ) ) {
+							return $context->get_loader( 'bp_blog' )->load( $blog->blog_id );
+						}
+					}
+				}
+
+				$array = explode( '/', $parsed_url['path'] );
+				$slug  = $array[2] ?? '';
+
+				if ( empty( $slug ) ) {
+					return $node;
+				}
+
+				if ( bp_is_active( 'groups' ) ) {
+					$group_id = groups_get_id( $slug );
+
+					if ( is_numeric( $group_id ) && ! empty( $group_id ) ) {
+						return $context->get_loader( 'bp_group' )->load( $group_id );
+					}
+				}
+
+				if ( bp_is_active( 'members' ) ) {
+					$user = get_user_by( 'slug', $slug );
+
+					if ( $user instanceof WP_User && ! empty( $user->ID ) ) {
+						return $context->get_loader( 'user' )->load( $user->ID );
+					}
+				}
+
+				return $node;
+			},
+			10,
+			3
+		);
+
+		/**
+		 * Change the visibility of the user to `restricted`.
+		 *
+		 * BuddyPress users are "open" by default.
+		 */
+		add_filter(
+			'graphql_object_visibility',
+			function ( $visibility, $model_name ) {
+				if ( 'UserObject' === $model_name && 'private' === $visibility ) {
+					return 'restricted';
+				}
+
+				return $visibility;
+			},
+			10,
+			2
+		);
 	}
 
 	/**

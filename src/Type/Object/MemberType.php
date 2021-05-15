@@ -177,6 +177,12 @@ class MemberType {
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Cover of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
+
+					// Bail early, if disabled.
+					if ( false === bp_is_active( 'members', 'cover_image' ) ) {
+						return null;
+					}
+
 					return Factory::resolve_attachment_cover( $source->userId ?? 0 );
 				},
 			]

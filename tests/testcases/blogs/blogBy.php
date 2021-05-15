@@ -22,13 +22,22 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->user );
 
 		$blog_id = $this->bp_factory->blog->create(
-			[ 'title' => 'The Foo Bar Blog' ]
+			[
+				'title'  => 'The Foo Bar Blog',
+				'domain' => 'foo-bar',
+				'path'   => 'blog',
+			]
 		);
+
+		$this->factory()->post->create();
 
 		$this->assertQuerySuccessful( $this->get_a_blog( $blog_id ) )
 			->hasField( 'id', $this->toRelayId( 'blog', $blog_id ) )
-			->hasField( 'blogAdmin', [ 'userId' => $this->user ] )
+			->hasField( 'admin', [ 'userId' => $this->user ] )
 			->hasField( 'name', 'The Foo Bar Blog' )
+			->hasField( 'uri', 'http://foo-bar/blog/' )
+			->hasField( 'domain', 'foo-bar' )
+			->hasField( 'path', '/blog/' )
 			->hasField( 'description', 'Just another Test Blog Network site' )
 			->hasField( 'attachmentAvatar', [
 				'full'  => $this->get_avatar_image( 'full', 'blog', $blog_id ),
@@ -83,10 +92,13 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				blogBy(blogId: {$blog_id}) {
 					id
 					databaseId
-					blogAdmin {
+					admin {
 						userId
 					}
 					name
+					uri
+					domain
+					path
 					description
 					attachmentAvatar {
 						full

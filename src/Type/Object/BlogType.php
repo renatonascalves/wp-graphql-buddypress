@@ -33,9 +33,9 @@ class BlogType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress Blog.', 'wp-graphql-buddypress' ),
-				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
 				'fields'            => [
-					'blogAdmin' => [
+					'admin' => [
 						'type'        => 'User',
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Blog $blog, array $args, AppContext $context ) {
@@ -47,10 +47,6 @@ class BlogType {
 					'name' => [
 						'type'        => 'String',
 						'description' => __( 'The name of the Blog.', 'wp-graphql-buddypress' ),
-					],
-					'permalink' => [
-						'type'        => 'String',
-						'description' => __( 'The permalink of the blog.', 'wp-graphql-buddypress' ),
 					],
 					'description' => [
 						'type'        => 'String',

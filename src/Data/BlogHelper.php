@@ -43,8 +43,8 @@ class BlogHelper {
 		}
 
 		// Get the blog object.
-		$blogs       = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $blog_id ) ] ) );
-		$blog_object = $blogs[0] ?? 0;
+		$blogs       = bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $blog_id ) ] );
+		$blog_object = $blogs['blogs'][0] ?? 0;
 
 		if ( empty( $blog_object ) || ! is_object( $blog_object ) ) {
 			throw new UserError(

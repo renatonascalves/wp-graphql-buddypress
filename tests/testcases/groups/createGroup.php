@@ -37,7 +37,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 							'slug'             => 'group-slug',
 							'description'      => bp_get_group_description( $group ),
 							'status'           => 'PUBLIC',
-							'link'             => bp_get_group_permalink( $group ),
+							'uri'              => bp_get_group_permalink( $group ),
 							'hasForum'         => false,
 							'dateCreated'      => Utils::prepare_date_response(
 								$group->date_created,
@@ -173,7 +173,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						slug
 						description
 						status
-						link
+						uri
 						hasForum
 						dateCreated
 						parent {

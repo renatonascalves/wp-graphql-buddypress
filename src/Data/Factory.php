@@ -25,9 +25,9 @@ use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
 use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
-use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
 
 /**
  * Class Factory.

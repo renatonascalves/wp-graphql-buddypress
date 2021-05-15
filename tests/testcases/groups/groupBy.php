@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Test_Groups_groupBy_Queries Class.
  *
@@ -37,7 +36,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'admins', null )
 			->hasField( 'mods', null )
 			->hasField( 'creator', [ 'userId' => $this->user ] )
-			->hasField( 'link', bp_get_group_permalink( new \BP_Groups_Group( $this->group ) ) );
+			->hasField( 'uri', bp_get_group_permalink( new \BP_Groups_Group( $this->group ) ) );
 	}
 
 	public function test_group_by_query_with_groupid_param() {
@@ -211,7 +210,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 					totalMemberCount
 					lastActivity
 					hasForum
-					link
+					uri
 					creator {
 						userId
 					}
