@@ -77,13 +77,6 @@ class BlogType {
 						'type'        => 'String',
 						'description' => __( 'The domain of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'latestPost' => [
-						'type'        => 'Int',
-						'description' => __( 'Latest post ID from the blog.', 'wp-graphql-buddypress' ),
-						'resolve'     => function ( Blog $blog ) {
-							return $blog->postId ?? null;
-						},
-					],
 					'lastActivity' => [
 						'type'        => 'String',
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),
