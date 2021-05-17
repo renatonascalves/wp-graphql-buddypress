@@ -68,7 +68,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args['parent_id'] = null;
 		}
 
-		// Set last.
+		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
 			$query_args['order'] = 'ASC';
 		}

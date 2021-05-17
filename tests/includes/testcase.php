@@ -322,7 +322,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @return self
 	 */
-	protected function haPreviousPage(): self {
+	protected function hasPreviousPage(): self {
 		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
 
 		$this->assertTrue( $page_info['hasPreviousPage'] );

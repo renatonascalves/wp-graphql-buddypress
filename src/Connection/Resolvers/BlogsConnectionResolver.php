@@ -35,33 +35,29 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'include_blog_ids' => [],
-			'user_id'          => 0,
+			'include_blog_ids' => false,
+			'user_id'          => false,
 			'search_terms'     => false,
-			'type'             => 'active',
+			'type'             => 'newest',
 		];
 
 		// Prepare for later use.
-		$last = $this->args['last'] ?? null;
+		$first = $this->args['first'] ?? null;
+		$last  = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
-		$input_fields = [];
-		if ( ! empty( $this->args['where'] ) ) {
-			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
-		}
+		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
-		if ( empty( $query_args['order'] ) ) {
-			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
-		}
+		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
-		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
+		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
@@ -106,7 +102,13 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return wp_list_pluck( $this->query['blogs'], 'blog_id' );
+		$blog_ids = wp_list_pluck( $this->query['blogs'], 'blog_id' );
+
+		if ( ! empty( $this->args['last'] ) ) {
+			return array_reverse( $blog_ids );
+		}
+
+		return $blog_ids;
 	}
 
 	/**
