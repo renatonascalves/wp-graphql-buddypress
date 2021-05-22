@@ -102,7 +102,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		$blog_ids = wp_list_pluck( $this->query['blogs'], 'blog_id' );
+		$blog_ids = array_map( 'absint', wp_list_pluck( $this->query['blogs'], 'blog_id' ) );
 
 		if ( ! empty( $this->args['last'] ) ) {
 			return array_reverse( $blog_ids );
@@ -140,15 +140,17 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'userId'  => 'user_id',
-			'include' => 'include_blog_ids',
-			'search'  => 'search_terms',
-			'type'    => 'type',
-		];
 
-		// Map and sanitize the input args to the bp_blogs_get_blogs compatible args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		// Map and sanitize the input args.
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'userId'  => 'user_id',
+				'include' => 'include_blog_ids',
+				'search'  => 'search_terms',
+				'type'    => 'type',
+			]
+		);
 
 		/**
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
@@ -158,7 +160,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context being passed.
 		 * @param ResolveInfo $info       Info about the resolver.
 		 */
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_blogs_query',
 			$query_args,
 			$args,
@@ -167,11 +169,5 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 }

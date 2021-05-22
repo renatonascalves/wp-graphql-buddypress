@@ -144,18 +144,20 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'hideEmptyFields' => 'hide_empty_fields',
-			'excludeFields'   => 'exclude_fields',
-			'memberType'      => 'member_type',
-			'userId'          => 'user_id',
-		];
 
 		// Map and sanitize the input args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'hideEmptyFields' => 'hide_empty_fields',
+				'excludeFields'   => 'exclude_fields',
+				'memberType'      => 'member_type',
+				'userId'          => 'user_id',
+			]
+		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_xprofile_fields_query',
 			$query_args,
 			$args,
@@ -164,11 +166,5 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 }

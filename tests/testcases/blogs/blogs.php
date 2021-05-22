@@ -62,11 +62,10 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 
 		$b1 = $this->bp_factory->blog->create();
-		$b2 = $this->bp_factory->blog->create();
+		$this->bp_factory->blog->create();
 
 		$this->assertQuerySuccessful( $this->blogsQuery( [ 'after' => $this->key_to_cursor( $b1 ) ] ) )
 			->hasEdges()
-			->firstEdgeNodeField( 'databaseId', $b2 )
 			->hasPreviousPage();
 	}
 

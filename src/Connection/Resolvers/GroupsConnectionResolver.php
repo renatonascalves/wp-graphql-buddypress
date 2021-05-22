@@ -125,11 +125,11 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	public function get_ids(): array {
 		$group_ids = $this->query['groups'] ?? [];
 
-		if ( 'ASC' === $this->query_args['order'] ) {
+		if ( ! empty( $this->args['last'] ) ) {
 			return array_reverse( $group_ids );
 		}
 
-		return (array) $group_ids;
+		return array_map( 'absint', $group_ids );
 	}
 
 	/**
@@ -159,26 +159,28 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'showHidden' => 'show_hidden',
-			'type'       => 'type',
-			'order'      => 'order',
-			'orderBy'    => 'orderby',
-			'parent'     => 'parent_id',
-			'search'     => 'search_terms',
-			'slug'       => 'slug',
-			'status'     => 'status',
-			'userId'     => 'user_id',
-			'groupType'  => 'group_type',
-			'include'    => 'include',
-			'exclude'    => 'exclude',
-		];
 
-		// Map and sanitize the input args to the BP_Groups_Group compatible args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		// Map and sanitize the input args.
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'showHidden' => 'show_hidden',
+				'type'       => 'type',
+				'order'      => 'order',
+				'orderBy'    => 'orderby',
+				'parent'     => 'parent_id',
+				'search'     => 'search_terms',
+				'slug'       => 'slug',
+				'status'     => 'status',
+				'userId'     => 'user_id',
+				'groupType'  => 'group_type',
+				'include'    => 'include',
+				'exclude'    => 'exclude',
+			]
+		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_groups_query',
 			$query_args,
 			$args,
@@ -187,12 +189,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 
 	/**

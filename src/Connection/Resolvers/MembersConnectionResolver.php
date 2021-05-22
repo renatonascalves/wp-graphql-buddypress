@@ -99,7 +99,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return wp_list_pluck( array_values( $this->query->results ), 'ID' );
+		return array_map( 'absint', wp_list_pluck( array_values( $this->query->results ), 'ID' ) );
 	}
 
 	/**
@@ -129,22 +129,24 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'type'            => 'type',
-			'userId'          => 'user_id',
-			'include'         => 'user_ids',
-			'exclude'         => 'exclude',
-			'xprofile'        => 'xprofile_query',
-			'memberType'      => 'member_type',
-			'memberTypeNotIn' => 'member_type__not_in',
-			'search'          => 'search_terms',
-		];
 
-		// Map and sanitize the input args to the BP_User_Query compatiable args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		// Map and sanitize the input args.
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'type'            => 'type',
+				'userId'          => 'user_id',
+				'include'         => 'user_ids',
+				'exclude'         => 'exclude',
+				'xprofile'        => 'xprofile_query',
+				'memberType'      => 'member_type',
+				'memberTypeNotIn' => 'member_type__not_in',
+				'search'          => 'search_terms',
+			]
+		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_members_query',
 			$query_args,
 			$args,
@@ -153,11 +155,5 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 }
