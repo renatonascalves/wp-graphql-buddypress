@@ -37,22 +37,23 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'user_id'      => 0,
+			'user_id'      => null,
 			'is_confirmed' => null,
 		];
 
 		// Prepare for later use.
-		$last = $this->args['last'] ?? null;
+		$first = $this->args['first'] ?? null;
+		$last  = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
-		$input_fields = [];
-		if ( ! empty( $this->args['where'] ) ) {
-			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
-		}
+		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
+
+		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
 		if ( empty( $query_args['sort_order'] ) ) {
@@ -106,7 +107,13 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return array_map( 'absint', wp_list_pluck( $this->query, 'id' ) );
+		$friend_ids = array_map( 'absint', array_values( wp_list_pluck( $this->query, 'id' ) ) );
+
+		if ( ! empty( $this->args['last'] ) ) {
+			$friend_ids = array_reverse( $friend_ids );
+		}
+
+		return array_map( 'absint', $friend_ids );
 	}
 
 	/**
@@ -145,13 +152,15 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'order'       => 'sort_order',
-			'isConfirmed' => 'is_confirmed',
-		];
 
 		// Map and sanitize the input args to the BP_Friends_Friendship::get_friendships compatible args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'order'       => 'sort_order',
+				'isConfirmed' => 'is_confirmed',
+			]
+		);
 
 		/**
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
@@ -161,7 +170,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context being passed.
 		 * @param ResolveInfo $info       Info about the resolver.
 		 */
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_friendship_query',
 			$query_args,
 			$args,
@@ -170,11 +179,5 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 }

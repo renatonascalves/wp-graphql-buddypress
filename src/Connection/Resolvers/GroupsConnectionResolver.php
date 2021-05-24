@@ -44,24 +44,22 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			'order'       => 'DESC',
 			'orderby'     => 'date_created',
 			'type'        => 'active',
-			'status'      => [],
+			'status'      => [ 'public' ],
 		];
 
 		// Prepare for later use.
-		$last = $this->args['last'] ?? null;
+		$first = $this->args['first'] ?? null;
+		$last  = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
-		$input_fields = [];
-		if ( ! empty( $this->args['where'] ) ) {
-			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
-		}
+		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
 		// See if the user can see hidden groups.
-		if ( isset( $query_args['show_hidden'] ) && true === (bool) $query_args['show_hidden'] && ! $this->can_see_hidden_groups( $query_args['user_id'] ) ) {
+		if ( true === (bool) $query_args['show_hidden'] && ! $this->can_see_hidden_groups( $query_args['user_id'] ) ) {
 			$query_args['show_hidden'] = false;
 		}
 
@@ -70,9 +68,17 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args['parent_id'] = null;
 		}
 
+		// Set order when using the last param.
+		if ( ! empty( $last ) ) {
+			$query_args['order'] = 'ASC';
+		}
+
+		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
+
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
-		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
+		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
@@ -117,7 +123,13 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return $this->query['groups'];
+		$group_ids = $this->query['groups'] ?? [];
+
+		if ( ! empty( $this->args['last'] ) ) {
+			$group_ids = array_reverse( $group_ids );
+		}
+
+		return array_map( 'absint', $group_ids );
 	}
 
 	/**
@@ -147,26 +159,28 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
-		$arg_mapping = [
-			'showHidden' => 'show_hidden',
-			'type'       => 'type',
-			'order'      => 'order',
-			'orderBy'    => 'orderby',
-			'parent'     => 'parent_id',
-			'search'     => 'search_terms',
-			'slug'       => 'slug',
-			'status'     => 'status',
-			'userId'     => 'user_id',
-			'groupType'  => 'group_type',
-			'include'    => 'include',
-			'exclude'    => 'exclude',
-		];
 
-		// Map and sanitize the input args to the BP_Groups_Group compatible args.
-		$query_args = Utils::map_input( $args, $arg_mapping );
+		// Map and sanitize the input args.
+		$query_args = Utils::map_input(
+			$args,
+			[
+				'showHidden' => 'show_hidden',
+				'type'       => 'type',
+				'order'      => 'order',
+				'orderBy'    => 'orderby',
+				'parent'     => 'parent_id',
+				'search'     => 'search_terms',
+				'slug'       => 'slug',
+				'status'     => 'status',
+				'userId'     => 'user_id',
+				'groupType'  => 'group_type',
+				'include'    => 'include',
+				'exclude'    => 'exclude',
+			]
+		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		$query_args = apply_filters(
+		return apply_filters(
 			'graphql_map_input_fields_to_groups_query',
 			$query_args,
 			$args,
@@ -175,12 +189,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-
-		if ( empty( $query_args ) || ! is_array( $query_args ) ) {
-			return [];
-		}
-
-		return $query_args;
 	}
 
 	/**

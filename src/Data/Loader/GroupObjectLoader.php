@@ -8,7 +8,6 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
-use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use BP_Groups_Group;
@@ -37,8 +36,6 @@ class GroupObjectLoader extends AbstractDataLoader {
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
-	 *
-	 * @throws UserError User error.
 	 *
 	 * @param array $keys Array of keys.
 	 * @return array

@@ -154,7 +154,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return self
 	 */
 	public function expectedErrorMessage( string $message ): self {
-		$this->assertSame( $message, $this->response['errors'][0]['message'] );
+		$this->assertSame( $message, $this->response['errors'][0]['message'] ?? '' );
 
 		return $this;
 	}
@@ -171,7 +171,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Check if field exists in the response.
+	 * Check if field, and its content, exists in the response.
 	 *
 	 * @param string $field Field.
 	 * @param mixed  $field_content Field Content.
@@ -208,7 +208,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	protected function get_field_value_from_response( string $object_field ) {
 		foreach( $this->response['data'] as $operationName ) {
 			foreach( $operationName as $field => $value ) {
-				if ($object_field === $field) {
+				if ( $object_field === $field ) {
 					$object = [ $field => $value ];
 					break;
 				}
@@ -218,6 +218,116 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		}
 
 		return $object ?? '';
+	}
+
+	/**
+	 * Key to cursor.
+	 *
+	 * @param int $object_id Object ID.
+	 * @return string
+	 */
+	protected function key_to_cursor( int $object_id ): string {
+		return \GraphQLRelay\Connection\ArrayConnection::offsetToCursor( $object_id );
+	}
+
+	/**
+	 * Check if field, and its content, exists in the first node of an edge.
+	 *
+	 * @param string $field Field.
+	 * @param mixed $field_content Field Content.
+	 * @return self
+	 */
+	protected function firstEdgeNodeField( string $field, $field_content ): self {
+		$edges = current( $this->get_field_value_from_response( 'edges' ) );
+
+		$this->assertEquals( $field_content, $edges[0]['node'][ $field ] ?? '' );
+
+		return $this;
+	}
+
+	/**
+	 * Check if field, and its content, exists in the first node of an Node.
+	 *
+	 * @param string $field Field.
+	 * @param mixed $field_content Field Content.
+	 * @return self
+	 */
+	protected function firstNodesNodeField( string $field, $field_content ): self {
+		$nodes = current( $this->get_field_value_from_response( 'nodes' ) );
+
+		$this->assertEquals( $field_content, $nodes[0][ $field ] ?? '' );
+
+		return $this;
+	}
+
+	/**
+	 * Check if Edges exist in a response.
+	 *
+	 * @return self
+	 */
+	protected function hasEdges(): self {
+		$this->assertTrue( ! empty( current( $this->get_field_value_from_response( 'edges' ) ) ) );
+
+		return $this;
+	}
+
+	/**
+	 * Check if Edges does not exist in a response.
+	 *
+	 * @return self
+	 */
+	protected function notHasEdges(): self {
+		$this->assertTrue( empty( current( $this->get_field_value_from_response( 'edges' ) ) ) );
+
+		return $this;
+	}
+
+	/**
+	 * Check if Nodes exist in a response.
+	 *
+	 * @return self
+	 */
+	protected function hasNodes(): self {
+		$this->assertTrue( ! empty( current( $this->get_field_value_from_response( 'nodes' ) ) ) );
+
+		return $this;
+	}
+
+	/**
+	 * Check if Nodes does not exist in a response.
+	 *
+	 * @return self
+	 */
+	protected function notHasNodes(): self {
+		$this->assertTrue( empty( current( $this->get_field_value_from_response( 'nodes' ) ) ) );
+
+		return $this;
+	}
+
+	/**
+	 * Does query has a next page?
+	 *
+	 * @return self
+	 */
+	protected function hasNextPage(): self {
+		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
+
+		$this->assertTrue( $page_info['hasNextPage'] );
+
+		return $this;
+	}
+
+	/**
+	 * Does query has a previous page?
+	 *
+	 * @return self
+	 */
+	protected function hasPreviousPage(): self {
+		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
+
+		$this->assertTrue( $page_info['hasPreviousPage'] );
+
+		return $this;
 	}
 
 	/**
@@ -272,13 +382,11 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			}
 		';
 
-		$variables = wp_json_encode(
-			[
-				'clientMutationId' => $this->client_mutation_id,
-				'object'           => $object,
-				'objectId'         => $objectId,
-			]
-		);
+		$variables = [
+			'clientMutationId' => $this->client_mutation_id,
+			'object'           => $object,
+			'objectId'         => $objectId,
+		];
 
 		$operation_name = 'deleteCoverTest';
 

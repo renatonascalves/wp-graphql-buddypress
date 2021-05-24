@@ -61,14 +61,6 @@ class XProfileField extends Model {
 				'parent'          => function() {
 					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
-				'parentId'          => function() {
-					! empty( $this->data->parent_id )
-						? Relay::toGlobalId( 'bp_xprofile_field', (string) $this->data->parent_id )
-						: null;
-				},
-				'parentDatabaseId'          => function() {
-					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
-				},
 				'name'            => function() {
 					return $this->data->name ?? null;
 				},

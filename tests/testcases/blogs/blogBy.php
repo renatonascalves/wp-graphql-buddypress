@@ -29,7 +29,11 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			]
 		);
 
+		switch_to_blog( $blog_id );
+
 		$this->factory()->post->create();
+
+		restore_current_blog();
 
 		$this->assertQuerySuccessful( $this->get_a_blog( $blog_id ) )
 			->hasField( 'id', $this->toRelayId( 'blog', $blog_id ) )

@@ -79,15 +79,15 @@ class TypeRegistry {
 
 		// Add our custom types to the list of supported node types.
 		add_filter(
-			'graphql_resolve_uniform_resource_identifiable_node_type',
-			function ( $type, $node, $type_registry ) {
+			'graphql_interface_resolve_type',
+			function ( $type, $node, $interface_instance ) {
 
 				if ( bp_is_active( 'groups' ) && $node instanceof Group ) {
-					return $type_registry->get_type( 'Group' );
+					return $interface_instance->type_registry->get_type( 'Group' );
 				}
 
 				if ( bp_is_active( 'blogs' ) && $node instanceof Blog ) {
-					return $type_registry->get_type( 'Blog' );
+					return $interface_instance->type_registry->get_type( 'Blog' );
 				}
 
 				return $type;
@@ -104,7 +104,7 @@ class TypeRegistry {
 				// Parse URI.
 				$parsed_url = wp_parse_url( $uri );
 
-				if ( bp_is_active( 'blogs' ) && '/' === $parsed_url['path'] ) {
+				if ( bp_is_active( 'blogs' ) && ( empty( $parsed_url['path'] ) || '/' === $parsed_url['path'] ) ) {
 					$blogs = bp_blogs_get_blogs();
 
 					foreach ( $blogs['blogs'] ?? [] as $blog ) {
