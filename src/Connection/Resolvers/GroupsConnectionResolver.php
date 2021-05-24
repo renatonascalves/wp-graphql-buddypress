@@ -126,7 +126,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		$group_ids = $this->query['groups'] ?? [];
 
 		if ( ! empty( $this->args['last'] ) ) {
-			return array_reverse( $group_ids );
+			$group_ids = array_reverse( $group_ids );
 		}
 
 		return array_map( 'absint', $group_ids );

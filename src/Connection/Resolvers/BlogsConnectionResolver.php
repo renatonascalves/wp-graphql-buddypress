@@ -105,10 +105,10 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		$blog_ids = array_map( 'absint', wp_list_pluck( $this->query['blogs'], 'blog_id' ) );
 
 		if ( ! empty( $this->args['last'] ) ) {
-			return array_reverse( $blog_ids );
+			$blog_ids = array_reverse( $blog_ids );
 		}
 
-		return $blog_ids;
+		return array_map( 'absint', $blog_ids );
 	}
 
 	/**

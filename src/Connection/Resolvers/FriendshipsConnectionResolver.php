@@ -110,10 +110,10 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		$friend_ids = array_map( 'absint', array_values( wp_list_pluck( $this->query, 'id' ) ) );
 
 		if ( ! empty( $this->args['last'] ) ) {
-			return array_reverse( $friend_ids );
+			$friend_ids = array_reverse( $friend_ids );
 		}
 
-		return $friend_ids;
+		return array_map( 'absint', $friend_ids );
 	}
 
 	/**

@@ -105,7 +105,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return wp_list_pluck( $this->query['members'], 'ID' );
+		return array_map( 'absint', wp_list_pluck( $this->query['members'], 'ID' ) );
 	}
 
 	/**

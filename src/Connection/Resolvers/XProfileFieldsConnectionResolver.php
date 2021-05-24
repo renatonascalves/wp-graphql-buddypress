@@ -49,10 +49,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		$last = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
-		$input_fields = [];
-		if ( ! empty( $this->args['where'] ) ) {
-			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
-		}
+		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
