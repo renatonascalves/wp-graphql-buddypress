@@ -78,7 +78,7 @@ class TypeRegistry {
 		add_filter( 'graphql_data_loaders', [ __CLASS__, 'graphql_register_autoloaders' ], 10, 2 );
 
 		// Add our custom types to the list of supported node types.
-		/* add_filter(
+		add_filter(
 			'graphql_interface_resolve_type',
 			function ( $type, $node, $interface_instance ) {
 
@@ -94,7 +94,7 @@ class TypeRegistry {
 			},
 			10,
 			3
-		); */
+		);
 
 		// Resolve URI.
 		add_filter(
