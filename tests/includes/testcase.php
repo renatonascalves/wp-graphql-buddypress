@@ -80,6 +80,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		/**
+		 * Reset the WPGraphQL schema before each test.
+		 * Lazy loading types only loads part of the schema,
+		 * so we refresh for each test.
+		 */
+		WPGraphQL::clear_schema();
+
 		$this->bp_factory         = new BP_UnitTest_Factory();
 		$this->bp                 = new BP_UnitTestCase();
 		$this->client_mutation_id = 'someUniqueId';
@@ -130,6 +137,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
 		$this->assertArrayHasKey( 'data', $this->response );
+		$this->assertArrayNotHasKey( 'errors', $this->response );
 
 		return $this;
 	}
