@@ -36,7 +36,7 @@ class MemberType {
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Member types associated with the user.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
-					$types = bp_get_member_type( $source->userId ?? 0, false );
+					$types = bp_get_member_type( $source->databaseId ?? 0, false );
 
 					return $types ?? null;
 				},
@@ -54,7 +54,7 @@ class MemberType {
 						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
-					$mention_name = bp_activity_get_user_mentionname( $source->userId ?? 0 );
+					$mention_name = bp_activity_get_user_mentionname( $source->databaseId ?? 0 );
 
 					return $mention_name ?? null;
 				},
@@ -68,7 +68,7 @@ class MemberType {
 				'type'        => 'String',
 				'description' => __( 'Profile URL of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
-					$link = bp_core_get_user_domain( $source->userId ?? 0 );
+					$link = bp_core_get_user_domain( $source->databaseId ?? 0 );
 
 					return $link ?? null;
 				},
@@ -95,7 +95,7 @@ class MemberType {
 					// Get the member with BuddyPress extra data.
 					$member_query = new BP_User_Query(
 						[
-							'user_ids'        => [ $source->userId ],
+							'user_ids'        => [ $source->databaseId ],
 							'populate_extras' => true,
 						]
 					);
@@ -136,7 +136,7 @@ class MemberType {
 					// Get the member with BuddyPress extra data.
 					$member_query = new BP_User_Query(
 						[
-							'user_ids'        => [ $source->userId ],
+							'user_ids'        => [ $source->databaseId ],
 							'populate_extras' => true,
 						]
 					);
@@ -165,7 +165,7 @@ class MemberType {
 						return null;
 					}
 
-					return Factory::resolve_attachment( $source->userId ?? 0 );
+					return Factory::resolve_attachment( $source->databaseId ?? 0 );
 				},
 			]
 		);
@@ -183,7 +183,7 @@ class MemberType {
 						return null;
 					}
 
-					return Factory::resolve_attachment_cover( $source->userId ?? 0 );
+					return Factory::resolve_attachment_cover( $source->databaseId ?? 0 );
 				},
 			]
 		);

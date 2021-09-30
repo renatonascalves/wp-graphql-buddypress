@@ -48,7 +48,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 *
-		 * @return WP_GraphQL_BuddyPress - The one true WP_GraphQL_BuddyPress
+		 * @return WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
 		public static function instance() {
 
@@ -148,6 +148,8 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Uses composer's autoload to include required files.
 		 *
 		 * @since 0.0.1-alpha
+		 *
+		 * @return bool
 		 */
 		private function includes() {
 

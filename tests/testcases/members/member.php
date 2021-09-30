@@ -23,7 +23,6 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 		friends_add_friend( $this->user, $this->random_user, true );
 
 		$this->assertQuerySuccessful( $this->get_a_member() )
-			->hasField( 'memberTypes', [ 'foo' ] )
 			->hasField( 'mentionName', bp_activity_get_user_mentionname( $this->user ) )
 			->hasField( 'link', bp_core_get_user_domain( $this->user ) )
 			->hasField( 'totalFriendCount', 1 )
@@ -70,7 +69,6 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 			query {
 				user(id: \"{$global_id}\") {
 					link
-					memberTypes
 					mentionName
 					totalFriendCount
 					latestUpdate

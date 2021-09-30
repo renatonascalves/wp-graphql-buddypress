@@ -34,6 +34,7 @@ class BlogType {
 			[
 				'description'       => __( 'Info about a BuddyPress Blog.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
+				'eagerlyLoadType'   => true,
 				'fields'            => [
 					'admin' => [
 						'type'        => 'User',

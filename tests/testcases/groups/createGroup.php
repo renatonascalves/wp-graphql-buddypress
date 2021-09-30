@@ -35,7 +35,6 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 							'databaseId'       => $group->id,
 							'name'             => 'Group Test',
 							'slug'             => 'group-slug',
-							'description'      => bp_get_group_description( $group ),
 							'status'           => 'PUBLIC',
 							'uri'              => bp_get_group_permalink( $group ),
 							'hasForum'         => false,
@@ -151,7 +150,6 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 			mutation createGroupTest(
 				$clientMutationId:String!
 				$name:String!
-				$description:String
 				$slug:String
 				$status:GroupStatusEnum
 			) {
@@ -160,7 +158,6 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						clientMutationId: $clientMutationId
 						name: $name
 						slug: $slug
-						description: $description
 						status: $status
 					}
 				)
@@ -171,7 +168,6 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						databaseId
 						name
 						slug
-						description
 						status
 						uri
 						hasForum
@@ -211,7 +207,6 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 				'clientMutationId' => $this->client_mutation_id,
 				'name'             => 'Group Test',
 				'slug'             => 'group-slug',
-				'description'      => 'Group Description',
 				'status'           => 'PUBLIC',
 			]
 		);

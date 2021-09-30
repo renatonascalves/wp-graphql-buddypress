@@ -35,6 +35,7 @@ class GroupType {
 			[
 				'description'       => __( 'Info about a BuddyPress group.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
+				'eagerlyLoadType'   => true,
 				'fields'            => [
 					'parent'           => [
 						'type'        => self::$type_name,
@@ -154,7 +155,7 @@ class GroupType {
 								return $group->description;
 							}
 
-							return bp_get_group_description( $group );
+							return bp_get_group_description( $group->databaseId ?? 0 );
 						},
 					],
 					'hasForum'         => [
