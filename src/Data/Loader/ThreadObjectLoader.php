@@ -1,6 +1,6 @@
 <?php
 /**
- * BlogObjectLoader Class
+ * ThreadObjectLoader Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data\Loader
  * @since 0.0.1-alpha
@@ -9,29 +9,29 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
-use WPGraphQL\Extensions\BuddyPress\Model\Blog;
-use stdClass;
+use WPGraphQL\Extensions\BuddyPress\Model\Thread;
+use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
+use BP_Messages_Thread;
+
 /**
- * Class BlogObjectLoader
+ * Class ThreadObjectLoader
  */
-class BlogObjectLoader extends AbstractDataLoader {
+class ThreadObjectLoader extends AbstractDataLoader {
 
 	/**
 	 * Get model.
 	 *
 	 * @param mixed $entry The object.
 	 * @param mixed $key   The Key to identify the object by.
-	 * @return null|Blog
+	 * @return null|Thread
 	 */
-	protected function get_model( $entry, $key ): ?Blog {
+	protected function get_model( $entry, $key ): ?Thread {
 
-		// Check if friendship exists.
-		if ( ! $entry instanceof stdClass ) {
+		if ( empty( $entry ) || ! $entry instanceof BP_Messages_Thread ) {
 			return null;
 		}
 
-		return new Blog( $entry );
+		return new Thread( $entry );
 	}
 
 	/**
@@ -47,16 +47,13 @@ class BlogObjectLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		// Execute the query, and prune the cache.
-		bp_blogs_get_blogs( [ 'include_blog_ids' => $keys ] );
+		$loaded_threads = [];
 
-		$loaded_blogs = [];
-
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
-			$loaded_blogs[ $key ] = BlogHelper::get_blog_from_input( absint( $key ) );
+			$loaded_threads[ $key ] = ThreadHelper::get_thread_from_input( [ 'threadId' => absint( $key ) ] );
 		}
 
-		return $loaded_blogs;
+		return $loaded_threads;
 	}
 }

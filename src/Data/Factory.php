@@ -14,18 +14,21 @@ use GraphQL\Deferred;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
+use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
+use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupMembersConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileGroupsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\BlogsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\FriendshipsConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
-use WPGraphQL\Extensions\BuddyPress\Model\XProfileFieldValue;
-use WPGraphQL\Extensions\BuddyPress\Model\Attachment;
-use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\XProfileFieldOptionsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ThreadConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MessagesConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
 
@@ -33,6 +36,50 @@ use BP_Friends_Friendship;
  * Class Factory.
  */
 class Factory {
+
+	/**
+	 * Returns a Thread object.
+	 *
+	 * @param int        $id      Thread ID.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_thread_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$thread_id = absint( $id );
+		$context->get_loader( 'bp_thread' )->buffer( [ $thread_id ] );
+
+		return new Deferred(
+			function () use ( $thread_id, $context ) {
+				return $context->get_loader( 'bp_thread' )->load( $thread_id );
+			}
+		);
+	}
+
+	/**
+	 * Returns a Message object.
+	 *
+	 * @param int        $id      Message ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_message_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$message_id = absint( $id );
+		$context->get_loader( 'bp_message' )->buffer( [ $message_id ] );
+
+		return new Deferred(
+			function () use ( $message_id, $context ) {
+				return $context->get_loader( 'bp_message' )->load( $message_id );
+			}
+		);
+	}
 
 	/**
 	 * Returns a Group object.
@@ -81,8 +128,6 @@ class Factory {
 	/**
 	 * Returns a XProfile Field object.
 	 *
-	 * @throws UserError User error.
-	 *
 	 * @param int        $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
 	 * @return XProfileField|null
@@ -96,10 +141,7 @@ class Factory {
 		$user_id = $context->config['userId'] ?? null;
 
 		// Get the XProfile field object.
-		$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input(
-			absint( $id ),
-			absint( $user_id )
-		);
+		$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( absint( $id ), $user_id );
 
 		return new XProfileField( $xprofile_field_object );
 	}
@@ -119,7 +161,7 @@ class Factory {
 	}
 
 	/**
-	 * Resolve an attachment avatar for an object.
+	 * Resolve an attachment avatar for the object.
 	 *
 	 * @param int    $id     ID of the object.
 	 * @param string $object Object (user, group, blog, etc). Default: 'user'.
@@ -291,6 +333,45 @@ class Factory {
 	 */
 	public static function resolve_xprofile_field_options_connection( XProfileField $source, array $args, AppContext $context ): ?array {
 		return XProfileFieldOptionsConnectionResolver::resolve( $source, $args, $context );
+	}
+
+	/**
+	 * Wrapper for the ThreadConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_thread_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new ThreadConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the MessagesConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_messages_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new MessagesConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the RecipientsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_recipients_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new RecipientsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**

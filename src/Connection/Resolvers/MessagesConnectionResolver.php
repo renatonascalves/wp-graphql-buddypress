@@ -1,6 +1,6 @@
 <?php
 /**
- * FriendshipsConnectionResolver Class
+ * MessagesConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
@@ -12,14 +12,13 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
-use WPGraphQL\Model\User;
-use BP_Friends_Friendship;
+use BP_Messages_Thread;
+use BP_Messages_Message;
 
 /**
- * Class FriendshipsConnectionResolver
+ * Class MessagesConnectionResolver
  */
-class FriendshipsConnectionResolver extends AbstractConnectionResolver {
+class MessagesConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Return the name of the loader to be used with the connection resolver.
@@ -27,7 +26,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'bp_friend';
+		return 'bp_message';
 	}
 
 	/**
@@ -37,9 +36,8 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'user_id'      => null,
-			'is_confirmed' => null,
-			'sort_order'   => 'DESC',
+			'order' => 'ASC',
+			'type'  => 'all',
 		];
 
 		// Prepare for later use.
@@ -56,35 +54,25 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
 		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
-		// Set order when using the last param.
-		if ( ! empty( $last ) ) {
-			$query_args['sort_order'] = 'ASC';
-		}
-
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
-		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
+		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
-
-		// Setting the user ID whose friends we wanna fetch.
-		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
-			$query_args['user_id'] = $this->source->userId;
-		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
 		 * the GraphQL Query have been applied and has the potential to override the GraphQL Query Input Args.
 		 *
-		 * @param array       $query_args An array of query_args being passed.
-		 * @param mixed       $source     Source passed down from the resolve tree.
-		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    Context passed down the resolve tree.
-		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
+		 * @param array       $query_args array of query_args being passed to the
+		 * @param mixed       $source     Source passed down from the resolve tree
+		 * @param array       $args       array of arguments input in the field as part of the GraphQL query
+		 * @param AppContext  $context    object passed down zthe resolve tree
+		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return apply_filters(
-			'graphql_friendship_connection_query_args',
+			'graphql_messages_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -94,27 +82,39 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Return the friendship query.
+	 * Returns the thread messages.
 	 *
 	 * @return array
 	 */
 	public function get_query(): array {
-		return BP_Friends_Friendship::get_friendships( $this->source->userId ?? 0, $this->query_args );
+		return BP_Messages_Thread::get_messages( $this->source->databaseId, $this->query_args );
 	}
 
 	/**
-	 * Return an array of friend ids.
+	 * Return an array of message ids.
 	 *
 	 * @return array
 	 */
 	public function get_ids(): array {
-		$friend_ids = array_map( 'absint', array_values( wp_list_pluck( $this->query, 'id' ) ) );
+		$ids = wp_list_pluck( $this->query, 'id' );
 
-		if ( ! empty( $this->args['last'] ) ) {
-			$friend_ids = array_reverse( $friend_ids );
+		// Handle starred messages.
+		if ( 'starred' === $this->args['where']['type'] ) {
+			$ids = array_values(
+				array_filter(
+					$ids,
+					function( $id ) {
+						return true === bp_messages_is_message_starred( $id, bp_loggedin_user_id() );
+					}
+				)
+			);
 		}
 
-		return array_map( 'absint', $friend_ids );
+		if ( ! empty( $this->args['last'] ) ) {
+			$ids = array_reverse( $ids );
+		}
+
+		return array_map( 'absint', $ids );
 	}
 
 	/**
@@ -124,13 +124,13 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function should_execute(): bool {
 
-		// Moderators can see everything.
+		// Moderators can do anything.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
 
-		// Logged in user is the same one from the current user object.
-		return ( isset( $this->source->userId ) && bp_loggedin_user_id() === $this->source->userId );
+		// Check thread access.
+		return messages_check_thread_access( $this->source->databaseId, bp_loggedin_user_id() );
 	}
 
 	/**
@@ -140,39 +140,32 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return FriendshipHelper::friendship_exists(
-			current( BP_Friends_Friendship::get_friendships_by_id( $offset ) )
-		);
+		$message_object = new BP_Messages_Message( (int) $offset );
+
+		return ! empty( $message_object->id );
 	}
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * BP_Friends_Friendship::get_friendships friendly keys.
+	 * BP_Messages_Thread::get_messages() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
 
-		// Map and sanitize the input args to the BP_Friends_Friendship::get_friendships compatible args.
+		// Map and sanitize the input args.
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'order'       => 'sort_order',
-				'isConfirmed' => 'is_confirmed',
+				'order' => 'order',
+				'type'  => 'type',
 			]
 		);
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 *
-		 * @param array       $query_args An array of query_args being passed.
-		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    Context being passed.
-		 * @param ResolveInfo $info       Info about the resolver.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		return apply_filters(
-			'graphql_map_input_fields_to_friendship_query',
+			'graphql_map_input_fields_to_messages_query',
 			$query_args,
 			$args,
 			$this->source,

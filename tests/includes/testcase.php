@@ -49,21 +49,21 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Regular user.
 	 *
-	 * @var WP_User
+	 * @var int
 	 */
 	public $user;
 
 	/**
 	 * Random regular user.
 	 *
-	 * @var WP_User
+	 * @var int
 	 */
 	public $random_user;
 
 	/**
 	 * Admin user.
 	 *
-	 * @var WP_User
+	 * @var int
 	 */
 	public $admin;
 
@@ -73,6 +73,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @var BP_Groups_Group
 	 */
 	public $group;
+
+	/**
+	 * Thread object.
+	 *
+	 * @var BP_Messages_Thread
+	 */
+	public $thread;
 
 	/**
 	 * Set up.
@@ -94,6 +101,14 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->user               = $this->bp_factory->user->create();
 		$this->random_user        = $this->bp_factory->user->create();
 		$this->admin              = $this->bp_factory->user->create( [ 'role' => 'administrator' ] );
+		$this->thread             = $this->bp_factory->message->create_and_get(
+			[
+				'sender_id'  => $this->random_user,
+				'recipients' => array( $this->user ),
+				'subject'    => 'Threat Test',
+				'content'    => 'Bar',
+			]
+		);
 		$this->group              = $this->bp_factory->group->create(
 			[
 				'name'        => 'Group Test',
@@ -333,9 +348,29 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	protected function hasPreviousPage(): self {
 		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
 
-		$this->assertTrue( $page_info['hasPreviousPage'] );
+		$this->assertTrue( (bool) $page_info['hasPreviousPage'] ?? false );
 
 		return $this;
+	}
+
+	/**
+	 * Create message/thread object.
+	 *
+	 * @param array $args Arguments.
+	 * @return BP_Messages_Message
+	 */
+	protected function create_thread_object( array $args = [] ): BP_Messages_Message {
+		return $this->bp_factory->message->create_and_get(
+			array_merge(
+				[
+					'sender_id'  => $this->admin,
+					'recipients' => array( $this->random_user ),
+					'subject'    => 'Thread  Subject',
+					'content'    => 'Foo',
+				],
+				$args
+			)
+		);
 	}
 
 	/**

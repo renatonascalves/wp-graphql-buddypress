@@ -137,8 +137,10 @@ class BlogType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$blog = BlogHelper::get_blog_from_input( $args );
-					return Factory::resolve_blog_object( $blog->blog_id, $context );
+					return Factory::resolve_blog_object(
+						BlogHelper::get_blog_from_input( $args )->blog_id,
+						$context
+					);
 				},
 			]
 		);

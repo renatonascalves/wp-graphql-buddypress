@@ -1,6 +1,6 @@
 <?php
 /**
- * BlogObjectLoader Class
+ * MessageObjectLoader Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data\Loader
  * @since 0.0.1-alpha
@@ -9,29 +9,28 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
-use WPGraphQL\Extensions\BuddyPress\Model\Blog;
-use stdClass;
+use WPGraphQL\Extensions\BuddyPress\Model\Message;
+use BP_Messages_Message;
+
 /**
- * Class BlogObjectLoader
+ * Class MessageObjectLoader
  */
-class BlogObjectLoader extends AbstractDataLoader {
+class MessageObjectLoader extends AbstractDataLoader {
 
 	/**
 	 * Get model.
 	 *
 	 * @param mixed $entry The object.
 	 * @param mixed $key   The Key to identify the object by.
-	 * @return null|Blog
+	 * @return null|Message
 	 */
-	protected function get_model( $entry, $key ): ?Blog {
+	protected function get_model( $entry, $key ): ?Message {
 
-		// Check if friendship exists.
-		if ( ! $entry instanceof stdClass ) {
+		if ( ! $entry instanceof BP_Messages_Message || empty( $entry->id ) ) {
 			return null;
 		}
 
-		return new Blog( $entry );
+		return new Message( $entry );
 	}
 
 	/**
@@ -47,16 +46,13 @@ class BlogObjectLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		// Execute the query, and prune the cache.
-		bp_blogs_get_blogs( [ 'include_blog_ids' => $keys ] );
+		$loaded_messages = [];
 
-		$loaded_blogs = [];
-
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
-			$loaded_blogs[ $key ] = BlogHelper::get_blog_from_input( absint( $key ) );
+			$loaded_messages[ $key ] = new BP_Messages_Message( absint( $key ) );
 		}
 
-		return $loaded_blogs;
+		return $loaded_messages;
 	}
 }
