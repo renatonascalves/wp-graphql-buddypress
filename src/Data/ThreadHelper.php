@@ -56,7 +56,7 @@ class ThreadHelper {
 	 *
 	 * @throws UserError User error for invalid message.
 	 *
-	 * @param array $input Array of possible input fields.
+	 * @param array|int $input Array of possible input fields. Or message ID.
 	 * @return BP_Messages_Message
 	 */
 	public static function get_message_from_input( $input ): BP_Messages_Message {

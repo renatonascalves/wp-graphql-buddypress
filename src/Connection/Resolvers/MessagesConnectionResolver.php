@@ -44,7 +44,7 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 		$first = $this->args['first'] ?? null;
 		$last  = $this->args['last'] ?? null;
 
-		// Collect the input_fields.
+		// Sanitize input fields.
 		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
@@ -99,7 +99,7 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 		$ids = wp_list_pluck( $this->query, 'id' );
 
 		// Handle starred messages.
-		if ( 'starred' === $this->args['where']['type'] ) {
+		if ( 'starred' === $this->query_args['type'] ) {
 			$ids = array_values(
 				array_filter(
 					$ids,
@@ -130,7 +130,7 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// Check thread access.
-		return messages_check_thread_access( $this->source->databaseId, bp_loggedin_user_id() );
+		return (bool) messages_check_thread_access( $this->source->databaseId, bp_loggedin_user_id() );
 	}
 
 	/**

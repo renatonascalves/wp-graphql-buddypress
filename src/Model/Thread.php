@@ -68,7 +68,7 @@ class Thread extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->thread_id )
-						? Relay::toGlobalId( 'thread', $this->data->thread_id )
+						? Relay::toGlobalId( 'thread', (string) $this->data->thread_id )
 						: null;
 				},
 				'databaseId' => function() {

@@ -72,7 +72,7 @@ class Message extends Model {
 			$this->fields = [
 				'id' => function() {
 					return ! empty( $this->data->id )
-						? Relay::toGlobalId( 'message', $this->data->id )
+						? Relay::toGlobalId( 'message', (string) $this->data->id )
 						: null;
 				},
 				'databaseId' => function() {
