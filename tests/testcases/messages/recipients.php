@@ -120,26 +120,34 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_get_thread_recipient_after() {
-		$this->bp->set_current_user( $this->admin );
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+
+		$this->bp->set_current_user( $u1 );
 
 		// Create thread.
-		$message = $this->create_thread_object( [ 'sender_id'  => $this->admin ]);
+		$message = $this->create_thread_object(
+			[
+				'sender_id'  => $u1,
+				'recipients' => [ $u2 ],
+			]
+		);
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $message->thread_id,
-				'sender_id'  => $this->random_user,
-				'recipients' => [ $this->admin ],
+				'sender_id'  => $u2,
+				'recipients' => [ $u1 ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$results = $this->get_thread_recipients(
 			$message->thread_id,
 			[
 				'first' => 1,
-				'after' => $this->key_to_cursor( $this->admin )
+				'after' => $this->key_to_cursor( $u1 )
 			]
 		);
 
@@ -147,12 +155,12 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		$ids   = wp_list_pluck( $nodes, 'databaseId' );
 
 		$this->assertQuerySuccessful( $results )
-			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
+			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
 			->hasField( 'databaseId', $message->thread_id )
 			->HasEdges();
 
 		$this->assertCount( 1, $nodes );
-		$this->assertTrue( in_array( $this->random_user, $ids, true ) );
+		$this->assertTrue( in_array( $u2, $ids, true ) );
 	}
 
 	/**

@@ -64,7 +64,8 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 	 * @return array
 	 */
 	protected function get_a_member( $user_id = null ): array {
-		$global_id = $this->toRelayId( 'user', $user_id ?? $this->user );
+		$u         = $user_id ?? $this->user;
+		$global_id = $this->toRelayId( 'user', (string) $u );
 		$query     = "
 			query {
 				user(id: \"{$global_id}\") {

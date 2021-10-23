@@ -19,7 +19,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->global_id = $this->toRelayId( 'group', $this->group );
+		$this->global_id = $this->toRelayId( 'group', (string) $this->group );
 	}
 
 	public function test_group_query() {
@@ -80,7 +80,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_group_by_query_with_previous_slug_param() {
 		$previous_slug = 'group-test';
 		$group_id      = $this->create_group_object();
-		$global_id     = $this->toRelayId( 'group', $group_id );
+		$global_id     = $this->toRelayId( 'group', (string) $group_id );
 
 		// Update slug.
 		groups_edit_base_group_details(
@@ -109,8 +109,8 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_group_with_parent_group() {
 		$parent_id       = $this->create_group_object();
 		$child_id        = $this->bp_factory->group->create( [ 'parent_id' => $parent_id ] );
-		$global_id       = $this->toRelayId( 'group', $parent_id );
-		$global_child_id = $this->toRelayId( 'group', $child_id );
+		$global_id       = $this->toRelayId( 'group', (string) $parent_id );
+		$global_child_id = $this->toRelayId( 'group', (string) $child_id );
 		$query           = "{
 			groupBy(id: \"{$global_child_id}\") {
 				id

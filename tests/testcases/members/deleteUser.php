@@ -17,7 +17,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	public function test_member_can_delete_his_own_account() {
 		$this->bp->set_current_user( $this->user );
 
-		$guid = $this->toRelayId( 'user', $this->user );
+		$guid = $this->toRelayId( 'user', (string) $this->user );
 
 		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
@@ -33,7 +33,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	public function test_admins_can_delete_members() {
 		$this->bp->set_current_user( $this->admin );
 
-		$guid = $this->toRelayId( 'user', $this->user );
+		$guid = $this->toRelayId( 'user', (string) $this->user );
 
 		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
@@ -109,7 +109,7 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'id'               => $this->toRelayId( 'user', $user_id ),
+			'id'               => $this->toRelayId( 'user', (string) $user_id ),
 		];
 
 		$operation_name = 'deleteUserTest';

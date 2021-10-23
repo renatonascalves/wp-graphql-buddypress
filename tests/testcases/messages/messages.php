@@ -57,7 +57,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [
@@ -70,7 +70,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 					1 => [
-						'id'          => $this->toRelayId( 'message', $m2->id ),
+						'id'          => $this->toRelayId( 'message', (string) $m2->id ),
 						'threadId'    => $m2->thread_id,
 						'databaseId'  => $m2->id,
 						'sender'      => [
@@ -113,7 +113,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $m2->id ),
+						'id'          => $this->toRelayId( 'message', (string) $m2->id ),
 						'threadId'    => $m2->thread_id,
 						'databaseId'  => $m2->id,
 						'sender'      => [
@@ -125,7 +125,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						'isStarred'   => false,
 					],
 					1 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [
@@ -153,7 +153,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [
@@ -182,7 +182,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [
@@ -219,7 +219,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [
@@ -248,7 +248,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
-						'id'          => $this->toRelayId( 'message', $message->id ),
+						'id'          => $this->toRelayId( 'message', (string) $message->id ),
 						'threadId'    => $message->thread_id,
 						'databaseId'  => $message->id,
 						'sender'      => [

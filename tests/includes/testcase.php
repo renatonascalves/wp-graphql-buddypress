@@ -137,10 +137,12 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Wrapper for the "GraphQLRelay\Relay::toGlobalId()" function.
 	 *
+	 * @param string $type Type.
+     * @param string $id   ID.
 	 * @return string
 	 */
-	public function toRelayId(): string {
-		return \GraphQLRelay\Relay::toGlobalId( ...func_get_args() );
+	public function toRelayId( $type, $id ): string {
+		return \GraphQLRelay\Relay::toGlobalId( $type, $id );
 	}
 
 	/**
