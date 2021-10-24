@@ -43,23 +43,23 @@ class XProfileGroupUpdate {
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'groupId'          => [
+			'groupId'     => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_XProfile_Group->id field.', 'wp-graphql-buddypress' ),
 			],
-			'name'      => [
+			'name'        => [
 				'type'        => 'String',
 				'description' => __( 'The name of the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'description'      => [
+			'description' => [
 				'type'        => 'String',
 				'description' => __( 'The description of the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'canDelete'      => [
+			'canDelete'   => [
 				'type'        => 'Boolean',
 				'description' => __( 'Option to allow XProfile group to be deleted.', 'wp-graphql-buddypress' ),
 			],
-			'groupOrder'      => [
+			'groupOrder'  => [
 				'type'        => 'Int',
 				'description' => __( 'Order of the group relative to other groups.', 'wp-graphql-buddypress' ),
 			],

@@ -48,27 +48,27 @@ class XProfileGroup extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id' => function() {
+				'id'          => function() {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'bp_xprofile_group', $this->data->id )
 						: null;
 				},
-				'databaseId' => function() {
+				'databaseId'  => function() {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'name' => function() {
+				'name'        => function() {
 					return $this->data->name ?? null;
 				},
 				'description' => function() {
 					return $this->data->description ?? null;
 				},
-				'groupOrder' => function() {
+				'groupOrder'  => function() {
 					return $this->data->group_order;
 				},
-				'canDelete' => function() {
+				'canDelete'   => function() {
 					return $this->data->can_delete ?? null;
 				},
-				'userId' => function() {
+				'userId'      => function() {
 					return $this->data->userId ?? null;
 				},
 			];

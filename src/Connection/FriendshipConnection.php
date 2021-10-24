@@ -31,12 +31,12 @@ class FriendshipConnection {
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the friendship has been accepted.', 'wp-graphql-buddypress' ),
 					],
-					'order' => [
+					'order'       => [
 						'type'        => 'OrderEnum',
 						'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_friendship_connection( $source, $args, $context, $info );
 				},
 			]

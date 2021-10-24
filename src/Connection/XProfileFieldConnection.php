@@ -41,7 +41,7 @@ class XProfileFieldConnection {
 				'toType'         => 'XProfileField',
 				'fromFieldName'  => 'fields',
 				'connectionArgs' => [
-					'memberType'     => [
+					'memberType'      => [
 						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 						'description' => __( 'Limit results set to certain member type(s).', 'wp-graphql-buddypress' ),
 					],
@@ -49,7 +49,7 @@ class XProfileFieldConnection {
 						'type'        => 'Boolean',
 						'description' => __( 'Whether to hide XProfile fields where the user has no provided data.', 'wp-graphql-buddypress' ),
 					],
-					'userId'  => [
+					'userId'          => [
 						'type'        => 'Int',
 						'description' => __( 'User ID to get XProfile fields data.', 'wp-graphql-buddypress' ),
 					],

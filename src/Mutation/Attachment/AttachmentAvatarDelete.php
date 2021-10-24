@@ -57,14 +57,14 @@ class AttachmentAvatarDelete {
 	 */
 	public static function get_output_fields(): array {
 		return [
-			'deleted' => [
+			'deleted'    => [
 				'type'        => 'Boolean',
 				'description' => __( 'The status of the attachment deletion.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
 					return $payload['deleted'];
 				},
 			],
-			'attachment'   => [
+			'attachment' => [
 				'type'        => 'Attachment',
 				'description' => __( 'The deleted attachment object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {

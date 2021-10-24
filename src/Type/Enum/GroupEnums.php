@@ -26,12 +26,12 @@ class GroupEnums {
 			[
 				'description' => __( 'The attribute to order groups by.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'DATE_CREATED'      => [
+					'DATE_CREATED'       => [
 						'name'        => 'DATE_CREATED',
 						'description' => __( 'Used to order groups by the created date.', 'wp-graphql-buddypress' ),
 						'value'       => 'date_created',
 					],
-					'LAST_ACTIVITY' => [
+					'LAST_ACTIVITY'      => [
 						'name'        => 'LAST_ACTIVITY',
 						'description' => __( 'Used to order groups by last activity.', 'wp-graphql-buddypress' ),
 						'value'       => 'last_activity',
@@ -41,12 +41,12 @@ class GroupEnums {
 						'description' => __( 'Used to order groups by totam member count.', 'wp-graphql-buddypress' ),
 						'value'       => 'total_member_count',
 					],
-					'NAME' => [
+					'NAME'               => [
 						'name'        => 'NAME',
 						'description' => __( 'Used to order groups by name.', 'wp-graphql-buddypress' ),
 						'value'       => 'name',
 					],
-					'RANDOM' => [
+					'RANDOM'             => [
 						'name'        => 'RANDOM',
 						'description' => __( 'Used to order groups randomly.', 'wp-graphql-buddypress' ),
 						'value'       => 'random',
@@ -61,27 +61,27 @@ class GroupEnums {
 			[
 				'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ACTIVE'      => [
+					'ACTIVE'       => [
 						'name'        => 'ACTIVE',
 						'description' => __( 'Used to order groups by their status.', 'wp-graphql-buddypress' ),
 						'value'       => 'active',
 					],
-					'NEWEST'      => [
+					'NEWEST'       => [
 						'name'        => 'NEWEST',
 						'description' => __( 'Used to order groups by their date.', 'wp-graphql-buddypress' ),
 						'value'       => 'newest',
 					],
-					'ALPHABETICAL'      => [
+					'ALPHABETICAL' => [
 						'name'        => 'ALPHABETICAL',
 						'description' => __( 'Used to order groups by alphabetical order.', 'wp-graphql-buddypress' ),
 						'value'       => 'alphabetical',
 					],
-					'RANDOM' => [
+					'RANDOM'       => [
 						'name'        => 'RANDOM',
 						'description' => __( 'Used to order groups randomly.', 'wp-graphql-buddypress' ),
 						'value'       => 'random',
 					],
-					'POPULAR' => [
+					'POPULAR'      => [
 						'name'        => 'POPULAR',
 						'description' => __( 'Used to order groups by their populatity.', 'wp-graphql-buddypress' ),
 						'value'       => 'popular',
@@ -150,7 +150,7 @@ class GroupEnums {
 						__( 'Group with the %1$s type', 'wp-graphql-buddypress' ),
 						$type
 					),
-					'value' => $type,
+					'value'       => $type,
 				];
 			}
 		}

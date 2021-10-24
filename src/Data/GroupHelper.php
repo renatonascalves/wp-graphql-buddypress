@@ -66,22 +66,22 @@ class GroupHelper {
 	 */
 	public static function prepare_group_args( array $input, string $action, $group = null ): array {
 		$mutation_args = [
-			'name'        => empty( $input['name'] )
+			'name'         => empty( $input['name'] )
 				? $group->name ?? ''
 				: $input['name'],
-			'description' => empty( $input['description'] )
+			'description'  => empty( $input['description'] )
 				? $group->description ?? ''
 				: $input['description'],
-			'creator_id'  => empty( $input['creatorId'] )
+			'creator_id'   => empty( $input['creatorId'] )
 				? $group->creator_id ?? bp_loggedin_user_id()
 				: $input['creatorId'],
-			'parent_id'   => empty( $input['parentId'] )
+			'parent_id'    => empty( $input['parentId'] )
 				? $group->parent_id ?? null
 				: $input['parentId'],
-			'slug'        => empty( $input['slug'] )
+			'slug'         => empty( $input['slug'] )
 				? $group->slug ?? null
 				: groups_check_slug( sanitize_title( esc_attr( $input['slug'] ) ) ),
-			'status'      => empty( $input['status'] )
+			'status'       => empty( $input['status'] )
 				? $group->status ?? null
 				: $input['status'],
 			'enable_forum' => empty( $input['hasForum'] )

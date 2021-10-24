@@ -20,7 +20,7 @@ class GroupMembersEnums {
 	 */
 	public static function register() {
 		$values = [
-			'LAST_JOINED'      => [
+			'LAST_JOINED'  => [
 				'name'        => 'LAST_JOINED',
 				'description' => __( 'Used to order group last joined members.', 'wp-graphql-buddypress' ),
 				'value'       => 'last_joined',
@@ -70,7 +70,7 @@ class GroupMembersEnums {
 					__( 'Group member role: %1$s', 'wp-graphql-buddypress' ),
 					$role->name
 				),
-				'value' => $role->id,
+				'value'       => $role->id,
 			];
 		}
 

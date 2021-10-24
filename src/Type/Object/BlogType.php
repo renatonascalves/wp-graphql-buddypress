@@ -36,7 +36,7 @@ class BlogType {
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
 				'eagerlyLoadType'   => true,
 				'fields'            => [
-					'admin' => [
+					'admin'            => [
 						'type'        => 'User',
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Blog $blog, array $args, AppContext $context ) {
@@ -45,11 +45,11 @@ class BlogType {
 								: null;
 						},
 					],
-					'name' => [
+					'name'             => [
 						'type'        => 'String',
 						'description' => __( 'The name of the Blog.', 'wp-graphql-buddypress' ),
 					],
-					'description' => [
+					'description'      => [
 						'type'        => 'String',
 						'description' => __( 'The description of the blog.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -70,15 +70,15 @@ class BlogType {
 							return stripslashes( $blog->description );
 						},
 					],
-					'path' => [
+					'path'             => [
 						'type'        => 'String',
 						'description' => __( 'The path of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'domain' => [
+					'domain'           => [
 						'type'        => 'String',
 						'description' => __( 'The domain of the blog.', 'wp-graphql-buddypress' ),
 					],
-					'lastActivity' => [
+					'lastActivity'     => [
 						'type'        => 'String',
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],
@@ -95,7 +95,7 @@ class BlogType {
 							return Factory::resolve_attachment( $blog->databaseId ?? 0, 'blog' );
 						},
 					],
-					'attachmentCover' => [
+					'attachmentCover'  => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Cover of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Blog $blog ) {
@@ -127,11 +127,11 @@ class BlogType {
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Blog object.', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'           => [
+					'id'     => [
 						'type'        => 'ID',
 						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
-					'blogId'      => [
+					'blogId' => [
 						'type'        => 'Int',
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],

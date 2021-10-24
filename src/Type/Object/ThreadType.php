@@ -64,11 +64,11 @@ class ThreadType {
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Thread object.', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'           => [
+					'id'       => [
 						'type'        => 'ID',
 						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
-					'threadId'      => [
+					'threadId' => [
 						'type'        => 'Int',
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],

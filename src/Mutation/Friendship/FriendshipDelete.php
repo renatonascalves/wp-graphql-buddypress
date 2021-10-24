@@ -43,11 +43,11 @@ class FriendshipDelete {
 				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'User ID of the friendship initiator.', 'wp-graphql-buddypress' ),
 			],
-			'friendId' => [
+			'friendId'    => [
 				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'User ID of the `friend` - the one invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
-			'force' => [
+			'force'       => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to force friendship removal.', 'wp-graphql-buddypress' ),
 			],
@@ -61,7 +61,7 @@ class FriendshipDelete {
 	 */
 	public static function get_output_fields(): array {
 		return [
-			'deleted' => [
+			'deleted'    => [
 				'type'        => 'Boolean',
 				'description' => __( 'The status of the friendship deletion.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {

@@ -29,9 +29,9 @@ class ThreadConnection {
 		register_graphql_connection(
 			self::get_thread_connection_config(
 				[
-					'fromType'       => 'User',
-					'toType'         => 'Thread',
-					'fromFieldName'  => 'threads',
+					'fromType'      => 'User',
+					'toType'        => 'Thread',
+					'fromFieldName' => 'threads',
 				]
 			)
 		);
@@ -64,11 +64,11 @@ class ThreadConnection {
 						'type'        => 'String',
 						'description' => __( 'Search term(s) to retrieve matching thread for.', 'wp-graphql-buddypress' ),
 					],
-					'type' => [
+					'type'   => [
 						'type'        => 'ThreadTypeEnum',
 						'description' => __( 'Filter the results by thread status.', 'wp-graphql-buddypress' ),
 					],
-					'box' => [
+					'box'    => [
 						'type'        => 'ThreadBoxEnum',
 						'description' => __( 'Filter the results by box.', 'wp-graphql-buddypress' ),
 					],
@@ -94,11 +94,11 @@ class ThreadConnection {
 				'toType'         => 'Message',
 				'fromFieldName'  => 'messages',
 				'connectionArgs' => [
-					'order'       => [
+					'order' => [
 						'type'        => 'OrderEnum',
 						'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 					],
-					'type'       => [
+					'type'  => [
 						'type'        => 'MessageTypeEnum',
 						'description' => __( 'Filter the results by type.', 'wp-graphql-buddypress' ),
 					],
@@ -124,7 +124,7 @@ class ThreadConnection {
 				'toType'         => 'User',
 				'fromFieldName'  => 'recipients',
 				'connectionArgs' => [
-					'order'       => [
+					'order' => [
 						'type'        => 'OrderEnum',
 						'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 					],

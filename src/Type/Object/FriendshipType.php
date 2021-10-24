@@ -36,7 +36,7 @@ class FriendshipType {
 				'description'       => __( 'Info about a BuddyPress Friendship.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'initiator' => [
+					'initiator'   => [
 						'type'        => 'User',
 						'description' => __( 'The initiator of the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
@@ -45,7 +45,7 @@ class FriendshipType {
 								: null;
 						},
 					],
-					'friend' => [
+					'friend'      => [
 						'type'        => 'User',
 						'description' => __( 'The friend, the one invited to the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
@@ -87,7 +87,7 @@ class FriendshipType {
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Friendship object.', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id' => [
+					'id'           => [
 						'type'        => 'ID',
 						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
@@ -96,7 +96,7 @@ class FriendshipType {
 						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve' => function ( $source, array $args ) {
+				'resolve'     => function ( $source, array $args ) {
 
 					// Require user to be logged in.
 					if ( ! is_user_logged_in() ) {

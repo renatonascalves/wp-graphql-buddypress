@@ -44,7 +44,7 @@ class GroupType {
 							return Factory::resolve_group_object( $group->parent, $context );
 						},
 					],
-					'creator'        => [
+					'creator'          => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
@@ -53,7 +53,7 @@ class GroupType {
 								: null;
 						},
 					],
-					'admins'         => [
+					'admins'           => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
@@ -91,7 +91,7 @@ class GroupType {
 							);
 						},
 					],
-					'mods'         => [
+					'mods'             => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
@@ -178,7 +178,7 @@ class GroupType {
 						'type'        => 'GroupStatusEnum',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 					],
-					'types'           => [
+					'types'            => [
 						'type'        => [ 'list_of' => 'GroupTypeEnum' ],
 						'description' => __( 'The types of the group.', 'wp-graphql-buddypress' ),
 					],
@@ -195,7 +195,7 @@ class GroupType {
 							return Factory::resolve_attachment( $group->databaseId ?? 0, 'group' );
 						},
 					],
-					'attachmentCover' => [
+					'attachmentCover'  => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Cover of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {

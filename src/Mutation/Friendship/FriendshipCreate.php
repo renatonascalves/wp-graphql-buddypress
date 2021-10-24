@@ -43,11 +43,11 @@ class FriendshipCreate {
 				'type'        => 'Int',
 				'description' => __( 'User ID of the friendship initiator. Defaults to the logged in user.', 'wp-graphql-buddypress' ),
 			],
-			'friendId' => [
+			'friendId'    => [
 				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'User ID of the `friend` - the one being invited to the friendship.', 'wp-graphql-buddypress' ),
 			],
-			'force' => [
+			'force'       => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to force the friendship agreement.', 'wp-graphql-buddypress' ),
 			],

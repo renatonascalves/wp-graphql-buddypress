@@ -28,40 +28,40 @@ class MemberConnection {
 				'fromFieldName'      => 'members',
 				'connectionTypeName' => 'RootQueryToMembersConnection',
 				'connectionArgs'     => [
-					'type'  => [
+					'type'            => [
 						'type'        => 'MemberOrderByTypeEnum',
 						'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
 					],
-					'userId'      => [
+					'userId'          => [
 						'type'        => 'Int',
 						'description' => __( 'Limit results to friends of a user with specific ID.', 'wp-graphql-buddypress' ),
 					],
-					'exclude'     => [
+					'exclude'         => [
 						'type'        => [ 'list_of' => 'Int' ],
 						'description' => __( 'Ensure result set excludes Members with specific IDs.', 'wp-graphql-buddypress' ),
 					],
-					'include'     => [
+					'include'         => [
 						'type'        => [ 'list_of' => 'Int' ],
 						'description' => __( 'Ensure result set includes Members with specific IDs.', 'wp-graphql-buddypress' ),
 					],
-					'memberType'     => [
+					'memberType'      => [
 						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 						'description' => __( 'Limit result set to certain member type(s).', 'wp-graphql-buddypress' ),
 					],
-					'memberTypeNotIn'     => [
+					'memberTypeNotIn' => [
 						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 						'description' => __( 'Limit result set excluding certain member type(s).', 'wp-graphql-buddypress' ),
 					],
-					'xprofile'   => [
+					'xprofile'        => [
 						'type'        => 'String',
 						'description' => __( 'Limit result set to a certain XProfile field.', 'wp-graphql-buddypress' ),
 					],
-					'search'      => [
+					'search'          => [
 						'type'        => 'String',
 						'description' => __( 'Search term(s) to retrieve matching members.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+				'resolve'            => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_members_connection( $source, $args, $context, $info );
 				},
 			]

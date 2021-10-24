@@ -48,18 +48,18 @@ class Friendship extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id' => function() {
+				'id'          => function() {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'friendship', (string) $this->data->id )
 						: null;
 				},
-				'databaseId' => function() {
+				'databaseId'  => function() {
 					return $this->data->id ?? null;
 				},
-				'initiator' => function() {
+				'initiator'   => function() {
 					return $this->data->initiator_user_id ?? null;
 				},
-				'friend' => function() {
+				'friend'      => function() {
 					return $this->data->friend_user_id ?? null;
 				},
 				'isConfirmed' => function() {

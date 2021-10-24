@@ -26,12 +26,12 @@ class FriendshipEnums {
 			[
 				'description' => __( 'The attribute to order friendships by.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ID'      => [
+					'ID'                => [
 						'name'        => 'ID',
 						'description' => __( 'Sort friendships by the id column.', 'wp-graphql-buddypress' ),
 						'value'       => 'id',
 					],
-					'FRIEND_USER_ID' => [
+					'FRIEND_USER_ID'    => [
 						'name'        => 'FRIEND_USER_ID',
 						'description' => __( 'Sort friendships by the friend_user_id column.', 'wp-graphql-buddypress' ),
 						'value'       => 'friend_user_id',
@@ -41,7 +41,7 @@ class FriendshipEnums {
 						'description' => __( 'Sort friendships by the initiator_user_id column.', 'wp-graphql-buddypress' ),
 						'value'       => 'initiator_user_id',
 					],
-					'DATE_CREATED' => [
+					'DATE_CREATED'      => [
 						'name'        => 'DATE_CREATED',
 						'description' => __( 'Sort friendships by the date_created column.', 'wp-graphql-buddypress' ),
 						'value'       => 'date_created',

@@ -66,21 +66,21 @@ class Thread extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id' => function() {
+				'id'          => function() {
 					return ! empty( $this->data->thread_id )
 						? Relay::toGlobalId( 'thread', (string) $this->data->thread_id )
 						: null;
 				},
-				'databaseId' => function() {
+				'databaseId'  => function() {
 					return $this->data->thread_id ?? null;
 				},
 				'unreadCount' => function() {
 					return $this->data->unread_count ?? null;
 				},
-				'recipients' => function() {
+				'recipients'  => function() {
 					return $this->data->recipients ?? null;
 				},
-				'messages' => function() {
+				'messages'    => function() {
 					return $this->data->messages ?? null;
 				},
 			];

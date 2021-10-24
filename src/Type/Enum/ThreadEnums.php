@@ -23,17 +23,17 @@ class ThreadEnums {
 			[
 				'description' => __( 'Shorthand for certain filter thread type combinations.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ALL'      => [
+					'ALL'    => [
 						'name'        => 'ALL',
 						'description' => __( 'Used to filter all threads.', 'wp-graphql-buddypress' ),
 						'value'       => 'all',
 					],
-					'READ'      => [
+					'READ'   => [
 						'name'        => 'READ',
 						'description' => __( 'Used to filter threads by the read status.', 'wp-graphql-buddypress' ),
 						'value'       => 'read',
 					],
-					'UNREAD'      => [
+					'UNREAD' => [
 						'name'        => 'UNREAD',
 						'description' => __( 'Used to filter threads by unread status.', 'wp-graphql-buddypress' ),
 						'value'       => 'unread',
@@ -47,12 +47,12 @@ class ThreadEnums {
 			[
 				'description' => __( 'Shorthand for certain filter thread box combinations.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'INBOX'      => [
+					'INBOX'   => [
 						'name'        => 'INBOX',
 						'description' => __( 'Used to get threads by inbox.', 'wp-graphql-buddypress' ),
 						'value'       => 'inbox',
 					],
-					'SENTBOX'      => [
+					'SENTBOX' => [
 						'name'        => 'SENTBOX',
 						'description' => __( 'Used to get threads by sent box.', 'wp-graphql-buddypress' ),
 						'value'       => 'sentbox',
@@ -66,12 +66,12 @@ class ThreadEnums {
 			[
 				'description' => __( 'Shorthand for certain filter message combinations.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ALL'      => [
+					'ALL'     => [
 						'name'        => 'ALL',
 						'description' => __( 'Used to get all messages (starred and unstarred).', 'wp-graphql-buddypress' ),
 						'value'       => 'all',
 					],
-					'STARRED'      => [
+					'STARRED' => [
 						'name'        => 'STARRED',
 						'description' => __( 'Used to get starred messages.', 'wp-graphql-buddypress' ),
 						'value'       => 'starred',

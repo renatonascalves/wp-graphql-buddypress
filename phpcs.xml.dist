@@ -54,9 +54,6 @@
 	</rule>
 
 	<rule ref="WordPress">
-		<!-- Allow array disalignment -->
-		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"/>
-
 		<!-- Pending investigation -->
 		<exclude name="PHPCompatibility.Keywords.ForbiddenNamesAsDeclared.objectFound"/>
 
