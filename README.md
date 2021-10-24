@@ -6,8 +6,8 @@ Docs (soon) • [Join Slack](https://wpgql-slack.herokuapp.com/)
 
 ## System Requirements
 
-* PHP >= 7.1
-* WP >= 4.9
+* PHP >= 7.3
+* WP >= 5.8
 * WPGraphQL >= latest
 * BuddyPress >= latest
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * MessageStar Mutation.
+ * StarMessage Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation\Message
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Thread
  * @since 0.0.1-alpha
  */
 
@@ -14,12 +14,12 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
 
 /**
- * MessageStar Class.
+ * StarMessage Class.
  */
 class StarMessage {
 
 	/**
-	 * Registers the MessageStar mutation.
+	 * Registers the StarMessage mutation.
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(

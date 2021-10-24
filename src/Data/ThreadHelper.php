@@ -23,7 +23,7 @@ class ThreadHelper {
 	 *
 	 * @throws UserError User error for invalid thread.
 	 *
-	 * @param array $input Array of possible input fields.
+	 * @param array|int $input Array of possible input fields. Or thread ID.
 	 * @return BP_Messages_Thread
 	 */
 	public static function get_thread_from_input( $input ): BP_Messages_Thread {
@@ -39,6 +39,8 @@ class ThreadHelper {
 			$thread_id = absint( $id_components['id'] );
 		} elseif ( ! empty( $input['threadId'] ) ) {
 			$thread_id = absint( $input['threadId'] );
+		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
+			$thread_id = absint( $input );
 		}
 
 		$thread_object = new BP_Messages_Thread( $thread_id, 'ASC', [ 'user_id' => $input['userId'] ?? bp_loggedin_user_id() ] );

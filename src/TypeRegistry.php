@@ -37,6 +37,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
@@ -290,6 +291,7 @@ class TypeRegistry {
 
 			// Thread/Messages Mutations.
 			StarMessage::register_mutation();
+			ThreadDelete::register_mutation();
 		}
 
 		// Attachment Type/Object.
