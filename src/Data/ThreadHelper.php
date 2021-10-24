@@ -70,6 +70,8 @@ class ThreadHelper {
 			}
 
 			$message_id = absint( $id_components['id'] );
+		} elseif ( ! empty( $input['messageId'] ) ) {
+			$message_id = absint( $input['messageId'] );
 		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
 			$message_id = absint( $input );
 		}

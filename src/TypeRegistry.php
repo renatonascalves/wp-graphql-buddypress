@@ -36,6 +36,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
@@ -72,7 +73,7 @@ class TypeRegistry {
 	 * Registers actions related to the type registry.
 	 */
 	public static function add_actions() {
-		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 99 );
+		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 9999 );
 	}
 
 	/**
@@ -185,22 +186,6 @@ class TypeRegistry {
 		// General Enum(s).
 		GeneralEnums::register();
 
-		// Thread/Messages component.
-		if ( bp_is_active( 'messages' ) ) {
-
-			// Enum(s).
-			ThreadEnums::register();
-
-			// Object(s).
-			ThreadType::register();
-			MessageType::register();
-
-			// Connections.
-			ThreadConnection::register_connections();
-
-			// Mutations.
-		}
-
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
 
@@ -288,6 +273,23 @@ class TypeRegistry {
 			FriendshipDelete::register_mutation();
 			FriendshipUpdate::register_mutation();
 			FriendshipCreate::register_mutation();
+		}
+
+		// Thread/Messages component.
+		if ( bp_is_active( 'messages' ) ) {
+
+			// Enum(s).
+			ThreadEnums::register();
+
+			// Object(s).
+			ThreadType::register();
+			MessageType::register();
+
+			// Thread/Messages Connections.
+			ThreadConnection::register_connections();
+
+			// Thread/Messages Mutations.
+			StarMessage::register_mutation();
 		}
 
 		// Attachment Type/Object.

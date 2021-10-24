@@ -104,7 +104,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->thread             = $this->bp_factory->message->create_and_get(
 			[
 				'sender_id'  => $this->random_user,
-				'recipients' => array( $this->user ),
+				'recipients' => [ $this->user ],
 				'subject'    => 'Threat Test',
 				'content'    => 'Bar',
 			]
@@ -366,7 +366,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			array_merge(
 				[
 					'sender_id'  => $this->admin,
-					'recipients' => array( $this->random_user ),
+					'recipients' => [ $this->random_user ],
 					'subject'    => 'Thread  Subject',
 					'content'    => 'Foo',
 				],
