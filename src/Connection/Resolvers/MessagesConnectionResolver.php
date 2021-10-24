@@ -87,7 +87,7 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_query(): array {
-		return BP_Messages_Thread::get_messages( $this->source->databaseId, $this->query_args );
+		return (array) BP_Messages_Thread::get_messages( $this->source->databaseId, $this->query_args );
 	}
 
 	/**

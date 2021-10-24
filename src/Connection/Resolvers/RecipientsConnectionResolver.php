@@ -54,7 +54,6 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
-		$query_args['recipients_page']        = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
@@ -99,7 +98,7 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 	public function get_ids(): array {
 		$ids = wp_list_pluck( $this->query, 'user_id' );
 
-		if ( ! empty( $this->args['where']['order'] ) && 'DESC' === $this->args['where']['order'] ) {
+		if ( 'DESC' === $this->query_args['order'] ) {
 			$ids = array_reverse( $ids );
 		}
 
