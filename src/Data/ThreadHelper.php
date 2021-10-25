@@ -87,4 +87,14 @@ class ThreadHelper {
 
 		return $message_object;
 	}
+
+	/**
+	 * Check if user can update or delete threads.
+	 *
+	 * @param int $thread_id Thread ID.
+	 * @return bool
+	 */
+	public static function can_update_or_delete_thread( int $thread_id ): bool {
+		return ( null !== messages_check_thread_access( $thread_id, bp_loggedin_user_id() ) );
+	}
 }

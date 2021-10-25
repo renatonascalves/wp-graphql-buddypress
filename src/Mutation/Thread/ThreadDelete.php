@@ -84,7 +84,7 @@ class ThreadDelete {
 			$user_id = bp_loggedin_user_id();
 
 			// Check if user can perform this action.
-			if ( ! is_user_logged_in() || ! messages_check_thread_access( $thread->thread_id, $user_id ) ) {
+			if ( false === ThreadHelper::can_update_or_delete_thread( $thread->thread_id ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
