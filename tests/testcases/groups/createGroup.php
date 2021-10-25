@@ -225,8 +225,8 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 	protected function create_group_type( $args = [] ) {
 		$query = '
 			mutation createGroupTest(
-				$clientMutationId:String!,
-				$name:String!,
+				$clientMutationId:String!
+				$name:String!
 				$types:[GroupTypeEnum]
 			) {
 				createGroup(

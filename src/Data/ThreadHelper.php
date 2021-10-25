@@ -89,6 +89,49 @@ class ThreadHelper {
 	}
 
 	/**
+	 * Mapping thread params.
+	 *
+	 * @param array                   $input  The input for the mutation.
+	 * @param string                  $action Hook action.
+	 * @param BP_Messages_Thread|null $thread Thread object.
+	 * @return array
+	 */
+	public static function prepare_thread_args( array $input, string $action, $thread = null ): array {
+		$mutation_args = [
+			'sender_id'  => empty( $input['senderId'] )
+				? $thread->sender_id ?? bp_loggedin_user_id()
+				: $input['senderId'],
+			'subject'    => empty( $input['subject'] )
+				? $thread->subject ?? null
+				: $input['subject'],
+			'content'    => empty( $input['message'] )
+				? $thread->message ?? null
+				: $input['message'],
+			'recipients' => empty( $input['recipients'] )
+				? (
+					$thread->recipients
+						? wp_parse_id_list( wp_list_pluck( $thread->recipients, 'user_id' ) )
+						: null
+				)
+				: $input['recipients'],
+		];
+
+		// Setting the group ID.
+		if ( ! empty( $thread->thread_id ) ) {
+			$mutation_args['thread_id'] = $thread->thread_id;
+		}
+
+		/**
+		 * Allows updating mutation args.
+		 *
+		 * @param array                   $mutation_args Mutation output args.
+		 * @param array                   $input         Mutation input args.
+		 * @param BP_Messages_Thread|null $thread        Thread object.
+		 */
+		return (array) apply_filters( "bp_graphql_thread_{$action}_mutation_args", $mutation_args, $input, $thread );
+	}
+
+	/**
 	 * Check if user can update or delete threads.
 	 *
 	 * @param int $thread_id Thread ID.
