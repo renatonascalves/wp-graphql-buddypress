@@ -99,13 +99,13 @@ class ThreadHelper {
 	public static function prepare_thread_args( array $input, string $action, $thread = null ): array {
 		$mutation_args = [
 			'sender_id'  => empty( $input['senderId'] )
-				? $thread->sender_id ?? bp_loggedin_user_id()
+				? bp_loggedin_user_id()
 				: $input['senderId'],
 			'subject'    => empty( $input['subject'] )
-				? $thread->subject ?? null
+				? $thread->last_message_subject ?? null
 				: $input['subject'],
 			'content'    => empty( $input['message'] )
-				? $thread->message ?? null
+				? $thread->last_message_content ?? null
 				: $input['message'],
 			'recipients' => empty( $input['recipients'] )
 				? (
@@ -116,7 +116,7 @@ class ThreadHelper {
 				: $input['recipients'],
 		];
 
-		// Setting the group ID.
+		// Setting the thread ID.
 		if ( ! empty( $thread->thread_id ) ) {
 			$mutation_args['thread_id'] = $thread->thread_id;
 		}
