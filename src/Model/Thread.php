@@ -19,7 +19,9 @@ use BP_Messages_Thread;
  * @property int    $databaseId Database ID.
  * @property int    $unreadCount Count of the unread messages.
  * @property array  $messages Thread messages.
+ * @property int    $lastMessage Last message ID of the thread.
  * @property array  $recipients Thread recipients.
+ * @property array  $senderIds Thread sender IDs.
  */
 class Thread extends Model {
 
@@ -77,7 +79,7 @@ class Thread extends Model {
 				'lastMessage' => function() {
 					return $this->data->last_message_id ?? null;
 				},
-				'sender_ids' => function() {
+				'senderIds'   => function() {
 					return $this->data->sender_ids ?? null;
 				},
 				'unreadCount' => function() {
