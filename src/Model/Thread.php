@@ -74,6 +74,12 @@ class Thread extends Model {
 				'databaseId'  => function() {
 					return $this->data->thread_id ?? null;
 				},
+				'lastMessage' => function() {
+					return $this->data->last_message_id ?? null;
+				},
+				'sender_ids' => function() {
+					return $this->data->sender_ids ?? null;
+				},
 				'unreadCount' => function() {
 					return $this->data->unread_count ?? null;
 				},

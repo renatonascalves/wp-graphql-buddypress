@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
 
+use GraphQL\Deferred;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
@@ -38,6 +39,34 @@ class ThreadType {
 					'unreadCount' => [
 						'type'        => 'Int',
 						'description' => __( 'Total count of unread messages for the thread.', 'wp-graphql-buddypress' ),
+					],
+					'lastMessage' => [
+						'type'        => 'Message',
+						'description' => __( 'The last message of the thread.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
+							return ! empty( $thread->lastMessage )
+								? $context->get_loader( 'bp_message' )->load_deferred( $thread->lastMessage )
+								: null;
+						},
+					],
+					'senders'           => [
+						'type'        => [ 'list_of' => 'User' ],
+						'description' => __( 'All users of all messages in the thread.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
+							$users = array_unique( $thread->sender_ids ?? [] );
+
+							if ( empty( $users ) ) {
+								return null;
+							}
+
+							$context->get_loader( 'user' )->buffer( $users );
+							return new Deferred(
+								function() use ( $context, $users ) {
+									// @codingStandardsIgnoreLine.
+									return $context->get_loader( 'user' )->loadMany( $users );
+								}
+							);
+						},
 					],
 				],
 				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
