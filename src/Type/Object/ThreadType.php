@@ -49,7 +49,7 @@ class ThreadType {
 								: null;
 						},
 					],
-					'senders'           => [
+					'senders'     => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'All users of all messages in the thread.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
