@@ -69,7 +69,7 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    object passed down zthe resolve tree
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_thread_recipients_connection_query_args',
 			$query_args,
 			$this->source,
@@ -140,7 +140,7 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input( $args, [ 'order' => 'order' ] );
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_recipients_query',
 			$query_args,
 			$args,

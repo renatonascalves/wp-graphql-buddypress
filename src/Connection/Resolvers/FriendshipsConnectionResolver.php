@@ -83,7 +83,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context passed down the resolve tree.
 		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_friendship_connection_query_args',
 			$query_args,
 			$this->source,
@@ -171,7 +171,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context being passed.
 		 * @param ResolveInfo $info       Info about the resolver.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_friendship_query',
 			$query_args,
 			$args,

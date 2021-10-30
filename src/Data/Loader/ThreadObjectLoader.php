@@ -51,7 +51,7 @@ class ThreadObjectLoader extends AbstractDataLoader {
 
 		// Get all objects.
 		foreach ( $keys as $key ) {
-			$loaded_threads[ $key ] = ThreadHelper::get_thread_from_input( [ 'threadId' => absint( $key ) ] );
+			$loaded_threads[ $key ] = ThreadHelper::get_thread_from_input( absint( $key ) );
 		}
 
 		return $loaded_threads;

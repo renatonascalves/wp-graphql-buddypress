@@ -124,13 +124,13 @@ class ThreadUpdate {
 			 * @since 0.0.1-alpha
 			 *
 			 * @param bool               $value    Whether the user can edit the message meta.
-			 *                                     By default: only the sender and a community moderator can.
+			 *                                     By default: only the sender, for now.
 			 * @param BP_Messages_Message $message The message object.
 			 * @param array               $input   Input values.
 			 */
 			$can_edit_item_meta = (bool) apply_filters(
 				'bp_graphql_messages_can_edit_item_meta',
-				( $user_id === $message->sender_id || bp_current_user_can( 'bp_moderate' ) ),
+				( $user_id === $message->sender_id ),
 				$message,
 				$input
 			);

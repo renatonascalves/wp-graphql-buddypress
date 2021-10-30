@@ -45,6 +45,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			->hasField( 'isStarred', true );
 
 		$this->assertTrue( bp_messages_is_message_starred( $message->id, $u1 ) );
+		$this->assertFalse( bp_messages_is_message_starred( $message->id, $u2 ) );
 
 		$this->assertQuerySuccessful( $this->star_message( $message->id ) )
 			->hasField( 'databaseId', $message->id )
@@ -52,6 +53,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			->hasField( 'isStarred', false );
 
 		$this->assertFalse( bp_messages_is_message_starred( $message->id, $u1 ) );
+		$this->assertFalse( bp_messages_is_message_starred( $message->id, $u2 ) );
 	}
 
 	public function test_star_message_as_recipient() {
@@ -84,6 +86,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			->hasField( 'isStarred', true );
 
 		$this->assertTrue( bp_messages_is_message_starred( $m2->id, $u2 ) );
+		$this->assertFalse( bp_messages_is_message_starred( $m2->id, $u1 ) );
 
 		$this->assertQuerySuccessful( $this->star_message( $m2->id ) )
 			->hasField( 'databaseId', $m2->id )
@@ -91,6 +94,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			->hasField( 'isStarred', false );
 
 		$this->assertFalse( bp_messages_is_message_starred( $m2->id, $u2 ) );
+		$this->assertFalse( bp_messages_is_message_starred( $m2->id, $u1 ) );
 	}
 
 	public function test_star_message_with_unauthenticated_user() {

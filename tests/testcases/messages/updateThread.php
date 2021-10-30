@@ -162,7 +162,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	/**
 	 * Update thread mutation.
 	 *
-	 * @param array $args Variables.
+	 * @param int|null $thread_id Thread ID.
+	 * @param array    $args      Variables.
 	 * @return array
 	 */
 	protected function update_thread( $thread_id = null, array $args = [] ): array {

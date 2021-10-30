@@ -112,7 +112,7 @@ class ThreadCreate {
 				throw new UserError( __( 'Recipients is a required field.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Create thread and return its newly created ID.
+			// Create thread and return its ID.
 			$thread_id = messages_new_message(
 				ThreadHelper::prepare_thread_args( $input, 'create', $thread )
 			);

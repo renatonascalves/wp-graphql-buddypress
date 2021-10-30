@@ -8,19 +8,10 @@
 class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
-	 * Global ID.
-	 *
-	 * @var int
-	 */
-	public $global_id;
-
-	/**
 	 * Set up.
 	 */
 	public function setUp() {
 		parent::setUp();
-
-		$this->global_id = $this->toRelayId( 'thread', $this->thread->thread_id );
 	}
 
 	public function test_get_thread_messages() {
@@ -86,10 +77,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			] );
 	}
 
-	/**
-	 * @todo Pending.
-	 */
-	public function get_thread_messages_order_desc() {
+	public function test_get_thread_messages_order_desc() {
 		$this->bp->set_current_user( $this->admin );
 
 		// Create thread.
@@ -97,19 +85,19 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Reply.
 		$m2 = $this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$this->assertQuerySuccessful( $this->get_thread_messages(
 			$message->thread_id,
 			[ 'where' => [ 'order' => 'DESC' ] ]
 		) )
-			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
+			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
@@ -123,6 +111,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $m2->message, 75 ) ) ),
 						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $m2->message ) ),
 						'isStarred'   => false,
+						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $m2->date_sent ),
 					],
 					1 => [
 						'id'          => $this->toRelayId( 'message', (string) $message->id ),
@@ -135,6 +124,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
 						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
 						'isStarred'   => false,
+						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
 			] );
@@ -149,7 +139,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->get_thread_messages(
 			$message->thread_id
 		) )
-			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
+			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
@@ -178,7 +168,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->get_thread_messages(
 			$message->thread_id
 		) )
-			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
+			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [
@@ -215,7 +205,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->get_thread_messages(
 			$message->thread_id
 		) )
-			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
+			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
 			->hasField( 'messages', [
 				'nodes' => [
 					0 => [

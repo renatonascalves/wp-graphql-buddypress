@@ -77,7 +77,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    object passed down zthe resolve tree
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_xprofile_fields_connection_query_args',
 			$query_args,
 			$this->source,
@@ -154,7 +154,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_xprofile_fields_query',
 			$query_args,
 			$args,

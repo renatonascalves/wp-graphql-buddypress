@@ -93,7 +93,7 @@ class ThreadHelper {
 	 *
 	 * @param array                   $input  The input for the mutation.
 	 * @param string                  $action Hook action.
-	 * @param BP_Messages_Thread|null $thread Thread object.
+	 * @param BP_Messages_Thread|null $thread Optional. BuddyPress Thread object.
 	 * @return array
 	 */
 	public static function prepare_thread_args( array $input, string $action, $thread = null ): array {
@@ -126,7 +126,7 @@ class ThreadHelper {
 		 *
 		 * @param array                   $mutation_args Mutation output args.
 		 * @param array                   $input         Mutation input args.
-		 * @param BP_Messages_Thread|null $thread        Thread object.
+		 * @param BP_Messages_Thread|null $thread        BuddyPress Thread object.
 		 */
 		return (array) apply_filters( "bp_graphql_thread_{$action}_mutation_args", $mutation_args, $input, $thread );
 	}

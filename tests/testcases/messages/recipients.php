@@ -8,19 +8,10 @@
 class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
-	 * Global ID.
-	 *
-	 * @var int
-	 */
-	public $global_id;
-
-	/**
 	 * Set up.
 	 */
 	public function setUp() {
 		parent::setUp();
-
-		$this->global_id = $this->toRelayId( 'thread', $this->thread->thread_id );
 	}
 
 	public function test_get_thread_recipients() {
