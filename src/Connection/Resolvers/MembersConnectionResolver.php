@@ -40,12 +40,14 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 			'user_ids'            => false,
 			'exclude'             => false,
 			'xprofile_query'      => false,
+			'populate_extras'     => false,
 			'member_type'         => '',
 			'member_type__not_in' => '',
 		];
 
 		// Prepare for later use.
-		$last = $this->args['last'] ?? null;
+		$first = $this->args['first'] ?? null;
+		$last  = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
 		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
@@ -53,6 +55,9 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
+
+		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
@@ -71,7 +76,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    object passed down zthe resolve tree
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_members_connection_query_args',
 			$query_args,
 			$this->source,
@@ -143,7 +148,7 @@ class MembersConnectionResolver extends AbstractConnectionResolver {
 		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_members_query',
 			$query_args,
 			$args,

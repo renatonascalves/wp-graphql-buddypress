@@ -26,7 +26,7 @@ class AttachmentEnums {
 			[
 				'description' => __( 'Avatar Attachment objects.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'USER'      => [
+					'USER'  => [
 						'name'        => 'USER',
 						'description' => __( 'Avatar Attachment for the user.', 'wp-graphql-buddypress' ),
 						'value'       => 'user',
@@ -36,7 +36,7 @@ class AttachmentEnums {
 						'description' => __( 'Avatar Attachment for the group.', 'wp-graphql-buddypress' ),
 						'value'       => 'group',
 					],
-					'BLOG' => [
+					'BLOG'  => [
 						'name'        => 'BLOG',
 						'description' => __( 'Avatar Attachment for the blog.', 'wp-graphql-buddypress' ),
 						'value'       => 'blog',
@@ -51,17 +51,17 @@ class AttachmentEnums {
 			[
 				'description' => __( 'Cover Attachment objects.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'MEMBERS'      => [
+					'MEMBERS' => [
 						'name'        => 'MEMBERS',
 						'description' => __( 'Cover Attachment for the members/users.', 'wp-graphql-buddypress' ),
 						'value'       => 'members',
 					],
-					'GROUPS' => [
+					'GROUPS'  => [
 						'name'        => 'GROUPS',
 						'description' => __( 'Cover Attachment for the groups.', 'wp-graphql-buddypress' ),
 						'value'       => 'groups',
 					],
-					'BLOGS' => [
+					'BLOGS'   => [
 						'name'        => 'BLOGS',
 						'description' => __( 'Cover Attachment for the blogs.', 'wp-graphql-buddypress' ),
 						'value'       => 'blogs',

@@ -88,7 +88,7 @@ class GroupConnection {
 	 */
 	public static function get_connection_args(): array {
 		return [
-			'showHidden'  => [
+			'showHidden' => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether results should include hidden Groups.', 'wp-graphql-buddypress' ),
 			],
@@ -96,47 +96,47 @@ class GroupConnection {
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the Group has a forum enabled or not.', 'wp-graphql-buddypress' ),
 			],
-			'type'        => [
+			'type'       => [
 				'type'        => 'GroupOrderTypeEnum',
 				'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
 			],
-			'order'       => [
+			'order'      => [
 				'type'        => 'OrderEnum',
 				'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 			],
-			'orderBy'     => [
+			'orderBy'    => [
 				'type'        => 'GroupOrderByEnum',
 				'description' => __( 'Order groups by attribute.', 'wp-graphql-buddypress' ),
 			],
-			'parent'      => [
+			'parent'     => [
 				'type'        => 'Int',
 				'description' => __( 'Parent ID of group to retrieve children of.', 'wp-graphql-buddypress' ),
 			],
-			'search'      => [
+			'search'     => [
 				'type'        => 'String',
 				'description' => __( 'Search term(s) to retrieve matching groups for.', 'wp-graphql-buddypress' ),
 			],
-			'slug'        => [
+			'slug'       => [
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Search group or groups by its/their slug(s).', 'wp-graphql-buddypress' ),
 			],
-			'status'      => [
+			'status'     => [
 				'type'        => [ 'list_of' => 'GroupStatusEnum' ],
 				'description' => __( 'Group statuses to limit results to.', 'wp-graphql-buddypress' ),
 			],
-			'groupType'   => [
+			'groupType'  => [
 				'type'        => 'GroupTypeEnum',
 				'description' => __( 'Include groups of a given type.', 'wp-graphql-buddypress' ),
 			],
-			'userId'      => [
+			'userId'     => [
 				'type'        => 'Int',
 				'description' => __( 'Include groups that this user is a member of.', 'wp-graphql-buddypress' ),
 			],
-			'exclude'     => [
+			'exclude'    => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
-			'include'     => [
+			'include'    => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set includes Groups with specific IDs.', 'wp-graphql-buddypress' ),
 			],
@@ -150,23 +150,23 @@ class GroupConnection {
 	 */
 	public static function get_group_members_connection_args(): array {
 		return [
-			'type'        => [
+			'type'              => [
 				'type'        => 'GroupMembersStatusTypeEnum',
 				'description' => __( 'Sort the order of results by the status of the group members.', 'wp-graphql-buddypress' ),
 			],
-			'exclude'     => [
+			'exclude'           => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes specific member IDs.', 'wp-graphql-buddypress' ),
 			],
-			'excludeBanned'        => [
+			'excludeBanned'     => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether results should exclude banned group members.', 'wp-graphql-buddypress' ),
 			],
-			'excludeAdminsMods'        => [
+			'excludeAdminsMods' => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether results should exclude group admins and mods.', 'wp-graphql-buddypress' ),
 			],
-			'groupMemberRoles'     => [
+			'groupMemberRoles'  => [
 				'type'        => [ 'list_of' => 'GroupMemberRolesEnum' ],
 				'description' => __( 'Ensure result set includes specific Group member roles.', 'wp-graphql-buddypress' ),
 			],

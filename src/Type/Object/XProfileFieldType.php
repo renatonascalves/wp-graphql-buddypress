@@ -35,62 +35,62 @@ class XProfileFieldType {
 				'description'       => __( 'Info about a BuddyPress XProfile field.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'groupId'          => [
+					'groupId'         => [
 						'type'        => 'Int',
 						'description' => __( 'The id field that matches the BP_XProfile_Field->group_id field.', 'wp-graphql-buddypress' ),
 					],
-					'parent'           => [
+					'parent'          => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent field of the current field. This field is equivalent to the BP_XProfile_Field object matching the BP_XProfile_Field->parent_id ID.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( XProfileField $field, array $args, AppContext $context ) {
 							return Factory::resolve_xprofile_field_object( $field->parent, $context );
 						},
 					],
-					'name'             => [
+					'name'            => [
 						'type'        => 'String',
 						'description' => __( 'XProfile field name.', 'wp-graphql-buddypress' ),
 					],
-					'type'             => [
+					'type'            => [
 						'type'        => 'XProfileFieldTypesEnum',
 						'description' => __( 'XProfile field type.', 'wp-graphql-buddypress' ),
 					],
-					'canDelete'             => [
+					'canDelete'       => [
 						'type'        => 'Boolean',
 						'description' => __( 'Can this field be deleted?', 'wp-graphql-buddypress' ),
 					],
-					'isRequired'             => [
+					'isRequired'      => [
 						'type'        => 'Boolean',
 						'description' => __( 'Is it a required field?', 'wp-graphql-buddypress' ),
 					],
-					'fieldOrder'             => [
+					'fieldOrder'      => [
 						'type'        => 'Int',
 						'description' => __( 'The order of the profile field into the group of fields.', 'wp-graphql-buddypress' ),
 					],
-					'optionOrder'             => [
+					'optionOrder'     => [
 						'type'        => 'Int',
 						'description' => __( 'The order of the option into the profile field list of options.', 'wp-graphql-buddypress' ),
 					],
-					'orderBy'             => [
+					'orderBy'         => [
 						'type'        => 'OrderEnum',
 						'description' => __( 'The way profile field\'s options are ordered.', 'wp-graphql-buddypress' ),
 					],
-					'isDefaultOption'             => [
+					'isDefaultOption' => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the option is the default one for the profile field.', 'wp-graphql-buddypress' ),
 					],
-					'visibilityLevel'             => [
+					'visibilityLevel' => [
 						'type'        => 'XProfileFieldVisibilityLevelEnum',
 						'description' => __( 'Who may see the saved value for this profile field.', 'wp-graphql-buddypress' ),
 					],
-					'doAutolink'             => [
+					'doAutolink'      => [
 						'type'        => 'String',
 						'description' => __( 'Is autolink enabled for this profile field.', 'wp-graphql-buddypress' ),
 					],
-					'memberTypes'             => [
+					'memberTypes'     => [
 						'type'        => [ 'list_of' => 'MemberTypesEnum' ],
 						'description' => __( 'Member types to which this field should be available.', 'wp-graphql-buddypress' ),
 					],
-					'description'      => [
+					'description'     => [
 						'type'        => 'String',
 						'description' => __( 'The description of the XProfile field.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -143,11 +143,11 @@ class XProfileFieldType {
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress XProfile Field object', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'           => [
+					'id'      => [
 						'type'        => 'ID',
 						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 					],
-					'fieldId'      => [
+					'fieldId' => [
 						'type'        => 'Int',
 						'description' => __( 'Get the object by its database ID', 'wp-graphql-buddypress' ),
 					],

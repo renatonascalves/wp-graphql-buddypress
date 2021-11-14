@@ -38,11 +38,11 @@ class XProfileFieldDelete {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id' => [
-				'type' => 'ID',
+			'id'         => [
+				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile field.', 'wp-graphql-buddypress' ),
 			],
-			'fieldId' => [
+			'fieldId'    => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_XProfile_Field->id field.', 'wp-graphql-buddypress' ),
 			],
@@ -67,7 +67,7 @@ class XProfileFieldDelete {
 					return (bool) $payload['deleted'];
 				},
 			],
-			'field' => [
+			'field'   => [
 				'type'        => 'XProfileField',
 				'description' => __( 'The deleted XProfile field object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( $payload ) {

@@ -31,7 +31,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 					'createGroup' => [
 						'clientMutationId' => $this->client_mutation_id,
 						'group' => [
-							'id'               => $this->toRelayId( 'group', $group->id ),
+							'id'               => $this->toRelayId( 'group', (string) $group->id ),
 							'databaseId'       => $group->id,
 							'name'             => 'Group Test',
 							'slug'             => 'group-slug',
@@ -44,12 +44,12 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 							),
 							'parent'           => null,
 							'creator'          => [
-								'id'     => $this->toRelayId( 'user', $this->admin ),
+								'id'     => $this->toRelayId( 'user', (string) $this->admin ),
 								'userId' => $this->admin,
 							],
 							'admins'           => [
 								[
-									'id'     => $this->toRelayId( 'user', $this->admin ),
+									'id'     => $this->toRelayId( 'user', (string) $this->admin ),
 									'userId' => $this->admin,
 								],
 							],
@@ -225,8 +225,8 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 	protected function create_group_type( $args = [] ) {
 		$query = '
 			mutation createGroupTest(
-				$clientMutationId:String!,
-				$name:String!,
+				$clientMutationId:String!
+				$name:String!
 				$types:[GroupTypeEnum]
 			) {
 				createGroup(

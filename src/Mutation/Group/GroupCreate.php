@@ -39,23 +39,23 @@ class GroupCreate {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'creatorId'      => [
+			'creatorId'   => [
 				'type'        => 'Int',
 				'description' => __( 'The userId to assign as the group creator.', 'wp-graphql-buddypress' ),
 			],
-			'parentId'      => [
+			'parentId'    => [
 				'type'        => 'Int',
 				'description' => __( 'The ID of the parent group.', 'wp-graphql-buddypress' ),
 			],
-			'name'      => [
+			'name'        => [
 				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The name of the group.', 'wp-graphql-buddypress' ),
 			],
-			'description'      => [
+			'description' => [
 				'type'        => 'String',
 				'description' => __( 'The description of the group.', 'wp-graphql-buddypress' ),
 			],
-			'slug'      => [
+			'slug'        => [
 				'type'        => 'String',
 				'description' => __( 'The slug of the group.', 'wp-graphql-buddypress' ),
 			],
@@ -63,13 +63,13 @@ class GroupCreate {
 				'type'        => 'GroupStatusEnum',
 				'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 			],
-			'types'      => [
+			'types'       => [
 				'type'        => [
 					'list_of' => 'GroupTypeEnum',
 				],
 				'description' => __( 'The type(s) of the group.', 'wp-graphql-buddypress' ),
 			],
-			'hasForum'      => [
+			'hasForum'    => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether the group has a forum enabled.', 'wp-graphql-buddypress' ),
 			],

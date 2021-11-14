@@ -85,54 +85,54 @@ class Group extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id' => function() {
+				'id'               => function() {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'group', (string) $this->data->id )
 						: null;
 				},
-				'databaseId' => function() {
+				'databaseId'       => function() {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'parent' => function() {
+				'parent'           => function() {
 					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
-				'creator' => function() {
+				'creator'          => function() {
 					return $this->data->creator_id ?? null;
 				},
-				'name' => function() {
+				'name'             => function() {
 					return $this->data->name ?? null;
 				},
-				'slug' => function() {
+				'slug'             => function() {
 					return $this->data->slug ?? null;
 				},
-				'description' => function() {
+				'description'      => function() {
 					return $this->data->description ?? null;
 				},
-				'uri' => function() {
+				'uri'              => function() {
 					return bp_get_group_permalink( $this->data ) ?? null;
 				},
-				'hasForum' => function() {
+				'hasForum'         => function() {
 					return $this->data->enable_forum ?? null;
 				},
 				'totalMemberCount' => [
-					'callback' => function() {
+					'callback'   => function() {
 						return groups_get_groupmeta( $this->data->id, 'total_member_count' );
 					},
 					'capability' => 'bp_moderate',
 				],
-				'lastActivity' => [
-					'callback' => function() {
+				'lastActivity'     => [
+					'callback'   => function() {
 						return Utils::prepare_date_response( groups_get_groupmeta( $this->data->id, 'last_activity' ) );
 					},
 					'capability' => 'bp_moderate',
 				],
-				'dateCreated' => function() {
+				'dateCreated'      => function() {
 					return Utils::prepare_date_response( $this->data->date_created );
 				},
-				'status' => function() {
+				'status'           => function() {
 					return bp_get_group_status( $this->data );
 				},
-				'types' => function() {
+				'types'            => function() {
 					$types = bp_groups_get_group_type( $this->data->id, false );
 
 					if ( empty( $types ) || ! is_array( $types ) ) {

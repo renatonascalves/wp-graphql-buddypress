@@ -52,7 +52,7 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 
 		// Get all objects and add them to cache.
 		foreach ( $keys as $key ) {
-			$loaded_friends[ $key ] = new BP_Friends_Friendship( absint( $key ) ); // This is cached.
+			$loaded_friends[ $key ] = new BP_Friends_Friendship( absint( $key ) );
 		}
 
 		return $loaded_friends;

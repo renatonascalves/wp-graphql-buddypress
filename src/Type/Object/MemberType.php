@@ -154,6 +154,27 @@ class MemberType {
 
 		register_graphql_field(
 			self::$type_name,
+			'totalMessagesUnreadCount',
+			[
+				'type'        => 'Int',
+				'description' => __( 'Total number of unread messages for the member.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( User $source ) {
+
+					if ( ! bp_is_active( 'messages' ) ) {
+						throw new UserError( __( 'The Messages component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
+					}
+
+					if ( empty( $source->databaseId ) ) {
+						return null;
+					}
+
+					return absint( messages_get_unread_count( $source->databaseId ) );
+				},
+			]
+		);
+
+		register_graphql_field(
+			self::$type_name,
 			'attachmentAvatar',
 			[
 				'type'        => 'Attachment',

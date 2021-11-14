@@ -19,7 +19,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u1 = $this->bp_factory->user->create();
 		$this->bp->add_user_to_group( $u1, $this->group );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members( [ 'id' => $global_id ] );
 
 		$this->assertQuerySuccessful( $response )
@@ -40,7 +40,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Ban member.
 		( new BP_Groups_Member( $this->random_user, $this->group ) )->ban();
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -59,7 +59,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_group_members_excluding_banned_without_permission() {
 		$this->bp->set_current_user( $this->user );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -79,7 +79,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u1, $group_id );
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', (string) $group_id );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -106,7 +106,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u2, $group_id, [ 'is_mod' => true ] );
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', (string) $group_id );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -133,7 +133,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u2, $group_id, [ 'is_mod' => true ] );
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', (string) $group_id );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -154,7 +154,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 		$this->bp->add_user_to_group( $this->random_user, $group_id );
 
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', (string) $group_id );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -182,7 +182,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->bp->set_current_user( $this->admin );
 
-		$global_id = $this->toRelayId( 'group', $group_id );
+		$global_id = $this->toRelayId( 'group', (string) $group_id );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -210,7 +210,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->bp->set_current_user( $u2 );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -230,7 +230,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -257,7 +257,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
@@ -285,7 +285,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 
-		$global_id = $this->toRelayId( 'group', $this->group );
+		$global_id = $this->toRelayId( 'group', (string) $this->group );
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,

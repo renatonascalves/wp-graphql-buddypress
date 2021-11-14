@@ -45,7 +45,7 @@
   },
   "scripts": {
     "phpcs" : "phpcs . --basepath=.",
-    "phpcbf": "phpcbf .",
+    "phpcbf": "phpcbf . --basepath=.",
     "phpunit": "phpunit",
     "phpunit:mu": "phpunit -c tests/multisite.xml",
     "phpstan": ["phpstan analyze --ansi --memory-limit=1G"]

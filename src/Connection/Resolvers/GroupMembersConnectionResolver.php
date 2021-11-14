@@ -80,7 +80,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Object passed down the resolve tree
 		 * @param ResolveInfo $info       Info about fields passed down the resolve tree
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_group_members_connection_query_args',
 			$query_args,
 			$this->source,
@@ -181,7 +181,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_group_members_query',
 			$query_args,
 			$args,

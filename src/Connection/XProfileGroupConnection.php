@@ -75,15 +75,15 @@ class XProfileGroupConnection {
 				'type'        => 'Int',
 				'description' => __( 'Limit results to a single XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'userId'  => [
+			'userId'          => [
 				'type'        => 'Int',
 				'description' => __( 'User ID to get XProfile fields data.', 'wp-graphql-buddypress' ),
 			],
-			'hideEmptyGroups'  => [
+			'hideEmptyGroups' => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to remove XProfile groups that do not have fields.', 'wp-graphql-buddypress' ),
 			],
-			'excludeGroups'  => [
+			'excludeGroups'   => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Ensure result set excludes specific XProfile field groups.', 'wp-graphql-buddypress' ),
 			],

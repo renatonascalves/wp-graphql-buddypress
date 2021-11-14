@@ -38,15 +38,15 @@ class GroupDelete {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id'          => [
+			'id'      => [
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the group.', 'wp-graphql-buddypress' ),
 			],
-			'groupId'          => [
+			'groupId' => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_Groups_Group->id field.', 'wp-graphql-buddypress' ),
 			],
-			'slug'         => [
+			'slug'    => [
 				'type'        => 'String',
 				'description' => __( 'Slug of the group.', 'wp-graphql-buddypress' ),
 			],

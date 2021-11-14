@@ -39,6 +39,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = [
 			'user_id'      => null,
 			'is_confirmed' => null,
+			'sort_order'   => 'DESC',
 		];
 
 		// Prepare for later use.
@@ -55,9 +56,9 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
 		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
-		// If there's no orderby params in the inputArgs, set order based on the first/last argument.
-		if ( empty( $query_args['sort_order'] ) ) {
-			$query_args['sort_order'] = ! empty( $last ) ? 'ASC' : 'DESC';
+		// Set order when using the last param.
+		if ( ! empty( $last ) ) {
+			$query_args['sort_order'] = 'ASC';
 		}
 
 		// Set the graphql_cursor_offset.
@@ -82,7 +83,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context passed down the resolve tree.
 		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_friendship_connection_query_args',
 			$query_args,
 			$this->source,
@@ -170,7 +171,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context being passed.
 		 * @param ResolveInfo $info       Info about the resolver.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_friendship_query',
 			$query_args,
 			$args,

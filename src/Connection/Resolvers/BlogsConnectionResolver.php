@@ -77,7 +77,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context passed down the resolve tree.
 		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_blogs_connection_query_args',
 			$query_args,
 			$this->source,
@@ -102,7 +102,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		$blog_ids = array_map( 'absint', wp_list_pluck( $this->query['blogs'], 'blog_id' ) );
+		$blog_ids = wp_list_pluck( $this->query['blogs'], 'blog_id' );
 
 		if ( ! empty( $this->args['last'] ) ) {
 			$blog_ids = array_reverse( $blog_ids );
@@ -160,7 +160,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    Context being passed.
 		 * @param ResolveInfo $info       Info about the resolver.
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'graphql_map_input_fields_to_blogs_query',
 			$query_args,
 			$args,

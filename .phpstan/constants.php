@@ -22,9 +22,21 @@ require_once BP_DIR . '/src/bp-blogs/bp-blogs-functions.php';
 require_once BP_DIR . '/src/bp-blogs/bp-blogs-template.php';
 require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
 require_once BP_DIR . '/src/bp-members/bp-members-functions.php';
+
+// Groups component.
 require_once BP_DIR . '/src/bp-groups/classes/class-bp-groups-group.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-functions.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-template.php';
+
+// Messages component.
+require_once BP_DIR . '/src/bp-messages/classes/class-bp-messages-box-template.php';
+require_once BP_DIR . '/src/bp-messages/classes/class-bp-messages-message.php';
+require_once BP_DIR . '/src/bp-messages/classes/class-bp-messages-thread.php';
+require_once BP_DIR . '/src/bp-messages/bp-messages-template.php';
+require_once BP_DIR . '/src/bp-messages/bp-messages-functions.php';
+require_once BP_DIR . '/src/bp-messages/bp-messages-star.php';
+
+// XProfile Component.
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-field.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-profiledata.php';
 require_once BP_DIR . '/src/bp-xprofile/classes/class-bp-xprofile-group.php';
@@ -34,4 +46,5 @@ require_once BP_DIR . '/src/bp-xprofile/bp-xprofile-template.php';
 if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR' ) ) {
 	define( 'WPGRAPHQL_PLUGIN_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql' );
 }
+
 require_once WPGRAPHQL_PLUGIN_DIR . '/vendor/autoload.php';

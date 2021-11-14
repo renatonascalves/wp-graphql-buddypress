@@ -38,7 +38,7 @@ class AttachmentCoverUpload {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'file' => [
+			'file'     => [
 				'type'        => [ 'non_null' => 'Upload' ],
 				'description' => __( 'Upload a local file using multi-part.', 'wp-graphql-buddypress' ),
 			],

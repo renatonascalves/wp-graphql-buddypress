@@ -22,11 +22,11 @@ class AttachmentType {
 			[
 				'description' => __( 'BuddyPress attachment object used in Avatar and Cover images.', 'wp-graphql-buddypress' ),
 				'fields'      => [
-					'thumb'          => [
+					'thumb' => [
 						'type'        => 'String',
 						'description' => __( 'URL for the attachment with the thumb size.', 'wp-graphql-buddypress' ),
 					],
-					'full'          => [
+					'full'  => [
 						'type'        => 'String',
 						'description' => __( 'URL for the attachment with the full size.', 'wp-graphql-buddypress' ),
 					],

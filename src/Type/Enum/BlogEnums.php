@@ -24,22 +24,22 @@ class BlogEnums {
 			[
 				'description' => __( 'Shorthand for certain orderby/order combinations.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ACTIVE'      => [
+					'ACTIVE'       => [
 						'name'        => 'ACTIVE',
 						'description' => __( 'Used to order blogs by their status.', 'wp-graphql-buddypress' ),
 						'value'       => 'active',
 					],
-					'NEWEST'      => [
+					'NEWEST'       => [
 						'name'        => 'NEWEST',
 						'description' => __( 'Used to order blogs by their date.', 'wp-graphql-buddypress' ),
 						'value'       => 'newest',
 					],
-					'ALPHABETICAL'      => [
+					'ALPHABETICAL' => [
 						'name'        => 'ALPHABETICAL',
 						'description' => __( 'Used to order blogs by alphabetical order.', 'wp-graphql-buddypress' ),
 						'value'       => 'alphabetical',
 					],
-					'RANDOM' => [
+					'RANDOM'       => [
 						'name'        => 'RANDOM',
 						'description' => __( 'Used to order blogs randomly.', 'wp-graphql-buddypress' ),
 						'value'       => 'random',

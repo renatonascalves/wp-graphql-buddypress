@@ -14,11 +14,14 @@ use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
@@ -33,6 +36,10 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
@@ -46,6 +53,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType;
@@ -53,6 +61,8 @@ use WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\MessageType;
+use WPGraphQL\Extensions\BuddyPress\Type\Object\ThreadType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType;
 use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType;
@@ -66,7 +76,7 @@ class TypeRegistry {
 	 * Registers actions related to the type registry.
 	 */
 	public static function add_actions() {
-		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 99 );
+		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 9999 );
 	}
 
 	/**
@@ -268,6 +278,26 @@ class TypeRegistry {
 			FriendshipCreate::register_mutation();
 		}
 
+		// Thread/Messages component.
+		if ( bp_is_active( 'messages' ) ) {
+
+			// Enum(s).
+			ThreadEnums::register();
+
+			// Object(s).
+			ThreadType::register();
+			MessageType::register();
+
+			// Thread/Messages Connections.
+			ThreadConnection::register_connections();
+
+			// Thread/Messages Mutations.
+			StarMessage::register_mutation();
+			ThreadDelete::register_mutation();
+			ThreadUpdate::register_mutation();
+			ThreadCreate::register_mutation();
+		}
+
 		// Attachment Type/Object.
 		AttachmentType::register();
 
@@ -305,6 +335,8 @@ class TypeRegistry {
 				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
 				'bp_friend'         => new FriendshipObjectLoader( $context ),
 				'bp_blog'           => new BlogObjectLoader( $context ),
+				'bp_thread'         => new ThreadObjectLoader( $context ),
+				'bp_message'        => new MessageObjectLoader( $context ),
 			]
 		);
 	}

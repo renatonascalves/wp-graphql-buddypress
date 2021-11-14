@@ -65,7 +65,7 @@ class XProfileFieldEnums {
 					__( 'Field Type: %1$s', 'wp-graphql-buddypress' ),
 					$type
 				),
-				'value' => $type,
+				'value'       => $type,
 			];
 		}
 

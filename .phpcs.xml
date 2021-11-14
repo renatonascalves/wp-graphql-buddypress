@@ -9,10 +9,10 @@
 	<rule ref="PHPCompatibilityWP" />
 
 	<!-- Configure the PHP version -->
-	<config name="testVersion" value="7.1-"/>
+	<config name="testVersion" value="7.4-"/>
 
 	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="4.9"/>
+	<config name="minimum_supported_wp_version" value="5.8"/>
 
 	<!--
 	Pass some flags to PHPCS:
@@ -54,9 +54,6 @@
 	</rule>
 
 	<rule ref="WordPress">
-		<!-- Allow array disalignment -->
-		<exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"/>
-
 		<!-- Pending investigation -->
 		<exclude name="PHPCompatibility.Keywords.ForbiddenNamesAsDeclared.objectFound"/>
 

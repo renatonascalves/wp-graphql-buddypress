@@ -39,15 +39,15 @@ class XProfileGroupCreate {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'name'      => [
+			'name'        => [
 				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The name of the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'description'      => [
+			'description' => [
 				'type'        => 'String',
 				'description' => __( 'The description of the XProfile group.', 'wp-graphql-buddypress' ),
 			],
-			'canDelete'      => [
+			'canDelete'   => [
 				'type'        => 'Boolean',
 				'description' => __( 'Option to allow XProfile group to be deleted.', 'wp-graphql-buddypress' ),
 			],
