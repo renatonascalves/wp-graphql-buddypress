@@ -48,6 +48,7 @@ class Thread extends Model {
 	 * @return bool
 	 */
 	protected function is_private(): bool {
+		return false;
 
 		// Moderators can see everything.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {

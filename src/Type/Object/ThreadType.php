@@ -34,7 +34,7 @@ class ThreadType {
 			self::$type_name,
 			[
 				'description'       => __( 'Info about a BuddyPress thread.', 'wp-graphql-buddypress' ),
-				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
+				'interfaces'        => [ 'Node', 'DatabaseIdentifier', 'UniformResourceIdentifiable' ],
 				'fields'            => [
 					'unreadCount' => [
 						'type'        => 'Int',

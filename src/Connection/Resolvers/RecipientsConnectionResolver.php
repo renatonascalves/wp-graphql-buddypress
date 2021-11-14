@@ -115,7 +115,14 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function should_execute(): bool {
-		return true;
+
+		// Moderators can do anything.
+		if ( bp_current_user_can( 'bp_moderate' ) ) {
+			return true;
+		}
+
+		// Check thread access.
+		return (bool) messages_check_thread_access( $this->source->databaseId, bp_loggedin_user_id() );
 	}
 
 	/**
