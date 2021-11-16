@@ -9,12 +9,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', '7.4']
+        php: ['7.4', '8.0']
         wp_version: ['master']
         include:
-          - php: '7.4'
+          - php: '8.0'
             wp_version: '5.8'
-          - php: '7.3'
+          - php: '7.4'
             wp_version: '5.8'
     env:
       WP_ENV_PHP_VERSION: ${{ matrix.php }}

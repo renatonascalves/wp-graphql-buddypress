@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['7.4']
+        php: ['8.0']
         wp_version: ['master']
     env:
       WP_ENV_PHP_VERSION: ${{ matrix.php }}
@@ -72,10 +72,10 @@ jobs:
       - name: Install node modules
         run: npm ci --cache ~/.npm
 
-      - name: Setup WordPress
+      - name: Set WordPress Version
         run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
 
-      - name: Install WordPress
+      - name: Set WordPress up
         run: |
           chmod -R 767 ./
           npm run wp-env start -- --update

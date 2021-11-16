@@ -26,6 +26,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use WPGraphQL\Extensions\BuddyPress\Model\Thread;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -100,6 +101,10 @@ class TypeRegistry {
 					return $interface_instance->type_registry->get_type( 'Blog' );
 				}
 
+				if ( bp_is_active( 'messages' ) && $node instanceof Thread ) {
+					return $interface_instance->type_registry->get_type( 'Thread' );
+				}
+
 				return $type;
 			},
 			10,
@@ -135,6 +140,16 @@ class TypeRegistry {
 
 				$array = explode( '/', $parsed_url['path'] );
 				$slug  = $array[2] ?? '';
+
+				if (
+					bp_is_active( 'messages' )
+					&& ! empty( $array[3] )
+					&& 'messages' === $array[3]
+					&& ! empty( $array[5] )
+					&& is_numeric( $array[5] )
+				) {
+					return $context->get_loader( 'bp_thread' )->load( absint( $array[5] ) );
+				}
 
 				if ( empty( $slug ) ) {
 					return $node;
