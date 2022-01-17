@@ -57,16 +57,16 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\MessageType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\ThreadType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MemberType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ThreadType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldValueType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
 
 /**
  * Class TypeRegistry

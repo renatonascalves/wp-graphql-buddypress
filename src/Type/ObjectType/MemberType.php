@@ -2,11 +2,11 @@
 /**
  * Registers BuddyPress member fields.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Type\Object
+ * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
+namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use GraphQL\Error\UserError;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;

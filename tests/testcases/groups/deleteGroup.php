@@ -28,16 +28,15 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		);
 	}
 
-	public function test_delete_group_non_member_group_but_site_admin_can_delete() {
+	public function test_group_non_member_but_site_admin_can_delete_group() {
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_group() )
 			->hasField( 'deleted', true )
-			->hasField( 'name', 'Deleted Group' )
 			->notHasField( 'uri' );
 	}
 
-	public function test_delete_group_invalid_group_id() {
+	public function test_delete_group_with_invalid_group_id() {
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQueryFailed( $this->delete_group( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )

@@ -2,13 +2,15 @@
 /**
  * WPGraphQL BuddyPress
  *
- * @package      WPGraphQL\Extensions\BuddyPress
- * @author       Renato Alves
- * @license      GPLv3
+ * @package  WPGraphQL\Extensions\BuddyPress
+ * @author   Renato Alves
+ * @version  0.0.1-alpha
+ * @license  GPL-3
  *
  * @wordpress-plugin
  * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
+ * GitHub Plugin URI: https://github.com/wp-graphql/wp-graphql-buddypress
  * Description:       Adds BuddyPress functionality to the WPGraphQL schema.
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
@@ -17,8 +19,8 @@
  * Domain Path:       /languages/
  * Requires PHP:      7.1
  * Requires WP:       4.9
- * Tested up to:      5.7
- * License:           GPLv3
+ * Tested up to:      5.8
+ * License:           GPL-3
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -50,7 +52,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @return WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
-		public static function instance() {
+		public static function instance(): self {
 
 			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
 				self::$instance = new self();
@@ -104,7 +106,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			_doing_it_wrong(
 				__FUNCTION__,
 				esc_html__(
-					'De-serializing instances of the WP_GraphQL_BuddyPress class is not allowed',
+					'De-serializing instances of the WP_GraphQL_BuddyPress class is not allowed.',
 					'wp-graphql-buddypress'
 				),
 				'0.0.1-alpha'
@@ -116,7 +118,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		private function setup_constants() {
+		private function setup_constants(): void {
 
 			// Plugin version.
 			if ( ! defined( 'WPGRAPHQL_BUDDYPRESS_VERSION' ) ) {
@@ -151,7 +153,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @return bool
 		 */
-		private function includes() {
+		private function includes(): bool {
 
 			// Autoload Required Classes.
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
@@ -176,7 +178,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		private function dependencies() {
+		private function dependencies(): void {
 
 			// Checks if BuddyPress is installed.
 			if ( ! class_exists( 'BuddyPress' ) ) {
@@ -196,7 +198,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		public function wp_graphql_buddypress_missing_notice() {
+		public function wp_graphql_buddypress_missing_notice(): void {
 
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
@@ -216,7 +218,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		public function buddypress_missing_notice() {
+		public function buddypress_missing_notice(): void {
 
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
@@ -234,7 +236,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		public function wpgraphql_missing_notice() {
+		public function wpgraphql_missing_notice(): void {
 
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
@@ -252,7 +254,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		private function actions() {
+		private function actions(): void {
 
 			// Setup actions.
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_actions();
@@ -263,7 +265,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 *
 		 * @since 0.0.1-alpha
 		 */
-		private function filters() {
+		private function filters(): void {
 
 			// Setup filters.
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_filters();
@@ -375,8 +377,10 @@ endif;
  * Function that instantiates the plugin main class.
  *
  * @since 0.0.1-alpha
+ *
+ * @return WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
  */
-function wp_graphql_buddypress_init() {
+function wp_graphql_buddypress_init(): \WP_GraphQL_BuddyPress {
 
 	// Return an instance of the action.
 	return \WP_GraphQL_BuddyPress::instance();
