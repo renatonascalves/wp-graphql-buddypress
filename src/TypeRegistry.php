@@ -76,14 +76,14 @@ class TypeRegistry {
 	/**
 	 * Registers actions related to the type registry.
 	 */
-	public static function add_actions() {
+	public static function add_actions(): void {
 		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 9999 );
 	}
 
 	/**
 	 * Registers filters related to the type registry.
 	 */
-	public static function add_filters() {
+	public static function add_filters(): void {
 
 		// Register custom autoloaders.
 		add_filter( 'graphql_data_loaders', [ __CLASS__, 'graphql_register_autoloaders' ], 10, 2 );
@@ -199,7 +199,7 @@ class TypeRegistry {
 	/**
 	 * Registers BuddyPress types, connections, and mutations to GraphQL schema.
 	 */
-	public static function graphql_register_types() {
+	public static function graphql_register_types(): void {
 
 		// General Enum(s).
 		GeneralEnums::register();

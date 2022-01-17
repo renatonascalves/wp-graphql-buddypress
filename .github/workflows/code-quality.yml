@@ -72,11 +72,9 @@ jobs:
       - name: Install node modules
         run: npm ci --cache ~/.npm
 
-      - name: Set WordPress Version
-        run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
-
-      - name: Set WordPress up
+      - name: Setup WordPress
         run: |
+          echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
           chmod -R 767 ./
           npm run wp-env start -- --update
 

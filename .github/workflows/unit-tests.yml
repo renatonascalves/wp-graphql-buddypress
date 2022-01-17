@@ -7,7 +7,7 @@ jobs:
     name: "WP: ${{ matrix.wp_version }} - PHP: ${{ matrix.php }}"
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: false # do not fail fast, let all tests fail.
       matrix:
         php: ['8.0']
         wp_version: ['master']
@@ -30,9 +30,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check Gitignored files
-        run: if [[ ! -z $(git ls-files -i --exclude-standard) ]]; then exit 1; fi
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -49,9 +46,6 @@ jobs:
           git --version
           php --version
           composer --version
-
-      - name: Validate Composer
-        run: composer validate --strict
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
@@ -71,9 +65,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Validate node modules
-        run: if [[ -f package.json ]]; then npm audit --audit-level=high --production --cache ~/.npm; fi
-
       - name: Install node modules
         run: npm ci --cache ~/.npm
 
@@ -85,11 +76,11 @@ jobs:
           chmod -R 767 ./
           npm run wp-env start -- --update
 
-      - name: Running single site unit tests
+      - name: Unit tests - single site
         run: npm run phpunit
         if: ${{ success() || failure() }}
 
-      - name: Running multisite unit tests
+      - name: Unit tests - MU Network
         run: npm run phpunit:mu
         if: ${{ success() || failure() }}
 
