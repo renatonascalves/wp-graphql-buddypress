@@ -52,6 +52,9 @@ jobs:
         with:
           composer-options: "--ignore-platform-reqs"
 
+      - name: Adjust wp-phpunit version
+        run: if [ ${{ env.WP_VERSION }} == 4.9' ]; then composer require --dev "wp-phpunit/wp-phpunit:4.9"; fi
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -69,10 +72,8 @@ jobs:
         run: npm ci --cache ~/.npm
 
       - name: Setup WordPress
-        run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
-
-      - name: Install WordPress
         run: |
+          echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
           chmod -R 767 ./
           npm run wp-env start -- --update
 
