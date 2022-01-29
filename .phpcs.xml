@@ -9,10 +9,10 @@
 	<rule ref="PHPCompatibilityWP" />
 
 	<!-- Configure the PHP version -->
-	<config name="testVersion" value="7.1-"/>
+	<config name="testVersion" value="7.4-"/>
 
 	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="4.9"/>
+	<config name="minimum_supported_wp_version" value="5.9"/>
 
 	<!--
 	Pass some flags to PHPCS:

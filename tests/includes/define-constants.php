@@ -1,6 +1,9 @@
 <?php
 /**
  * Define constants needed by test suite.
+ *
+ * @since 0.0.1-alpha
+ * @package WPGraphQL\Extensions\BuddyPress
  */
 
 if ( ! defined( 'BP_TESTS_DIR' ) ) {
