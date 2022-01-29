@@ -14,8 +14,6 @@ jobs:
         include:
           - php: '7.4'
             wp_version: '5.9'
-          - php: '7.1'
-            wp_version: '4.9'
     env:
       WP_ENV_PHP_VERSION: ${{ matrix.php }}
       WP_VERSION: ${{ matrix.wp_version }}
@@ -51,13 +49,6 @@ jobs:
         uses: ramsey/composer-install@v1
         with:
           composer-options: "--ignore-platform-reqs"
-
-      - name: Adjust wp-phpunit version
-        run: |
-          if [ ${{ env.WP_VERSION }} == '4.9' ]; then
-            composer require --dev --update-with-all-dependencies phpunit/phpunit ^6
-            composer require --dev wp-phpunit/wp-phpunit:4.9
-          fi
 
       - name: Cache node modules
         uses: actions/cache@v2
