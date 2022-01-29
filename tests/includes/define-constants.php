@@ -24,7 +24,7 @@ define( 'GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER', 99999999 );
  * - Assume that we are inside of a develop.svn.wordpress.org setup, and walk
  *   up the directory tree
  */
-if ( false !== getenv( 'WP_PHPUNIT__DIR' ) ) {
+if ( false !== getenv( 'WP_PHPUNIT__DIR' ) && defined( 'WPGRAPHQL_BP_USE_WP_ENV_TESTS' ) ) {
 	define( 'WP_TESTS_DIR', getenv( 'WP_PHPUNIT__DIR' ) );
 	define( 'WP_ROOT_DIR', '/var/www/html' );
 } elseif ( false !== getenv( 'WP_TESTS_DIR' ) ) {

@@ -113,10 +113,11 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$g1 = $this->create_group_object();
 		$g2 = $this->create_group_object();
+		$g3 = $this->create_group_object();
 
 		$this->assertQuerySuccessful( $this->groupsQuery( [
 			'last'   => 1,
-			'before' => $this->key_to_cursor( $g2 )
+			'before' => $this->key_to_cursor( $g3 )
 		] ) )
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $g1 )

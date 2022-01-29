@@ -6,11 +6,13 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
-// Use WP PHPUnit.
-require_once dirname( dirname( __FILE__ ) ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
-
 // Setting PHPUnit polyfills.
 const WP_TESTS_PHPUNIT_POLYFILLS_PATH = __DIR__ . '/../vendor/yoast/phpunit-polyfills';
+
+if ( defined( 'WPGRAPHQL_BP_USE_WP_ENV_TESTS' ) ) {
+	// Use WP PHPUnit.
+	require_once dirname( dirname( __FILE__ ) ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
+}
 
 // Define constants.
 require( dirname( __FILE__ ) . '/includes/define-constants.php' );
