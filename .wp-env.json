@@ -5,7 +5,6 @@
     "buddypress/buddypress#master",
     "https://downloads.wordpress.org/plugin/wp-graphql.1.6.9.zip"
   ],
-  "phpVersion": "8.0",
   "config": {
     "WP_DEBUG": true,
     "SCRIPT_DEBUG": true

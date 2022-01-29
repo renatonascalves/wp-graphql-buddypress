@@ -13,7 +13,7 @@ jobs:
         wp_version: ['master']
         include:
           - php: '7.4'
-            wp_version: '5.8'
+            wp_version: '5.9'
           - php: '7.1'
             wp_version: '4.9'
     env:
