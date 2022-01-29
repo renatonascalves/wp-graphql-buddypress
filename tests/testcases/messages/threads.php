@@ -138,6 +138,8 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_get_first_thread() {
+		$this->markTestSkipped();
+
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -191,6 +193,8 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_get_thread_after() {
+		$this->markTestSkipped();
+
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
@@ -241,6 +245,8 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_get_thread_before() {
+		$this->markTestSkipped();
+
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();

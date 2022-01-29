@@ -70,7 +70,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
-			$query_args['order'] = 'ASC';
+			$query_args['order'] = 'DESC';
 		}
 
 		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.

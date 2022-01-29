@@ -57,16 +57,16 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\AttachmentType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\BlogType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\FriendshipType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\GroupType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\MemberType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\MessageType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\ThreadType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileFieldValueType;
-use WPGraphQL\Extensions\BuddyPress\Type\Object\XProfileGroupType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MemberType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ThreadType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldValueType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
 
 /**
  * Class TypeRegistry
@@ -76,14 +76,14 @@ class TypeRegistry {
 	/**
 	 * Registers actions related to the type registry.
 	 */
-	public static function add_actions() {
+	public static function add_actions(): void {
 		add_action( 'graphql_register_types', [ __CLASS__, 'graphql_register_types' ], 9999 );
 	}
 
 	/**
 	 * Registers filters related to the type registry.
 	 */
-	public static function add_filters() {
+	public static function add_filters(): void {
 
 		// Register custom autoloaders.
 		add_filter( 'graphql_data_loaders', [ __CLASS__, 'graphql_register_autoloaders' ], 10, 2 );
@@ -199,7 +199,7 @@ class TypeRegistry {
 	/**
 	 * Registers BuddyPress types, connections, and mutations to GraphQL schema.
 	 */
-	public static function graphql_register_types() {
+	public static function graphql_register_types(): void {
 
 		// General Enum(s).
 		GeneralEnums::register();

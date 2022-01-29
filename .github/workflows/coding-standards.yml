@@ -36,9 +36,6 @@ jobs:
           php --version
           composer --version
 
-      - name: Validate Composer
-        run: composer validate --strict
-
       - name: Install dependencies
         uses: ramsey/composer-install@v1
         with:

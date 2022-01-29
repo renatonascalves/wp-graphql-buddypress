@@ -15,9 +15,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_blogs_query() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
+		$this->skipWithoutMultisite();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -38,9 +36,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_first_blog() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
+		$this->skipWithoutMultisite();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -55,9 +51,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_blog_after() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
+		$this->skipWithoutMultisite();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -70,9 +64,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_blog_before() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
+		$this->skipWithoutMultisite();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -87,9 +79,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_blogs_using_where_include() {
-		if ( ! is_multisite() ) {
-			$this->markTestSkipped();
-		}
+		$this->skipWithoutMultisite();
 
 		$this->bp->set_current_user( $this->admin );
 

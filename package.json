@@ -21,17 +21,18 @@
     "rest"
   ],
   "devDependencies": {
-    "@wordpress/env": "^4.1.2"
+    "@wordpress/env": "^4.1.3"
   },
   "engines": {
     "node": ">=14.15.0",
     "npm": ">=6.14.8"
   },
   "scripts": {
+    "preinstall": "npx check-node-version --package",
     "prewp-env": "npx check-node-version --package",
     "wp-env": "wp-env",
-    "phpunit": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/phpunit.xml.dist'",
-    "phpunit:mu": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/multisite.xml'",
+    "phpunit": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.xml'",
+    "phpunit:mu": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.multisite.xml'",
     "phpstan": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/bin/phpstan analyze --ansi --memory-limit=1G -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/phpstan.neon.dist'"
   }
 }

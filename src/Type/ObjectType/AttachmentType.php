@@ -2,11 +2,11 @@
 /**
  * Registers BuddyPress Attachment Type object.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Type\Object
+ * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
+namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 /**
  * AttachmentType Class.

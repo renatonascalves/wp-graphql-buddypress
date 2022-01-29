@@ -103,13 +103,13 @@ class Group extends Model {
 					return $this->data->name ?? null;
 				},
 				'slug'             => function() {
-					return $this->data->slug ?? null;
+					return bp_get_group_slug( $this->data->slug ?? false );
 				},
 				'description'      => function() {
 					return $this->data->description ?? null;
 				},
 				'uri'              => function() {
-					return bp_get_group_permalink( $this->data ) ?? null;
+					return bp_get_group_permalink( $this->data ?? null );
 				},
 				'hasForum'         => function() {
 					return $this->data->enable_forum ?? null;

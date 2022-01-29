@@ -2,11 +2,11 @@
 /**
  * Registers Group type and queries
  *
- * @package WPGraphQL\Extensions\BuddyPress\Type\Object
+ * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Type\Object;
+namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use GraphQL\Deferred;
 use WPGraphQL\AppContext;
@@ -132,6 +132,23 @@ class GroupType {
 					'name'             => [
 						'type'        => 'String',
 						'description' => __( 'Group name', 'wp-graphql-buddypress' ),
+						'args'        => [
+							'format' => [
+								'type'        => 'ContentFieldFormatEnum',
+								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
+							],
+						],
+						'resolve'     => function( Group $group, array $args ) {
+							if ( empty( $group->name ) ) {
+								return null;
+							}
+
+							if ( isset( $args['format'] ) && 'raw' === $args['format'] ) {
+								return $group->name;
+							}
+
+							return bp_get_group_name( $group->databaseId ?? 0 );
+						},
 					],
 					'slug'             => [
 						'type'        => 'String',

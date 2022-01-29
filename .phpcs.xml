@@ -12,7 +12,7 @@
 	<config name="testVersion" value="7.4-"/>
 
 	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="5.8"/>
+	<config name="minimum_supported_wp_version" value="5.9"/>
 
 	<!--
 	Pass some flags to PHPCS:
@@ -53,14 +53,10 @@
 		</properties>
 	</rule>
 
+	<!-- Silencing off rules. -->
 	<rule ref="WordPress">
-		<!-- Pending investigation -->
-		<exclude name="PHPCompatibility.Keywords.ForbiddenNamesAsDeclared.objectFound"/>
-
-		<!-- Pending review -->
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
-		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
 	</rule>
 </ruleset>
