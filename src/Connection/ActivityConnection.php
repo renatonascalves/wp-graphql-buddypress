@@ -90,59 +90,59 @@ class ActivityConnection {
 	 */
 	public static function get_connection_args(): array {
 		return [
-			'search'    => [
+			'search'          => [
 				'type'        => 'String',
 				'description' => __( 'Search term(s) to retrieve matching activities for.', 'wp-graphql-buddypress' ),
 			],
-			'displayComments'   => [
+			'displayComments' => [
 				'type'        => 'Boolean',
 				'description' => __( 'Display activity comments.', 'wp-graphql-buddypress' ),
 			],
-			'after'     => [
+			'after'           => [
 				'type'        => 'String',
 				'description' => __( 'Limit result set to items published after a given ISO8601 compliant date.', 'wp-graphql-buddypress' ),
 			],
-			'exclude'   => [
+			'exclude'         => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Limit result set to items without specific IDs.', 'wp-graphql-buddypress' ),
 			],
-			'include'   => [
+			'include'         => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Limit result set to items with specific IDs.', 'wp-graphql-buddypress' ),
 			],
-			'order'     => [
+			'order'           => [
 				'type'        => 'OrderEnum',
 				'description' => __( 'Order sort attribute ascending or descending.', 'wp-graphql-buddypress' ),
 			],
-			'status'    => [
+			'status'          => [
 				'type'        => 'ActivityOrderStatusEnum',
 				'description' => __( 'Limit result set to items with a specific status.', 'wp-graphql-buddypress' ),
 			],
-			'type'      => [
+			'type'            => [
 				'type'        => [ 'list_of' => 'ActivityTypeEnum' ],
 				'description' => __( 'Limit result set to items with one or more specific activity type.', 'wp-graphql-buddypress' ),
 			],
-			'component' => [
+			'component'       => [
 				'type'        => 'ActivityComponentEnum',
 				'description' => __( 'Limit result set to items with a specific active BuddyPress component.', 'wp-graphql-buddypress' ),
 			],
-			'scope'     => [
+			'scope'           => [
 				'type'        => [ 'list_of' => 'ActivityOrderScopeEnum' ],
 				'description' => __( 'Limit result set to items with one or more activity scope.', 'wp-graphql-buddypress' ),
 			],
-			'primaryId' => [
+			'primaryId'       => [
 				'type'        => 'Int',
 				'description' => __( 'Limit result set to items with a specific prime association ID..', 'wp-graphql-buddypress' ),
 			],
-			'userId'    => [
+			'userId'          => [
 				'type'        => 'Int',
 				'description' => __( 'Limit result set to items created by a specific member (ID).', 'wp-graphql-buddypress' ),
 			],
-			'groupId'   => [
+			'groupId'         => [
 				'type'        => 'Int',
 				'description' => __( 'Limit result set to items created within a specific BuddyPress Group (ID).', 'wp-graphql-buddypress' ),
 			],
-			'siteId'    => [
+			'siteId'          => [
 				'type'        => 'Int',
 				'description' => __( 'Limit result set to items attached to a specific site.', 'wp-graphql-buddypress' ),
 			],

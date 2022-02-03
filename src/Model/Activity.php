@@ -19,10 +19,14 @@ use stdClass;
  * @property string $id ID.
  * @property int $databaseId Activity ID.
  * @property int $userId User ID.
+ * @property int $parentDatabaseId Parent dabatase ID.
+ * @property int $primaryItemId Primary Item ID.
+ * @property int $secondaryItemId Secondary Item ID.
  * @property string $component Component.
  * @property string $type Type.
  * @property string $title Title.
  * @property string $date Date.
+ * @property string $dateGmt Date as GMT.
  * @property string $status Status.
  * @property string $link Link.
  * @property stdClass $data Activity object.

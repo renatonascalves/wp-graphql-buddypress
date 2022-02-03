@@ -47,19 +47,19 @@ class ActivityType {
 						'type'        => 'ID',
 						'description' => __( 'The globally unique identifier of the parent activity node.', 'wp-graphql-buddypress' ),
 					],
-					'parentDatabaseId'   => [
+					'parentDatabaseId' => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of the parent activity.', 'wp-graphql-buddypress' ),
 					],
-					'primaryItemId'   => [
+					'primaryItemId'    => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of some other object primarily associated with this one.', 'wp-graphql-buddypress' ),
 					],
-					'secondaryItemId'   => [
+					'secondaryItemId'  => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of some other object also associated with this one.', 'wp-graphql-buddypress' ),
 					],
-					'creator'   => [
+					'creator'          => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the activity.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Activity $activity, array $args, AppContext $context ) {
@@ -68,7 +68,7 @@ class ActivityType {
 								: null;
 						},
 					],
-					'content'   => [
+					'content'          => [
 						'type'        => 'String',
 						'description' => __( 'Allowed HTML content for the activity.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -89,35 +89,35 @@ class ActivityType {
 							return self::render_item( $activity->data );
 						},
 					],
-					'component' => [
+					'component'        => [
 						'type'        => 'ActivityComponentEnum',
 						'description' => __( 'The active BuddyPress component name the activity relates to.', 'wp-graphql-buddypress' ),
 					],
-					'status'    => [
+					'status'           => [
 						'type'        => 'String',
 						'description' => __( 'Whether the activity has been marked as spam or not.', 'wp-graphql-buddypress' ),
 					],
-					'type'      => [
+					'type'             => [
 						'type'        => 'ActivityTypeEnum',
 						'description' => __( 'The type of the activity.', 'wp-graphql-buddypress' ),
 					],
-					'title'     => [
+					'title'            => [
 						'type'        => 'String',
 						'description' => __( 'The description of the activity\'s type (eg: Username posted an update).', 'wp-graphql-buddypress' ),
 					],
-					'date'      => [
+					'date'             => [
 						'type'        => 'String',
 						'description' => __( 'The date the activity was published.', 'wp-graphql-buddypress' ),
 					],
-					'dateGmt'   => [
+					'dateGmt'          => [
 						'type'        => 'String',
 						'description' => __( 'The date the activity was published in GMT.', 'wp-graphql-buddypress' ),
 					],
-					'hidden'   => [
+					'hidden'           => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the activity was sitewide hidden from streams or not.', 'wp-graphql-buddypress' ),
 					],
-					'isFavorited' => [
+					'isFavorited'      => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the activity has been favorited by the current user.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Activity $activity ) {
