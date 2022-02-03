@@ -23,6 +23,9 @@ require_once BP_DIR . '/src/bp-blogs/bp-blogs-template.php';
 require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
 require_once BP_DIR . '/src/bp-members/bp-members-functions.php';
 
+// Activity component.
+require_once BP_DIR . '/src/bp-activity/classes/class-bp-activity-activity.php';
+
 // Groups component.
 require_once BP_DIR . '/src/bp-groups/classes/class-bp-groups-group.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-functions.php';

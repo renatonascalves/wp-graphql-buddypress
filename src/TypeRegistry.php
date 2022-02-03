@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress;
 
 use WP_User;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
@@ -20,6 +21,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
@@ -27,6 +29,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use WPGraphQL\Extensions\BuddyPress\Model\Thread;
+use WPGraphQL\Extensions\BuddyPress\Model\Activity;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -47,6 +50,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\ActivityEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
@@ -57,6 +61,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
@@ -103,6 +108,10 @@ class TypeRegistry {
 
 				if ( bp_is_active( 'messages' ) && $node instanceof Thread ) {
 					return $interface_instance->type_registry->get_type( 'Thread' );
+				}
+
+				if ( bp_is_active( 'activity' ) && $node instanceof Activity ) {
+					return $interface_instance->type_registry->get_type( 'Activity' );
 				}
 
 				return $type;
@@ -215,6 +224,19 @@ class TypeRegistry {
 
 			// Connections.
 			MemberConnection::register_connections();
+		}
+
+		// Acvitity component.
+		if ( bp_is_active( 'activity' ) ) {
+
+			// Enum(s).
+			ActivityEnums::register();
+
+			// Fields.
+			ActivityType::register();
+
+			// Connections.
+			ActivityConnection::register_connections();
 		}
 
 		// Groups component.
@@ -352,6 +374,7 @@ class TypeRegistry {
 				'bp_blog'           => new BlogObjectLoader( $context ),
 				'bp_thread'         => new ThreadObjectLoader( $context ),
 				'bp_message'        => new MessageObjectLoader( $context ),
+				'bp_activity'       => new ActivityObjectLoader( $context ),
 			]
 		);
 	}

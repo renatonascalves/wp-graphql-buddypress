@@ -313,7 +313,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return self
 	 */
 	protected function hasNodes(): self {
-		$this->assertTrue( ! empty( current( $this->get_field_value_from_response( 'nodes' ) ) ) );
+		$this->assertTrue(
+			! empty( current( $this->get_field_value_from_response( 'nodes' ) ) ),
+			'Response with empty `nodes`.'
+		);
 
 		return $this;
 	}
@@ -393,6 +396,16 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 				$args
 			)
 		);
+	}
+
+	/**
+	 * Create activity object.
+	 *
+	 * @param array $args Arguments.
+	 * @return int
+	 */
+	protected function create_activity_object( array $args = [] ): int {
+		return $this->bp_factory->activity->create( array_merge( [ 'user_id' => $this->admin ], $args ) );
 	}
 
 	/**

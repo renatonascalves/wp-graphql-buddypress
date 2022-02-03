@@ -112,7 +112,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 
 		$g1 = $this->create_group_object();
-		$g2 = $this->create_group_object();
+		$this->create_group_object();
 		$g3 = $this->create_group_object();
 
 		$this->assertQuerySuccessful( $this->groupsQuery( [

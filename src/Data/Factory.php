@@ -29,8 +29,10 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ThreadConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MessagesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivitiesConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 
 /**
  * Class Factory.
@@ -38,9 +40,31 @@ use BP_Friends_Friendship;
 class Factory {
 
 	/**
+	 * Returns an Activity object.
+	 *
+	 * @param int        $id      Activity ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_activity_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$activity_id = absint( $id );
+		$context->get_loader( 'bp_activity' )->buffer( [ $activity_id ] );
+
+		return new Deferred(
+			function () use ( $activity_id, $context ) {
+				return $context->get_loader( 'bp_activity' )->load( $activity_id );
+			}
+		);
+	}
+
+	/**
 	 * Returns a Thread object.
 	 *
-	 * @param int        $id      Thread ID.
+	 * @param int        $id      Thread ID or null.
 	 * @param AppContext $context AppContext object.
 	 * @return Deferred|null
 	 */
@@ -84,7 +108,7 @@ class Factory {
 	/**
 	 * Returns a Group object.
 	 *
-	 * @param int        $id      Group ID.
+	 * @param int        $id      Group ID or null.
 	 * @param AppContext $context AppContext object.
 	 * @return Deferred|null
 	 */
@@ -424,5 +448,31 @@ class Factory {
 	 */
 	public static function resolve_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new MembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the ActivityConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_activity_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new ActivitiesConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the ActivityCommentsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_activity_comments_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new ActivityCommentsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }
