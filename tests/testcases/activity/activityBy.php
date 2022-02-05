@@ -103,7 +103,7 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 							'parentDatabaseId' => $a,
 							'parentId'         => $this->toRelayId( 'activity', (string) $a ),
 							'type'             => 'ACTIVITY_COMMENT',
-							'primaryItemId'    => 0,
+							'primaryItemId'    => $a,
 							'secondaryItemId'  => $a,
 						]
 					]
@@ -182,7 +182,7 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			->hasField( 'databaseId', $a1 )
 			->hasField( 'parentDatabaseId', 0 )
 			->hasField( 'itemId', $g1 )
-			->hasField( 'primaryItemId', 0 )
+			->hasField( 'primaryItemId', $g1 )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'parentId', null )
 			->hasField( 'content', 'Foo' )

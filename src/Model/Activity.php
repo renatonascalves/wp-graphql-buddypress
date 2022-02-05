@@ -78,7 +78,7 @@ class Activity extends Model {
 					return absint( $this->data->item_id ?? 0 );
 				},
 				'primaryItemId'    => function() {
-					return absint( $this->data->primary_item_id ?? 0 );
+					return absint( $this->data->item_id ?? 0 );
 				},
 				'secondaryItemId'  => function() {
 					return absint( $this->data->secondary_item_id ?? 0 );
