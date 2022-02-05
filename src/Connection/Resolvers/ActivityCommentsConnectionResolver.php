@@ -12,6 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
 use BP_Activity_Activity;
 
 /**
@@ -125,7 +126,7 @@ class ActivityCommentsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return ! empty( bp_activity_get_specific( [ 'activity_ids' => absint( $offset ) ] )['activities'][0] );
+		return ActivityHelper::activity_exists( absint( $offset ) );
 	}
 
 	/**

@@ -12,6 +12,7 @@ use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use stdClass;
+
 /**
  * Class BlogObjectLoader
  */
@@ -27,7 +28,7 @@ class BlogObjectLoader extends AbstractDataLoader {
 	protected function get_model( $entry, $key ): ?Blog {
 
 		// Check if friendship exists.
-		if ( ! $entry instanceof stdClass ) {
+		if ( ! is_object( $entry ) ) {
 			return null;
 		}
 
@@ -38,8 +39,8 @@ class BlogObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return stdClass[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -52,7 +53,7 @@ class BlogObjectLoader extends AbstractDataLoader {
 
 		$loaded_blogs = [];
 
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
 			$loaded_blogs[ $key ] = BlogHelper::get_blog_from_input( absint( $key ) );
 		}

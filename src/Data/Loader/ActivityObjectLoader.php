@@ -10,7 +10,8 @@ namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Activity;
-use stdClass;
+use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
+use BP_Activity_Activity;
 
 /**
  * Class ActivityObjectLoader
@@ -26,7 +27,7 @@ class ActivityObjectLoader extends AbstractDataLoader {
 	 */
 	protected function get_model( $entry, $key ): ?Activity {
 
-		if ( empty( $entry ) || ! $entry instanceof stdClass ) {
+		if ( empty( $entry->id ) || ! $entry instanceof BP_Activity_Activity ) {
 			return null;
 		}
 
@@ -37,36 +38,20 @@ class ActivityObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return BP_Activity_Activity[]
 	 */
 	public function loadKeys( array $keys ): array {
-		global $wpdb;
 
 		if ( empty( $keys ) ) {
 			return $keys;
 		}
 
-		$bp                = buddypress();
 		$loaded_activities = [];
 
 		// Get all objects.
 		foreach ( $keys as $key ) {
-
-			/**
-			 * Currently, BuddyPress offers no way to get an activity ID directly.
-			 *
-			 * @todo Update with a better, cached, option.
-			 */
-			$activity = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$wpdb->prepare( "SELECT * FROM {$bp->activity->table_name} WHERE id = %d", $key ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			);
-
-			if ( empty( $activity[0] ) ) {
-				continue;
-			}
-
-			$loaded_activities[ $key ] = $activity[0];
+			$loaded_activities[ $key ] = ActivityHelper::get_activity( absint( $key ) );
 		}
 
 		return $loaded_activities;

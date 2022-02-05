@@ -11,7 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 use GraphQLRelay\Relay;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Model\Model;
-use stdClass;
+use BP_Activity_Activity;
 
 /**
  * Class Activity - Models the data for the Activity object type.
@@ -29,23 +29,23 @@ use stdClass;
  * @property string $dateGmt Date as GMT.
  * @property string $status Status.
  * @property string $link Link.
- * @property stdClass $data Activity object.
+ * @property BP_Activity_Activity $data Activity object.
  */
 class Activity extends Model {
 
 	/**
 	 * Stores the Activity object for the incoming data.
 	 *
-	 * @var stdClass
+	 * @var BP_Activity_Activity
 	 */
 	protected $data;
 
 	/**
 	 * Activity constructor.
 	 *
-	 * @param stdClass $activity The stdClass object.
+	 * @param BP_Activity_Activity $activity The activity object.
 	 */
-	public function __construct( stdClass $activity ) {
+	public function __construct( BP_Activity_Activity $activity ) {
 		$this->data = $activity;
 		parent::__construct();
 	}
@@ -65,17 +65,20 @@ class Activity extends Model {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'parentId'         => function() {
-					$id = 'activity_comment' === $this->data->type ? $this->data->item_id : 0;
+					$id = 'activity_comment' === $this->data->type ? $this->data->secondary_item_id : 0;
 
 					return ! empty( $id )
 						? Relay::toGlobalId( 'activity', (string) $id )
 						: null;
 				},
 				'parentDatabaseId' => function() {
-					return 'activity_comment' === $this->data->type ? absint( $this->data->item_id ) : 0;
+					return 'activity_comment' === $this->data->type ? absint( $this->data->secondary_item_id ) : 0;
+				},
+				'itemId'           => function() {
+					return absint( $this->data->item_id ?? 0 );
 				},
 				'primaryItemId'    => function() {
-					return absint( $this->data->item_id ?? 0 );
+					return absint( $this->data->primary_item_id ?? 0 );
 				},
 				'secondaryItemId'  => function() {
 					return absint( $this->data->secondary_item_id ?? 0 );
@@ -93,7 +96,7 @@ class Activity extends Model {
 					return $this->data->hide_sitewide ?? null;
 				},
 				'uri'              => function() {
-					return bp_activity_get_permalink( $this->data->id ?? null );
+					return bp_activity_get_permalink( $this->data->id ?? 0, $this->data ?? false );
 				},
 				'userId'           => function() {
 					return $this->data->user_id ?? null;

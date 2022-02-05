@@ -26,7 +26,7 @@ class ActivityEnums {
 		// Activity Components Enum.
 		self::activity_components();
 
-		// Activity Status Enum.
+		// Activity Order Status Enum.
 		register_graphql_enum_type(
 			'ActivityOrderStatusEnum',
 			[
@@ -46,6 +46,26 @@ class ActivityEnums {
 						'name'        => 'ALL',
 						'description' => __( 'Used to get all activities.', 'wp-graphql-buddypress' ),
 						'value'       => 'all',
+					],
+				],
+			]
+		);
+
+		// Activity Status Enum.
+		register_graphql_enum_type(
+			'ActivityStatusEnum',
+			[
+				'description' => __( 'The status of the activity.', 'wp-graphql-buddypress' ),
+				'values'      => [
+					'PUBLISHED' => [
+						'name'        => 'PUBLISHED',
+						'description' => __( 'Activity with the published status.', 'wp-graphql-buddypress' ),
+						'value'       => 'published',
+					],
+					'SPAM'      => [
+						'name'        => 'SPAM',
+						'description' => __( 'Activity with the spam status.', 'wp-graphql-buddypress' ),
+						'value'       => 'spam',
 					],
 				],
 			]

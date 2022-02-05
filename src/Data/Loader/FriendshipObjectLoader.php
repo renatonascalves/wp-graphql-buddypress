@@ -39,8 +39,8 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return BP_Friends_Friendship[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -50,7 +50,7 @@ class FriendshipObjectLoader extends AbstractDataLoader {
 
 		$loaded_friends = [];
 
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
 			$loaded_friends[ $key ] = new BP_Friends_Friendship( absint( $key ) );
 		}

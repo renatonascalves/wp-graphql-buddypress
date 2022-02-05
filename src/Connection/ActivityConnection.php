@@ -28,6 +28,12 @@ class ActivityConnection {
 		// Register connection from User to Activity.
 		register_graphql_connection( self::get_connection_config( [ 'fromType' => 'User' ] ) );
 
+		// Register connection from Blog/Site to Activity.
+		register_graphql_connection( self::get_connection_config( [ 'fromType' => 'Blog' ] ) );
+
+		// Register connection from Group to Activity.
+		register_graphql_connection( self::get_connection_config( [ 'fromType' => 'Group' ] ) );
+
 		// Register connection from Activity to Activity.
 		register_graphql_connection( self::get_activity_comments_connection_config() );
 	}
@@ -140,7 +146,7 @@ class ActivityConnection {
 			],
 			'groupId'         => [
 				'type'        => 'Int',
-				'description' => __( 'Limit result set to items created within a specific BuddyPress Group (ID).', 'wp-graphql-buddypress' ),
+				'description' => __( 'Limit result set to items created within a specific group (ID).', 'wp-graphql-buddypress' ),
 			],
 			'siteId'          => [
 				'type'        => 'Int',

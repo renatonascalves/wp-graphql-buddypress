@@ -164,6 +164,28 @@ class TypeRegistry {
 					return $node;
 				}
 
+				if (
+					bp_is_active( 'activity' )
+					&& (
+						! empty( $array[1] )
+						&& 'activity' === $array[1]
+						&& ! empty( $array[3] )
+						&& is_numeric( $array[3] )
+					)
+					||
+					(
+						! empty( $array[3] )
+						&& 'activity' === $array[3]
+						&& ! empty( $array[4] )
+						&& is_numeric( $array[4] )
+						&& empty( $array[5] )
+					)
+				) {
+					$activity_id = isset( $array[5] ) ? $array[4] : $array[3];
+
+					return $context->get_loader( 'bp_activity' )->load( $activity_id );
+				}
+
 				if ( bp_is_active( 'groups' ) ) {
 					$group_id = groups_get_id( $slug );
 

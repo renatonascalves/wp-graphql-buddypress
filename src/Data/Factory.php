@@ -30,9 +30,9 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ThreadConnectionResolve
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MessagesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivitiesConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
-use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 
 /**
  * Class Factory.

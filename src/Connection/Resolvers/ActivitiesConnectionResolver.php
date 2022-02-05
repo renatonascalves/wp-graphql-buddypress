@@ -13,6 +13,9 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Model\User;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
+use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
  * Class ActivitiesConnectionResolver
@@ -37,7 +40,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 		$query_args = [
 			'search_terms'      => false,
 			'sort'              => 'ASC',
-			'scope'             => false,
+			'scope'             => 'all',
 			'exclude'           => false,
 			'in'                => false,
 			'display_comments'  => false,
@@ -99,11 +102,13 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			$query_args['filter']['user_id'] = $query_args['user_id'];
 		}
 
-		if ( true === $query_args['display_comments'] ?? false ) {
+		// Display comments.
+		if ( true === boolval( $query_args['display_comments'] ) ) {
 			$query_args['display_comments'] = 'stream';
 		}
 
-		if ( ! empty( $query_args['dis'] ) ) {
+		// Set Scope.
+		if ( ! empty( $query_args['scope'] ) ) {
 			$query_args['scope'] = $query_args['scope'];
 		}
 
@@ -112,14 +117,34 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			$query_args['filter']['action'] = $query_args['type'];
 		}
 
-		// See if the user can see hidden activities.
-		if ( true === $this->can_see_hidden_activities( $query_args['component'] ?? '', $item_id ) ) {
-			$query_args['show_hidden'] = true;
-		}
-
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
 			$query_args['order'] = 'DESC';
+		}
+
+		// Setting the user ID whose activities we wanna fetch.
+		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
+			$query_args['filter']['user_id'] = $this->source->userId;
+		}
+
+		// Setting the site ID whose activities we wanna fetch.
+		if ( true === is_object( $this->source ) && $this->source instanceof Blog ) {
+			$query_args['filter']['object']     = 'blogs';
+			$query_args['filter']['primary_id'] = $this->source->databaseId;
+			$item_id                            = $this->source->databaseId;
+		}
+
+		// Setting the group ID whose activities we wanna fetch.
+		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['filter']['object']     = 'groups';
+			$query_args['filter']['primary_id'] = $this->source->databaseId;
+			$query_args['component']            = 'groups';
+			$item_id                            = $this->source->databaseId;
+		}
+
+		// See if the user can see hidden activities.
+		if ( true === $this->can_see_hidden_activities( $query_args['component'] ?? '', $item_id ) ) {
+			$query_args['show_hidden'] = true;
 		}
 
 		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
@@ -131,11 +156,6 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
-
-		// Setting the user ID whose activities we wanna fetch.
-		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
-			$query_args['filter']['user_id'] = $this->source->userId;
-		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
@@ -197,7 +217,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return ! empty( bp_activity_get_specific( [ 'activity_ids' => absint( $offset ) ] )['activities'][0] );
+		return ActivityHelper::activity_exists( absint( $offset ) );
 	}
 
 	/**

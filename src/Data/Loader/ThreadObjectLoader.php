@@ -38,8 +38,8 @@ class ThreadObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return BP_Messages_Thread[]
 	 */
 	public function loadKeys( array $keys ): array {
 

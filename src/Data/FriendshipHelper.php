@@ -57,7 +57,7 @@ class FriendshipHelper {
 		return (
 			( $logged_id !== $initiator_id && ! $is_moderator )
 			|| ( $logged_id === $friend_id && $is_moderator )
-			|| ( ! in_array( $logged_id, array( $initiator_id, $friend_id ), true ) && ! $is_moderator )
+			|| ( ! in_array( $logged_id, [ $initiator_id, $friend_id ], true ) && ! $is_moderator )
 		);
 	}
 }

@@ -9,9 +9,12 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use stdClass;
+use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Activity;
+use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
+use BP_Activity_Activity;
 
 /**
  * ActivityType Class.
@@ -51,6 +54,10 @@ class ActivityType {
 						'type'        => 'Int',
 						'description' => __( 'The ID of the parent activity.', 'wp-graphql-buddypress' ),
 					],
+					'itemId'           => [
+						'type'        => 'Int',
+						'description' => __( 'The ID of Item ID.', 'wp-graphql-buddypress' ),
+					],
 					'primaryItemId'    => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of some other object primarily associated with this one.', 'wp-graphql-buddypress' ),
@@ -70,7 +77,7 @@ class ActivityType {
 					],
 					'content'          => [
 						'type'        => 'String',
-						'description' => __( 'Allowed HTML content for the activity.', 'wp-graphql-buddypress' ),
+						'description' => __( 'HTML content for the activity.', 'wp-graphql-buddypress' ),
 						'args'        => [
 							'format' => [
 								'type'        => 'ContentFieldFormatEnum',
@@ -78,6 +85,7 @@ class ActivityType {
 							],
 						],
 						'resolve'     => function( Activity $activity, array $args ) {
+
 							if ( empty( $activity->data->content ) ) {
 								return null;
 							}
@@ -94,7 +102,7 @@ class ActivityType {
 						'description' => __( 'The active BuddyPress component name the activity relates to.', 'wp-graphql-buddypress' ),
 					],
 					'status'           => [
-						'type'        => 'String',
+						'type'        => 'ActivityStatusEnum',
 						'description' => __( 'Whether the activity has been marked as spam or not.', 'wp-graphql-buddypress' ),
 					],
 					'type'             => [
@@ -107,11 +115,11 @@ class ActivityType {
 					],
 					'date'             => [
 						'type'        => 'String',
-						'description' => __( 'The date the activity was published.', 'wp-graphql-buddypress' ),
+						'description' => __( 'The date the activity was published, in the site\'s timezone.', 'wp-graphql-buddypress' ),
 					],
 					'dateGmt'          => [
 						'type'        => 'String',
-						'description' => __( 'The date the activity was published in GMT.', 'wp-graphql-buddypress' ),
+						'description' => __( 'The date the activity was published, as GMT.', 'wp-graphql-buddypress' ),
 					],
 					'hidden'           => [
 						'type'        => 'Boolean',
@@ -148,15 +156,43 @@ class ActivityType {
 				},
 			]
 		);
+
+		register_graphql_field(
+			'RootQuery',
+			'activityBy',
+			[
+				'type'        => self::$type_name,
+				'description' => __( 'Get a BuddyPress Activity object.', 'wp-graphql-buddypress' ),
+				'args'        => [
+					'id'         => [
+						'type'        => 'ID',
+						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
+					],
+					'activityId' => [
+						'type'        => 'Int',
+						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
+					],
+				],
+				'resolve'     => function ( $source, array $args, AppContext $context ) {
+					$activity = ActivityHelper::get_activity_from_input( $args );
+
+					if ( false === bp_activity_user_can_read( $activity ) ) {
+						throw new UserError( __( 'Sorry, you are not allowed to see this activity.', 'wp-graphql-buddypress' ) );
+					}
+
+					return Factory::resolve_activity_object( $activity->id, $context );
+				},
+			]
+		);
 	}
 
 	/**
 	 * Renders the content of an activity.
 	 *
-	 * @param stdClass $activity Activity data.
+	 * @param BP_Activity_Activity $activity Activity object.
 	 * @return string The rendered activity content.
 	 */
-	public static function render_item( stdClass $activity ): string {
+	public static function render_item( BP_Activity_Activity $activity ): string {
 		$rendered = '';
 
 		if ( empty( $activity->content ) ) {

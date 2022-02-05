@@ -147,9 +147,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_public_group_activities() {
 		$component = buddypress()->groups->id;
-
-		$g1 = $this->bp_factory->group->create( [ 'status' => 'private' ] );
-		$g2 = $this->bp_factory->group->create( [ 'status' => 'public' ] );
+		$g1        = $this->create_group_object( [ 'status' => 'private', 'user_id' => $this->user ] );
+		$g2        = $this->create_group_object( [ 'status' => 'public', 'user_id'  => $this->user ] );
 
 		$a1 = $this->create_activity_object(
 			[
