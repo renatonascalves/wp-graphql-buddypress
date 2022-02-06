@@ -39,7 +39,6 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			->hasField( 'id', $this->toRelayId( 'activity', (string) $a ) )
 			->hasField( 'databaseId', $a )
 			->hasField( 'parentDatabaseId', 0 )
-			->hasField( 'itemId', 0 )
 			->hasField( 'primaryItemId', 0 )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'parentId', null )
@@ -83,7 +82,6 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			->hasField( 'databaseId', $a )
 			->hasField( 'parentDatabaseId', 0 )
 			->hasField( 'primaryItemId', 0 )
-			->hasField( 'itemId', 0 )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'parentId', null )
 			->hasField( 'content', 'Foo' )
@@ -181,7 +179,6 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			->hasField( 'id', $this->toRelayId( 'activity', (string) $a1 ) )
 			->hasField( 'databaseId', $a1 )
 			->hasField( 'parentDatabaseId', 0 )
-			->hasField( 'itemId', $g1 )
 			->hasField( 'primaryItemId', $g1 )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'parentId', null )
@@ -214,7 +211,6 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 					content(format: RAW)
 					uri
 					type
-					itemId
 					primaryItemId
 					secondaryItemId
 					isFavorited

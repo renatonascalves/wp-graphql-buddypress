@@ -159,13 +159,12 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
 
 				if ( file_exists( WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
-					// Autoload Required Classes.
 					require_once WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR . 'vendor/autoload.php';
 				}
 
 				// Bail if installed incorrectly.
 				if ( ! class_exists( '\WPGraphQL\Extensions\BuddyPress\TypeRegistry' ) ) {
-					add_action( 'admin_notices', array( $this, 'wp_graphql_buddypress_missing_notice' ) );
+					add_action( 'admin_notices', [ $this, 'wp_graphql_buddypress_missing_notice' ] );
 					return false;
 				}
 			}
@@ -182,13 +181,13 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 			// Checks if BuddyPress is installed.
 			if ( ! class_exists( 'BuddyPress' ) ) {
-				add_action( 'admin_notices', array( $this, 'buddypress_missing_notice' ) );
+				add_action( 'admin_notices', [ $this, 'buddypress_missing_notice' ] );
 				return;
 			}
 
 			// Checks if WPGraphQL is installed.
 			if ( ! class_exists( 'WPGraphQL' ) ) {
-				add_action( 'admin_notices', array( $this, 'wpgraphql_missing_notice' ) );
+				add_action( 'admin_notices', [ $this, 'wpgraphql_missing_notice' ] );
 				return;
 			}
 		}

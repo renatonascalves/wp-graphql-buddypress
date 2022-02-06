@@ -54,10 +54,6 @@ class ActivityType {
 						'type'        => 'Int',
 						'description' => __( 'The ID of the parent activity.', 'wp-graphql-buddypress' ),
 					],
-					'itemId'           => [
-						'type'        => 'Int',
-						'description' => __( 'The ID of Item ID.', 'wp-graphql-buddypress' ),
-					],
 					'primaryItemId'    => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of some other object primarily associated with this one.', 'wp-graphql-buddypress' ),

@@ -38,20 +38,16 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'search_terms'      => false,
-			'sort'              => 'ASC',
-			'scope'             => 'all',
-			'exclude'           => false,
-			'in'                => false,
-			'display_comments'  => false,
-			'spam'              => 'ham_only',
-			'count_total'       => false,
-			'fields'            => 'ids',
-			'update_meta_cache' => true,
-			'show_hidden'       => false,
-			'filter'            => false,
-			// @todo default to this type?
-			// 'type'              => 'activity_update',
+			'search_terms'     => false,
+			'sort'             => 'DESC',
+			'scope'            => false,
+			'exclude'          => false,
+			'in'               => false,
+			'display_comments' => false,
+			'spam'             => 'ham_only',
+			'fields'           => 'ids',
+			'show_hidden'      => false,
+			'filter'           => false,
 		];
 
 		// Prepare for later use.
@@ -92,8 +88,8 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			}
 
 			if ( ! empty( $query_args['primary_id'] ) ) {
+				$query_args['filter']['primary_id'] = $query_args['primary_id'];
 				$item_id                            = $query_args['primary_id'];
-				$query_args['filter']['primary_id'] = $item_id;
 			}
 		}
 
@@ -107,11 +103,6 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			$query_args['display_comments'] = 'stream';
 		}
 
-		// Set Scope.
-		if ( ! empty( $query_args['scope'] ) ) {
-			$query_args['scope'] = $query_args['scope'];
-		}
-
 		// Set Type.
 		if ( ! empty( $query_args['type'] ) ) {
 			$query_args['filter']['action'] = $query_args['type'];
@@ -119,7 +110,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
-			$query_args['order'] = 'DESC';
+			$query_args['sort'] = 'DESC';
 		}
 
 		// Setting the user ID whose activities we wanna fetch.
@@ -136,9 +127,9 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 
 		// Setting the group ID whose activities we wanna fetch.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['component']            = 'groups';
 			$query_args['filter']['object']     = 'groups';
 			$query_args['filter']['primary_id'] = $this->source->databaseId;
-			$query_args['component']            = 'groups';
 			$item_id                            = $this->source->databaseId;
 		}
 

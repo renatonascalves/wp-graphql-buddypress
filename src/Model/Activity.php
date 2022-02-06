@@ -74,9 +74,6 @@ class Activity extends Model {
 				'parentDatabaseId' => function() {
 					return 'activity_comment' === $this->data->type ? absint( $this->data->secondary_item_id ) : 0;
 				},
-				'itemId'           => function() {
-					return absint( $this->data->item_id ?? 0 );
-				},
 				'primaryItemId'    => function() {
 					return absint( $this->data->item_id ?? 0 );
 				},
