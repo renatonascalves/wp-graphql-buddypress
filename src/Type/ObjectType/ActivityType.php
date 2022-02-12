@@ -90,7 +90,7 @@ class ActivityType {
 								return $activity->data->content;
 							}
 
-							return self::render_item( $activity->data );
+							return self::render_activity_content( $activity->data );
 						},
 					],
 					'component'        => [
@@ -132,7 +132,7 @@ class ActivityType {
 
 							$user_favorites = bp_activity_get_user_favorites( get_current_user_id() );
 
-							return in_array( $activity->databaseId, array_filter( wp_parse_id_list( $user_favorites ) ), true );
+							return in_array( $activity->databaseId, array_values( array_filter( wp_parse_id_list( $user_favorites ) ) ), true );
 						},
 					],
 				],
@@ -188,7 +188,7 @@ class ActivityType {
 	 * @param BP_Activity_Activity $activity Activity object.
 	 * @return string The rendered activity content.
 	 */
-	public static function render_item( BP_Activity_Activity $activity ): string {
+	public static function render_activity_content( BP_Activity_Activity $activity ): string {
 		$rendered = '';
 
 		if ( empty( $activity->content ) ) {

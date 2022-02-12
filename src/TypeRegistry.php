@@ -30,6 +30,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use WPGraphQL\Extensions\BuddyPress\Model\Thread;
 use WPGraphQL\Extensions\BuddyPress\Model\Activity;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -183,7 +184,7 @@ class TypeRegistry {
 				) {
 					$activity_id = isset( $array[5] ) ? $array[4] : $array[3];
 
-					return $context->get_loader( 'bp_activity' )->load( $activity_id );
+					return $context->get_loader( 'bp_activity' )->load( absint( $activity_id ) );
 				}
 
 				if ( bp_is_active( 'groups' ) ) {
@@ -198,7 +199,7 @@ class TypeRegistry {
 					$user = get_user_by( 'slug', $slug );
 
 					if ( $user instanceof WP_User && ! empty( $user->ID ) ) {
-						return $context->get_loader( 'user' )->load( $user->ID );
+						return $context->get_loader( 'user' )->load( absint( $user->ID ) );
 					}
 				}
 
@@ -259,6 +260,9 @@ class TypeRegistry {
 
 			// Connections.
 			ActivityConnection::register_connections();
+
+			// Mutations.
+			ActivityDelete::register_mutation();
 		}
 
 		// Groups component.

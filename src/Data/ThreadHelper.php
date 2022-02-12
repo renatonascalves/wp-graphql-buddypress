@@ -110,7 +110,7 @@ class ThreadHelper {
 			'recipients' => empty( $input['recipients'] )
 				? (
 					$thread->recipients
-						? wp_parse_id_list( wp_list_pluck( $thread->recipients, 'user_id' ) )
+						? array_values( array_filter( wp_parse_id_list( wp_list_pluck( $thread->recipients, 'user_id' ) ) ) )
 						: null
 				)
 				: $input['recipients'],
