@@ -20,7 +20,7 @@ class ActivityDelete {
 	/**
 	 * Registers the ActivityDelete mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'deleteActivity',
 			[

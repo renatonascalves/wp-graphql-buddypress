@@ -96,7 +96,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_query(): array {
-		return groups_get_group_members( $this->query_args );
+		return (array) groups_get_group_members( $this->query_args );
 	}
 
 	/**
@@ -131,7 +131,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// Current user is a member of the group.
-		return ( groups_is_user_member( bp_loggedin_user_id(), $this->source->databaseId ) );
+		return (bool) groups_is_user_member( bp_loggedin_user_id(), $this->source->databaseId );
 	}
 
 	/**

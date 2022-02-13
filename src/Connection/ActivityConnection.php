@@ -20,7 +20,7 @@ class ActivityConnection {
 	/**
 	 * Register connections to Activity.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 
 		// Register connection from RootQuery to Activity.
 		register_graphql_connection( self::get_connection_config() );

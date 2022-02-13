@@ -28,7 +28,7 @@ class BlogType {
 	/**
 	 * Register the blog type and queries to the WPGraphQL schema.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_object_type(
 			self::$type_name,
 			[
@@ -137,10 +137,9 @@ class BlogType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					return Factory::resolve_blog_object(
-						BlogHelper::get_blog_from_input( $args )->blog_id,
-						$context
-					);
+					$blog = BlogHelper::get_blog_from_input( $args );
+
+					return Factory::resolve_blog_object( $blog->blog_id ?? 0, $context );
 				},
 			]
 		);

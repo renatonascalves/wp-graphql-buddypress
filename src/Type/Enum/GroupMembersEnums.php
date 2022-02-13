@@ -18,7 +18,7 @@ class GroupMembersEnums {
 	/**
 	 * Registers enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 		$values = [
 			'LAST_JOINED'  => [
 				'name'        => 'LAST_JOINED',
@@ -61,7 +61,7 @@ class GroupMembersEnums {
 	/**
 	 * Group Member Roles.
 	 */
-	public static function group_member_roles() {
+	public static function group_member_roles(): void {
 		$roles = [];
 		foreach ( bp_groups_get_group_roles() as $role ) {
 			$roles[ WPEnumType::get_safe_name( $role->id ) ] = [

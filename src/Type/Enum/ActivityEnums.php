@@ -18,7 +18,7 @@ class ActivityEnums {
 	/**
 	 * Registers enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Activity Types Enum.
 		self::activity_types();
@@ -110,7 +110,7 @@ class ActivityEnums {
 	/**
 	 * Registers activity types enum.
 	 */
-	public static function activity_types() {
+	public static function activity_types(): void {
 		$activity_types_enum_values = [];
 		$activity_types             = array_keys( bp_activity_get_types() );
 
@@ -140,7 +140,7 @@ class ActivityEnums {
 	/**
 	 * Registers activity components enum.
 	 */
-	public static function activity_components() {
+	public static function activity_components(): void {
 		$activity_components_enum_values = [];
 		$activity_components             = array_keys( buddypress()->active_components );
 

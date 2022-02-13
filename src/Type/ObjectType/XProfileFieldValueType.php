@@ -23,7 +23,7 @@ class XProfileFieldValueType {
 	/**
 	 * XProfile Field Value Registration.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_object_type(
 			self::$type_name,
 			[

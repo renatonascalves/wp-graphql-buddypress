@@ -16,7 +16,7 @@ class FriendshipEnums {
 	/**
 	 * Register enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		/**
 		 * Friendship Order By Enum.

@@ -20,7 +20,7 @@ class FriendshipConnection {
 	/**
 	 * Register connection from User -> Friendship(s).
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 		register_graphql_connection(
 			[
 				'fromType'       => 'User',

@@ -21,7 +21,7 @@ class ActivityUpdate {
 	/**
 	 * Registers the ActivityUpdate mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'updateActivity',
 			[

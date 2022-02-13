@@ -18,7 +18,7 @@ class GroupEnums {
 	/**
 	 * Registers enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Group Order By.
 		register_graphql_enum_type(
@@ -100,7 +100,7 @@ class GroupEnums {
 	/**
 	 * Registers group stati enum.
 	 */
-	public static function group_stati() {
+	public static function group_stati(): void {
 		$group_status_enum_values = [
 			'name'  => 'PUBLIC',
 			'value' => 'public',
@@ -137,7 +137,7 @@ class GroupEnums {
 	/**
 	 * Registers group types enum.
 	 */
-	public static function group_types() {
+	public static function group_types(): void {
 		$group_types_enum_values = [];
 		$group_types             = bp_groups_get_group_types();
 

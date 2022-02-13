@@ -21,7 +21,7 @@ class ActivityFavorite {
 	/**
 	 * Registers the ActivityFavorite mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'favoriteActivity',
 			[

@@ -16,7 +16,7 @@ class GeneralEnums {
 	/**
 	 * Registers enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Content Field Format.
 		register_graphql_enum_type(

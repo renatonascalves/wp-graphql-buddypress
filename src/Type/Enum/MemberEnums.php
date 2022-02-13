@@ -18,7 +18,7 @@ class MemberEnums {
 	/**
 	 * Registers member enum types.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Member Order by Type Enum.
 		register_graphql_enum_type(
@@ -67,7 +67,7 @@ class MemberEnums {
 	/**
 	 * Member Types Enum.
 	 */
-	public static function member_types_enum() {
+	public static function member_types_enum(): void {
 		$types = [];
 
 		foreach ( (array) bp_get_member_types() as $type ) {

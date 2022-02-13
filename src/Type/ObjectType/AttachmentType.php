@@ -16,7 +16,7 @@ class AttachmentType {
 	/**
 	 * Attachment registrations.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_object_type(
 			'Attachment',
 			[

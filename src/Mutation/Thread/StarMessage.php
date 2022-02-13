@@ -21,7 +21,7 @@ class StarMessage {
 	/**
 	 * Registers the StarMessage mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'starMessage',
 			[

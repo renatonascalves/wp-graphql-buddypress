@@ -20,7 +20,7 @@ class BlogConnection {
 	/**
 	 * Register connection from RootQuery -> Blog (type).
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 		register_graphql_connection(
 			[
 				'fromType'       => 'RootQuery',

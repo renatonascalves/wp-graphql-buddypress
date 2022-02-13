@@ -18,7 +18,7 @@ class XProfileFieldEnums {
 	/**
 	 * Registers enums.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Field Types Enum.
 		self::field_types_enum();
@@ -30,7 +30,7 @@ class XProfileFieldEnums {
 	/**
 	 * Visibility Levels Enum.
 	 */
-	public static function visibility_levels_enum() {
+	public static function visibility_levels_enum(): void {
 		$levels = [];
 		foreach ( bp_xprofile_get_visibility_levels() as $level ) {
 			$levels[ WPEnumType::get_safe_name( $level['id'] ) ] = [
@@ -56,7 +56,7 @@ class XProfileFieldEnums {
 	/**
 	 * Field Types Enum.
 	 */
-	public static function field_types_enum() {
+	public static function field_types_enum(): void {
 		$types = [];
 		foreach ( (array) buddypress()->profile->field_types as $type ) {
 			$types[ WPEnumType::get_safe_name( $type ) ] = [
