@@ -129,7 +129,7 @@ class ActivityHelper {
 	}
 
 	/**
-	 * Check if Activity exists.
+	 * Check if an activity exists.
 	 *
 	 * @param int $activity_id Activity ID.
 	 * @return bool
@@ -144,7 +144,7 @@ class ActivityHelper {
 	 *
 	 * @param  string $component The component the activity is from.
 	 * @param  int    $item_id   The activity item ID.
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function show_hidden( string $component, int $item_id ): bool {
 		$user_id = get_current_user_id();
@@ -171,5 +171,4 @@ class ActivityHelper {
 
 		return $retval;
 	}
-
 }

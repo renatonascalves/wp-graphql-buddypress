@@ -24,6 +24,7 @@ use BP_Activity_Activity;
  * @property int $secondaryItemId Secondary Item ID.
  * @property string $component Component.
  * @property string $type Type.
+ * @property string $uri Permalink.
  * @property string $title Title.
  * @property string $date Date.
  * @property string $dateGmt Date as GMT.

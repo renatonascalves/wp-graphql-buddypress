@@ -134,7 +134,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// See if the user can see hidden activities.
-		if ( true === $this->can_see_hidden_activities( $query_args['component'] ?? '', $item_id ) ) {
+		if ( true === ActivityHelper::show_hidden( $query_args['component'] ?? '', $item_id ) ) {
 			$query_args['show_hidden'] = true;
 		}
 
@@ -159,7 +159,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return (array) apply_filters(
-			'graphql_activities_connection_query_args',
+			'graphql_activityies_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -252,36 +252,5 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-	}
-
-	/**
-	 * Show hidden activity(ies)?
-	 *
-	 * @param  string $component The component the activity is from.
-	 * @param  int    $item_id   The activity item ID.
-	 * @return bool
-	 */
-	protected function can_see_hidden_activities( string $component, int $item_id ): bool {
-		$user_id = get_current_user_id();
-		$retval  = false;
-
-		// If activity is from a group, do an extra cap check.
-		if ( ! empty( $component ) && ! empty( $item_id ) && bp_is_active( $component ) && buddypress()->groups->id === $component ) {
-			// Group admins and mods have access as well.
-			if ( groups_is_user_admin( $user_id, $item_id ) || groups_is_user_mod( $user_id, $item_id ) ) {
-				$retval = true;
-
-				// User is a member of the group.
-			} elseif ( (bool) groups_is_user_member( $user_id, $item_id ) ) {
-				$retval = true;
-			}
-		}
-
-		// Moderators as well.
-		if ( bp_current_user_can( 'bp_moderate' ) ) {
-			$retval = true;
-		}
-
-		return $retval;
 	}
 }

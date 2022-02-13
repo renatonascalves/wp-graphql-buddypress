@@ -107,7 +107,7 @@ class ActivityUpdate {
 			$activity = ActivityHelper::get_activity_from_input( $input );
 
 			// Bail now if a user isn't allowed to update an activity.
-			if ( false === bp_activity_user_can_delete( $activity ) ) { // the delete function is right here.
+			if ( false === bp_activity_user_can_delete( $activity ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 

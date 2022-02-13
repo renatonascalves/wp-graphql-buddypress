@@ -30,7 +30,7 @@ class ActivityEnums {
 		register_graphql_enum_type(
 			'ActivityOrderStatusEnum',
 			[
-				'description' => __( 'The status of the activity.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The status order of the activity.', 'wp-graphql-buddypress' ),
 				'values'      => [
 					'HAM_ONLY'  => [
 						'name'        => 'HAM_ONLY',

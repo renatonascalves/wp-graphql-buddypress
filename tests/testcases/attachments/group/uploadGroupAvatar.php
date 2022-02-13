@@ -18,11 +18,11 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_group_creator_can_upload_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -34,11 +34,11 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_regular_admins_can_upload_any_group_avatar() {
 		$this->bp->set_current_user( $this->admin );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -53,11 +53,11 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$this->bp->set_current_user( $this->random_user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [

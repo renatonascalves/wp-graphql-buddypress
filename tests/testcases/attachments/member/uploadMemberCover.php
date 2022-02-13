@@ -22,7 +22,7 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -42,7 +42,7 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [

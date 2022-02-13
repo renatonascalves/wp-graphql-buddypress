@@ -18,11 +18,11 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 	public function test_member_can_upload_his_own_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -37,11 +37,11 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 	public function test_regular_admins_can_upload_any_member_avatar() {
 		$this->bp->set_current_user( $this->admin );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [

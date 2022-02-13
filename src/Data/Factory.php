@@ -451,7 +451,7 @@ class Factory {
 	}
 
 	/**
-	 * Wrapper for the ActivityConnectionResolver class.
+	 * Wrapper for the ActivitiesConnectionResolver class.
 	 *
 	 * @param mixed       $source  Source.
 	 * @param array       $args    Array of args to be passed down to the resolve method.

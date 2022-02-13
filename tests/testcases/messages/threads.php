@@ -63,12 +63,12 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $thread->thread_id,
 				'sender_id'  => $this->random_user,
-				'recipients' => array( $this->admin ),
+				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$this->assertQuerySuccessful( $this->threadsQuery() )

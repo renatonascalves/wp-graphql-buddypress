@@ -52,11 +52,6 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			->hasField( 'hidden', false );
 	}
 
-	/**
-	 * Undocumented function
-	 *
-	 * @group renato
-	 */
 	public function test_activity_comments() {
 		$a = $this->create_activity_object(
 			[

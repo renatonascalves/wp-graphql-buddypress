@@ -51,12 +51,12 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$results = $this->get_thread_recipients(
@@ -81,12 +81,12 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$results = $this->get_thread_recipients(
