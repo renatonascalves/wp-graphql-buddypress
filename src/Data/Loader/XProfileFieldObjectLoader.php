@@ -38,8 +38,8 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return BP_XProfile_Field[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -52,7 +52,7 @@ class XProfileFieldObjectLoader extends AbstractDataLoader {
 		// Get the user ID if available.
 		$user_id = $this->context->config['userId'] ?? null;
 
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
 			$loaded_xprofile_fields[ $key ] = XProfileFieldHelper::get_xprofile_field_from_input( absint( $key ), $user_id );
 		}

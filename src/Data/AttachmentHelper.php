@@ -104,7 +104,7 @@ class AttachmentHelper {
 	 * @param string $object  Object (members, groups, blogs, etc).
 	 * @param int    $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
-	public static function upload_cover_from_file( array $input, string $object, int $item_id ) {
+	public static function upload_cover_from_file( array $input, string $object, int $item_id ): void {
 
 		// Set global variables.
 		$bp = buddypress();
@@ -223,7 +223,7 @@ class AttachmentHelper {
 	 * @param string $object  Object (user, group, blog, etc).
 	 * @param int    $item_id Item. (user_id, group_id, blog_id, etc).
 	 */
-	public static function upload_avatar_from_file( $input, $object, $item_id ) {
+	public static function upload_avatar_from_file( $input, $object, $item_id ): void {
 
 		// Set global variables.
 		$bp = buddypress();
@@ -334,7 +334,7 @@ class AttachmentHelper {
 	 * @param string               $object          Object.
 	 * @param int                  $item_id         Item ID.
 	 */
-	protected static function crop_image( $image_file, $avatar_instance, $object, $item_id ) {
+	protected static function crop_image( $image_file, $avatar_instance, $object, $item_id ): void {
 		$image          = getimagesize( $image_file );
 		$avatar_to_crop = str_replace( bp_core_avatar_upload_path(), '', $image_file );
 
@@ -417,7 +417,7 @@ class AttachmentHelper {
 	 * @param int    $item_id Item ID.
 	 * @param string $object  Object.
 	 */
-	protected static function delete_existing_image( $item_id, $object ) {
+	protected static function delete_existing_image( $item_id, $object ): void {
 		// Get existing avatar.
 		$existing_avatar = bp_core_fetch_avatar(
 			[

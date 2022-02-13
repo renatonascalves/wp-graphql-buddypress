@@ -18,11 +18,11 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 	public function test_member_can_delete_his_own_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user ) );
 		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );
@@ -47,11 +47,11 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 	public function test_regular_admins_can_delete_other_member_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user ) );
 		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );

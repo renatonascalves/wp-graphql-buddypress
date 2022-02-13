@@ -18,11 +18,11 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_regular_admins_can_delete_any_group_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$full  = $this->get_avatar_image( 'full', 'group', absint( $this->group ) );
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );
@@ -50,11 +50,11 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_group_creator_can_delete_avatar() {
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$full  = $this->get_avatar_image( 'full', 'group', absint( $this->group ) );
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );
@@ -82,11 +82,11 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$this->bp->set_current_user( $this->user );
 
-		add_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$response = $this->upload_avatar( 'GROUP', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$full  = $this->get_avatar_image( 'full', 'group', absint( $this->group ) );
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );

@@ -20,7 +20,7 @@ class XProfileFieldConnection {
 	/**
 	 * Register connection from RootQuery to XProfile Groups.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 
 		// Connection for the XProfile Field options.
 		register_graphql_connection(

@@ -38,7 +38,7 @@ class MessageObjectLoader extends AbstractDataLoader {
 	 * values.
 	 *
 	 * @param array $keys Array of keys.
-	 * @return array
+	 * @return BP_Messages_Message[]
 	 */
 	public function loadKeys( array $keys ): array {
 

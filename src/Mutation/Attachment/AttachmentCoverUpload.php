@@ -20,7 +20,7 @@ class AttachmentCoverUpload {
 	/**
 	 * Registers the AttachmentCoverUpload mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'uploadAttachmentCover',
 			[

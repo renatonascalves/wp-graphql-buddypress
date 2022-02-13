@@ -20,7 +20,7 @@ class GroupDelete {
 	/**
 	 * Registers the GroupDelete mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'deleteGroup',
 			[

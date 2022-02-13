@@ -12,6 +12,7 @@ use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
 use BP_XProfile_Group;
+use stdClass;
 
 /**
  * Class XProfileGroupObjectLoader
@@ -38,8 +39,8 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys.
-	 * @return array
+	 * @param array $keys Array of keys/ids.
+	 * @return stdClass[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -52,7 +53,7 @@ class XProfileGroupObjectLoader extends AbstractDataLoader {
 
 		$loaded_xprofile_groups = [];
 
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
 			$loaded_xprofile_groups[ $key ] = XProfileGroupHelper::get_xprofile_group_from_input( absint( $key ) );
 		}

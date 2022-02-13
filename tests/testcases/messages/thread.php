@@ -49,12 +49,12 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $thread->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $u1 ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		// Moderator can see it all.
@@ -105,12 +105,12 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Reply.
 		$this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $thread->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $u1 ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		$this->bp->set_current_user( $u2 );

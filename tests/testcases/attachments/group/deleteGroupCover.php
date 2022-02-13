@@ -22,7 +22,7 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 
@@ -50,7 +50,7 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 
@@ -78,7 +78,7 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 

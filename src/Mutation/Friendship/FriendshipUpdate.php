@@ -21,7 +21,7 @@ class FriendshipUpdate {
 	/**
 	 * Registers the FriendshipUpdate mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'updateFriendship',
 			[

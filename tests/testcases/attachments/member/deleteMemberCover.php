@@ -22,7 +22,7 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
 
@@ -50,7 +50,7 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
 

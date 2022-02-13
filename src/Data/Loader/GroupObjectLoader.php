@@ -38,7 +38,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 	 * values.
 	 *
 	 * @param array $keys Array of keys.
-	 * @return array
+	 * @return BP_Groups_Group[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -56,7 +56,7 @@ class GroupObjectLoader extends AbstractDataLoader {
 
 		$loaded_groups = [];
 
-		// Get all objects and add them to cache.
+		// Get all objects.
 		foreach ( $keys as $key ) {
 			$loaded_groups[ $key ] = groups_get_group( absint( $key ) );
 		}

@@ -16,7 +16,7 @@ class ThreadEnums {
 	/**
 	 * Registers enum types.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		register_graphql_enum_type(
 			'ThreadTypeEnum',

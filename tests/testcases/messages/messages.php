@@ -22,12 +22,12 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		// Reply.
 		$m2 = $this->create_thread_object(
-			array(
+			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
-			)
+			]
 		);
 
 		// Star the second message.

@@ -16,7 +16,7 @@ class BlogEnums {
 	/**
 	 * Registers enum type.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Blog Order Types.
 		register_graphql_enum_type(

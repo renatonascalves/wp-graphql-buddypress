@@ -18,7 +18,7 @@ class AttachmentEnums {
 	 *
 	 * @todo update to allow automatic insetion of new attachment components.
 	 */
-	public static function register() {
+	public static function register(): void {
 
 		// Attachment Avatar Enum.
 		register_graphql_enum_type(

@@ -29,7 +29,7 @@ class GroupType {
 	/**
 	 * Registers the group type and queries to the WPGraphQL schema.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_object_type(
 			self::$type_name,
 			[
@@ -64,7 +64,7 @@ class GroupType {
 							}
 
 							$admins     = [];
-							$admin_mods = groups_get_group_members(
+							$admin_mods = (array) groups_get_group_members(
 								[
 									// @codingStandardsIgnoreLine.
 									'group_id'   => $group->databaseId,
@@ -72,7 +72,7 @@ class GroupType {
 								]
 							);
 
-							foreach ( (array) $admin_mods['members'] as $admin ) {
+							foreach ( $admin_mods['members'] as $admin ) {
 								if ( ! empty( $admin->is_admin ) && ! empty( $admin->ID ) ) {
 									$admins[] = $admin->ID;
 								}
@@ -102,7 +102,7 @@ class GroupType {
 							}
 
 							$mods       = [];
-							$admin_mods = groups_get_group_members(
+							$admin_mods = (array) groups_get_group_members(
 								[
 									// @codingStandardsIgnoreLine.
 									'group_id'   => $group->databaseId,
@@ -110,7 +110,7 @@ class GroupType {
 								]
 							);
 
-							foreach ( (array) $admin_mods['members'] as $mod ) {
+							foreach ( $admin_mods['members'] as $mod ) {
 								if ( empty( $mod->is_admin ) ) {
 									$mods[] = $mod->ID;
 								}

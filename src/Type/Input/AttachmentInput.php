@@ -16,7 +16,7 @@ class AttachmentInput {
 	/**
 	 * Input registrations.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_input_type(
 			'Upload',
 			[

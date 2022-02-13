@@ -20,7 +20,7 @@ class GroupConnection {
 	/**
 	 * Register connections to Groups.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 
 		// Register connection from RootQuery to groups.
 		register_graphql_connection( self::get_connection_config() );

@@ -20,7 +20,7 @@ class ThreadConnection {
 	/**
 	 * Register connections to Threads.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 
 		// Register connection from RootQuery to Thread.
 		register_graphql_connection( self::get_thread_connection_config() );

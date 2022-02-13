@@ -20,7 +20,7 @@ class MemberConnection {
 	/**
 	 * Register connections from the RootQuery to User members.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 		register_graphql_connection(
 			[
 				'fromType'           => 'RootQuery',

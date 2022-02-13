@@ -22,7 +22,7 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -42,7 +42,7 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [
@@ -65,7 +65,7 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$response = $this->upload_cover( 'GROUPS', absint( $this->group ) );
 
-		remove_filter( 'pre_move_uploaded_file', array( $this, 'copy_file' ), 10, 3 );
+		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'attachment', [

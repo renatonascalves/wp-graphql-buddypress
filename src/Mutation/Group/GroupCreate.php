@@ -21,7 +21,7 @@ class GroupCreate {
 	/**
 	 * Registers the GroupCreate mutation.
 	 */
-	public static function register_mutation() {
+	public static function register_mutation(): void {
 		register_graphql_mutation(
 			'createGroup',
 			[

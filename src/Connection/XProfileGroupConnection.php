@@ -21,7 +21,7 @@ class XProfileGroupConnection {
 	/**
 	 * Register connections to XProfile Groups.
 	 */
-	public static function register_connections() {
+	public static function register_connections(): void {
 
 		// Register connection from RootQuery to XProfile Groups.
 		register_graphql_connection( self::get_connection_config() );

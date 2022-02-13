@@ -117,7 +117,7 @@ class XProfileFieldHelper {
 	 * @param int   $xprofile_field_id Field ID.
 	 * @param array $input             The input for the mutation.
 	 */
-	public static function set_additional_fields( int $xprofile_field_id, array $input ) {
+	public static function set_additional_fields( int $xprofile_field_id, array $input ): void {
 
 		// Setting/Updating member types if available.
 		if ( ! empty( $input['memberTypes'] ) ) {

@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
+use stdClass;
 
 /**
  * XProfileGroupHelper Class.
@@ -22,9 +23,9 @@ class XProfileGroupHelper {
 	 * @throws UserError User error for invalid XProfile group.
 	 *
 	 * @param array|int $input Array of possible input fields, or an integer from a specific XProfile group.
-	 * @return object
+	 * @return stdClass
 	 */
-	public static function get_xprofile_group_from_input( $input ) {
+	public static function get_xprofile_group_from_input( $input ): stdClass {
 		$xprofile_group_id = 0;
 
 		if ( ! empty( $input['id'] ) ) {
@@ -61,7 +62,6 @@ class XProfileGroupHelper {
 	 * @return array
 	 */
 	public static function prepare_xprofile_group_args( array $input, string $action, $xprofile_group = null ): array {
-
 		$output_args = [
 			'name'           => empty( $input['name'] )
 				? $xprofile_group->name ?? ''

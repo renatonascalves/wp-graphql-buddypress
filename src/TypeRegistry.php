@@ -10,6 +10,7 @@ namespace WPGraphQL\Extensions\BuddyPress;
 
 use WP_User;
 use WPGraphQL\AppContext;
+use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
@@ -20,6 +21,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
@@ -27,6 +29,11 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use WPGraphQL\Extensions\BuddyPress\Model\Thread;
+use WPGraphQL\Extensions\BuddyPress\Model\Activity;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -47,6 +54,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\ActivityEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
@@ -57,6 +65,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
@@ -103,6 +112,10 @@ class TypeRegistry {
 
 				if ( bp_is_active( 'messages' ) && $node instanceof Thread ) {
 					return $interface_instance->type_registry->get_type( 'Thread' );
+				}
+
+				if ( bp_is_active( 'activity' ) && $node instanceof Activity ) {
+					return $interface_instance->type_registry->get_type( 'Activity' );
 				}
 
 				return $type;
@@ -155,6 +168,28 @@ class TypeRegistry {
 					return $node;
 				}
 
+				if (
+					bp_is_active( 'activity' )
+					&& (
+						! empty( $array[1] )
+						&& 'activity' === $array[1]
+						&& ! empty( $array[3] )
+						&& is_numeric( $array[3] )
+					)
+					||
+					(
+						! empty( $array[3] )
+						&& 'activity' === $array[3]
+						&& ! empty( $array[4] )
+						&& is_numeric( $array[4] )
+						&& empty( $array[5] )
+					)
+				) {
+					$activity_id = isset( $array[5] ) ? $array[4] : $array[3];
+
+					return $context->get_loader( 'bp_activity' )->load( absint( $activity_id ) );
+				}
+
 				if ( bp_is_active( 'groups' ) ) {
 					$group_id = groups_get_id( $slug );
 
@@ -167,7 +202,7 @@ class TypeRegistry {
 					$user = get_user_by( 'slug', $slug );
 
 					if ( $user instanceof WP_User && ! empty( $user->ID ) ) {
-						return $context->get_loader( 'user' )->load( $user->ID );
+						return $context->get_loader( 'user' )->load( absint( $user->ID ) );
 					}
 				}
 
@@ -215,6 +250,25 @@ class TypeRegistry {
 
 			// Connections.
 			MemberConnection::register_connections();
+		}
+
+		// Acvitity component.
+		if ( bp_is_active( 'activity' ) ) {
+
+			// Enum(s).
+			ActivityEnums::register();
+
+			// Fields.
+			ActivityType::register();
+
+			// Connections.
+			ActivityConnection::register_connections();
+
+			// Mutations.
+			ActivityFavorite::register_mutation();
+			ActivityCreate::register_mutation();
+			ActivityDelete::register_mutation();
+			ActivityUpdate::register_mutation();
 		}
 
 		// Groups component.
@@ -303,10 +357,10 @@ class TypeRegistry {
 			ThreadType::register();
 			MessageType::register();
 
-			// Thread/Messages Connections.
+			// Connections.
 			ThreadConnection::register_connections();
 
-			// Thread/Messages Mutations.
+			// Mutations.
 			StarMessage::register_mutation();
 			ThreadDelete::register_mutation();
 			ThreadUpdate::register_mutation();
@@ -352,6 +406,7 @@ class TypeRegistry {
 				'bp_blog'           => new BlogObjectLoader( $context ),
 				'bp_thread'         => new ThreadObjectLoader( $context ),
 				'bp_message'        => new MessageObjectLoader( $context ),
+				'bp_activity'       => new ActivityObjectLoader( $context ),
 			]
 		);
 	}

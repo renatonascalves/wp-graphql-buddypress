@@ -28,7 +28,7 @@ class MemberType {
 	/**
 	 * Register Member fields to the WPGraphQL schema.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_field(
 			self::$type_name,
 			'memberTypes',

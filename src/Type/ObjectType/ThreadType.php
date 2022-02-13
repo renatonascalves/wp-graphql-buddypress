@@ -29,7 +29,7 @@ class ThreadType {
 	/**
 	 * Registers the thread type and queries to the WPGraphQL schema.
 	 */
-	public static function register() {
+	public static function register(): void {
 		register_graphql_object_type(
 			self::$type_name,
 			[

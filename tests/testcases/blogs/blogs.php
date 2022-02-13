@@ -88,13 +88,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u3 = $this->bp_factory->blog->create();
 		$u4 = $this->bp_factory->blog->create();
 
-		$results = $this->blogsQuery(
-			[
-				'where' => [
-					'include' => [ $u1, $u2 ],
-				]
-			]
-		);
+		$results = $this->blogsQuery( [ 'where' => [ 'include' => [ $u1, $u2 ], ] ] );
 
 		$this->assertQuerySuccessful( $results )
 			->hasEdges();
