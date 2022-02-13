@@ -81,7 +81,7 @@ class ActivityDelete {
 	public static function mutate_and_get_payload() {
 		return function ( array $input ) {
 
-			// Get the activity object.
+			// Check and get the activity.
 			$activity = ActivityHelper::get_activity_from_input( $input );
 
 			// Bail now if a user isn't allowed to delete an activity.

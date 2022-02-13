@@ -53,6 +53,72 @@ class ActivityHelper {
 	}
 
 	/**
+	 * Mapping activity params.
+	 *
+	 * @param array                     $input    The input for the mutation.
+	 * @param string                    $action   Hook action.
+	 * @param BP_Activity_Activity|null $activity Activity object.
+	 * @return array
+	 */
+	public static function prepare_activity_args( array $input, string $action, $activity = null ): array {
+		$mutation_args = [
+			'content'           => empty( $input['content'] )
+				? $activity->content ?? ''
+				: $input['content'],
+			'user_id'           => empty( $input['userId'] )
+				? get_current_user_id()
+				: $input['userId'],
+			'component'         => empty( $input['component'] )
+				? buddypress()->activity->id
+				: $input['component'],
+			'type'              => empty( $input['type'] )
+				? $activity->type ?? null
+				: $input['type'],
+			'secondary_item_id' => empty( $input['secondaryItemId'] )
+				? $activity->secondary_item_id ?? null
+				: $input['secondaryItemId'],
+			'hide_sitewide'     => empty( $input['hidden'] )
+				? $activity->hide_sitewide ?? null
+				: $input['hidden'],
+		];
+
+		if ( ! empty( $activity->id ) && ! empty( $mutation_args['type'] && 'activity_comment' !== $mutation_args['type'] ) ) {
+			$mutation_args['error_type'] = 'wp_error';
+		}
+
+		// Setting the activity ID.
+		if ( ! empty( $activity->id ) ) {
+			$mutation_args['id'] = $activity->id;
+		}
+
+		// Setting the Primary Item ID.
+		if ( ! empty( $input['primaryItemId'] ) ) {
+			$item_id = (int) $input['primaryItemId'];
+
+			// Use a generic item ID.
+			$mutation_args['item_id'] = $item_id;
+
+			// Set the group ID, used in the `groups_post_update` helper function only.
+			if (
+				bp_is_active( 'groups' )
+				&& ! empty( $mutation_args['component'] )
+				&& buddypress()->groups->id === $mutation_args['component']
+			) {
+				$mutation_args['group_id'] = $item_id;
+			}
+		}
+
+		/**
+		 * Allows updating mutation args.
+		 *
+		 * @param array                     $mutation_args Mutation output args.
+		 * @param array                     $input         Mutation input args.
+		 * @param BP_Activity_Activity|null $activity      Activity object.
+		 */
+		return apply_filters( "bp_graphql_activity_{$action}_mutation_args", $mutation_args, $input, $activity );
+	}
+
+	/**
 	 * Get activity.
 	 *
 	 * @param int $activity_id Activity ID.
