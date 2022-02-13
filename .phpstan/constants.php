@@ -31,6 +31,7 @@ require_once BP_DIR . '/src/bp-activity/bp-activity-template.php';
 // Groups component.
 require_once BP_DIR . '/src/bp-groups/classes/class-bp-groups-group.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-functions.php';
+require_once BP_DIR . '/src/bp-groups/bp-groups-activity.php';
 require_once BP_DIR . '/src/bp-groups/bp-groups-template.php';
 
 // Messages component.

@@ -69,16 +69,16 @@ class ActivityHelper {
 				? get_current_user_id()
 				: $input['userId'],
 			'component'         => empty( $input['component'] )
-				? buddypress()->activity->id
+				? buddypress()->activity->id ?? false
 				: $input['component'],
 			'type'              => empty( $input['type'] )
-				? $activity->type ?? null
+				? $activity->type ?? false
 				: $input['type'],
 			'secondary_item_id' => empty( $input['secondaryItemId'] )
-				? $activity->secondary_item_id ?? null
+				? $activity->secondary_item_id ?? false
 				: $input['secondaryItemId'],
 			'hide_sitewide'     => empty( $input['hidden'] )
-				? $activity->hide_sitewide ?? null
+				? $activity->hide_sitewide ?? false
 				: $input['hidden'],
 		];
 
@@ -138,4 +138,38 @@ class ActivityHelper {
 		$activity = self::get_activity( absint( $activity_id ) );
 		return ( $activity instanceof BP_Activity_Activity && ! empty( $activity->id ) );
 	}
+
+	/**
+	 * Show hidden activity?
+	 *
+	 * @param  string $component The component the activity is from.
+	 * @param  int    $item_id   The activity item ID.
+	 * @return boolean
+	 */
+	public static function show_hidden( string $component, int $item_id ): bool {
+		$user_id = get_current_user_id();
+		$retval  = false;
+
+		if ( ! empty( $component ) ) {
+			// If activity is from a group, do an extra cap check.
+			if ( false === $retval && ! empty( $item_id ) && bp_is_active( $component ) && buddypress()->groups->id === $component ) {
+				// Group admins and mods have access as well.
+				if ( groups_is_user_admin( $user_id, $item_id ) || groups_is_user_mod( $user_id, $item_id ) ) {
+					$retval = true;
+
+					// User is a member of the group.
+				} elseif ( (bool) groups_is_user_member( $user_id, $item_id ) ) {
+					$retval = true;
+				}
+			}
+		}
+
+		// Moderators as well.
+		if ( bp_current_user_can( 'bp_moderate' ) ) {
+			$retval = true;
+		}
+
+		return $retval;
+	}
+
 }
