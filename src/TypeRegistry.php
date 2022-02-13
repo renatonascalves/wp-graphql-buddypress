@@ -33,6 +33,7 @@ use WPGraphQL\Extensions\BuddyPress\Model\Activity;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
@@ -264,6 +265,7 @@ class TypeRegistry {
 			ActivityConnection::register_connections();
 
 			// Mutations.
+			ActivityFavorite::register_mutation();
 			ActivityCreate::register_mutation();
 			ActivityDelete::register_mutation();
 			ActivityUpdate::register_mutation();
@@ -355,10 +357,10 @@ class TypeRegistry {
 			ThreadType::register();
 			MessageType::register();
 
-			// Thread/Messages Connections.
+			// Connections.
 			ThreadConnection::register_connections();
 
-			// Thread/Messages Mutations.
+			// Mutations.
 			StarMessage::register_mutation();
 			ThreadDelete::register_mutation();
 			ThreadUpdate::register_mutation();
