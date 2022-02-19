@@ -26,12 +26,12 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	public function setUp() {
 		parent::setUp();
 
-		$this->activity  = $this->bp_factory->activity->create();
+		$this->activity  = $this->create_activity_id();
 		$this->global_id = $this->toRelayId( 'activity', (string) $this->activity );
 	}
 
 	public function test_activity_query() {
-		$a = $this->create_activity_object( [ 'content' => 'Foo' ] );
+		$a = $this->create_activity_id( [ 'content' => 'Foo' ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -53,7 +53,7 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_activity_comments() {
-		$a = $this->create_activity_object(
+		$a = $this->create_activity_id(
 			[
 				'component' => 'activity',
 				'content'   => 'Foo',
@@ -138,8 +138,8 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_get_group_activity_without_access() {
-		$g1 = $this->create_group_object( [ 'status' => 'private' ] );
-		$a1 = $this->create_activity_object(
+		$g1 = $this->create_group_id( [ 'status' => 'private' ] );
+		$a1 = $this->create_activity_id(
 			[
 				'component'     => buddypress()->groups->id,
 				'type'          => 'created_group',
@@ -156,8 +156,8 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_group_activity() {
-		$g1 = $this->create_group_object( [ 'status' => 'private' ] );
-		$a1 = $this->create_activity_object(
+		$g1 = $this->create_group_id( [ 'status' => 'private' ] );
+		$a1 = $this->create_activity_id(
 			[
 				'component'     => buddypress()->groups->id,
 				'content'       => 'Foo',

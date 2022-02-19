@@ -16,12 +16,18 @@ if ( ! defined( 'BP_DIR' ) ) {
 }
 
 require_once BP_DIR . '/bp-loader.php';
+
+// Friends component.
 require_once BP_DIR . '/src/bp-friends/bp-friends-functions.php';
 require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';
+
+// Blog component.
 require_once BP_DIR . '/src/bp-blogs/bp-blogs-functions.php';
 require_once BP_DIR . '/src/bp-blogs/bp-blogs-template.php';
-require_once BP_DIR . '/src/bp-activity/bp-activity-functions.php';
+
+// Members component.
 require_once BP_DIR . '/src/bp-members/bp-members-functions.php';
+require_once BP_DIR . '/src/bp-members/bp-members-template.php';
 
 // Activity component.
 require_once BP_DIR . '/src/bp-activity/classes/class-bp-activity-activity.php';

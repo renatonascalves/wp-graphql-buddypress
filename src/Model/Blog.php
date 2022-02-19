@@ -85,6 +85,18 @@ class Blog extends Model {
 				'latestPostId' => function() {
 					return $this->data->latest_post->ID ?? null;
 				},
+				// @todo Pending implementation.
+				'status'       => function() {
+					return null;
+				},
+				// @todo Pending implementation.
+				'title'        => function() {
+					return null;
+				},
+				// @todo Pending implementation.
+				'language'     => function() {
+					return null;
+				},
 			];
 		}
 	}

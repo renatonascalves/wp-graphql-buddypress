@@ -189,7 +189,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			$activities = array_reverse( $activities );
 		}
 
-		return array_map( 'absint', $activities );
+		return array_values( array_filter( wp_parse_id_list( $activities ) ) );
 	}
 
 	/**

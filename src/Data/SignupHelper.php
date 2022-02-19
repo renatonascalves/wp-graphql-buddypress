@@ -1,0 +1,118 @@
+<?php
+/**
+ * SignupHelper Class.
+ *
+ * @package WPGraphQL\Extensions\BuddyPress\Data
+ * @since 0.0.1-alpha
+ */
+
+namespace WPGraphQL\Extensions\BuddyPress\Data;
+
+use GraphQL\Error\UserError;
+use GraphQLRelay\Relay;
+use BP_Signup;
+
+/**
+ * SignupHelper Class.
+ */
+class SignupHelper {
+
+	/**
+	 * Get signup helper.
+	 *
+	 * @throws UserError User error for invalid signup.
+	 *
+	 * @param array|int|string $input Possible values.
+	 * @return BP_Signup
+	 */
+	public static function get_signup_from_input( $input ): BP_Signup {
+		$query_args = [];
+
+		if ( ! empty( $input['id'] ) ) {
+			$id_components = Relay::fromGlobalId( $input['id'] );
+
+			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+			}
+
+			$query_args['include'] = [ absint( $id_components['id'] ) ];
+		} elseif ( ! empty( $input['signupId'] ) ) {
+			$query_args['include'] = [ absint( $input['signupId'] ) ];
+		} elseif ( is_email( $input ) ) {
+			$query_args['usersearch'] = $input;
+		} elseif ( ! empty( $input['activationKey'] ) ) {
+			$query_args['activation_key'] = $input['activationKey'];
+		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
+			$query_args['include'] = [ absint( $input ) ];
+		}
+
+		// Get signup.
+		$signups = BP_Signup::get( $query_args );
+
+		// Confirm if signup exists.
+		if ( empty( $signups['signups'] ) ) {
+			throw new UserError( __( 'This signup does not exist.', 'wp-graphql-buddypress' ) );
+		}
+
+		return reset( $signups['signups'] );
+	}
+
+	/**
+	 * Mapping signup params.
+	 *
+	 * @param array          $input  The input for the mutation.
+	 * @param string         $action Hook action.
+	 * @param BP_Signup|null $signup Signup object.
+	 * @return array
+	 */
+	public static function prepare_signup_args( array $input, string $action, $signup = null ): array {
+		$mutation_args = [
+			'id' => empty( $input['id'] )
+				? $signup->id ?? ''
+				: $input['id'],
+		];
+
+		/**
+		 * Allows updating mutation args.
+		 *
+		 * @param array          $mutation_args Mutation output args.
+		 * @param array          $input         Mutation input args.
+		 * @param BP_Signup|null $activity      Signup object.
+		 */
+		return apply_filters( "bp_graphql_signup_{$action}_mutation_args", $mutation_args, $input, $signup );
+	}
+
+	/**
+	 * Get signup.
+	 *
+	 * @param int $signup_id Signup ID.
+	 * @return BP_Signup
+	 */
+	public static function get_signup( int $signup_id ): BP_Signup {
+		return new BP_Signup( $signup_id );
+	}
+
+	/**
+	 * Check if an signup exists.
+	 *
+	 * @param int $signup_id Signup ID.
+	 * @return bool
+	 */
+	public static function signup_exists( int $signup_id ): bool {
+		$signup = self::get_signup( absint( $signup_id ) );
+		return ( $signup instanceof BP_Signup && ! empty( $signup->id ) );
+	}
+
+	/**
+	 * Can user see a signup object?
+	 *
+	 * @return bool
+	 */
+	public static function can_see(): bool {
+		$capability = is_multisite()
+			? 'manage_network_users'
+			: 'edit_users';
+
+		return ( is_user_logged_in() && bp_current_user_can( $capability ) );
+	}
+}

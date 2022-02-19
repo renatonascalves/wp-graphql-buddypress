@@ -1,6 +1,6 @@
 <?php
 /**
- * BlogsConnectionResolver Class
+ * SignupConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
@@ -12,12 +12,13 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Model\User;
+use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
+use BP_Signup;
 
 /**
- * Class BlogsConnectionResolver
+ * Class SignupConnectionResolver
  */
-class BlogsConnectionResolver extends AbstractConnectionResolver {
+class SignupConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Return the name of the loader to be used with the connection resolver.
@@ -25,7 +26,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'bp_blog';
+		return 'bp_signup';
 	}
 
 	/**
@@ -35,10 +36,13 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'include_blog_ids' => false,
-			'user_id'          => false,
-			'search_terms'     => false,
-			'type'             => 'newest',
+			'include'        => false,
+			'usersearch'     => false,
+			'active'         => 0,
+			'order'          => 'DESC',
+			'orderby'        => 'signup_id',
+			'activation_key' => '',
+			'fields'         => 'ids',
 		];
 
 		// Prepare for later use.
@@ -52,8 +56,13 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
-		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
+		// Set order when using the last param.
+		if ( ! empty( $last ) ) {
+			$query_args['order'] = 'DESC';
+		}
+
+		// Set number the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['number'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
@@ -62,23 +71,18 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		// Setting the user ID whose blogs user can post to.
-		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
-			$query_args['user_id'] = $this->source->userId;
-		}
-
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
 		 * the GraphQL Query have been applied and has the potential to override the GraphQL Query Input Args.
 		 *
-		 * @param array       $query_args An array of query_args being passed.
-		 * @param mixed       $source     Source passed down from the resolve tree.
-		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    Context passed down the resolve tree.
-		 * @param ResolveInfo $info       Resolver info about fields passed down the resolve tree.
+		 * @param array       $query_args array of query_args being passed to the
+		 * @param mixed       $source     Source passed down from the resolve tree
+		 * @param array       $args       array of arguments input in the field as part of the GraphQL query
+		 * @param AppContext  $context    object passed down zthe resolve tree
+		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return (array) apply_filters(
-			'graphql_blogs_connection_query_args',
+			'graphql_signup_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -88,27 +92,27 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns the blogs query.
+	 * Returns the signup query.
 	 *
 	 * @return array
 	 */
 	public function get_query(): array {
-		return bp_blogs_get_blogs( $this->query_args );
+		return BP_Signup::get( $this->query_args );
 	}
 
 	/**
-	 * Returns an array of blog IDs.
+	 * Return an array of signup ids from the query.
 	 *
-	 * @return array
+	 * @return int[]
 	 */
 	public function get_ids(): array {
-		$blog_ids = wp_list_pluck( $this->query['blogs'], 'blog_id' );
+		$signups = $this->query['signups'] ?? [];
 
 		if ( ! empty( $this->args['last'] ) ) {
-			$blog_ids = array_reverse( $blog_ids );
+			$signups = array_reverse( $signups );
 		}
 
-		return array_values( array_filter( wp_parse_id_list( $blog_ids ) ) );
+		return array_values( array_filter( wp_parse_id_list( $signups ) ) );
 	}
 
 	/**
@@ -117,24 +121,22 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function should_execute(): bool {
-		return true;
+		return SignupHelper::can_see();
 	}
 
 	/**
-	 * Determine whether or not the the offset is valid.
+	 * Determine whether or not the offset is valid.
 	 *
 	 * @param int $offset Offset ID.
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		$blogs = current( bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $offset ) ] ) );
-
-		return ( ! empty( $blogs[0] ) && is_object( $blogs[0] ) );
+		return SignupHelper::signup_exists( absint( $offset ) );
 	}
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * bp_blogs_get_blogs() friendly keys.
+	 * BP_Signup::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 * @return array
@@ -145,23 +147,20 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'userId'  => 'user_id',
-				'include' => 'include_blog_ids',
-				'search'  => 'search_terms',
-				'type'    => 'type',
+				'include'        => 'include',
+				'user_login'     => 'userLogin',
+				'user_email'     => 'userEmail',
+				'usersearch'     => 'search',
+				'order'          => 'order',
+				'orderby'        => 'orderBy',
+				'active'         => 'active',
+				'activation_key' => 'activationKey',
 			]
 		);
 
-		/**
-		 * This allows plugins/themes to hook in and alter what $args should be allowed.
-		 *
-		 * @param array       $query_args An array of query_args being passed.
-		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    Context being passed.
-		 * @param ResolveInfo $info       Info about the resolver.
-		 */
+		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		return (array) apply_filters(
-			'graphql_map_input_fields_to_blogs_query',
+			'graphql_map_input_fields_to_signup_query',
 			$query_args,
 			$args,
 			$this->source,

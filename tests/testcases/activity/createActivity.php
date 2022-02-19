@@ -67,7 +67,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_create_activity_in_a_group() {
-		$g = $this->create_group_object();
+		$g = $this->create_group_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -105,7 +105,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_non_member_create_activity_in_a_public_group() {
-		$g = $this->create_group_object( [ 'status' => 'public' ] );
+		$g = $this->create_group_id( [ 'status' => 'public' ] );
 
 		$this->bp->set_current_user( $this->user );
 
@@ -122,7 +122,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_member_create_activity_in_a_public_group() {
-		$g = $this->create_group_object( [ 'status' => 'public' ] );
+		$g = $this->create_group_id( [ 'status' => 'public' ] );
 
 		$this->bp->add_user_to_group( $this->user, $g );
 
@@ -163,7 +163,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_create_activity_in_a_private_group() {
-		$g = $this->create_group_object( [ 'status' => 'private' ] );
+		$g = $this->create_group_id( [ 'status' => 'private' ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -201,7 +201,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_create_activity_in_a_hidden_group() {
-		$g = $this->create_group_object( [ 'status' => 'hidden' ] );
+		$g = $this->create_group_id( [ 'status' => 'hidden' ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -239,7 +239,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_create_activity_comment() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -278,8 +278,8 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_create_activity_comment_in_a_group() {
-		$g = $this->create_group_object( [ 'status' => 'hidden' ] );
-		$a = $this->create_activity_object( [ 'item_id' => $g, 'user_id' => $this->user ] );
+		$g = $this->create_group_id( [ 'status' => 'hidden' ] );
+		$a = $this->create_activity_id( [ 'item_id' => $g, 'user_id' => $this->user ] );
 
 		$this->bp->add_user_to_group( $this->random_user, $g );
 		$this->bp->set_current_user( $this->random_user );

@@ -15,6 +15,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\SignupConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
@@ -24,6 +25,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\SignupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
@@ -62,6 +64,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\SignupEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
@@ -72,6 +75,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MemberType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\SignupType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ThreadType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldValueType;
@@ -250,6 +254,19 @@ class TypeRegistry {
 
 			// Connections.
 			MemberConnection::register_connections();
+
+			// Signup.
+			if ( bp_get_signup_allowed() ) {
+
+				// Enum(s).
+				SignupEnums::register();
+
+				// Fields.
+				SignupType::register();
+
+				// Connections.
+				SignupConnection::register_connections();
+			}
 		}
 
 		// Acvitity component.
@@ -399,6 +416,7 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
+				'bp_signup'         => new SignupObjectLoader( $context ),
 				'bp_group'          => new GroupObjectLoader( $context ),
 				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
 				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),

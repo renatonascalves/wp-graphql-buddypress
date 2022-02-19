@@ -16,7 +16,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_authenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -34,7 +34,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_unfavorite_activity_authenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -64,7 +64,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_comment_authenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -91,7 +91,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_unauthenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->assertQueryFailed( $this->favorite_activity( $a ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -103,7 +103,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_unfavorite_activity_directly() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		bp_activity_add_user_favorite( $a, $this->admin );
 
@@ -115,7 +115,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_when_disable() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -128,8 +128,8 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_from_hidden_group() {
-		$g = $this->create_group_object( [ 'status' => 'hidden' ] );
-		$a = $this->create_activity_object(
+		$g = $this->create_group_id( [ 'status' => 'hidden' ] );
+		$a = $this->create_activity_id(
 			[
 				'component' => buddypress()->groups->id,
 				'type'      => 'activity_update',
@@ -148,8 +148,8 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 	}
 
 	public function test_favorite_activity_from_hidden_group_without_permission() {
-		$g = $this->create_group_object( [ 'status' => 'hidden' ] );
-		$a = $this->create_activity_object(
+		$g = $this->create_group_id( [ 'status' => 'hidden' ] );
+		$a = $this->create_activity_id(
 			[
 				'component' => buddypress()->groups->id,
 				'type'      => 'activity_update',

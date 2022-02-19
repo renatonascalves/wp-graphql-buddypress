@@ -17,7 +17,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_private_groups_with_where_param_and_authenticated_user() {
 		$this->bp->set_current_user( $this->admin );
 
-		$private_group_id = $this->create_group_object( [ 'status' => 'private' ] );
+		$private_group_id = $this->create_group_id( [ 'status' => 'private' ] );
 
 		$this->assertQuerySuccessful( $this->groupsQuery(
 			[
@@ -37,7 +37,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->groupsQuery(
 			[
 				'where' => [
-					'include' => [ $this->create_group_object( [ 'status' => 'private' ] ) ],
+					'include' => [ $this->create_group_id( [ 'status' => 'private' ] ) ],
 					'status'  => [ 'PRIVATE']
 				]
 			]
@@ -49,7 +49,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_hidden_groups_with_where_param() {
 		$this->bp->set_current_user( $this->admin );
 
-		$hidden_group_id = $this->create_group_object( [ 'status' => 'hidden' ] );
+		$hidden_group_id = $this->create_group_id( [ 'status' => 'hidden' ] );
 
 		$this->assertQuerySuccessful( $this->groupsQuery(
 			[
@@ -64,9 +64,9 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_groups_query() {
-		$g1 = $this->create_group_object();
-		$g2 = $this->create_group_object();
-		$g3 = $this->create_group_object();
+		$g1 = $this->create_group_id();
+		$g2 = $this->create_group_id();
+		$g3 = $this->create_group_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -85,7 +85,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_first_group() {
 		$this->bp->set_current_user( $this->admin );
-		$this->create_group_object();
+		$this->create_group_id();
 
 		$this->assertQuerySuccessful( $this->groupsQuery( [
 			'first' => 1,
@@ -99,8 +99,8 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_group_after() {
 		$this->bp->set_current_user( $this->admin );
 
-		$g1 = $this->create_group_object();
-		$g2 = $this->create_group_object();
+		$g1 = $this->create_group_id();
+		$g2 = $this->create_group_id();
 
 		$this->assertQuerySuccessful( $this->groupsQuery( [ 'after' => $this->key_to_cursor( $g1 ) ] ) )
 			->HasEdges()
@@ -111,9 +111,9 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_group_before() {
 		$this->bp->set_current_user( $this->admin );
 
-		$g1 = $this->create_group_object();
-		$this->create_group_object();
-		$g3 = $this->create_group_object();
+		$g1 = $this->create_group_id();
+		$this->create_group_id();
+		$g3 = $this->create_group_id();
 
 		$this->assertQuerySuccessful( $this->groupsQuery( [
 			'last'   => 1,
@@ -125,7 +125,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_group_admins_with_unauthenticated_user() {
-		$this->create_group_object();
+		$this->create_group_id();
 
 		$this->assertQuerySuccessful( $this->groupsQuery() )
 			->hasNodes()

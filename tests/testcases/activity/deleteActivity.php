@@ -15,7 +15,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_activity_creator_can_delete() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -25,7 +25,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_admin_can_delete_activity_comment() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -45,7 +45,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_comment_creator_delete_activity_comment() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -65,7 +65,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_activity_creator_can_not_delete_activity_comment() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -89,12 +89,12 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_delete_activity_user_not_logged_in() {
-		$this->assertQueryFailed( $this->delete_activity( $this->create_activity_object() ) )
+		$this->assertQueryFailed( $this->delete_activity( $this->create_activity_id() ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_activity_user_without_permission() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->random_user );
 
