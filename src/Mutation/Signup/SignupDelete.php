@@ -95,7 +95,7 @@ class SignupDelete {
 
 			$retval = BP_Signup::delete( [ $signup->id ] );
 
-			if ( false === $retval ) {
+			if ( ! empty( $retval['errors'] ) ) {
 				throw new UserError( __( 'Could not delete the signup.', 'wp-graphql-buddypress' ) );
 			}
 

@@ -41,7 +41,9 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 		);
 
 		// Email was sent.
-		$this->assertTrue( 1 === $signup->count_sent );
+		if ( ! is_multisite() ) {
+			$this->assertTrue( 1 === $signup->count_sent );
+		}
 	}
 
 	public function test_create_signup_authenticated() {
@@ -69,7 +71,9 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 		);
 
 		// Email was sent.
-		$this->assertTrue( 1 === $signup->count_sent );
+		if ( ! is_multisite() ) {
+			$this->assertTrue( 1 === $signup->count_sent );
+		}
 	}
 
 	public function test_create_signup_with_invalid_password() {
@@ -78,25 +82,49 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_create_signup_with_empty_user_login() {
+		$error_message = 'Please enter a username';
+
+		if ( is_multisite() ) {
+			$error_message = 'Please enter a username.';
+		}
+
 		$this->assertQueryFailed( $this->create_signup( [ 'userLogin' => '' ] ) )
-			->expectedErrorMessage( 'Please enter a username' );
+			->expectedErrorMessage( $error_message );
 	}
 
 	public function test_create_signup_with_illegal_login() {
+		$error_message = 'That username is not allowed';
+
+		if ( is_multisite() ) {
+			$error_message = 'Usernames can only contain lowercase letters (a-z) and numbers.';
+		}
+
 		update_site_option( 'illegal_names', [ 'user_name' ] );
 
 		$this->assertQueryFailed( $this->create_signup( [ 'userLogin' => 'user_name' ] ) )
-			->expectedErrorMessage( 'That username is not allowed' );
+			->expectedErrorMessage( $error_message );
 	}
 
 	public function test_create_signup_with_invalid_login() {
+		$error_message = 'Sorry, usernames may not contain the character "_"!';
+
+		if ( is_multisite() ) {
+			$error_message = 'Usernames can only contain lowercase letters (a-z) and numbers.';
+		}
+
 		$this->assertQueryFailed( $this->create_signup( [ 'userLogin' => 'user_name' ] ) )
-			->expectedErrorMessage( 'Sorry, usernames may not contain the character "_"!' );
+			->expectedErrorMessage( $error_message );
 	}
 
 	public function test_create_signup_with_short_login() {
+		$error_message = 'Username must be at least 4 characters';
+
+		if ( is_multisite() ) {
+			$error_message = 'Username must be at least 4 characters.';
+		}
+
 		$this->assertQueryFailed( $this->create_signup( [ 'userLogin' => 'use' ] ) )
-			->expectedErrorMessage( 'Username must be at least 4 characters' );
+			->expectedErrorMessage( $error_message );
 	}
 
 	public function test_create_signup_with_numbers_only() {
