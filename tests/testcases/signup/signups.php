@@ -93,7 +93,9 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$ids = wp_list_pluck( $results['data']['signups']['nodes'], 'databaseId' );
 
-		// Check signup.
+		// @todo this is incorrect, investigate.
+		// Should be:
+		// $this->assertSame( [ $a2, $a1 ], $ids );
 		$this->assertSame( [ $a1 ], $ids );
 	}
 

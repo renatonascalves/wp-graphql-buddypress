@@ -26,7 +26,8 @@ class SignupHelper {
 	 * @return BP_Signup
 	 */
 	public static function get_signup_from_input( $input ): BP_Signup {
-		$query_args = [];
+		$query_args    = [];
+		$error_message = __( 'This signup does not exist.', 'wp-graphql-buddypress' );
 
 		if ( ! empty( $input['id'] ) ) {
 			$id_components = Relay::fromGlobalId( $input['id'] );
@@ -38,10 +39,11 @@ class SignupHelper {
 			$query_args['include'] = [ absint( $id_components['id'] ) ];
 		} elseif ( ! empty( $input['signupId'] ) ) {
 			$query_args['include'] = [ absint( $input['signupId'] ) ];
-		} elseif ( is_email( $input ) ) {
-			$query_args['usersearch'] = $input;
 		} elseif ( ! empty( $input['activationKey'] ) ) {
 			$query_args['activation_key'] = $input['activationKey'];
+			$error_message                = __( 'Invalid activation key.', 'wp-graphql-buddypress' );
+		} elseif ( is_email( $input ) ) {
+			$query_args['usersearch'] = $input;
 		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
 			$query_args['include'] = [ absint( $input ) ];
 		}
@@ -51,7 +53,7 @@ class SignupHelper {
 
 		// Confirm if signup exists.
 		if ( empty( $signups['signups'] ) ) {
-			throw new UserError( __( 'This signup does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( $error_message );
 		}
 
 		return reset( $signups['signups'] );
@@ -114,5 +116,33 @@ class SignupHelper {
 			: 'edit_users';
 
 		return ( is_user_logged_in() && bp_current_user_can( $capability ) );
+	}
+
+	/**
+	 * Is it signup with a blog enabled?
+	 *
+	 * @param int $network_id Main network ID.
+	 * @return bool
+	 */
+	public static function is_blog_signup_enabled( int $network_id = 0 ): bool {
+
+		if ( empty( $network_id ) ) {
+			$network_id = get_main_network_id();
+		}
+
+		$active_signup = get_network_option( $network_id, 'registration' );
+
+		return ( 'blog' === $active_signup || 'all' === $active_signup );
+	}
+
+	/**
+	 * Get site's available locales.
+	 *
+	 * @return array The list of available locales.
+	 */
+	public static function get_available_languages(): array {
+		/** This filter is documented in wp-signup.php */
+		$languages = (array) apply_filters( 'signup_get_available_languages', get_available_languages() );
+		return array_intersect_assoc( $languages, get_available_languages() );
 	}
 }

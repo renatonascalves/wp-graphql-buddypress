@@ -129,7 +129,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$group_ids = array_reverse( $group_ids );
 		}
 
-		return array_map( 'absint', $group_ids );
+		return array_values( array_filter( wp_parse_id_list( $group_ids ) ) );
 	}
 
 	/**

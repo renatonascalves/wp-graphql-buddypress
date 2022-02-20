@@ -45,12 +45,12 @@ class XProfileFieldValue extends Model {
 			return false;
 		}
 
-		$hidden_user_fields = bp_xprofile_get_hidden_fields_for_user(
+		$hidden_user_fields = (array) bp_xprofile_get_hidden_fields_for_user(
 			$this->data->user_id ?? 0,
 			$this->current_user->ID ?? 0
 		);
 
-		return in_array( $this->data->id, (array) $hidden_user_fields, true );
+		return in_array( $this->data->id, $hidden_user_fields, true );
 	}
 
 	/**

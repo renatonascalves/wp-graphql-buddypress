@@ -77,6 +77,8 @@ class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_signup_with_invalid_id() {
+		$this->set_user();
+
 		$this->assertQueryFailed( $this->get_signup( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This signup does not exist.' );
 	}

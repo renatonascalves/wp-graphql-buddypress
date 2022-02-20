@@ -12,7 +12,6 @@ use GraphQLRelay\Relay;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Model\Model;
 use BP_Signup;
-use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
 
 /**
  * Class Signup - Models the data for the Signup object type.
@@ -27,6 +26,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
  * @property string $dateSent Date sent.
  * @property string $dateSentGmt Date as GMT.
  * @property int    $countSent Count sent.
+ * @property bool   $active Active status.
  * @property int    $blogId Blog ID.
  */
 class Signup extends Model {
@@ -46,20 +46,6 @@ class Signup extends Model {
 	public function __construct( BP_Signup $signup ) {
 		$this->data = $signup;
 		parent::__construct();
-	}
-
-	/**
-	 * Method for determining if the data should be considered private or not.
-	 *
-	 * @return bool
-	 */
-	protected function is_private(): bool {
-
-		if ( SignupHelper::can_see() ) {
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
@@ -88,6 +74,9 @@ class Signup extends Model {
 				// @todo Pending implementation.
 				'blogId'        => function() {
 					return 0;
+				},
+				'active'        => function() {
+					return $this->data->active ?? null;
 				},
 				'registered'    => function() {
 					return Utils::prepare_date_response( $this->data->registered, get_date_from_gmt( $this->data->registered ) );

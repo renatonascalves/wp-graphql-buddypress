@@ -106,7 +106,7 @@ class ThreadConnectionResolver extends AbstractConnectionResolver {
 	public function get_ids(): array {
 		$ids = wp_list_pluck( $this->query->threads, 'thread_id' );
 
-		return array_map( 'absint', $ids );
+		return array_values( array_filter( wp_parse_id_list( $ids ) ) );
 	}
 
 	/**

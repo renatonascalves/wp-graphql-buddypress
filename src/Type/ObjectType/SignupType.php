@@ -73,6 +73,10 @@ class SignupType {
 						'type'        => 'String',
 						'description' => __( 'The date the activation email was sent to the user, as GMT.', 'wp-graphql-buddypress' ),
 					],
+					'active'        => [
+						'type'        => 'Boolean',
+						'description' => __( 'The status of the signup.', 'wp-graphql-buddypress' ),
+					],
 					'countSent'     => [
 						'type'        => 'String',
 						'description' => __( 'The number of times the activation email was sent to the user.', 'wp-graphql-buddypress' ),
@@ -124,6 +128,11 @@ class SignupType {
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
+
+					if ( false === SignupHelper::can_see() ) {
+						return null;
+					}
+
 					$signup = SignupHelper::get_signup_from_input( $args );
 
 					return Factory::resolve_signup_object( $signup->id, $context );
