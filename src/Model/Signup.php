@@ -27,7 +27,7 @@ use BP_Signup;
  * @property string $dateSentGmt Date as GMT.
  * @property int    $countSent Count sent.
  * @property bool   $active Active status.
- * @property int    $blogId Blog ID.
+ * @property BP_Signup $blog Signup object.
  */
 class Signup extends Model {
 
@@ -71,9 +71,8 @@ class Signup extends Model {
 				'userName'      => function() {
 					return $this->data->user_name ?? null;
 				},
-				// @todo Pending implementation.
-				'blogId'        => function() {
-					return 0;
+				'blog'          => function() {
+					return $this->data;
 				},
 				'active'        => function() {
 					return $this->data->active ?? null;

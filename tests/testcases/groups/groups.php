@@ -120,8 +120,8 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 			'before' => $this->key_to_cursor( $g3 )
 		] ) )
 			->HasEdges()
-			->firstEdgeNodeField( 'databaseId', $g1 )
-			->hasNextPage();
+			->hasNextPage()
+			->firstEdgeNodeField( 'databaseId', $g1 );
 	}
 
 	public function test_get_group_admins_with_unauthenticated_user() {

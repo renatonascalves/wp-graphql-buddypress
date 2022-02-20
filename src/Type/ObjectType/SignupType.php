@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Signup;
 use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
+use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 
 /**
  * SignupType Class.
@@ -83,14 +84,14 @@ class SignupType {
 					],
 					'blog'          => [
 						'type'        => 'Blog',
-						'description' => __( 'Blog.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Signup $signup, array $args, AppContext $context ) {
+						'description' => __( 'Blog with some of the information.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Signup $signup ) {
 
-							if ( empty( $signup->blogId ) || false === is_user_logged_in() || false === is_multisite() ) {
+							if ( empty( $signup->blog ) || false === is_multisite() ) {
 								return null;
 							}
 
-							return Factory::resolve_blog_object( $signup->blogId, $context );
+							return new Blog( $signup->blog );
 						},
 					],
 				],

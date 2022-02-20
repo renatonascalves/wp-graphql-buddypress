@@ -11,7 +11,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Model;
 use WPGraphQL\Utils\Utils;
+use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use stdClass;
+use BP_Signup;
 
 /**
  * Class Blog - Models the data for the Blog object type.
@@ -25,6 +27,8 @@ use stdClass;
  * @property string $path Blog path.
  * @property string $domain Blog domain.
  * @property string $lastActivity Blog's last activity.
+ * @property bool   $public Blog status.
+ * @property string $language Blog language.
  * @property int    $latestPostId Latest post ID from Blog.
  */
 class Blog extends Model {
@@ -32,16 +36,16 @@ class Blog extends Model {
 	/**
 	 * Stores the Blog object for the incoming data.
 	 *
-	 * @var stdClass
+	 * @var stdClass|BP_Signup
 	 */
 	protected $data;
 
 	/**
 	 * Blog constructor.
 	 *
-	 * @param stdClass $blog The Blog object.
+	 * @param stdClass|BP_Signup $blog The Blog or signup object.
 	 */
-	public function __construct( stdClass $blog ) {
+	public function __construct( $blog ) {
 		$this->data = $blog;
 		parent::__construct();
 	}
@@ -64,13 +68,13 @@ class Blog extends Model {
 					return $this->data->admin_user_id ?? null;
 				},
 				'name'         => function() {
-					return $this->data->name ?? null;
+					return $this->data->name ?? $this->data->title ?? null;
 				},
 				'description'  => function() {
 					return $this->data->description ?? null;
 				},
 				'uri'          => function() {
-					return $this->get_blog_uri( $this->data );
+					return BlogHelper::get_blog_uri( $this->data );
 				},
 				'path'         => function() {
 					return $this->data->path ?? null;
@@ -81,46 +85,17 @@ class Blog extends Model {
 				'lastActivity' => function() {
 					return Utils::prepare_date_response( $this->data->last_activity );
 				},
+				'public'       => function() {
+					return $this->data->meta['public'] ?? null;
+				},
+				'language'     => function() {
+					return $this->data->meta['WPLANG'] ?? null;
+				},
 				// @todo Pending implementation.
 				'latestPostId' => function() {
 					return $this->data->latest_post->ID ?? null;
 				},
-				// @todo Pending implementation.
-				'status'       => function() {
-					return null;
-				},
-				// @todo Pending implementation.
-				'title'        => function() {
-					return null;
-				},
-				// @todo Pending implementation.
-				'language'     => function() {
-					return null;
-				},
 			];
 		}
-	}
-
-	/**
-	 * Get blog uri/permalink.
-	 *
-	 * @param stdClass $blog Blog object.
-	 * @return string|null
-	 */
-	protected function get_blog_uri( stdClass $blog ): ?string {
-
-		// Bail early.
-		if ( empty( $blog->domain ) && empty( $blog->path ) ) {
-			return null;
-		}
-
-		if ( empty( $blog->domain ) && ! empty( $blog->path ) ) {
-			return bp_get_root_domain() . $blog->path;
-		}
-
-		$protocol  = is_ssl() ? 'https://' : 'http://';
-		$permalink = $protocol . $blog->domain . $blog->path;
-
-		return apply_filters( 'bp_get_blog_permalink', $permalink );
 	}
 }

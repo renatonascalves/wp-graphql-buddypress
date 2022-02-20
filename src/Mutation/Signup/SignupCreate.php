@@ -13,6 +13,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
 use BP_Signup;
+use BP_Blogs_Blog;
 
 /**
  * SignupCreate Class.
@@ -39,7 +40,8 @@ class SignupCreate {
 	 * @return array
 	 */
 	public static function get_input_fields(): array {
-		return [
+		$multisite_fields = [];
+		$fields           = [
 			'userLogin' => [
 				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'The login for the new member.', 'wp-graphql-buddypress' ),
@@ -57,6 +59,29 @@ class SignupCreate {
 				'description' => __( 'The password for the new member.', 'wp-graphql-buddypress' ),
 			],
 		];
+
+		if ( is_multisite() ) {
+			$multisite_fields = [
+				'siteName'     => [
+					'type'        => 'String',
+					'description' => __( 'Unique name (slug) of the new member\'s child site.', 'wp-graphql-buddypress' ),
+				],
+				'siteTitle'    => [
+					'type'        => 'String',
+					'description' => __( 'Title of the new member\'s child site.', 'wp-graphql-buddypress' ),
+				],
+				'sitePublic'   => [
+					'type'        => 'Boolean',
+					'description' => __( 'Search engine visibility of the new member\'s site. true to be visible, false otherwise.', 'wp-graphql-buddypress' ),
+				],
+				'siteLanguage' => [
+					'type'        => 'SiteLanguagesEnum',
+					'description' => __( 'Language to use for the new member\'s site. Default: the Network main site\'s locale (eg: en_US)', 'wp-graphql-buddypress' ),
+				],
+			];
+		}
+
+		return array_merge( $fields, $multisite_fields );
 	}
 
 	/**
@@ -129,23 +154,18 @@ class SignupCreate {
 						$wp_key_suffix = $domain;
 						$path          = $blog_signup_validation['path'];
 						$site_title    = $blog_signup_validation['blog_title'];
-						$site_public   = (bool) $input['sitePublic'];
-
-						$meta = [
+						$site_language = wp_unslash( sanitize_text_field( $input['siteLanguage'] ) );
+						$meta          = [
 							'lang_id' => 1,
-							'public'  => $site_public ? 1 : 0,
+							'public'  => (bool) $input['sitePublic'] ? 1 : 0,
 						];
 
-						$site_language = $input['siteLanguage'];
-
-						if ( in_array( $site_language, SignupHelper::get_available_languages(), true ) ) {
-							$language = wp_unslash( sanitize_text_field( $site_language ) );
-
-							if ( $language ) {
-								$meta['WPLANG'] = $language;
-							}
+						if ( ! empty( $site_language ) ) {
+							$meta['WPLANG'] = $site_language;
 						}
 					}
+				} elseif ( ! empty( $input['siteTitle'] ) && ! empty( $input['siteName'] ) ) {
+					throw new UserError( __( 'You are trying to create a blog but blog signup is disabled.', 'wp-graphql-buddypress' ) );
 				}
 			}
 

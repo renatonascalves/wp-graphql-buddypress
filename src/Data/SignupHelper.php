@@ -134,15 +134,4 @@ class SignupHelper {
 
 		return ( 'blog' === $active_signup || 'all' === $active_signup );
 	}
-
-	/**
-	 * Get site's available locales.
-	 *
-	 * @return array The list of available locales.
-	 */
-	public static function get_available_languages(): array {
-		/** This filter is documented in wp-signup.php */
-		$languages = (array) apply_filters( 'signup_get_available_languages', get_available_languages() );
-		return array_intersect_assoc( $languages, get_available_languages() );
-	}
 }
