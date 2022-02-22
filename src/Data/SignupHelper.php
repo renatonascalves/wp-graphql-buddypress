@@ -20,7 +20,7 @@ class SignupHelper {
 	/**
 	 * Get signup helper.
 	 *
-	 * @throws UserError User error for invalid signup.
+	 * @throws UserError User error for invalid signup or activation key.
 	 *
 	 * @param array|int|string $input Possible values.
 	 * @return BP_Signup
@@ -60,31 +60,6 @@ class SignupHelper {
 	}
 
 	/**
-	 * Mapping signup params.
-	 *
-	 * @param array          $input  The input for the mutation.
-	 * @param string         $action Hook action.
-	 * @param BP_Signup|null $signup Signup object.
-	 * @return array
-	 */
-	public static function prepare_signup_args( array $input, string $action, $signup = null ): array {
-		$mutation_args = [
-			'id' => empty( $input['id'] )
-				? $signup->id ?? ''
-				: $input['id'],
-		];
-
-		/**
-		 * Allows updating mutation args.
-		 *
-		 * @param array          $mutation_args Mutation output args.
-		 * @param array          $input         Mutation input args.
-		 * @param BP_Signup|null $activity      Signup object.
-		 */
-		return apply_filters( "bp_graphql_signup_{$action}_mutation_args", $mutation_args, $input, $signup );
-	}
-
-	/**
 	 * Get signup.
 	 *
 	 * @param int $signup_id Signup ID.
@@ -121,7 +96,7 @@ class SignupHelper {
 	/**
 	 * Is it signup with a blog enabled?
 	 *
-	 * @param int $network_id Main network ID.
+	 * @param int $network_id Network ID.
 	 * @return bool
 	 */
 	public static function is_blog_signup_enabled( int $network_id = 0 ): bool {

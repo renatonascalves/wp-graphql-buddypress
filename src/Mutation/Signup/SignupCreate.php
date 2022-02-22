@@ -13,7 +13,6 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
 use BP_Signup;
-use BP_Blogs_Blog;
 
 /**
  * SignupCreate Class.
