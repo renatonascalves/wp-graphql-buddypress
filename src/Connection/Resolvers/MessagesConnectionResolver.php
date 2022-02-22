@@ -114,7 +114,7 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 			$ids = array_reverse( $ids );
 		}
 
-		return array_map( 'absint', $ids );
+		return array_values( array_filter( wp_parse_id_list( $ids ) ) );
 	}
 
 	/**

@@ -15,9 +15,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_public_activities_authenticated() {
-		$a1 = $this->create_activity_object();
-		$a2 = $this->create_activity_object();
-		$a3 = $this->create_activity_object();
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->random_user );
 
@@ -35,10 +35,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_public_activities_unauthenticated() {
-		$a1 = $this->create_activity_object();
-		$a2 = $this->create_activity_object();
-		$a3 = $this->create_activity_object();
-		$a4 = $this->create_activity_object( [ 'hide_sitewide' => true ] );
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id();
+		$a4 = $this->create_activity_id( [ 'hide_sitewide' => true ] );
 
 		$results = $this->activityQuery();
 
@@ -59,7 +59,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_hidden_activities_authenticated_and_with_access() {
-		$a1 = $this->create_activity_object( [ 'hide_sitewide' => true ] );
+		$a1 = $this->create_activity_id( [ 'hide_sitewide' => true ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -69,7 +69,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_hidden_activities_unauthenticated() {
-		$this->create_activity_object( [ 'hide_sitewide' => true ] );
+		$this->create_activity_id( [ 'hide_sitewide' => true ] );
 
 		$this->assertQuerySuccessful( $this->activityQuery() )
 			->notHasEdges()
@@ -77,9 +77,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_spammed_activities() {
-		$a1 = $this->create_activity_object( [ 'is_spam' => true ] );
-		$a2 = $this->create_activity_object();
-		$a3 = $this->create_activity_object( [ 'is_spam' => true ] );
+		$a1 = $this->create_activity_id( [ 'is_spam' => true ] );
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id( [ 'is_spam' => true ] );
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -111,9 +111,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_activities_from_multiple_types() {
-		$g1 = $this->create_group_object( [ 'status' => 'public' ] );
-		$a1 = $this->create_activity_object();
-		$a2 = $this->create_activity_object( [
+		$g1 = $this->create_group_id( [ 'status' => 'public' ] );
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id( [
 			'component'     => buddypress()->groups->id,
 			'type'          => 'created_group',
 			'user_id'       => $this->admin,
@@ -143,10 +143,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_public_group_activities() {
 		$component = buddypress()->groups->id;
-		$g1        = $this->create_group_object( [ 'status' => 'private', 'user_id' => $this->user ] );
-		$g2        = $this->create_group_object( [ 'status' => 'public', 'user_id'  => $this->user ] );
+		$g1        = $this->create_group_id( [ 'status' => 'private', 'user_id' => $this->user ] );
+		$g2        = $this->create_group_id( [ 'status' => 'public', 'user_id'  => $this->user ] );
 
-		$a1 = $this->create_activity_object(
+		$a1 = $this->create_activity_id(
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
@@ -156,7 +156,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -184,10 +184,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_activities_from_a_specific_group() {
 		$component = buddypress()->groups->id;
-		$g1        = $this->create_group_object();
-		$g2        = $this->create_group_object();
+		$g1        = $this->create_group_id();
+		$g2        = $this->create_group_id();
 
-		$a1 = $this->create_activity_object(
+		$a1 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -196,7 +196,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -205,7 +205,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a3 = $this->create_activity_object(
+		$a3 = $this->create_activity_id(
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
@@ -215,7 +215,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a4 = $this->create_activity_object(
+		$a4 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -244,14 +244,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_activities_from_private_group_without_access() {
-		$g1 = $this->create_group_object(
+		$g1 = $this->create_group_id(
 			[
 				'status'     => 'private',
 				'creator_id' => $this->user,
 			]
 		);
 
-		$this->create_activity_object(
+		$this->create_activity_id(
 			[
 				'component'     => buddypress()->groups->id,
 				'type'          => 'created_group',
@@ -279,10 +279,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_activities_from_a_specific_group_with_primary_id() {
 		$component = buddypress()->groups->id;
-		$g1        = $this->create_group_object();
-		$g2        = $this->create_group_object();
+		$g1        = $this->create_group_id();
+		$g2        = $this->create_group_id();
 
-		$a1 = $this->create_activity_object(
+		$a1 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -291,7 +291,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -300,7 +300,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a3 = $this->create_activity_object(
+		$a3 = $this->create_activity_id(
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
@@ -310,7 +310,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a4 = $this->create_activity_object(
+		$a4 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -341,21 +341,21 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$component = buddypress()->groups->id;
 		$u         = $this->factory->user->create();
 
-		$g1 = $this->create_group_object(
+		$g1 = $this->create_group_id(
 			[
 				'status'     => 'private',
 				'creator_id' => $u,
 			]
 		);
 
-		$g2 = $this->create_group_object(
+		$g2 = $this->create_group_id(
 			[
 				'status'     => 'public',
 				'creator_id' => $this->user,
 			]
 		);
 
-		$a1 = $this->create_activity_object(
+		$a1 = $this->create_activity_id(
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
@@ -365,7 +365,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -393,10 +393,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_activities_from_a_specific_group_using_different_component() {
 		$component = buddypress()->groups->id;
-		$g1        = $this->create_group_object();
-		$g2        = $this->create_group_object();
+		$g1        = $this->create_group_id();
+		$g2        = $this->create_group_id();
 
-		$a1 = $this->create_activity_object(
+		$a1 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -405,7 +405,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -414,7 +414,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a3 = $this->create_activity_object(
+		$a3 = $this->create_activity_id(
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
@@ -424,7 +424,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a4 = $this->create_activity_object(
+		$a4 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -459,9 +459,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	public function test_get_activities_sorted() {
 		$this->bp->set_current_user( $this->admin );
 
-		$a1 = $this->create_activity_object();
-		$this->create_activity_object();
-		$a3 = $this->create_activity_object();
+		$a1 = $this->create_activity_id();
+		$this->create_activity_id();
+		$a3 = $this->create_activity_id();
 
 		// ASC.
 		$this->assertQuerySuccessful( $this->activityQuery( [ 'where' => [ 'order' => 'ASC' ] ] ) )
@@ -477,9 +477,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	public function test_get_activities_with_exclude() {
 		$this->bp->set_current_user( $this->admin );
 
-		$a1 = $this->create_activity_object();
-		$a2 = $this->create_activity_object();
-		$a3 = $this->create_activity_object();
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id();
 
 		$results = $this->activityQuery( [ 'where' => [ 'exclude' => [ $a1 ] ] ] );
 
@@ -506,9 +506,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$g1 = $this->bp_factory->group->create();
 
-		$a1 = $this->create_activity_object( [ 'user_id' => $u ] );
+		$a1 = $this->create_activity_id( [ 'user_id' => $u ] );
 
-		$a2 = $this->create_activity_object(
+		$a2 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -517,7 +517,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$a3 = $this->create_activity_object(
+		$a3 = $this->create_activity_id(
 			[
 				'component' => $component,
 				'type'      => 'created_group',
@@ -543,9 +543,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_first_activity() {
-		$this->create_activity_object();
-		$this->create_activity_object();
-		$a1 = $this->create_activity_object();
+		$this->create_activity_id();
+		$this->create_activity_id();
+		$a1 = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -560,8 +560,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_activities_after() {
-		$a1 = $this->create_activity_object();
-		$a2 = $this->create_activity_object();
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -573,9 +573,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_activities_before() {
-		$this->create_activity_object();
-		$a2 = $this->create_activity_object();
-		$a3 = $this->create_activity_object();
+		$this->create_activity_id();
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -589,7 +589,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_public_activity_comments_thread() {
-		$a = $this->create_activity_object(
+		$a = $this->create_activity_id(
 			[
 				'component' => 'activity',
 				'content'   => 'Foo',
@@ -645,7 +645,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_public_activity_comments_stream() {
-		$a = $this->create_activity_object(
+		$a = $this->create_activity_id(
 			[
 				'component' => 'activity',
 				'content'   => 'Foo',
@@ -704,8 +704,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	public function test_get_activities_thread_comments_from_a_specific_group() {
-		$g = $this->create_group_object();
-		$a = $this->create_activity_object(
+		$g = $this->create_group_id();
+		$a = $this->create_activity_id(
 			[
 				'component' => buddypress()->groups->id,
 				'content'   => 'Foo',
@@ -774,8 +774,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	public function test_get_activities_stream_comments_from_a_specific_group() {
 		$this->markTestIncomplete( 'Pending implementation' );
 
-		$g = $this->create_group_object();
-		$a = $this->create_activity_object(
+		$g = $this->create_group_id();
+		$a = $this->create_activity_id(
 			[
 				'component' => buddypress()->groups->id,
 				'content'   => 'Foo',

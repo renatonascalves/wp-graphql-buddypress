@@ -114,7 +114,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 			$friend_ids = array_reverse( $friend_ids );
 		}
 
-		return array_map( 'absint', $friend_ids );
+		return array_values( array_filter( wp_parse_id_list( $friend_ids ) ) );
 	}
 
 	/**

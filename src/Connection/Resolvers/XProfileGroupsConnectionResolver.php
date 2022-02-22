@@ -106,7 +106,9 @@ class XProfileGroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		return array_map( 'absint', wp_list_pluck( $this->query, 'id' ) );
+		$ids = wp_list_pluck( $this->query, 'id' );
+
+		return array_values( array_filter( wp_parse_id_list( $ids ) ) );
 	}
 
 	/**

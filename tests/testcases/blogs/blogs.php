@@ -21,8 +21,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$b1 = $this->bp_factory->blog->create();
 		$b2 = $this->bp_factory->blog->create();
-		$this->bp_factory->blog->create();
-		$this->bp_factory->blog->create();
+		$this->bp_factory->blog->create_many( 2 );
 
 		$results = $this->blogsQuery();
 

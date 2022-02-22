@@ -109,7 +109,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 			}
 		}
 
-		return array_map( 'absint', $ids );
+		return array_values( array_filter( wp_parse_id_list( $ids ) ) );
 	}
 
 	/**

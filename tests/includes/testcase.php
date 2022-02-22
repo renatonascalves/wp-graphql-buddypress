@@ -128,10 +128,11 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Wrapper for the "graphql()" function.
 	 *
+	 * @param array $args Query arguments.
 	 * @return array
 	 */
-	public function graphql(): array {
-		return graphql( ...func_get_args() );
+	public function graphql( ...$args ): array {
+		return graphql( ...$args );
 	}
 
 	/**
@@ -346,6 +347,19 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Does query not have a next page?
+	 *
+	 * @return self
+	 */
+	protected function notHasNextPage(): self {
+		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
+
+		$this->assertFalse( $page_info['hasNextPage'] );
+
+		return $this;
+	}
+
+	/**
 	 * Does query has a previous page?
 	 *
 	 * @return self
@@ -354,6 +368,19 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
 
 		$this->assertTrue( (bool) $page_info['hasPreviousPage'] ?? false );
+
+		return $this;
+	}
+
+	/**
+	 * Does query not have a previous page?
+	 *
+	 * @return self
+	 */
+	protected function notHasPreviousPage(): self {
+		$page_info = current( $this->get_field_value_from_response( 'pageInfo' ) );
+
+		$this->assertFalse( (bool) $page_info['hasPreviousPage'] ?? true );
 
 		return $this;
 	}
@@ -379,12 +406,24 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Create group object.
+	 * Set current user based on MU environment.
+	 */
+	protected function set_user() {
+		if ( is_multisite() ) {
+			$this->bp->grant_super_admin( $this->user );
+			$this->bp->set_current_user( $this->user );
+		} else {
+			$this->bp->set_current_user( $this->admin );
+		}
+	}
+
+	/**
+	 * Create group id.
 	 *
 	 * @param array $args Arguments.
 	 * @return int
 	 */
-	protected function create_group_object( array $args = [] ): int {
+	protected function create_group_id( array $args = [] ): int {
 		return $this->bp_factory->group->create(
 			array_merge(
 				[
@@ -399,13 +438,38 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Create activity object.
+	 * Create activity id.
 	 *
 	 * @param array $args Arguments.
 	 * @return int
 	 */
-	protected function create_activity_object( array $args = [] ): int {
+	protected function create_activity_id( array $args = [] ): int {
 		return $this->bp_factory->activity->create( array_merge( [ 'user_id' => $this->admin ], $args ) );
+	}
+
+	/**
+	 * Create signup id.
+	 *
+	 * @param array $args Arguments.
+	 * @return int
+	 */
+	protected function create_signup_id( array $args = [] ): int {
+		return $this->bp_factory->signup->create(
+			array_merge(
+				[
+					'user_login'     => 'user' . wp_rand( 1, 20 ),
+					'user_email'     => sprintf( 'user%d@example.com', wp_rand( 1, 20 ) ),
+					'registered'     => bp_core_current_time(),
+					'activation_key' => wp_generate_password( 32, false ),
+					'meta'           => [
+						'field_1'  => 'Foo Bar',
+						'meta1'    => 'meta2',
+						'password' => wp_generate_password( 12, false ),
+					],
+				],
+				$args
+			)
+		);
 	}
 
 	/**

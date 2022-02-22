@@ -108,7 +108,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 			$blog_ids = array_reverse( $blog_ids );
 		}
 
-		return array_map( 'absint', $blog_ids );
+		return array_values( array_filter( wp_parse_id_list( $blog_ids ) ) );
 	}
 
 	/**

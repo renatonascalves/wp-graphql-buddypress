@@ -90,7 +90,7 @@ class ActivityConnection {
 	}
 
 	/**
-	 * This returns the connection args for the Groups connection.
+	 * This returns the connection args for the Activity connection.
 	 *
 	 * @return array
 	 */

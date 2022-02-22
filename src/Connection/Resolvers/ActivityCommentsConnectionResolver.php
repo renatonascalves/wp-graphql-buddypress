@@ -107,7 +107,7 @@ class ActivityCommentsConnectionResolver extends AbstractConnectionResolver {
 			$comments = array_reverse( $comments );
 		}
 
-		return array_map( 'absint', $comments );
+		return array_values( array_filter( wp_parse_id_list( $comments ) ) );
 	}
 
 	/**

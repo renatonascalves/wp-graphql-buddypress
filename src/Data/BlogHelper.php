@@ -57,4 +57,27 @@ class BlogHelper {
 
 		return $blog_object;
 	}
+
+	/**
+	 * Get blog uri/permalink.
+	 *
+	 * @param mixed $object Object.
+	 * @return string|null
+	 */
+	public static function get_blog_uri( $object ): ?string {
+
+		// Bail early.
+		if ( empty( $object->domain ) && empty( $object->path ) ) {
+			return null;
+		}
+
+		if ( empty( $object->domain ) && ! empty( $object->path ) ) {
+			return bp_get_root_domain() . $object->path;
+		}
+
+		$protocol  = is_ssl() ? 'https://' : 'http://';
+		$permalink = $protocol . $object->domain . $object->path;
+
+		return apply_filters( 'bp_get_blog_permalink', $permalink );
+	}
 }

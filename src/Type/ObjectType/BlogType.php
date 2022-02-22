@@ -78,6 +78,14 @@ class BlogType {
 						'type'        => 'String',
 						'description' => __( 'The domain of the blog.', 'wp-graphql-buddypress' ),
 					],
+					'public'           => [
+						'type'        => 'Boolean',
+						'description' => __( 'Search engine visibility of the blog. true to be visible, false otherwise.', 'wp-graphql-buddypress' ),
+					],
+					'language'         => [
+						'type'        => 'SiteLanguagesEnum',
+						'description' => __( 'The language of the blog.', 'wp-graphql-buddypress' ),
+					],
 					'lastActivity'     => [
 						'type'        => 'String',
 						'description' => __( 'The last activity date from the blog, in the site\'s timezone.', 'wp-graphql-buddypress' ),

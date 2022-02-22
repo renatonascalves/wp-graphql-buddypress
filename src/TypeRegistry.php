@@ -10,72 +10,79 @@ namespace WPGraphQL\Extensions\BuddyPress;
 
 use WP_User;
 use WPGraphQL\AppContext;
-use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
-use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
-use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 use WPGraphQL\Extensions\BuddyPress\Model\Thread;
 use WPGraphQL\Extensions\BuddyPress\Model\Activity;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipDelete;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\SignupEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\ActivityEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
+use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
+use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MemberType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\SignupType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ThreadType;
+use WPGraphQL\Extensions\BuddyPress\Connection\MemberConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\SignupConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\ThreadUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
+use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\SignupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupActivate;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
+use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
+use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
+use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileFieldObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\XProfileGroupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileFieldUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupUpdate;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\ActivityEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\BlogEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\MemberEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\ThreadEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\Input\AttachmentInput;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MemberType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ThreadType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldValueType;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
 
 /**
  * Class TypeRegistry
@@ -250,6 +257,24 @@ class TypeRegistry {
 
 			// Connections.
 			MemberConnection::register_connections();
+
+			// Signup.
+			if ( bp_get_signup_allowed() ) {
+
+				// Enum(s).
+				SignupEnums::register();
+
+				// Fields.
+				SignupType::register();
+
+				// Connections.
+				SignupConnection::register_connections();
+
+				// Mutations.
+				SignupDelete::register_mutation();
+				SignupActivate::register_mutation();
+				SignupCreate::register_mutation();
+			}
 		}
 
 		// Acvitity component.
@@ -399,6 +424,7 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
+				'bp_signup'         => new SignupObjectLoader( $context ),
 				'bp_group'          => new GroupObjectLoader( $context ),
 				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
 				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),

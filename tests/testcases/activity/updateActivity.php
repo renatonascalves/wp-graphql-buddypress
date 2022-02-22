@@ -15,7 +15,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_authenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -25,7 +25,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_component() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -35,7 +35,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_type() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -46,8 +46,8 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_into_activity_comment() {
-		$c = $this->create_activity_object();
-		$a = $this->create_activity_object();
+		$c = $this->create_activity_id();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -64,7 +64,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_without_content_or_type() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -85,14 +85,14 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_unauthenticated() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $a ] ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_update_activity_without_permission() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->random_user );
 
@@ -101,8 +101,8 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_posted_in_a_group() {
-		$g = $this->create_group_object();
-		$a = $this->create_activity_object(
+		$g = $this->create_group_id();
+		$a = $this->create_activity_id(
 			[
 				'component' => buddypress()->groups->id,
 				'type'      => 'activity_update',
@@ -119,7 +119,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_creator_can_update_activity_comment() {
-		$a = $this->create_activity_object();
+		$a = $this->create_activity_id();
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -146,7 +146,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_comment_unauthenticated() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -168,7 +168,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_admin_can_update_activity_comment() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -195,7 +195,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_activity_creator_can_not_update_activity_comment() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
@@ -219,7 +219,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_activity_comment_without_content_or_type() {
-		$a = $this->create_activity_object( [ 'user_id' => $this->random_user ] );
+		$a = $this->create_activity_id( [ 'user_id' => $this->random_user ] );
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',

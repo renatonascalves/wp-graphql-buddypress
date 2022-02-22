@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupsConnectionResolver Class
+ * SignupConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
@@ -12,12 +12,13 @@ use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
-use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
+use BP_Signup;
 
 /**
- * Class GroupsConnectionResolver
+ * Class SignupConnectionResolver
  */
-class GroupsConnectionResolver extends AbstractConnectionResolver {
+class SignupConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Return the name of the loader to be used with the connection resolver.
@@ -25,7 +26,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'bp_group';
+		return 'bp_signup';
 	}
 
 	/**
@@ -35,16 +36,13 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'fields'      => 'ids',
-			'show_hidden' => false,
-			'user_id'     => 0,
-			'include'     => [],
-			'exclude'     => [],
-			'meta'        => [],
-			'order'       => 'DESC',
-			'orderby'     => 'date_created',
-			'type'        => 'active',
-			'status'      => [ 'public' ],
+			'include'        => false,
+			'usersearch'     => false,
+			'active'         => 0,
+			'order'          => 'DESC',
+			'orderby'        => 'signup_id',
+			'activation_key' => '',
+			'fields'         => 'ids',
 		];
 
 		// Prepare for later use.
@@ -58,23 +56,13 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
-		// See if the user can see hidden groups.
-		if ( true === (bool) $query_args['show_hidden'] && ! $this->can_see_hidden_groups( $query_args['user_id'] ) ) {
-			$query_args['show_hidden'] = false;
-		}
-
-		// Adding correct value for the parent_id.
-		if ( empty( $query_args['parent_id'] ) ) {
-			$query_args['parent_id'] = null;
-		}
-
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
 			$query_args['order'] = 'DESC';
 		}
 
-		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
-		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
+		// Set number the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['number'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
@@ -82,11 +70,6 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
-
-		// Setting parent group.
-		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
-			$query_args['parent_id'] = $this->source->databaseId;
-		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
@@ -99,7 +82,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return (array) apply_filters(
-			'graphql_groups_connection_query_args',
+			'graphql_signup_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -109,27 +92,27 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns the groups query.
+	 * Returns the signup query.
 	 *
 	 * @return array
 	 */
 	public function get_query(): array {
-		return groups_get_groups( $this->query_args );
+		return BP_Signup::get( $this->query_args );
 	}
 
 	/**
-	 * Return an array of group ids from the query.
+	 * Return an array of signup ids from the query.
 	 *
-	 * @return array
+	 * @return int[]
 	 */
 	public function get_ids(): array {
-		$group_ids = $this->query['groups'] ?? [];
+		$signups = $this->query['signups'] ?? [];
 
 		if ( ! empty( $this->args['last'] ) ) {
-			$group_ids = array_reverse( $group_ids );
+			$signups = array_reverse( $signups );
 		}
 
-		return array_values( array_filter( wp_parse_id_list( $group_ids ) ) );
+		return array_values( array_filter( wp_parse_id_list( $signups ) ) );
 	}
 
 	/**
@@ -138,7 +121,7 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function should_execute(): bool {
-		return true;
+		return SignupHelper::can_see();
 	}
 
 	/**
@@ -148,12 +131,12 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return ! empty( groups_get_group( absint( $offset ) ) );
+		return SignupHelper::signup_exists( absint( $offset ) );
 	}
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * BP_Groups_Group::get() friendly keys.
+	 * BP_Signup::get() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 * @return array
@@ -164,24 +147,20 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'showHidden' => 'show_hidden',
-				'type'       => 'type',
-				'order'      => 'order',
-				'orderBy'    => 'orderby',
-				'parent'     => 'parent_id',
-				'search'     => 'search_terms',
-				'slug'       => 'slug',
-				'status'     => 'status',
-				'userId'     => 'user_id',
-				'groupType'  => 'group_type',
-				'include'    => 'include',
-				'exclude'    => 'exclude',
+				'include'        => 'include',
+				'user_login'     => 'userLogin',
+				'user_email'     => 'userEmail',
+				'usersearch'     => 'search',
+				'order'          => 'order',
+				'orderby'        => 'orderBy',
+				'active'         => 'active',
+				'activation_key' => 'activationKey',
 			]
 		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		return (array) apply_filters(
-			'graphql_map_input_fields_to_groups_query',
+			'graphql_map_input_fields_to_signup_query',
 			$query_args,
 			$args,
 			$this->source,
@@ -189,15 +168,5 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 			$this->context,
 			$this->info
 		);
-	}
-
-	/**
-	 * Can this user see hidden groups?
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool
-	 */
-	protected function can_see_hidden_groups( int $user_id ): bool {
-		return bp_current_user_can( 'bp_moderate' ) || ( is_user_logged_in() && bp_loggedin_user_id() === $user_id );
 	}
 }
