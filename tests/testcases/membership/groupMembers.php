@@ -316,7 +316,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			$where:GroupToUserConnectionWhereArgs
 		) {
 			groupBy(id: $id) {
-				id,
+				id
 				members(where: $where) {
 					nodes {
 						userId

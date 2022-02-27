@@ -226,14 +226,14 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Get a field value from response.
+	 * Get a field value from the response.
 	 *
 	 * @param string $object_field Object field.
 	 * @return mixed
 	 */
 	protected function get_field_value_from_response( string $object_field ) {
-		foreach( $this->response['data'] as $operationName ) {
-			foreach( $operationName as $field => $value ) {
+		foreach( $this->response['data'] as $fields ) {
+			foreach( $fields as $field => $value ) {
 				if ( $object_field === $field ) {
 					$object = [ $field => $value ];
 					break;
@@ -406,9 +406,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Populate group with invites.
 	 *
+	 * @param int[]    $users      Array of user ids.
+	 * @param int|null $group_id   Optional. Group ID.
+	 * @param int|null $inviter_id Optional. Inviter ID.
 	 */
-	protected function populate_group_with_invites( $users, $group_id = null, $inviter_id = null ) {
+	protected function populate_group_with_invites( $users, $group_id = null, $inviter_id = null ): void {
 		foreach ( $users as $user_id ) {
 			groups_invite_user(
 				[
@@ -424,7 +428,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set current user based on MU environment.
 	 */
-	protected function set_user() {
+	protected function set_user(): void {
 		if ( is_multisite() ) {
 			$this->bp->grant_super_admin( $this->user );
 			$this->bp->set_current_user( $this->user );

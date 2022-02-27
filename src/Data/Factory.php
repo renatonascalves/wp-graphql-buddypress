@@ -32,6 +32,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionRes
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivitiesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\SignupConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupInvitationsConnectionResolver;
 use stdClass;
 use BP_Friends_Friendship;
 
@@ -467,6 +468,19 @@ class Factory {
 	 */
 	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new GroupMembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the GroupMembershipRequestsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_group_invitations_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new GroupInvitationsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**

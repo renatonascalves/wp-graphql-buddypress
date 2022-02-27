@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Test_Member_Query Class.
  *
@@ -61,6 +60,7 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase  {
 	/**
 	 * Get a member.
 	 *
+	 * @param int|null $user_id User ID.
 	 * @return array
 	 */
 	protected function get_a_member( $user_id = null ): array {

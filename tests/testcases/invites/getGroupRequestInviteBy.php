@@ -4,8 +4,8 @@
  *
  * @group invite
  * @group invitation
- * @group request
- * @group group
+ * @group groups
+ * @group group-membership
  */
 class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * GroupMembersConnectionResolver Class
+ * GroupInvitationsConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
  * @since 0.0.1-alpha
@@ -8,17 +8,18 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;
 
-use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Utils\Utils;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Data\InvitationHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use WPGraphQL\Model\User;
 
 /**
- * Class GroupMembersConnectionResolver
+ * Class GroupInvitationsConnectionResolver
  */
-class GroupMembersConnectionResolver extends AbstractConnectionResolver {
+class GroupInvitationsConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * Return the name of the loader to be used with the connection resolver.
@@ -26,7 +27,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return string
 	 */
 	public function get_loader_name(): string {
-		return 'user';
+		return 'bp_invitation';
 	}
 
 	/**
@@ -36,17 +37,14 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'group_id'            => 0,
-			'exclude'             => false,
-			'search_terms'        => false,
-			'type'                => 'last_joined',
-			'group_role'          => [],
-			'exclude_admins_mods' => true,
-			'exclude_banned'      => true,
+			'item_id' => 0,
+			'user_id' => 0,
+			'fields'  => 'ids',
 		];
 
 		// Prepare for later use.
-		$last = $this->args['last'] ?? null;
+		$first = $this->args['first'] ?? null;
+		$last  = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
 		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
@@ -55,17 +53,37 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			$query_args = array_merge( $query_args, $input_fields );
 		}
 
+		// Set group.
+		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
+			$query_args['item_id'] = $this->source->databaseId;
+		}
+
+		// Set user.
+		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
+			$query_args['user_id'] = $this->source->databaseId;
+		} else {
+			$logged_user_id = bp_loggedin_user_id();
+
+			// If the query is not restricted by user, limit it to the current user, if not an admin/group admin/group moderator.
+			if (
+				empty( $query_args['user_id'] )
+				&& ! bp_current_user_can( 'bp_moderate' )
+				&& ! groups_is_user_admin( $logged_user_id, $query_args['item_id'] )
+				&& ! groups_is_user_mod( $logged_user_id, $query_args['item_id'] )
+			) {
+				$query_args['user_id'] = $logged_user_id;
+			}
+		}
+
+		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
+		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
+
 		// Set the graphql_cursor_offset.
 		$query_args['graphql_cursor_offset']  = $this->get_offset();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
-
-		// Assign group when trying to get members from a group.
-		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
-			$query_args['group_id'] = $this->source->databaseId;
-		}
 
 		/**
 		 * Filter the query_args that should be applied to the query. This filter is applied AFTER the input args from
@@ -78,7 +96,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       Info about fields passed down the resolve tree
 		 */
 		return (array) apply_filters(
-			'graphql_group_members_connection_query_args',
+			'graphql_group_invitations_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -88,23 +106,32 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns group members query.
+	 * Returns group invitations query.
 	 *
 	 * @return array
 	 */
 	public function get_query(): array {
-		return (array) groups_get_group_members( $this->query_args );
+		$request_query = 'request' === $this->query_args['type'] ?? '';
+
+		// Remove type before querying.
+		unset( $this->query_args['type'] );
+
+		if ( true === $request_query ) {
+			$query = groups_get_requests( $this->query_args );
+		} else {
+			$query = groups_get_invites( $this->query_args );
+		}
+
+		return (array) $query;
 	}
 
 	/**
-	 * Returns an array of group member ids.
+	 * Returns an array of group invite ids.
 	 *
 	 * @return int[]
 	 */
 	public function get_ids(): array {
-		$member_ids = wp_list_pluck( $this->query['members'], 'ID' );
-
-		return array_values( array_filter( wp_parse_id_list( $member_ids ) ) );
+		return array_values( array_filter( wp_parse_id_list( $this->query ) ) );
 	}
 
 	/**
@@ -113,24 +140,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function should_execute(): bool {
-
-		// Check if group object is there.
-		if ( ! $this->source instanceof Group ) {
-			return false;
-		}
-
-		// It is okay for public groups.
-		if ( 'public' === $this->source->status ) {
-			return true;
-		}
-
-		// Moderators as well.
-		if ( bp_current_user_can( 'bp_moderate' ) ) {
-			return true;
-		}
-
-		// Current user is a member of the group.
-		return (bool) groups_is_user_member( bp_loggedin_user_id(), $this->source->databaseId );
+		return true;
 	}
 
 	/**
@@ -140,48 +150,31 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return ! empty( get_user_by( 'ID', absint( $offset ) ) );
+		return InvitationHelper::invitation_exists( absint( $offset ) );
 	}
 
 	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to
-	 * groups_get_group_members() friendly keys.
-	 *
-	 * @throws UserError User error.
+	 * groups_get_requests()|groups_get_invites() friendly keys.
 	 *
 	 * @param array $args The array of query arguments.
 	 * @return array
 	 */
 	public function sanitize_input_fields( array $args ): array {
 
-		// Only admins can filter those.
-		// @todo update so that mods are not blocked as well.
-		if (
-			(
-				( ! empty( $args['groupMemberRoles'] ) && 'banned' === $args['groupMemberRoles'][0] )
-				|| ! empty( $args['excludeBanned'] )
-			)
-			&& ! bp_current_user_can( 'bp_moderate' )
-		) {
-			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
-		}
-
 		// Map and sanitize the input args.
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'type'              => 'type',
-				'exclude'           => 'exclude',
-				'search'            => 'search_terms',
-				'groupMemberRoles'  => 'group_role',
-				'excludeAdminsMods' => 'exclude_admins_mods',
-				'excludeBanned'     => 'exclude_banned',
+				'userId' => 'user_id',
+				'itemId' => 'item_id',
+				'type'   => 'type',
 			]
 		);
 
 		// This allows plugins/themes to hook in and alter what $args should be allowed.
 		return (array) apply_filters(
-			'graphql_map_input_fields_to_group_members_query',
+			'graphql_map_input_fields_to_group_invitations_query',
 			$query_args,
 			$args,
 			$this->source,

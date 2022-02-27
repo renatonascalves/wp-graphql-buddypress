@@ -36,7 +36,27 @@ class GroupConnection {
 		);
 
 		// Register connection from Group > User.
-		register_graphql_connection( self::get_group_members_connection_config() );
+		register_graphql_connection(
+			[
+				'fromType'       => 'Group',
+				'toType'         => 'User',
+				'fromFieldName'  => 'members',
+				'connectionArgs' => self::get_group_members_connection_args(),
+				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+					return Factory::resolve_group_members_connection( $source, $args, $context, $info );
+				},
+			]
+		);
+
+		// Register connection from Group > GroupInvitation (Request|Invite).
+		register_graphql_connection( self::get_group_invitations_connection_config() );
+
+		// Register connection from User > GroupInvitation (Request|Invite).
+		register_graphql_connection(
+			self::get_group_invitations_connection_config(
+				[ 'fromType' => 'User' ]
+			)
+		);
 	}
 
 	/**
@@ -61,20 +81,44 @@ class GroupConnection {
 	}
 
 	/**
-	 * This returns a Group > User connection config.
+	 * This returns a Group|User > GroupInvitation (Request|Invite) connection config.
 	 *
 	 * @param array $args Array of arguments.
 	 * @return array
 	 */
-	public static function get_group_members_connection_config( array $args = [] ): array {
+	public static function get_group_invitations_connection_config( array $args = [] ): array {
+		$fields = [
+			'userId' => [
+				'type'        => 'Int',
+				'description' => __( 'Return invitations from a specific user.', 'wp-graphql-buddypress' ),
+			],
+			'type'   => [
+				'type'        => [ 'non_null' => 'InvitationTypeEnum' ],
+				'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
+			],
+		];
+
+		if ( ! empty( $args['fromType'] ) && 'User' === $args['fromType'] ) {
+			$fields = [
+				'itemId' => [
+					'type'        => 'Int',
+					'description' => __( 'ID of the group to limit results to.', 'wp-graphql-buddypress' ),
+				],
+				'type'   => [
+					'type'        => [ 'non_null' => 'InvitationTypeEnum' ],
+					'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
+				],
+			];
+		}
+
 		return array_merge(
 			[
 				'fromType'       => 'Group',
-				'toType'         => 'User',
-				'fromFieldName'  => 'members',
-				'connectionArgs' => self::get_group_members_connection_args(),
+				'toType'         => 'GroupInvitation',
+				'fromFieldName'  => 'invitations',
+				'connectionArgs' => $fields,
 				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-					return Factory::resolve_group_members_connection( $source, $args, $context, $info );
+					return Factory::resolve_group_invitations_connection( $source, $args, $context, $info );
 				},
 			],
 			$args

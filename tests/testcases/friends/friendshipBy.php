@@ -74,19 +74,21 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	 */
 	protected function get_friendship( int $id ): array {
 		$global_id = $this->toRelayId( 'friendship', $id );
-		$query     = "{
-			friendshipBy(id: \"{$global_id}\") {
-				id
-				databaseId
-				isConfirmed
-				friend {
-					userId
-				}
-				initiator {
-					userId
+		$query     = "
+			query {
+				friendshipBy(id: \"{$global_id}\") {
+					id
+					databaseId
+					isConfirmed
+					friend {
+						userId
+					}
+					initiator {
+						userId
+					}
 				}
 			}
-		}";
+		";
 
 		return $this->graphql( compact( 'query' ) );
 	}

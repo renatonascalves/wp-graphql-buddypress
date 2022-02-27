@@ -120,7 +120,7 @@ class GroupCreate {
 			}
 
 			// Create group and return its newly created ID.
-			$group_id = groups_create_group(
+			$group_id = (int) groups_create_group(
 				GroupHelper::prepare_group_args( $input, 'create' )
 			);
 
