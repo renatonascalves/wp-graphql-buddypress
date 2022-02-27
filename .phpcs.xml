@@ -3,16 +3,16 @@
 	<description>PHP_CodeSniffer standard for the WPGraphQL BuddyPress extension.</description>
 
 	<!-- Load WordPress Coding standards -->
-	<rule ref="WordPress"/>
+	<rule ref="WordPress" />
 
 	<!-- Load PHPCompatibilityWP standards -->
 	<rule ref="PHPCompatibilityWP" />
 
 	<!-- Configure the PHP version -->
-	<config name="testVersion" value="7.4-"/>
+	<config name="testVersion" value="7.4-" />
 
 	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="5.9"/>
+	<config name="minimum_supported_wp_version" value="5.9" />
 
 	<!--
 	Pass some flags to PHPCS:
@@ -22,13 +22,13 @@
 	<arg value="ps" />
 
 	<!-- Enable colors in report -->
-	<arg name="colors"/>
+	<arg name="colors" />
 
 	<!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
 	<arg name="cache" value=".phpcs/cache.json" />
 
 	<!-- Check 20 files in parallel. -->
-	<arg name="parallel" value="20"/>
+	<arg name="parallel" value="20" />
 
 	<!-- Set severity to 1 to see everything that isn't effectively turned off. -->
 	<arg name="severity" value="1" />

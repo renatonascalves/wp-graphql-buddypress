@@ -66,6 +66,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\InvitationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipDelete;
@@ -83,6 +84,8 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
+use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
 
 /**
  * Class TypeRegistry
@@ -246,6 +249,9 @@ class TypeRegistry {
 		// General Enum(s).
 		GeneralEnums::register();
 
+		// Register Interfaces.
+		Invitation::register_type();
+
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
 
@@ -305,6 +311,7 @@ class TypeRegistry {
 
 			// Object(s).
 			GroupType::register();
+			InvitationGroupType::register();
 
 			// Connections.
 			GroupConnection::register_connections();
@@ -433,6 +440,7 @@ class TypeRegistry {
 				'bp_thread'         => new ThreadObjectLoader( $context ),
 				'bp_message'        => new MessageObjectLoader( $context ),
 				'bp_activity'       => new ActivityObjectLoader( $context ),
+				'bp_invitation'     => new InvitationObjectLoader( $context ),
 			]
 		);
 	}

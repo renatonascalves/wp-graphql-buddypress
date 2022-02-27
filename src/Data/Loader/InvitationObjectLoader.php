@@ -1,6 +1,6 @@
 <?php
 /**
- * ActivityObjectLoader Class
+ * InvitationObjectLoader Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data\Loader
  * @since 0.0.1-alpha
@@ -9,37 +9,37 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;
 
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\Extensions\BuddyPress\Model\Activity;
-use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
-use BP_Activity_Activity;
+use WPGraphQL\Extensions\BuddyPress\Model\Invitation;
+use WPGraphQL\Extensions\BuddyPress\Data\InvitationHelper;
+use BP_Invitation;
 
 /**
- * Class ActivityObjectLoader
+ * Class InvitationObjectLoader
  */
-class ActivityObjectLoader extends AbstractDataLoader {
+class InvitationObjectLoader extends AbstractDataLoader {
 
 	/**
 	 * Get model.
 	 *
 	 * @param mixed $entry The object.
 	 * @param mixed $key   The Key to identify the object by.
-	 * @return null|Activity
+	 * @return null|Invitation
 	 */
-	protected function get_model( $entry, $key ): ?Activity {
+	protected function get_model( $entry, $key ): ?Invitation {
 
-		if ( empty( $entry->id ) || ! $entry instanceof BP_Activity_Activity ) {
+		if ( empty( $entry->id ) || ! $entry instanceof BP_Invitation ) {
 			return null;
 		}
 
-		return new Activity( $entry );
+		return new Invitation( $entry );
 	}
 
 	/**
 	 * Given array of keys, loads and returns a map consisting of keys from `keys` array and loaded
 	 * values.
 	 *
-	 * @param array $keys Array of keys/ids.
-	 * @return BP_Activity_Activity[]
+	 * @param array $keys Array of keys.
+	 * @return BP_Invitation[]
 	 */
 	public function loadKeys( array $keys ): array {
 
@@ -47,15 +47,15 @@ class ActivityObjectLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		$loaded_activities = [];
+		$loaded_invitations = [];
 
 		// Get all objects.
 		foreach ( $keys as $key ) {
 
 			// This is cached.
-			$loaded_activities[ $key ] = ActivityHelper::get_activity( absint( $key ) );
+			$loaded_invitations[ $key ] = InvitationHelper::get_invitation( absint( $key ) );
 		}
 
-		return $loaded_activities;
+		return $loaded_invitations;
 	}
 }

@@ -202,7 +202,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$query = "
 			query {
 				groupBy(groupId: {$group}) {
-					id,
+					id
 					databaseId
 					name
 					status

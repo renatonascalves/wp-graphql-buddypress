@@ -22,10 +22,10 @@ class GroupConnection {
 	 */
 	public static function register_connections(): void {
 
-		// Register connection from RootQuery to groups.
+		// Register connection from RootQuery > Group.
 		register_graphql_connection( self::get_connection_config() );
 
-		// Register connection from Group to children groups.
+		// Register connection from Group > Group.
 		register_graphql_connection(
 			self::get_connection_config(
 				[
@@ -35,7 +35,7 @@ class GroupConnection {
 			)
 		);
 
-		// Register connection from Group to group members.
+		// Register connection from Group > User.
 		register_graphql_connection( self::get_group_members_connection_config() );
 	}
 

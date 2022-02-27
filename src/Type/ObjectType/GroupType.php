@@ -58,7 +58,7 @@ class GroupType {
 						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Group $group, array $args, AppContext $context ) {
 
-							// Only logged users can see these values.
+							// Only logged in users can see these values.
 							if ( false === is_user_logged_in() ) {
 								return null;
 							}
@@ -66,7 +66,6 @@ class GroupType {
 							$admins     = [];
 							$admin_mods = (array) groups_get_group_members(
 								[
-									// @codingStandardsIgnoreLine.
 									'group_id'   => $group->databaseId,
 									'group_role' => [ 'admin' ],
 								]
@@ -85,7 +84,6 @@ class GroupType {
 							$context->get_loader( 'user' )->buffer( $admins );
 							return new Deferred(
 								function() use ( $context, $admins ) {
-									// @codingStandardsIgnoreLine.
 									return $context->get_loader( 'user' )->loadMany( $admins );
 								}
 							);
@@ -104,7 +102,6 @@ class GroupType {
 							$mods       = [];
 							$admin_mods = (array) groups_get_group_members(
 								[
-									// @codingStandardsIgnoreLine.
 									'group_id'   => $group->databaseId,
 									'group_role' => [ 'mod' ],
 								]
@@ -123,7 +120,6 @@ class GroupType {
 							$context->get_loader( 'user' )->buffer( $mods );
 							return new Deferred(
 								function() use ( $context, $mods ) {
-									// @codingStandardsIgnoreLine.
 									return $context->get_loader( 'user' )->loadMany( $mods );
 								}
 							);

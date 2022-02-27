@@ -222,7 +222,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->expectedErrorMessage( 'Sorry, you do not have the necessary permissions to filter with this param.' );
 	}
 
-	public function test_get_group_members_aphabetically() {
+	public function test_get_group_members_alphabetically() {
 		$this->bp->set_current_user( $this->admin );
 
 		$u1 = $this->bp_factory->user->create( [ 'name' => 'Jorge' ]);

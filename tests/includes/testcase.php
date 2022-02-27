@@ -180,7 +180,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return self
 	 */
 	public function expectedErrorMessage( string $message ): self {
-		$this->assertSame( $message, $this->response['errors'][0]['message'] ?? '' );
+		$this->assertSame( $message, $this->response['errors'][0]['message'] ?: '' );
 
 		return $this;
 	}
@@ -403,6 +403,22 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 				$args
 			)
 		);
+	}
+
+	/**
+	 *
+	 */
+	protected function populate_group_with_invites( $users, $group_id = null, $inviter_id = null ) {
+		foreach ( $users as $user_id ) {
+			groups_invite_user(
+				[
+					'user_id'     => $user_id,
+					'group_id'    => $group_id ?? $this->group,
+					'inviter_id'  => $inviter_id ?? $this->user,
+					'send_invite' => 1,
+				]
+			);
+		}
 	}
 
 	/**

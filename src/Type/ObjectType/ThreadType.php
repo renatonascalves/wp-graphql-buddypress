@@ -62,7 +62,6 @@ class ThreadType {
 							$context->get_loader( 'user' )->buffer( $users );
 							return new Deferred(
 								function() use ( $context, $users ) {
-									// @codingStandardsIgnoreLine.
 									return $context->get_loader( 'user' )->loadMany( $users );
 								}
 							);

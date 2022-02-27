@@ -41,6 +41,28 @@ use BP_Friends_Friendship;
 class Factory {
 
 	/**
+	 * Returns an Invitation object.
+	 *
+	 * @param int        $id      Invitation ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_invitation_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$invite_id = absint( $id );
+		$context->get_loader( 'bp_invitation' )->buffer( [ $invite_id ] );
+
+		return new Deferred(
+			function () use ( $invite_id, $context ) {
+				return $context->get_loader( 'bp_invitation' )->load( $invite_id );
+			}
+		);
+	}
+
+	/**
 	 * Returns a Signup object.
 	 *
 	 * @param int        $id      Activity ID or null.

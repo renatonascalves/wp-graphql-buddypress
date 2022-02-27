@@ -31,13 +31,33 @@ class GeneralEnums {
 				'values'      => [
 					'RAW'      => [
 						'name'        => 'RAW',
-						'description' => __( 'Provide the field value directly from database', 'wp-graphql-buddypress' ),
+						'description' => __( 'Provide the field value directly from database.', 'wp-graphql-buddypress' ),
 						'value'       => 'raw',
 					],
 					'RENDERED' => [
 						'name'        => 'RENDERED',
-						'description' => __( 'Apply the default WordPress rendering', 'wp-graphql-buddypress' ),
+						'description' => __( 'Apply the default WordPress rendering.', 'wp-graphql-buddypress' ),
 						'value'       => 'rendered',
+					],
+				],
+			]
+		);
+
+		// Invitaton Type Enum.
+		register_graphql_enum_type(
+			'InvitationTypeEnum',
+			[
+				'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
+				'values'      => [
+					'INVITE'  => [
+						'name'        => 'INVITE',
+						'description' => __( 'The invite type.', 'wp-graphql-buddypress' ),
+						'value'       => 'invite',
+					],
+					'REQUEST' => [
+						'name'        => 'REQUEST',
+						'description' => __( 'The request type.', 'wp-graphql-buddypress' ),
+						'value'       => 'request',
 					],
 				],
 			]
