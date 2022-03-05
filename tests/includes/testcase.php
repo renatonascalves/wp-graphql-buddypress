@@ -84,8 +84,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up(): void {
+		parent::set_up();
 
 		/**
 		 * Reset the WPGraphQL schema before each test.

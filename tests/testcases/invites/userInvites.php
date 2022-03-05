@@ -45,6 +45,46 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertTrue( count( $response['data']['user']['invitations']['nodes'] ) === 4 );
 	}
 
+	public function test_get_user_invites_as_admin() {
+		$u1 = $this->factory->user->create();
+
+		$this->populate_group_with_invites( [ $u1 ], $this->g1, $this->random_user );
+		$this->populate_group_with_invites( [ $u1 ], $this->g2, $this->random_user );
+		$this->populate_group_with_invites( [ $u1 ], $this->g3, $this->random_user );
+		$this->populate_group_with_invites( [ $u1 ], $this->g4, $this->random_user );
+
+		$this->bp->set_current_user( $this->admin );
+
+		$response = $this->getMemberInvitesQuery(
+			[
+				'id'    => $this->toRelayId( 'user', (string) $u1 ),
+				'where' => [ 'type' => 'INVITE' ]
+			]
+		);
+
+		$this->assertQuerySuccessful( $response );
+		$this->assertTrue( count( $response['data']['user']['invitations']['nodes'] ) === 4 );
+	}
+
+	public function test_get_user_invites_without_access() {
+		$u1 = $this->factory->user->create();
+		$u2 = $this->factory->user->create();
+
+		$this->populate_group_with_invites( [ $u1 ], $this->g1, $this->random_user );
+
+		$this->bp->set_current_user( $u2 );
+
+		$response = $this->getMemberInvitesQuery(
+			[
+				'id'    => $this->toRelayId( 'user', (string) $u1 ),
+				'where' => [ 'type' => 'INVITE' ]
+			]
+		);
+
+		$this->assertQuerySuccessful( $response );
+		$this->assertEmpty( $response['data']['user']['invitations']['nodes'] );
+	}
+
 	public function test_get_user_invites_from_group() {
 		$u1 = $this->factory->user->create();
 
@@ -104,6 +144,31 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$r2 = groups_send_membership_request( [ 'group_id' => $this->g2, 'user_id' => $u1 ] );
 
 		$this->bp->set_current_user( $u1 );
+
+		$response = $this->getMemberInvitesQuery(
+			[
+				'id'    => $this->toRelayId( 'user', (string) $u1 ),
+				'where' => [ 'type' => 'REQUEST' ]
+			]
+		);
+
+		$this->assertQuerySuccessful( $response );
+		$this->assertTrue( count( $response['data']['user']['invitations']['nodes'] ) === 2 );
+		$this->assertEqualSets(
+			[ $r1, $r2 ],
+			wp_list_pluck(
+				$response['data']['user']['invitations']['nodes'],
+				'databaseId'
+			)
+		);
+	}
+
+	public function test_get_user_group_requests_as_admin() {
+		$u1 = $this->factory->user->create();
+		$r1 = groups_send_membership_request( [ 'group_id' => $this->g1, 'user_id' => $u1 ] );
+		$r2 = groups_send_membership_request( [ 'group_id' => $this->g2, 'user_id' => $u1 ] );
+
+		$this->bp->set_current_user( $this->admin );
 
 		$response = $this->getMemberInvitesQuery(
 			[

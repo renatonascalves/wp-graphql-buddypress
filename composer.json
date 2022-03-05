@@ -20,8 +20,7 @@
   "authors": [
     {
       "name": "Renato Alves",
-      "homepage": "https://ralv.es",
-      "role": "Lead developer"
+      "homepage": "https://ralv.es"
     }
   ],
   "support": {
@@ -29,34 +28,35 @@
     "source": "https://github.com/wp-graphql/wp-graphql-buddypress"
   },
   "require": {
-    "php": "^7.4 || ^8.0"
+    "php": "^7.4|^8.0",
+    "composer/installers": "^1.10.0"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
     "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+		"squizlabs/php_codesniffer" : "^3.5.4",
+    "wp-coding-standards/wpcs": "*",
+    "szepeviktor/phpstan-wordpress": "^0.7.5",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^0.12.82",
     "phpunit/phpunit": "^7.5",
-    "squizlabs/php_codesniffer": "^3.5.4",
-    "szepeviktor/phpstan-wordpress": "^0.7.5",
-    "wp-coding-standards/wpcs": "^2.3",
     "wp-phpunit/wp-phpunit": "^5.9",
-    "yoast/phpunit-polyfills": "^1.0"
+    "yoast/phpunit-polyfills": "^1.0.1"
   },
   "scripts": {
     "phpcs" : "phpcs . --basepath=.",
     "phpcbf": "phpcbf . --basepath=.",
-    "phpstan": ["phpstan analyze --ansi --memory-limit=1G"]
+    "phpstan": ["phpstan analyze --ansi --memory-limit=1G"],
+    "phpunit": "phpunit"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "config": {
     "optimize-autoloader": true,
     "process-timeout": 1800,
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
+      "phpstan/extension-installer": true,
+      "composer/installers": false
     }
   },
   "autoload": {
