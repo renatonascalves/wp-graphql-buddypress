@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "616f1d5014801d22b3c341b05e69a098",
+    "content-hash": "49e5872dc2b25d901cb184459d2fb20c",
     "packages": [
         {
             "name": "composer/installers",
@@ -303,6 +303,58 @@
                 }
             ],
             "time": "2022-03-03T08:28:38+00:00"
+        },
+        {
+            "name": "johnkary/phpunit-speedtrap",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/johnkary/phpunit-speedtrap.git",
+                "reference": "5f9b160eac87e975f1c6ca9faee5125f0616fba3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/johnkary/phpunit-speedtrap/zipball/5f9b160eac87e975f1c6ca9faee5125f0616fba3",
+                "reference": "5f9b160eac87e975f1c6ca9faee5125f0616fba3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JohnKary\\PHPUnit\\Listener\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Kary",
+                    "email": "john@johnkary.net"
+                }
+            ],
+            "description": "Find and report on slow tests in your PHPUnit test suite",
+            "homepage": "https://github.com/johnkary/phpunit-speedtrap",
+            "keywords": [
+                "phpunit",
+                "profile",
+                "slow"
+            ],
+            "support": {
+                "issues": "https://github.com/johnkary/phpunit-speedtrap/issues",
+                "source": "https://github.com/johnkary/phpunit-speedtrap/tree/v4.0.0"
+            },
+            "time": "2021-05-03T02:37:05+00:00"
         },
         {
             "name": "myclabs/deep-copy",
