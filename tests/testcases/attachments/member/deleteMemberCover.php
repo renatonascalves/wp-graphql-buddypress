@@ -27,17 +27,23 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		// There is no default member cover.
 		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user ) ) ) );
@@ -55,20 +61,26 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		// There is no default member cover.
 		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user ) ) ) );

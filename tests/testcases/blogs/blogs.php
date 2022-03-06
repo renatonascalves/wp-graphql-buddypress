@@ -41,10 +41,14 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$b1 = $this->bp_factory->blog->create();
 
-		$this->assertQuerySuccessful( $this->blogsQuery( [
-			'first' => 1,
-			'after' => ''
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->blogsQuery(
+				[
+					'first' => 1,
+					'after' => '',
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $b1 );
 	}
@@ -70,10 +74,14 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp_factory->blog->create();
 		$b2 = $this->bp_factory->blog->create();
 
-		$this->assertQuerySuccessful( $this->blogsQuery( [
-			'last'   => 1,
-			'before' => $this->key_to_cursor( $b2 )
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->blogsQuery(
+				[
+					'last'   => 1,
+					'before' => $this->key_to_cursor( $b2 ),
+				]
+			)
+		)
 			->hasNextPage();
 	}
 
@@ -87,7 +95,7 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u3 = $this->bp_factory->blog->create();
 		$u4 = $this->bp_factory->blog->create();
 
-		$results = $this->blogsQuery( [ 'where' => [ 'include' => [ $u1, $u2 ], ] ] );
+		$results = $this->blogsQuery( [ 'where' => [ 'include' => [ $u1, $u2 ] ] ] );
 
 		$this->assertQuerySuccessful( $results )
 			->hasEdges();

@@ -15,7 +15,7 @@ if ( defined( 'WPGRAPHQL_BP_USE_WP_ENV_TESTS' ) ) {
 }
 
 // Define constants.
-require( dirname( __FILE__ ) . '/includes/define-constants.php' );
+require dirname( __FILE__ ) . '/includes/define-constants.php';
 
 if ( ! file_exists( WP_TESTS_DIR . '/includes/functions.php' ) ) {
 	die( "The WordPress PHPUnit test suite could not be found.\n" );

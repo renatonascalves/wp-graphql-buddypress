@@ -32,7 +32,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->xprofile_field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
 	}
 
-    public function test_admins_can_update_xprofile_field() {
+	public function test_admins_can_update_xprofile_field() {
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'name' => 'Updated' ] ) )
@@ -45,12 +45,26 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'fieldId' => $field_id, 'fieldOrder' => 1 ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_xprofile_field(
+				[
+					'fieldId'    => $field_id,
+					'fieldOrder' => 1,
+				]
+			)
+		)
 			->hasField( 'fieldOrder', 1 )
 			->hasField( 'databaseId', $field_id );
 
 		// Update Order.
-		$this->assertQuerySuccessful( $this->update_xprofile_field( [ 'fieldId' => $this->xprofile_field_id, 'fieldOrder' => 1 ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_xprofile_field(
+				[
+					'fieldId'    => $this->xprofile_field_id,
+					'fieldOrder' => 1,
+				]
+			)
+		)
 			->hasField( 'fieldOrder', 1 )
 			->hasField( 'databaseId', $this->xprofile_field_id );
 	}
@@ -63,12 +77,12 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_update_xprofile_field_without_logged_in_user() {
-		$this->assertQueryFailed( $this->update_xprofile_field( ) )
+		$this->assertQueryFailed( $this->update_xprofile_field() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
-    }
+	}
 
-    public function test_update_xprofile_field_with_user_without_permission() {
-        $this->bp->set_current_user( $this->user );
+	public function test_update_xprofile_field_with_user_without_permission() {
+		$this->bp->set_current_user( $this->user );
 
 		$this->assertQueryFailed( $this->update_xprofile_field() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -107,7 +121,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 			}
         ';
 
-		$variables  = wp_parse_args(
+		$variables = wp_parse_args(
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,

@@ -28,17 +28,23 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Confirm that the group default avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user ) ), 'mystery-man' ) );
@@ -57,20 +63,26 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Confirm that the group default avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user ) ), 'mystery-man' ) );

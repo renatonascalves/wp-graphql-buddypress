@@ -117,8 +117,8 @@ class Test_Friendship_createFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 	/**
 	 * Create friendship.
 	 *
-	 * @param int $initiator Initiator ID.
-	 * @param int $friend Friend ID.
+	 * @param int  $initiator Initiator ID.
+	 * @param int  $friend Friend ID.
 	 * @param bool $force Force friendship confirmation.
 	 * @return array
 	 */

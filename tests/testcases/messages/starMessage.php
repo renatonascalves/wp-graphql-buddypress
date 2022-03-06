@@ -16,8 +16,8 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 	}
 
 	public function test_star_message_as_sender() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		// Reply.
 		$message = $this->create_thread_object(
@@ -57,8 +57,8 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 	}
 
 	public function test_star_message_as_recipient() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		// Reply.
 		$message = $this->create_thread_object(
@@ -98,8 +98,8 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 	}
 
 	public function test_star_message_with_unauthenticated_user() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		// Create thread.
 		$message = $this->create_thread_object(
@@ -110,14 +110,14 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			]
 		);
 
-		$this->assertQueryFailed( $this->star_message(  $message->id  ) )
+		$this->assertQueryFailed( $this->star_message( $message->id ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_star_message_with_invalid_user() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
-		$u3 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+		$u3 = $this->bp_factory->user->create();
 
 		// Create thread.
 		$message = $this->create_thread_object(
@@ -139,7 +139,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 
 		$this->bp->set_current_user( $u3 );
 
-		$this->assertQueryFailed( $this->star_message(  $message->id  ) )
+		$this->assertQueryFailed( $this->star_message( $message->id ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
@@ -185,6 +185,6 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 
 		$operation_name = 'starMessageTest';
 
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 }

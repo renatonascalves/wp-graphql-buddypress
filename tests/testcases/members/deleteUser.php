@@ -5,7 +5,7 @@
  *
  * @group members
  */
-class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase  {
+class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.
@@ -21,10 +21,13 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
-			->hasField( 'user', [
-				'userId' => $this->user,
-				'id'     => $guid
-			] );
+			->hasField(
+				'user',
+				[
+					'userId' => $this->user,
+					'id'     => $guid,
+				]
+			);
 
 		// Make sure the user actually got deleted.
 		$this->assertFalse( get_user_by( 'id', $this->user ) );
@@ -37,10 +40,13 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
 			->hasField( 'deletedId', $guid )
-			->hasField( 'user', [
-				'userId' => $this->user,
-				'id'     => $guid
-			] );
+			->hasField(
+				'user',
+				[
+					'userId' => $this->user,
+					'id'     => $guid,
+				]
+			);
 
 		// Make sure the user actually got deleted.
 		$this->assertFalse( get_user_by( 'id', $this->user ) );
@@ -65,19 +71,19 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 
 		bp_update_option( 'bp-disable-account-deletion', false );
-    }
+	}
 
 	public function test_member_needs_to_be_loggin_to_delete_account() {
 		$this->assertQueryFailed( $this->delete_member( absint( $this->user ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
-    }
+	}
 
 	public function test_delete_member_with_invalid_id() {
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQueryFailed( $this->delete_member( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
-    }
+	}
 
 	/**
 	 * Delete a member mutation.

@@ -27,20 +27,26 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_cover( 'GROUPS', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 	}
 
 	public function test_group_creator_can_delete_cover() {
@@ -55,17 +61,23 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		$this->assertQuerySuccessful( $this->delete_cover( 'GROUPS', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 	}
 
 	public function test_group_admins_can_delete_cover() {
@@ -83,20 +95,26 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		$cover = $this->get_cover_image( 'groups', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 
 		// Switch to the group admin user here.
 		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQuerySuccessful( $this->delete_cover( 'GROUPS', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $cover,
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $cover,
+					'thumb' => null,
+				]
+			);
 	}
 
 	public function test_group_mods_can_not_delete_cover() {

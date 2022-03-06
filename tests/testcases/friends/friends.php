@@ -40,11 +40,13 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->bp->set_current_user( $this->user );
 
-		$response = $this->get_friends( [
-			'id'    => $this->toRelayId( 'user', (string) $this->user ),
-			'first' => 1,
-			'after' => ''
-		] );
+		$response = $this->get_friends(
+			[
+				'id'    => $this->toRelayId( 'user', (string) $this->user ),
+				'first' => 1,
+				'after' => '',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
@@ -62,10 +64,12 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->bp->set_current_user( $this->user );
 
-		$response = $this->get_friends( [
-			'id'    => $this->toRelayId( 'user', (string) $this->user ),
-			'after' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) )
-		] );
+		$response = $this->get_friends(
+			[
+				'id'    => $this->toRelayId( 'user', (string) $this->user ),
+				'after' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) ),
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u3, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
@@ -83,11 +87,13 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->bp->set_current_user( $this->user );
 
-		$response = $this->get_friends( [
-			'id'     => $this->toRelayId( 'user', (string) $this->user ),
-			'last'   => 1,
-			'before' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) )
-		] );
+		$response = $this->get_friends(
+			[
+				'id'     => $this->toRelayId( 'user', (string) $this->user ),
+				'last'   => 1,
+				'before' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) ),
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );

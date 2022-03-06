@@ -98,8 +98,8 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 							'type'             => 'ACTIVITY_COMMENT',
 							'primaryItemId'    => $a,
 							'secondaryItemId'  => $a,
-						]
-					]
+						],
+					],
 				]
 			)
 			->hasField( 'hidden', false );

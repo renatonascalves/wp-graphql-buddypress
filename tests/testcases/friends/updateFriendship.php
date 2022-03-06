@@ -132,6 +132,6 @@ class Test_Friendship_updateFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$operation_name = 'updateFriendshipTest';
 
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 }

@@ -139,7 +139,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Wrapper for the "GraphQLRelay\Relay::toGlobalId()" function.
 	 *
 	 * @param string $type Type.
-     * @param string $id   ID.
+	 * @param string $id   ID.
 	 * @return string
 	 */
 	public function toRelayId( $type, $id ): string {
@@ -232,8 +232,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return mixed
 	 */
 	protected function get_field_value_from_response( string $object_field ) {
-		foreach( $this->response['data'] as $fields ) {
-			foreach( $fields as $field => $value ) {
+		foreach ( $this->response['data'] as $fields ) {
+			foreach ( $fields as $field => $value ) {
 				if ( $object_field === $field ) {
 					$object = [ $field => $value ];
 					break;
@@ -260,7 +260,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Check if field, and its content, exists in the first node of an edge.
 	 *
 	 * @param string $field Field.
-	 * @param mixed $field_content Field Content.
+	 * @param mixed  $field_content Field Content.
 	 * @return self
 	 */
 	protected function firstEdgeNodeField( string $field, $field_content ): self {
@@ -275,7 +275,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Check if field, and its content, exists in the first node of an Node.
 	 *
 	 * @param string $field Field.
-	 * @param mixed $field_content Field Content.
+	 * @param mixed  $field_content Field Content.
 	 * @return self
 	 */
 	protected function firstNodesNodeField( string $field, $field_content ): self {
@@ -447,10 +447,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->bp_factory->group->create(
 			array_merge(
 				[
-					'slug'         => 'group-test',
-					'name'         => 'Group Test',
-					'description'  => 'Group Description',
-					'creator_id'   => $this->admin,
+					'slug'        => 'group-test',
+					'name'        => 'Group Test',
+					'description' => 'Group Description',
+					'creator_id'  => $this->admin,
 				],
 				$args
 			)
@@ -496,7 +496,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Delete cover.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function delete_cover( string $object, int $objectId ): array {
@@ -539,7 +539,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Upload avatar mutation.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function upload_avatar( string $object, int $objectId ): array {
@@ -574,7 +574,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 			'file'             => [
 				'fileName' => $this->image_file,
-				'mimeType' => 'IMAGE_JPEG'
+				'mimeType' => 'IMAGE_JPEG',
 			],
 		];
 
@@ -587,7 +587,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Upload cover mutation.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function upload_cover( string $object, int $objectId ): array {
@@ -622,7 +622,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 			'file'             => [
 				'fileName' => $this->image_file,
-				'mimeType' => 'IMAGE_JPEG'
+				'mimeType' => 'IMAGE_JPEG',
 			],
 		];
 
@@ -705,7 +705,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @param string $size Image size.
 	 * @param string $object Object (group/blog/user).
-	 * @param int $item_id Item ID.
+	 * @param int    $item_id Item ID.
 	 * @return string
 	 */
 	protected function get_avatar_image( string $size, string $object, int $item_id ): string {
@@ -724,7 +724,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Get cover image.
 	 *
 	 * @param string $object Object (members/groups).
-	 * @param int $item_id Item ID.
+	 * @param int    $item_id Item ID.
 	 * @return string
 	 */
 	protected function get_cover_image( string $object, int $item_id ): string {

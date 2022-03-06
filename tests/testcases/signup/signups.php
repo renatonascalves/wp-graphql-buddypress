@@ -197,10 +197,14 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$a1 = $this->create_signup_id();
 
 		// The first here is the last one created. The latest signup.
-		$this->assertQuerySuccessful( $this->signupQuery( [
-			'first' => 1,
-			'after' => ''
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->signupQuery(
+				[
+					'first' => 1,
+					'after' => '',
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a1 )
 			->hasNextPage();
@@ -226,10 +230,14 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$a2 = $this->create_signup_id();
 		$a3 = $this->create_signup_id();
 
-		$this->assertQuerySuccessful( $this->signupQuery( [
-			'last'   => 1,
-			'before' => $this->key_to_cursor( $a3 )
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->signupQuery(
+				[
+					'last'   => 1,
+					'before' => $this->key_to_cursor( $a3 ),
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a2 )
 			->hasNextPage();

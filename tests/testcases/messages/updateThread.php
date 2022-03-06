@@ -15,8 +15,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_mark_thread_as_read() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -38,8 +38,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_mark_thread_as_unread() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -63,8 +63,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_update_message_with_invalid_id() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -81,8 +81,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_update_message_with_different_thread_message_id() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -102,8 +102,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	 * @todo Add logic to test this using the `bp_graphql_messages_can_edit_item_meta` hook.
 	 */
 	public function test_update_message_with_sender_id() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -121,8 +121,8 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_update_message_with_recipient() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$thread = $this->create_thread_object(
 			[
@@ -144,7 +144,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function update_thread_user_without_permission() {
-		$u1 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 

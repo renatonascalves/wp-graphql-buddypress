@@ -25,10 +25,13 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
+					'thumb' => null,
+				]
+			);
 
 		// Confirm the group path.
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
@@ -45,10 +48,13 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
+					'thumb' => null,
+				]
+			);
 
 		// Confirm the group path.
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
@@ -68,10 +74,13 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
-				'thumb' => null,
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_cover_image( 'groups', absint( $this->group ) ),
+					'thumb' => null,
+				]
+			);
 
 		// Confirm the group path.
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );

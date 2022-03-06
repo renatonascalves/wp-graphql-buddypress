@@ -38,18 +38,21 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->xprofile_group_id )
-			->hasField( 'fields', [
-				'nodes' => [
-					0 => [
-						'databaseId' => $field_id_1,
-						'groupId'    => $this->xprofile_group_id,
+			->hasField(
+				'fields',
+				[
+					'nodes' => [
+						0 => [
+							'databaseId' => $field_id_1,
+							'groupId'    => $this->xprofile_group_id,
+						],
+						1 => [
+							'databaseId' => $field_id_2,
+							'groupId'    => $this->xprofile_group_id,
+						],
 					],
-					1 => [
-						'databaseId' => $field_id_2,
-						'groupId'    => $this->xprofile_group_id,
-					]
 				]
-			] );
+			);
 	}
 
 	public function test_get_xprofile_group_fields_excluding_ids() {
@@ -61,21 +64,26 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			[ 'field_group_id' => $this->xprofile_group_id ]
 		);
 
-		$response = $this->get_xprofile_group( [
-			'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
-			'where' => [ 'excludeFields' => [ $field_id_1 ] ]
-		] );
+		$response = $this->get_xprofile_group(
+			[
+				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'where' => [ 'excludeFields' => [ $field_id_1 ] ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->xprofile_group_id )
-			->hasField( 'fields', [
-				'nodes' => [
-					0 => [
-						'databaseId' => $field_id_2,
-						'groupId'    => $this->xprofile_group_id,
-					]
+			->hasField(
+				'fields',
+				[
+					'nodes' => [
+						0 => [
+							'databaseId' => $field_id_2,
+							'groupId'    => $this->xprofile_group_id,
+						],
+					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_xprofile_group_fields_with_member_type() {
@@ -86,21 +94,26 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$field_1 = new BP_XProfile_Field( $field_id_1 );
 		$field_1->set_member_types( [ 'foo' ] );
 
-		$response = $this->get_xprofile_group( [
-			'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
-			'where' => [ 'memberType' => [ 'FOO' ] ]
-		] );
+		$response = $this->get_xprofile_group(
+			[
+				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'where' => [ 'memberType' => [ 'FOO' ] ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->xprofile_group_id )
-			->hasField( 'fields', [
-				'nodes' => [
-					0 => [
-						'databaseId' => $field_id_1,
-						'groupId'    => $this->xprofile_group_id,
-					]
+			->hasField(
+				'fields',
+				[
+					'nodes' => [
+						0 => [
+							'databaseId' => $field_id_1,
+							'groupId'    => $this->xprofile_group_id,
+						],
+					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_xprofile_group_fields_with_empty_fields_hidden() {
@@ -118,21 +131,29 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		xprofile_set_field_data( $field_id_1, $this->user, 'foo' );
 
-		$response = $this->get_xprofile_group( [
-			'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
-			'where' => [ 'userId' => $this->user, 'hideEmptyFields' => true ]
-		] );
+		$response = $this->get_xprofile_group(
+			[
+				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'where' => [
+					'userId'          => $this->user,
+					'hideEmptyFields' => true,
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->xprofile_group_id )
-			->hasField( 'fields', [
-				'nodes' => [
-					0 => [
-						'databaseId' => $field_id_1,
-						'groupId'    => $this->xprofile_group_id,
-					]
+			->hasField(
+				'fields',
+				[
+					'nodes' => [
+						0 => [
+							'databaseId' => $field_id_1,
+							'groupId'    => $this->xprofile_group_id,
+						],
+					],
 				]
-			] );
+			);
 	}
 
 	/**

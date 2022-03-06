@@ -19,14 +19,16 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$private_group_id = $this->create_group_id( [ 'status' => 'private' ] );
 
-		$this->assertQuerySuccessful( $this->groupsQuery(
-			[
-				'where' => [
-					'include' => [ $private_group_id ],
-					'status'  => [ 'PRIVATE']
+		$this->assertQuerySuccessful(
+			$this->groupsQuery(
+				[
+					'where' => [
+						'include' => [ $private_group_id ],
+						'status'  => [ 'PRIVATE' ],
+					],
 				]
-			]
-		) )
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $private_group_id );
 	}
@@ -34,14 +36,16 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_private_groups_with_where_param_and_unauthenticated_user() {
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQuerySuccessful( $this->groupsQuery(
-			[
-				'where' => [
-					'include' => [ $this->create_group_id( [ 'status' => 'private' ] ) ],
-					'status'  => [ 'PRIVATE']
+		$this->assertQuerySuccessful(
+			$this->groupsQuery(
+				[
+					'where' => [
+						'include' => [ $this->create_group_id( [ 'status' => 'private' ] ) ],
+						'status'  => [ 'PRIVATE' ],
+					],
 				]
-			]
-		) )
+			)
+		)
 			->notHasEdges()
 			->notHasNodes();
 	}
@@ -51,14 +55,16 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$hidden_group_id = $this->create_group_id( [ 'status' => 'hidden' ] );
 
-		$this->assertQuerySuccessful( $this->groupsQuery(
-			[
-				'where' => [
-					'include' => [ $hidden_group_id ],
-					'status'  => [ 'HIDDEN']
+		$this->assertQuerySuccessful(
+			$this->groupsQuery(
+				[
+					'where' => [
+						'include' => [ $hidden_group_id ],
+						'status'  => [ 'HIDDEN' ],
+					],
 				]
-			]
-		) )
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $hidden_group_id );
 	}
@@ -87,10 +93,14 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 		$this->create_group_id();
 
-		$this->assertQuerySuccessful( $this->groupsQuery( [
-			'first' => 1,
-			'after' => ''
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->groupsQuery(
+				[
+					'first' => 1,
+					'after' => '',
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $this->group )
 			->hasNextPage();
@@ -115,10 +125,14 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->create_group_id();
 		$g3 = $this->create_group_id();
 
-		$this->assertQuerySuccessful( $this->groupsQuery( [
-			'last'   => 1,
-			'before' => $this->key_to_cursor( $g3 )
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->groupsQuery(
+				[
+					'last'   => 1,
+					'before' => $this->key_to_cursor( $g3 ),
+				]
+			)
+		)
 			->HasEdges()
 			->hasNextPage()
 			->firstEdgeNodeField( 'databaseId', $g1 );

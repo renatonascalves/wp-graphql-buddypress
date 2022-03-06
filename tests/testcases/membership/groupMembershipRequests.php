@@ -37,16 +37,31 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u2 = $this->factory->user->create();
 		$u3 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->group, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->group, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->group, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->group,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->group,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->group,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->group,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->group,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -59,16 +74,31 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u2 = $this->factory->user->create();
 		$u3 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -81,16 +111,31 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u2 = $this->factory->user->create();
 		$u3 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->random_user );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -104,9 +149,24 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u3 = $this->factory->user->create();
 		$u4 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->add_user_to_group( $u4, $this->private_group_id, [ 'is_admin' => true ] );
 
@@ -114,8 +174,8 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -129,17 +189,32 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u3 = $this->factory->user->create();
 		$u4 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->add_user_to_group( $u4, $this->private_group_id, [ 'is_mod' => true ] );
 		$this->bp->set_current_user( $u4 );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -150,14 +225,19 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	public function test_get_group_membership_requests_as_requestor() {
 		$u = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u,
+			]
+		);
 
 		$this->bp->set_current_user( $u );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -174,17 +254,32 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u3 = $this->factory->user->create();
 		$u4 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->add_user_to_group( $u4, $this->private_group_id );
 		$this->bp->set_current_user( $u4 );
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -198,20 +293,35 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u3 = $this->factory->user->create();
 		$u4 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
 		// Try a user without a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
+				'id'    => $this->private_group_id,
 				'where' => [
 					'userId' => $u4,
-					'type'   => 'REQUEST'
-				]
+					'type'   => 'REQUEST',
+				],
 			]
 		);
 
@@ -221,11 +331,11 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		// Try another user with a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
+				'id'    => $this->private_group_id,
 				'where' => [
 					'userId' => $u1,
-					'type'   => 'REQUEST'
-				]
+					'type'   => 'REQUEST',
+				],
 			]
 		);
 
@@ -236,8 +346,8 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	public function test_get_group_membership_requests_unauthenticated() {
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id' => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ]
+				'id'    => $this->private_group_id,
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -250,9 +360,24 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u2 = $this->factory->user->create();
 		$u3 = $this->factory->user->create();
 
-		$r1 = groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		$r2 = groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		$r1 = groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		$r2 = groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -261,7 +386,7 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 				'id'     => $this->private_group_id,
 				'last'   => 1,
 				'before' => $this->key_to_cursor( $r2 ),
-				'where' => [ 'type' => 'REQUEST' ]
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -274,9 +399,24 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$u2 = $this->factory->user->create();
 		$u3 = $this->factory->user->create();
 
-		$r1 = groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u1 ] );
-		$r2 = groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u2 ] );
-		groups_send_membership_request( [ 'group_id' => $this->private_group_id, 'user_id' => $u3 ] );
+		$r1 = groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u1,
+			]
+		);
+		$r2 = groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u2,
+			]
+		);
+		groups_send_membership_request(
+			[
+				'group_id' => $this->private_group_id,
+				'user_id'  => $u3,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -284,7 +424,7 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 			[
 				'id'    => $this->private_group_id,
 				'after' => $this->key_to_cursor( $r1 ),
-				'where' => [ 'type' => 'REQUEST' ]
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 

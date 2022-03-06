@@ -18,10 +18,30 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->g1 = $this->bp_factory->group->create( [ 'status' => 'private', 'creator_id' => $this->random_user ] );
-		$this->g2 = $this->bp_factory->group->create( [ 'status' => 'private', 'creator_id' => $this->random_user ] );
-		$this->g3 = $this->bp_factory->group->create( [ 'status' => 'private', 'creator_id' => $this->random_user ] );
-		$this->g4 = $this->bp_factory->group->create( [ 'status' => 'private', 'creator_id' => $this->random_user ] );
+		$this->g1 = $this->bp_factory->group->create(
+			[
+				'status'     => 'private',
+				'creator_id' => $this->random_user,
+			]
+		);
+		$this->g2 = $this->bp_factory->group->create(
+			[
+				'status'     => 'private',
+				'creator_id' => $this->random_user,
+			]
+		);
+		$this->g3 = $this->bp_factory->group->create(
+			[
+				'status'     => 'private',
+				'creator_id' => $this->random_user,
+			]
+		);
+		$this->g4 = $this->bp_factory->group->create(
+			[
+				'status'     => 'private',
+				'creator_id' => $this->random_user,
+			]
+		);
 	}
 
 	public function test_get_user_invites() {
@@ -37,7 +57,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
-				'where' => [ 'type' => 'INVITE' ]
+				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -58,7 +78,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
-				'where' => [ 'type' => 'INVITE' ]
+				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -77,7 +97,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
-				'where' => [ 'type' => 'INVITE' ]
+				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -108,7 +128,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'where' => [
 					'itemId' => $this->g3,
 					'type'   => 'INVITE',
-				]
+				],
 			]
 		);
 
@@ -130,7 +150,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'where' => [
 					'itemId' => $this->g2,
 					'type'   => 'INVITE',
-				]
+				],
 			]
 		);
 
@@ -140,15 +160,25 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_user_group_requests() {
 		$u1 = $this->factory->user->create();
-		$r1 = groups_send_membership_request( [ 'group_id' => $this->g1, 'user_id' => $u1 ] );
-		$r2 = groups_send_membership_request( [ 'group_id' => $this->g2, 'user_id' => $u1 ] );
+		$r1 = groups_send_membership_request(
+			[
+				'group_id' => $this->g1,
+				'user_id'  => $u1,
+			]
+		);
+		$r2 = groups_send_membership_request(
+			[
+				'group_id' => $this->g2,
+				'user_id'  => $u1,
+			]
+		);
 
 		$this->bp->set_current_user( $u1 );
 
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
-				'where' => [ 'type' => 'REQUEST' ]
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -165,15 +195,25 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_user_group_requests_as_admin() {
 		$u1 = $this->factory->user->create();
-		$r1 = groups_send_membership_request( [ 'group_id' => $this->g1, 'user_id' => $u1 ] );
-		$r2 = groups_send_membership_request( [ 'group_id' => $this->g2, 'user_id' => $u1 ] );
+		$r1 = groups_send_membership_request(
+			[
+				'group_id' => $this->g1,
+				'user_id'  => $u1,
+			]
+		);
+		$r2 = groups_send_membership_request(
+			[
+				'group_id' => $this->g2,
+				'user_id'  => $u1,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
-				'where' => [ 'type' => 'REQUEST' ]
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -191,8 +231,18 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_user_group_requests_from_specific_group() {
 		$u1 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->g1, 'user_id' => $u1 ] );
-		$request = groups_send_membership_request( [ 'group_id' => $this->g2, 'user_id' => $u1 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->g1,
+				'user_id'  => $u1,
+			]
+		);
+		$request = groups_send_membership_request(
+			[
+				'group_id' => $this->g2,
+				'user_id'  => $u1,
+			]
+		);
 
 		$this->bp->set_current_user( $u1 );
 
@@ -201,8 +251,8 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
 				'where' => [
 					'itemId' => $this->g2,
-					'type'   => 'REQUEST'
-				]
+					'type'   => 'REQUEST',
+				],
 			]
 		);
 
@@ -214,7 +264,12 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_user_group_requests_from_invalid_group() {
 		$u1 = $this->factory->user->create();
 
-		groups_send_membership_request( [ 'group_id' => $this->g1, 'user_id' => $u1 ] );
+		groups_send_membership_request(
+			[
+				'group_id' => $this->g1,
+				'user_id'  => $u1,
+			]
+		);
 
 		$this->bp->set_current_user( $u1 );
 
@@ -223,8 +278,8 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 				'id'    => $this->toRelayId( 'user', (string) $u1 ),
 				'where' => [
 					'itemId' => $this->g3,
-					'type'   => 'REQUEST'
-				]
+					'type'   => 'REQUEST',
+				],
 			]
 		);
 
@@ -238,7 +293,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u ),
-				'where' => [ 'type' => 'REQUEST' ]
+				'where' => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -248,7 +303,7 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->getMemberInvitesQuery(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $u ),
-				'where' => [ 'type' => 'INVITE' ]
+				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 

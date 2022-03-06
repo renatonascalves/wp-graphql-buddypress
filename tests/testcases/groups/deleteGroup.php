@@ -22,8 +22,8 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->group_id = $this->bp_factory->group->create(
 			[
-				'name'        => 'Deleted Group',
-				'creator_id'  => $this->user,
+				'name'       => 'Deleted Group',
+				'creator_id' => $this->user,
 			]
 		);
 	}

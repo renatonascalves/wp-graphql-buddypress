@@ -51,14 +51,14 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$field_id_1 = $this->bp_factory->xprofile_field->create(
 			[
 				'name'           => $this->field_name,
-				'field_group_id' => $u1
+				'field_group_id' => $u1,
 			]
 		);
 
 		$field_id_2 = $this->bp_factory->xprofile_field->create(
 			[
 				'name'           => 'Another field.',
-				'field_group_id' => $u1
+				'field_group_id' => $u1,
 			]
 		);
 
@@ -68,20 +68,23 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'canDelete', true )
 			->hasField( 'name', $this->name )
 			->hasField( 'description', $this->desc )
-			->hasField( 'fields', [
-				'nodes' => [
-					0 => [
-						'name'       => $this->field_name,
-						'databaseId' => $field_id_1,
-						'groupId'    => $u1,
+			->hasField(
+				'fields',
+				[
+					'nodes' => [
+						0 => [
+							'name'       => $this->field_name,
+							'databaseId' => $field_id_1,
+							'groupId'    => $u1,
+						],
+						1 => [
+							'name'       => 'Another field.',
+							'databaseId' => $field_id_2,
+							'groupId'    => $u1,
+						],
 					],
-					1 => [
-						'name'       => 'Another field.',
-						'databaseId' => $field_id_2,
-						'groupId'    => $u1,
-					]
 				]
-			] );
+			);
 	}
 
 	public function test_xprofile_group_by_invalid_id() {

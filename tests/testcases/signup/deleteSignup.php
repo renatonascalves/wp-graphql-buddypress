@@ -21,7 +21,7 @@ class Test_Signup_deleteSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$a = $this->create_signup_id();
 
-		$this->assertQuerySuccessful(  $this->delete_signup( $a ) )
+		$this->assertQuerySuccessful( $this->delete_signup( $a ) )
 			->hasField( 'deleted', true )
 			->hasField( 'databaseId', $a );
 	}

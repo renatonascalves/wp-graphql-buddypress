@@ -62,23 +62,23 @@ class Test_Invitation_createGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 				'data' => [
 					'createInvitation' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'invite' => [
-							'id'          => $this->toRelayId( 'invitation', (string) $invite->id ),
-							'databaseId'  => $invite->id,
-							'itemId'      => $invite->item_id,
-							'type'        => strtoupper( $invite->type ),
-							'accepted'    => $invite->accepted,
-							'inviteSent'  => $invite->invite_sent,
-							'invitee'     => [
+						'invite'           => [
+							'id'         => $this->toRelayId( 'invitation', (string) $invite->id ),
+							'databaseId' => $invite->id,
+							'itemId'     => $invite->item_id,
+							'type'       => strtoupper( $invite->type ),
+							'accepted'   => $invite->accepted,
+							'inviteSent' => $invite->invite_sent,
+							'invitee'    => [
 								'databaseId' => $this->invitee,
 							],
-							'inviter'     => [
+							'inviter'    => [
 								'databaseId' => $this->inviter,
 							],
-							'group'       => [
+							'group'      => [
 								'databaseId' => $this->private_group_id,
 							],
-							'message'     => $invite->content,
+							'message'    => $invite->content,
 						],
 					],
 				],

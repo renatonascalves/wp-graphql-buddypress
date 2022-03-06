@@ -65,7 +65,14 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$xprofile_group_id = $this->bp_factory->xprofile_group->create();
 
-		$this->assertQuerySuccessful( $this->update_xprofile_group( [ 'groupId' => $xprofile_group_id, 'groupOrder' => 1 ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_xprofile_group(
+				[
+					'groupId'    => $xprofile_group_id,
+					'groupOrder' => 1,
+				]
+			)
+		)
 			->hasField( 'groupOrder', 1 )
 			->hasField( 'databaseId', $xprofile_group_id );
 

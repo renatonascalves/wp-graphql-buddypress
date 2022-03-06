@@ -15,8 +15,8 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_delete_thread_from_sender() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		// Create thread.
 		$message = $this->create_thread_object(
@@ -38,8 +38,8 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_delete_thread_from_recipient() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		// Reply.
 		$message = $this->create_thread_object(
@@ -66,7 +66,7 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_delete_thread_user_without_permission() {
-		$u1 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 

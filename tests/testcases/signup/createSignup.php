@@ -61,9 +61,9 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 				'data' => [
 					'createSignup' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'signup' => [
-							'id'               => $this->toRelayId( 'signup', (string) $signup->id ),
-							'databaseId'       => $signup->id,
+						'signup'           => [
+							'id'         => $this->toRelayId( 'signup', (string) $signup->id ),
+							'databaseId' => $signup->id,
 						],
 					],
 				],

@@ -53,19 +53,19 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 				'data' => [
 					'createInvitation' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'invite' => [
-							'id'          => $this->toRelayId( 'invitation', (string) $invite->id ),
-							'databaseId'  => $invite->id,
-							'itemId'      => $invite->item_id,
-							'type'        => 'REQUEST',
-							'accepted'    => $invite->accepted,
-							'inviteSent'  => $invite->invite_sent,
-							'invitee'     => [
+						'invite'           => [
+							'id'         => $this->toRelayId( 'invitation', (string) $invite->id ),
+							'databaseId' => $invite->id,
+							'itemId'     => $invite->item_id,
+							'type'       => 'REQUEST',
+							'accepted'   => $invite->accepted,
+							'inviteSent' => $invite->invite_sent,
+							'invitee'    => [
 								'databaseId' => $this->requester_id,
 							],
-							'inviter'     => null,
-							'group'       => null,
-							'message'     => $invite->content,
+							'inviter'    => null,
+							'group'      => null,
+							'message'    => $invite->content,
 						],
 					],
 				],
@@ -88,21 +88,21 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 				'data' => [
 					'createInvitation' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'invite' => [
-							'id'          => $this->toRelayId( 'invitation', (string) $invite->id ),
-							'databaseId'  => $invite->id,
-							'itemId'      => $invite->item_id,
-							'type'        => 'REQUEST',
-							'accepted'    => $invite->accepted,
-							'inviteSent'  => $invite->invite_sent,
-							'invitee'     => [
+						'invite'           => [
+							'id'         => $this->toRelayId( 'invitation', (string) $invite->id ),
+							'databaseId' => $invite->id,
+							'itemId'     => $invite->item_id,
+							'type'       => 'REQUEST',
+							'accepted'   => $invite->accepted,
+							'inviteSent' => $invite->invite_sent,
+							'invitee'    => [
 								'databaseId' => $this->requester_id,
 							],
-							'inviter'     => null,
-							'group'       => [
+							'inviter'    => null,
+							'group'      => [
 								'databaseId' => $this->private_group_id,
 							],
-							'message'     => $invite->content,
+							'message'    => $invite->content,
 						],
 					],
 				],
