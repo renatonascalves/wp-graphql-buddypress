@@ -34,12 +34,32 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnect
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\SignupConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupInvitationsConnectionResolver;
 use stdClass;
+use WP_User;
 use BP_Friends_Friendship;
 
 /**
  * Class Factory.
  */
 class Factory {
+
+	/**
+	 * Get the user object, if the ID is valid.
+	 *
+	 * @param int $user_id Supplied user ID.
+	 * @return WP_User|null
+	 */
+	public static function get_user( int $user_id ): ?WP_User {
+		if ( $user_id <= 0 ) {
+			return null;
+		}
+
+		$user = get_userdata( (int) $user_id );
+		if ( empty( $user ) || ! $user->exists() ) {
+			return null;
+		}
+
+		return $user;
+	}
 
 	/**
 	 * Returns an Invitation object.

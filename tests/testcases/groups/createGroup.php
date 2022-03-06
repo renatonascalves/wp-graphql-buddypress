@@ -9,13 +9,6 @@ use WPGraphQL\Utils\Utils;
  */
 class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_create_group() {
 		$this->bp->set_current_user( $this->admin );
 

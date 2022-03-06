@@ -2,16 +2,15 @@
 /**
  * InvitationReject Mutation.
  *
- * @package WPGraphQL\Extensions\BuddyPress\Mutation\Signup
+ * @package WPGraphQL\Extensions\BuddyPress\Mutation\Invites
  * @since 0.0.1-alpha
  */
 
-namespace WPGraphQL\Extensions\BuddyPress\Mutation\Signup;
+namespace WPGraphQL\Extensions\BuddyPress\Mutation\Invites;
 
 use GraphQL\Error\UserError;
-use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
-use WPGraphQL\Extensions\BuddyPress\Model\Signup;
-use BP_Signup;
+use WPGraphQL\Extensions\BuddyPress\Data\InvitationHelper;
+use WPGraphQL\Extensions\BuddyPress\Model\Invitation;
 
 /**
  * InvitationReject Class.
@@ -23,7 +22,7 @@ class InvitationReject {
 	 */
 	public static function register_mutation(): void {
 		register_graphql_mutation(
-			'rejectInvitatio',
+			'rejectInvitation',
 			[
 				'inputFields'         => self::get_input_fields(),
 				'outputFields'        => self::get_output_fields(),
@@ -63,14 +62,14 @@ class InvitationReject {
 		return [
 			'deleted' => [
 				'type'        => 'Boolean',
-				'description' => __( 'The status of the signup deletion.', 'wp-graphql-buddypress' ),
+				'description' => __( 'The status of the invitation deletion.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
 					return (bool) $payload['deleted'];
 				},
 			],
-			'signup'  => [
-				'type'        => 'Signup',
-				'description' => __( 'The deleted signup object.', 'wp-graphql-buddypress' ),
+			'invite'  => [
+				'type'        => 'GroupInvitation',
+				'description' => __( 'The deleted invitation object.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( array $payload ) {
 					return $payload['previousObject'] ?? null;
 				},
@@ -86,27 +85,60 @@ class InvitationReject {
 	public static function mutate_and_get_payload() {
 		return function ( array $input ) {
 
-			// Check and get the signup.
-			$signup = SignupHelper::get_signup_from_input( $input );
+			$invite  = InvitationHelper::get_invitation_from_input( $input );
+			$user_id = bp_loggedin_user_id();
 
-			// Bail now if a user isn't allowed to delete a signup.
-			if ( false === SignupHelper::can_see() ) {
+			// Stop now if user isn't allowed to reject invite.
+			if ( InvitationHelper::can_update_or_delete_invite( $user_id, $invite ) ) {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
-			// Get and save the Signup object before it is deleted.
-			$previous_signup = new Signup( $signup );
+			$previous_invite = new Invitation( $invite );
 
-			$retval = BP_Signup::delete( [ $signup->id ] );
+			if ( 'request' === $input['type'] ) {
+				/**
+				 * If this change is being initiated by the requesting user,
+				 * use the `delete` function.
+				 */
+				if ( $user_id === $invite->user_id ) {
+					$deleted = groups_delete_membership_request( 0, $invite->user_id, $invite->item_id );
 
-			if ( ! empty( $retval['errors'] ) ) {
-				throw new UserError( __( 'Could not delete the signup.', 'wp-graphql-buddypress' ) );
+					/**
+					 * Otherwise, this change is being initiated by a group admin or site admin,
+					 * and we should use the `reject` function.
+					 */
+				} else {
+					$deleted = groups_reject_membership_request( 0, $invite->user_id, $invite->item_id );
+				}
+
+				$error_message = __( 'There was an error rejecting the membership request.', 'wp-graphql-buddypress' );
+			} else {
+				/**
+				 * If this change is being initiated by the invited user,
+				 * use the `reject` function.
+				 */
+				if ( $user_id === $invite->user_id ) {
+					$deleted = groups_reject_invite( $invite->user_id, $invite->item_id, $invite->inviter_id );
+
+					/**
+					 * Otherwise, this change is being initiated by a group admin, site admin,
+					 * or the inviter, and we should use the `uninvite` function.
+					 */
+				} else {
+					$deleted = groups_uninvite_user( $invite->user_id, $invite->item_id, $invite->inviter_id );
+				}
+
+				$error_message = __( 'There was an error rejecting the invitation.', 'wp-graphql-buddypress' );
 			}
 
-			// The deleted signup status and the previous signup object.
+			if ( false === $deleted ) {
+				throw new UserError( $error_message );
+			}
+
+			// The deleted invite status and the previous invite object.
 			return [
 				'deleted'        => true,
-				'previousObject' => $previous_signup,
+				'previousObject' => $previous_invite,
 			];
 		};
 	}

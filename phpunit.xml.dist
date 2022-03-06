@@ -13,6 +13,14 @@
 		</testsuite>
 	</testsuites>
 	<listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>800</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>

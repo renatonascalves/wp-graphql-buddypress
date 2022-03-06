@@ -84,6 +84,9 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
 use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
 
@@ -320,6 +323,11 @@ class TypeRegistry {
 			GroupCreate::register_mutation();
 			GroupDelete::register_mutation();
 			GroupUpdate::register_mutation();
+
+			// Invitation related.
+			InvitationReject::register_mutation();
+			InvitationAccept::register_mutation();
+			InvitationCreate::register_mutation();
 		}
 
 		// XProfile component.
