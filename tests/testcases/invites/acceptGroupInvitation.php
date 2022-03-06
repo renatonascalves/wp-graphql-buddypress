@@ -5,6 +5,7 @@
  *
  * @group invite
  * @group invitation
+ * @group groups
  */
 class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 

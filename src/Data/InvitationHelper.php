@@ -97,6 +97,14 @@ class InvitationHelper {
 			'content'     => $input['message'] ?? null,
 		];
 
+		if ( 'request' === $input['type'] ) {
+			$mutation_args = [
+				'user_id'  => $input['userId'] ?? false,
+				'group_id' => $input['itemId'] ?? false,
+				'content'  => $input['message'] ?? null,
+			];
+		}
+
 		/**
 		 * Allows updating mutation args.
 		 *

@@ -95,28 +95,47 @@ class InvitationCreate {
 	public static function mutate_and_get_payload() {
 		return function( array $input ) {
 
-			$error_message = __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' );
+			$error_message    = __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' );
+			$invalid_id_error = __( 'Invalid member ID.', 'wp-graphql-buddypress' );
 
 			if ( false === is_user_logged_in() ) {
 				throw new UserError( $error_message );
 			}
 
-			$inviter  = Factory::get_user( $input['inviterId'] );
-			$user     = Factory::get_user( $input['userId'] );
-			$group_id = $input['itemId'];
+			$user  = Factory::get_user( $input['userId'] );
+			$group = bp_get_group( $input['itemId'] );
 
-			if ( empty( $user->ID ) || empty( $inviter->ID ) || $user->ID === $inviter->ID ) {
-				throw new UserError( __( 'Invalid member ID.', 'wp-graphql-buddypress' ) );
+			if ( empty( $group->id ) ) {
+				throw new UserError( __( 'Invalid group ID.', 'wp-graphql-buddypress' ) );
 			}
 
-			$can_create = (
-				! bp_current_user_can( 'bp_moderate' )
-				|| ! groups_is_user_admin( $inviter->ID, $group_id )
-				|| ! groups_is_user_mod( $inviter->ID, $group_id )
-			);
+			$group_id = $group->id;
 
-			if ( false === $can_create ) {
-				throw new UserError( $error_message );
+			if ( 'request' === $input['type'] ) {
+
+				if ( empty( $user->ID ) ) {
+					throw new UserError( $invalid_id_error );
+				}
+
+				if ( false === ( bp_loggedin_user_id() === $user->ID || bp_current_user_can( 'bp_moderate' ) ) ) {
+					throw new UserError( $error_message );
+				}
+			} else {
+				$inviter = Factory::get_user( $input['inviterId'] );
+
+				if ( empty( $user->ID ) || empty( $inviter->ID ) || $user->ID === $inviter->ID ) {
+					throw new UserError( $invalid_id_error );
+				}
+
+				$can_create = (
+					! bp_current_user_can( 'bp_moderate' )
+					|| ! groups_is_user_admin( $inviter->ID, $group_id )
+					|| ! groups_is_user_mod( $inviter->ID, $group_id )
+				);
+
+				if ( false === $can_create ) {
+					throw new UserError( $error_message );
+				}
 			}
 
 			$params = InvitationHelper::prepare_invite_args( $input );

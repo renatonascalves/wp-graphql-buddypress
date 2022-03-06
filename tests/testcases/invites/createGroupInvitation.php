@@ -107,6 +107,13 @@ class Test_Invitation_createGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			->expectedErrorMessage( 'Invalid member ID.' );
 	}
 
+	public function test_invite_user_to_group_with_invalid_group_id() {
+		$this->bp->set_current_user( $this->user );
+
+		$this->assertQueryFailed( $this->invite_user_to_group( [ 'itemId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+			->expectedErrorMessage( 'Invalid group ID.' );
+	}
+
 	public function test_group_moderator_invite_user_to_group() {
 		$u = $this->bp_factory->user->create();
 

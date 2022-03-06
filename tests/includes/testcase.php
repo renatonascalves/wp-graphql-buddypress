@@ -634,8 +634,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Delete avatar mutation.
 	 *
-	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param string $object   Object name.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function delete_avatar( string $object, int $objectId ): array {
@@ -677,22 +677,22 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Create a friendship object.
 	 *
-	 * @param int $user_1 Initiator ID.
-	 * @param int $user_2 Friend ID.
+	 * @param int $initiator_id Initiator ID.
+	 * @param int $friend_id    Friend ID.
 	 * @return int
 	 */
-	protected function create_friendship_object( int $user_1 = 0, int $user_2 = 0 ): int {
-		if ( empty( $user_1 ) ) {
-			$user_1 = $this->factory->user->create();
+	protected function create_friendship_object( int $initiator_id = 0, int $friend_id = 0 ): int {
+		if ( empty( $initiator_id ) ) {
+			$initiator_id = $this->factory->user->create();
 		}
 
-		if ( empty( $user_2 ) ) {
-			$user_2 = $this->factory->user->create();
+		if ( empty( $friend_id ) ) {
+			$friend_id = $this->factory->user->create();
 		}
 
 		$friendship                    = new BP_Friends_Friendship();
-		$friendship->initiator_user_id = $user_1;
-		$friendship->friend_user_id    = $user_2;
+		$friendship->initiator_user_id = $initiator_id;
+		$friendship->friend_user_id    = $friend_id;
 		$friendship->is_confirmed      = 0;
 		$friendship->date_created      = bp_core_current_time();
 		$friendship->save();
@@ -737,7 +737,12 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		);
 	}
 
-	public function copy_file( $return = null, $file, $new_file ) {
+	/**
+	 * Copy file.
+	 *
+	 * @source https://core.trac.wordpress.org/browser/tags/5.9/src/wp-admin/includes/file.php#L979
+	 */
+	public function copy_file( $return, $file, $new_file ) {
 		return @copy( $file['tmp_name'], $new_file );
 	}
 }
