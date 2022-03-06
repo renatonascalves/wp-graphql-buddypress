@@ -49,10 +49,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		$last = $this->args['last'] ?? null;
 
 		// Collect the input_fields.
-		$input_fields = [];
-		if ( ! empty( $this->args['where'] ) ) {
-			$input_fields = $this->sanitize_input_fields( $this->args['where'] );
-		}
+		$input_fields = $this->sanitize_input_fields( $this->args['where'] ?? [] );
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
@@ -65,7 +62,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
-		// Assign group when trying to get group members from a group.
+		// Assign group when trying to get members from a group.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
 			$query_args['group_id'] = $this->source->databaseId;
 		}
@@ -100,9 +97,9 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	}
 
 	/**
-	 * Returns an array of group members.
+	 * Returns an array of group member ids.
 	 *
-	 * @return array
+	 * @return int[]
 	 */
 	public function get_ids(): array {
 		$member_ids = wp_list_pluck( $this->query['members'], 'ID' );
@@ -127,7 +124,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			return true;
 		}
 
-		// Moderators.
+		// Moderators as well.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
 			return true;
 		}
@@ -158,7 +155,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 	public function sanitize_input_fields( array $args ): array {
 
 		// Only admins can filter those.
-		// @todo update so that mods are not blocked as weel.
+		// @todo update so that mods are not blocked as well.
 		if (
 			(
 				( ! empty( $args['groupMemberRoles'] ) && 'banned' === $args['groupMemberRoles'][0] )

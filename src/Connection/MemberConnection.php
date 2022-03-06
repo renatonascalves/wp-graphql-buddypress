@@ -18,9 +18,11 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 class MemberConnection {
 
 	/**
-	 * Register connections from the RootQuery to User members.
+	 * Register connections to Users.
 	 */
 	public static function register_connections(): void {
+
+		// Register connection from RootQuery > User.
 		register_graphql_connection(
 			[
 				'fromType'           => 'RootQuery',

@@ -25,10 +25,13 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
+				]
+			);
 	}
 
 	public function test_regular_admins_can_upload_any_group_avatar() {
@@ -41,10 +44,13 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
+				]
+			);
 	}
 
 	public function test_group_admins_can_upload_avatar() {
@@ -60,10 +66,13 @@ class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'group', absint( $this->group ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) ),
+				]
+			);
 	}
 
 	public function test_group_mods_can_not_delete_avatar() {

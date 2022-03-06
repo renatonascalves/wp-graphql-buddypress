@@ -9,13 +9,6 @@ use WPGraphQL\Utils\Utils;
  */
 class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_create_group() {
 		$this->bp->set_current_user( $this->admin );
 
@@ -30,7 +23,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 				'data' => [
 					'createGroup' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'group' => [
+						'group'            => [
 							'id'               => $this->toRelayId( 'group', (string) $group->id ),
 							'databaseId'       => $group->id,
 							'name'             => 'Group Test',
@@ -61,7 +54,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 							),
 							'types'            => null,
 							'attachmentAvatar' => [
-								'full'  => $this->get_avatar_image( 'full', 'group', $group->id ),
+								'full' => $this->get_avatar_image( 'full', 'group', $group->id ),
 							],
 							'attachmentCover'  => null,
 						],

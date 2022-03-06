@@ -200,6 +200,6 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 
 		$operation_name = 'favoriteActivityTest';
 
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) ) ;
+		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
 	}
 }

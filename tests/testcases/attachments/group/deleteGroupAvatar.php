@@ -28,20 +28,26 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQuerySuccessful( $this->delete_avatar( 'GROUP', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Confirm that the group default avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'group', absint( $this->group ) ), 'mystery-group' ) );
@@ -60,17 +66,23 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		$this->assertQuerySuccessful( $this->delete_avatar( 'GROUP', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Confirm that the group default avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'group', absint( $this->group ) ), 'mystery-group' ) );
@@ -92,20 +104,26 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		$thumb = $this->get_avatar_image( 'thumb', 'group', absint( $this->group ) );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Switch to the group admin user here.
 		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQuerySuccessful( $this->delete_avatar( 'GROUP', absint( $this->group ) ) )
 			->hasField( 'deleted', true )
-			->hasField( 'attachment', [
-				'full'  => $full,
-				'thumb' => $thumb,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $full,
+					'thumb' => $thumb,
+				]
+			);
 
 		// Confirm that the group default avatar IS present.
 		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'group', absint( $this->group ) ), 'mystery-group' ) );

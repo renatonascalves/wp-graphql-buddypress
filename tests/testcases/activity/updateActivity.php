@@ -29,7 +29,14 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity( [ 'activityId' => $a, 'component' => 'GROUPS' ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId' => $a,
+					'component'  => 'GROUPS',
+				]
+			)
+		)
 			->hasField( 'component', 'GROUPS' )
 			->hasField( 'databaseId', $a );
 	}
@@ -39,7 +46,14 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity( [ 'activityId' => $a, 'type' => 'ACTIVITY_COMMENT' ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId' => $a,
+					'type'       => 'ACTIVITY_COMMENT',
+				]
+			)
+		)
 			->hasField( 'type', 'ACTIVITY_COMMENT' )
 			->hasField( 'primaryItemId', 0 )
 			->hasField( 'databaseId', $a );
@@ -51,13 +65,15 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity(
-			[
-				'activityId'    => $c,
-				'type'          => 'ACTIVITY_COMMENT',
-				'primaryItemId' => $a
-			]
-		) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId'    => $c,
+					'type'          => 'ACTIVITY_COMMENT',
+					'primaryItemId' => $a,
+				]
+			)
+		)
 			->hasField( 'type', 'ACTIVITY_COMMENT' )
 			->hasField( 'primaryItemId', $a )
 			->hasField( 'databaseId', $c );
@@ -69,11 +85,25 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->bp->set_current_user( $this->admin );
 
 		// Test without content.
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $a, 'content' => '' ] ) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId' => $a,
+					'content'    => '',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Please, enter the content of the activity.' );
 
 		// Test without a type.
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $a, 'type' => '' ] ) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId' => $a,
+					'type'       => '',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Variable "$type" got invalid value (empty string); Expected type ActivityTypeEnum.' );
 	}
 
@@ -112,7 +142,14 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity( [ 'activityId' => $a, 'primaryItemId' => $g ] ) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId'    => $a,
+					'primaryItemId' => $g,
+				]
+			)
+		)
 			->hasField( 'content', 'Updated Activity content' )
 			->hasField( 'primaryItemId', $g )
 			->hasField( 'databaseId', $a );
@@ -131,14 +168,16 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQuerySuccessful( $this->update_activity(
-			[
-				'activityId'    => $c,
-				'primaryItemId' => $a,
-				'type'          => 'ACTIVITY_COMMENT',
-				'content'       => 'Updated commment',
-			]
-		) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId'    => $c,
+					'primaryItemId' => $a,
+					'type'          => 'ACTIVITY_COMMENT',
+					'content'       => 'Updated commment',
+				]
+			)
+		)
 			->hasField( 'content', 'Updated commment' )
 			->hasField( 'primaryItemId', $a )
 			->hasField( 'parentDatabaseId', $a )
@@ -156,14 +195,16 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			]
 		);
 
-		$this->assertQueryFailed( $this->update_activity(
-			[
-				'activityId'    => $c,
-				'primaryItemId' => $a,
-				'type'          => 'ACTIVITY_COMMENT',
-				'content'       => 'Updated commment',
-			]
-		) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId'    => $c,
+					'primaryItemId' => $a,
+					'type'          => 'ACTIVITY_COMMENT',
+					'content'       => 'Updated commment',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
@@ -180,14 +221,16 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity(
-			[
-				'activityId'    => $c,
-				'primaryItemId' => $a,
-				'type'          => 'ACTIVITY_COMMENT',
-				'content'       => 'Updated commment',
-			]
-		) )
+		$this->assertQuerySuccessful(
+			$this->update_activity(
+				[
+					'activityId'    => $c,
+					'primaryItemId' => $a,
+					'type'          => 'ACTIVITY_COMMENT',
+					'content'       => 'Updated commment',
+				]
+			)
+		)
 			->hasField( 'content', 'Updated commment' )
 			->hasField( 'primaryItemId', $a )
 			->hasField( 'parentDatabaseId', $a )
@@ -207,14 +250,16 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->update_activity(
-			[
-				'activityId'    => $c,
-				'primaryItemId' => $a,
-				'type'          => 'ACTIVITY_COMMENT',
-				'content'       => 'Updated commment',
-			]
-		) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId'    => $c,
+					'primaryItemId' => $a,
+					'type'          => 'ACTIVITY_COMMENT',
+					'content'       => 'Updated commment',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
@@ -232,11 +277,25 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->bp->set_current_user( $this->user );
 
 		// Test without content.
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $c, 'content' => '' ] ) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId' => $c,
+					'content'    => '',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Please, enter the content of the activity.' );
 
 		// Test without a type.
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $c, 'type' => '' ] ) )
+		$this->assertQueryFailed(
+			$this->update_activity(
+				[
+					'activityId' => $c,
+					'type'       => '',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Variable "$type" got invalid value (empty string); Expected type ActivityTypeEnum.' );
 	}
 

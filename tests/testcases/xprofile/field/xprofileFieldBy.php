@@ -59,12 +59,15 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 			->hasField( 'isRequired', false )
 			->hasField( 'isDefaultOption', false )
 			->hasField( 'visibilityLevel', 'PUBLIC' )
-			->hasField( 'value', [
-				'raw'          => 'foo',
-				'unserialized' => [
-					'foo',
-				],
-			] );
+			->hasField(
+				'value',
+				[
+					'raw'          => 'foo',
+					'unserialized' => [
+						'foo',
+					],
+				]
+			);
 	}
 
 	public function test_get_xprofile_field_with_invalid_id() {
@@ -116,35 +119,41 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful( $this->get_xprofile_field( $xprofile_field_id ) )
 			->hasField( 'databaseId', $xprofile_field_id )
 			->hasField( 'groupId', $this->xprofile_group_id )
-			->hasField( 'value', [
-				'raw'          => 'a:2:{i:0;s:8:"Option 1";i:1;s:8:"Option 3";}',
-				'unserialized' => [
-					'Option 1',
-					'Option 3'
-				],
-			] )
-			->hasField( 'options', [
-				'nodes' => [
-					[
-						'name'       => 'Option 1',
-						'databaseId'    => $option1,
-						'groupId'    => $this->xprofile_group_id,
-						'isRequired' => false,
+			->hasField(
+				'value',
+				[
+					'raw'          => 'a:2:{i:0;s:8:"Option 1";i:1;s:8:"Option 3";}',
+					'unserialized' => [
+						'Option 1',
+						'Option 3',
 					],
-					[
-						'name'       => 'Option 2',
-						'databaseId'    => $option2,
-						'groupId'    => $this->xprofile_group_id,
-						'isRequired' => true,
+				]
+			)
+			->hasField(
+				'options',
+				[
+					'nodes' => [
+						[
+							'name'       => 'Option 1',
+							'databaseId' => $option1,
+							'groupId'    => $this->xprofile_group_id,
+							'isRequired' => false,
+						],
+						[
+							'name'       => 'Option 2',
+							'databaseId' => $option2,
+							'groupId'    => $this->xprofile_group_id,
+							'isRequired' => true,
+						],
+						[
+							'name'       => 'Option 3',
+							'databaseId' => $option3,
+							'groupId'    => $this->xprofile_group_id,
+							'isRequired' => false,
+						],
 					],
-					[
-						'name'       => 'Option 3',
-						'databaseId'    => $option3,
-						'groupId'    => $this->xprofile_group_id,
-						'isRequired' => false,
-					],
-				],
-			] );
+				]
+			);
 	}
 
 	/**

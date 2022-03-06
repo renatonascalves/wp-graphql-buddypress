@@ -30,7 +30,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,
@@ -74,7 +74,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$response = $this->create_activity(
 			[
 				'primaryItemId' => $g,
-				'component'     => strtoupper( buddypress()->groups->id )
+				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
 
@@ -87,7 +87,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,
@@ -113,7 +113,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			[
 				'primaryItemId' => $g,
 				'userId'        => $this->user,
-				'component'     => strtoupper( buddypress()->groups->id )
+				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
 
@@ -132,7 +132,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			[
 				'primaryItemId' => $g,
 				'userId'        => $this->user,
-				'component'     => strtoupper( buddypress()->groups->id )
+				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
 
@@ -145,7 +145,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,
@@ -170,7 +170,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$response = $this->create_activity(
 			[
 				'primaryItemId' => $g,
-				'component'     => strtoupper( buddypress()->groups->id )
+				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
 
@@ -183,7 +183,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,
@@ -208,7 +208,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$response = $this->create_activity(
 			[
 				'primaryItemId' => $g,
-				'component'     => strtoupper( buddypress()->groups->id )
+				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
 
@@ -221,7 +221,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,
@@ -247,7 +247,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			[
 				'primaryItemId' => $a,
 				'content'       => 'Activity comment',
-				'type'          => strtoupper( 'activity_comment' )
+				'type'          => strtoupper( 'activity_comment' ),
 			]
 		);
 
@@ -260,7 +260,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => $a,
@@ -279,7 +279,12 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 	public function test_create_activity_comment_in_a_group() {
 		$g = $this->create_group_id( [ 'status' => 'hidden' ] );
-		$a = $this->create_activity_id( [ 'item_id' => $g, 'user_id' => $this->user ] );
+		$a = $this->create_activity_id(
+			[
+				'item_id' => $g,
+				'user_id' => $this->user,
+			]
+		);
 
 		$this->bp->add_user_to_group( $this->random_user, $g );
 		$this->bp->set_current_user( $this->random_user );
@@ -302,7 +307,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => $a,
@@ -346,7 +351,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				'data' => [
 					'createActivity' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'activity' => [
+						'activity'         => [
 							'id'               => $this->toRelayId( 'activity', (string) $activity->id ),
 							'databaseId'       => $activity->id,
 							'parentDatabaseId' => 0,

@@ -5,7 +5,7 @@
  *
  * @group members
  */
-class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase  {
+class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Set up.

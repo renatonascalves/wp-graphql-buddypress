@@ -159,7 +159,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return (array) apply_filters(
-			'graphql_activityies_connection_query_args',
+			'graphql_activities_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,

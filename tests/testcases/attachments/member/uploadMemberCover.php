@@ -25,10 +25,13 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
+					'thumb' => null,
+				]
+			);
 
 		// Confirm the member path.
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/members' ) );
@@ -45,10 +48,13 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
-				'thumb' => null,
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
+					'thumb' => null,
+				]
+			);
 
 		// Confirm the member path.
 		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/members' ) );

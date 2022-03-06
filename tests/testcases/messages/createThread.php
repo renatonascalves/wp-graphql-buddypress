@@ -18,8 +18,8 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_thread() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
@@ -36,7 +36,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 				'data' => [
 					'createThread' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'thread' => [
+						'thread'           => [
 							'id'         => $this->toRelayId( 'thread', (string) $thread->thread_id ),
 							'databaseId' => $thread->thread_id,
 							'recipients' => [
@@ -48,22 +48,22 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 									1 => [
 										'id'         => $this->toRelayId( 'user', (string) $u1 ),
 										'databaseId' => $u1,
-									]
+									],
 								],
 							],
-							'messages' => [
+							'messages'   => [
 								'nodes' => [
 									0 => [
-										'id'          => $this->toRelayId( 'message', (string) $thread->last_message_id ),
-										'threadId'    => $thread->thread_id,
-										'databaseId'  => $thread->last_message_id,
-										'sender'      => [
+										'id'         => $this->toRelayId( 'message', (string) $thread->last_message_id ),
+										'threadId'   => $thread->thread_id,
+										'databaseId' => $thread->last_message_id,
+										'sender'     => [
 											'id'         => $this->toRelayId( 'user', (string) $u1 ),
 											'databaseId' => $u1,
 										],
-										'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->last_message_subject ) ),
-										'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->last_message_content ) ),
-										'isStarred'   => false,
+										'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->last_message_subject ) ),
+										'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->last_message_content ) ),
+										'isStarred'  => false,
 									],
 								],
 							],
@@ -76,8 +76,8 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_message_to_already_existent_thread() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
@@ -91,7 +91,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			[
 				'threadId'   => $r1['data']['createThread']['thread']['databaseId'],
 				'message'    => 'Another message',
-				'recipients' => [ $u1 ]
+				'recipients' => [ $u1 ],
 			]
 		);
 
@@ -106,7 +106,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 				'data' => [
 					'createThread' => [
 						'clientMutationId' => $this->client_mutation_id,
-						'thread' => [
+						'thread'           => [
 							'id'         => $this->toRelayId( 'thread', (string) $thread->thread_id ),
 							'databaseId' => $thread->thread_id,
 							'recipients' => [
@@ -121,31 +121,31 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 									],
 								],
 							],
-							'messages' => [
+							'messages'   => [
 								'nodes' => [
 									0 => [
-										'id'          => $this->toRelayId( 'message', (string) $thread->messages[0]->id ),
-										'threadId'    => $thread->thread_id,
-										'databaseId'  => $thread->messages[0]->id,
-										'sender'      => [
+										'id'         => $this->toRelayId( 'message', (string) $thread->messages[0]->id ),
+										'threadId'   => $thread->thread_id,
+										'databaseId' => $thread->messages[0]->id,
+										'sender'     => [
 											'id'         => $this->toRelayId( 'user', (string) $u1 ),
 											'databaseId' => $u1,
 										],
-										'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->messages[0]->subject ) ),
-										'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->messages[0]->message ) ),
-										'isStarred'   => false,
+										'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->messages[0]->subject ) ),
+										'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->messages[0]->message ) ),
+										'isStarred'  => false,
 									],
 									1 => [
-										'id'          => $this->toRelayId( 'message', (string) $thread->messages[1]->id ),
-										'threadId'    => $thread->thread_id,
-										'databaseId'  => $thread->messages[1]->id,
-										'sender'      => [
+										'id'         => $this->toRelayId( 'message', (string) $thread->messages[1]->id ),
+										'threadId'   => $thread->thread_id,
+										'databaseId' => $thread->messages[1]->id,
+										'sender'     => [
 											'id'         => $this->toRelayId( 'user', (string) $u2 ),
 											'databaseId' => $u2,
 										],
-										'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->messages[1]->subject ) ),
-										'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->messages[1]->message ) ),
-										'isStarred'   => false,
+										'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $thread->messages[1]->subject ) ),
+										'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $thread->messages[1]->message ) ),
+										'isStarred'  => false,
 									],
 								],
 							],
@@ -158,9 +158,9 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_message_to_already_existent_thread_with_invalid_user() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
-		$u3 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+		$u3 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
@@ -174,7 +174,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			[
 				'threadId'   => $r1['data']['createThread']['thread']['databaseId'],
 				'message'    => 'Another message',
-				'recipients' => [ $u1 ]
+				'recipients' => [ $u1 ],
 			]
 		);
 
@@ -183,8 +183,8 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_message_with_invalid_thread_id() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
@@ -192,7 +192,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			[
 				'threadId'   => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER,
 				'message'    => 'Another message',
-				'recipients' => [ $u2 ]
+				'recipients' => [ $u2 ],
 			]
 		);
 
@@ -201,34 +201,48 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_thread_user_not_logged_in() {
-		$u1 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
 
 		$this->assertQueryFailed( $this->create_thread( [ 'recipients' => [ $u1 ] ] ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_create_thread_with_null_message_field() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
-		$this->assertQueryFailed( $this->create_thread( [ 'recipients' => [ $u2 ], 'message' => null ] ) )
+		$this->assertQueryFailed(
+			$this->create_thread(
+				[
+					'recipients' => [ $u2 ],
+					'message'    => null,
+				]
+			)
+		)
 			->expectedErrorMessage( 'Variable "$message" of non-null type "String!" must not be null.' );
 	}
 
 	public function test_create_thread_with_empty_message_field() {
-		$u1 =  $this->bp_factory->user->create();
-		$u2 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
-		$this->assertQueryFailed( $this->create_thread( [ 'recipients' => [ $u2 ], 'message' => '' ] ) )
+		$this->assertQueryFailed(
+			$this->create_thread(
+				[
+					'recipients' => [ $u2 ],
+					'message'    => '',
+				]
+			)
+		)
 			->expectedErrorMessage( 'Please, enter the content of the thread message.' );
 	}
 
 	public function test_create_thread_with_empty_recipients_field() {
-		$u1 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 
@@ -237,7 +251,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_create_thread_with_invalid_recipient() {
-		$u1 =  $this->bp_factory->user->create();
+		$u1 = $this->bp_factory->user->create();
 
 		$this->bp->set_current_user( $u1 );
 

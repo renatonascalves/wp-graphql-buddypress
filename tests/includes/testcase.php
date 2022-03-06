@@ -84,8 +84,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up(): void {
+		parent::set_up();
 
 		/**
 		 * Reset the WPGraphQL schema before each test.
@@ -139,7 +139,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Wrapper for the "GraphQLRelay\Relay::toGlobalId()" function.
 	 *
 	 * @param string $type Type.
-     * @param string $id   ID.
+	 * @param string $id   ID.
 	 * @return string
 	 */
 	public function toRelayId( $type, $id ): string {
@@ -180,7 +180,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return self
 	 */
 	public function expectedErrorMessage( string $message ): self {
-		$this->assertSame( $message, $this->response['errors'][0]['message'] ?? '' );
+		$this->assertSame( $message, $this->response['errors'][0]['message'] ?: '' );
 
 		return $this;
 	}
@@ -226,14 +226,14 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Get a field value from response.
+	 * Get a field value from the response.
 	 *
 	 * @param string $object_field Object field.
 	 * @return mixed
 	 */
 	protected function get_field_value_from_response( string $object_field ) {
-		foreach( $this->response['data'] as $operationName ) {
-			foreach( $operationName as $field => $value ) {
+		foreach ( $this->response['data'] as $fields ) {
+			foreach ( $fields as $field => $value ) {
 				if ( $object_field === $field ) {
 					$object = [ $field => $value ];
 					break;
@@ -260,7 +260,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Check if field, and its content, exists in the first node of an edge.
 	 *
 	 * @param string $field Field.
-	 * @param mixed $field_content Field Content.
+	 * @param mixed  $field_content Field Content.
 	 * @return self
 	 */
 	protected function firstEdgeNodeField( string $field, $field_content ): self {
@@ -275,7 +275,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Check if field, and its content, exists in the first node of an Node.
 	 *
 	 * @param string $field Field.
-	 * @param mixed $field_content Field Content.
+	 * @param mixed  $field_content Field Content.
 	 * @return self
 	 */
 	protected function firstNodesNodeField( string $field, $field_content ): self {
@@ -406,9 +406,29 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Populate group with invites.
+	 *
+	 * @param int[]    $users      Array of user ids.
+	 * @param int|null $group_id   Optional. Group ID.
+	 * @param int|null $inviter_id Optional. Inviter ID.
+	 */
+	protected function populate_group_with_invites( $users, $group_id = null, $inviter_id = null ): void {
+		foreach ( $users as $user_id ) {
+			groups_invite_user(
+				[
+					'user_id'     => $user_id,
+					'group_id'    => $group_id ?? $this->group,
+					'inviter_id'  => $inviter_id ?? $this->user,
+					'send_invite' => 1,
+				]
+			);
+		}
+	}
+
+	/**
 	 * Set current user based on MU environment.
 	 */
-	protected function set_user() {
+	protected function set_user(): void {
 		if ( is_multisite() ) {
 			$this->bp->grant_super_admin( $this->user );
 			$this->bp->set_current_user( $this->user );
@@ -427,10 +447,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->bp_factory->group->create(
 			array_merge(
 				[
-					'slug'         => 'group-test',
-					'name'         => 'Group Test',
-					'description'  => 'Group Description',
-					'creator_id'   => $this->admin,
+					'slug'        => 'group-test',
+					'name'        => 'Group Test',
+					'description' => 'Group Description',
+					'creator_id'  => $this->admin,
 				],
 				$args
 			)
@@ -476,7 +496,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Delete cover.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function delete_cover( string $object, int $objectId ): array {
@@ -519,7 +539,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Upload avatar mutation.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function upload_avatar( string $object, int $objectId ): array {
@@ -554,7 +574,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 			'file'             => [
 				'fileName' => $this->image_file,
-				'mimeType' => 'IMAGE_JPEG'
+				'mimeType' => 'IMAGE_JPEG',
 			],
 		];
 
@@ -567,7 +587,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Upload cover mutation.
 	 *
 	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function upload_cover( string $object, int $objectId ): array {
@@ -602,7 +622,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 			'file'             => [
 				'fileName' => $this->image_file,
-				'mimeType' => 'IMAGE_JPEG'
+				'mimeType' => 'IMAGE_JPEG',
 			],
 		];
 
@@ -614,8 +634,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Delete avatar mutation.
 	 *
-	 * @param string $object Object.
-	 * @param int $objectId Object ID.
+	 * @param string $object   Object name.
+	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
 	protected function delete_avatar( string $object, int $objectId ): array {
@@ -657,22 +677,22 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Create a friendship object.
 	 *
-	 * @param int $user_1 Initiator ID.
-	 * @param int $user_2 Friend ID.
+	 * @param int $initiator_id Initiator ID.
+	 * @param int $friend_id    Friend ID.
 	 * @return int
 	 */
-	protected function create_friendship_object( int $user_1 = 0, int $user_2 = 0 ): int {
-		if ( empty( $user_1 ) ) {
-			$user_1 = $this->factory->user->create();
+	protected function create_friendship_object( int $initiator_id = 0, int $friend_id = 0 ): int {
+		if ( empty( $initiator_id ) ) {
+			$initiator_id = $this->factory->user->create();
 		}
 
-		if ( empty( $user_2 ) ) {
-			$user_2 = $this->factory->user->create();
+		if ( empty( $friend_id ) ) {
+			$friend_id = $this->factory->user->create();
 		}
 
 		$friendship                    = new BP_Friends_Friendship();
-		$friendship->initiator_user_id = $user_1;
-		$friendship->friend_user_id    = $user_2;
+		$friendship->initiator_user_id = $initiator_id;
+		$friendship->friend_user_id    = $friend_id;
 		$friendship->is_confirmed      = 0;
 		$friendship->date_created      = bp_core_current_time();
 		$friendship->save();
@@ -685,7 +705,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @param string $size Image size.
 	 * @param string $object Object (group/blog/user).
-	 * @param int $item_id Item ID.
+	 * @param int    $item_id Item ID.
 	 * @return string
 	 */
 	protected function get_avatar_image( string $size, string $object, int $item_id ): string {
@@ -704,7 +724,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Get cover image.
 	 *
 	 * @param string $object Object (members/groups).
-	 * @param int $item_id Item ID.
+	 * @param int    $item_id Item ID.
 	 * @return string
 	 */
 	protected function get_cover_image( string $object, int $item_id ): string {
@@ -717,7 +737,12 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		);
 	}
 
-	public function copy_file( $return = null, $file, $new_file ) {
+	/**
+	 * Copy file.
+	 *
+	 * @source https://core.trac.wordpress.org/browser/tags/5.9/src/wp-admin/includes/file.php#L979
+	 */
+	public function copy_file( $return, $file, $new_file ) {
 		return @copy( $file['tmp_name'], $new_file );
 	}
 }

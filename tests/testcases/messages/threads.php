@@ -50,7 +50,7 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->threadsQuery( [ 'where' => [ 'userId' => $this->admin, ] ] ) )
+		$this->assertQuerySuccessful( $this->threadsQuery( [ 'where' => [ 'userId' => $this->admin ] ] ) )
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $thread->thread_id );
 	}
@@ -177,10 +177,14 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->threadsQuery( [
-			'first' => 1,
-			'after' => ''
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->threadsQuery(
+				[
+					'first' => 1,
+					'after' => '',
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $t1->thread_id )
 			->hasNextPage();
@@ -285,10 +289,14 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->threadsQuery( [
-			'last'   => 1,
-			'before' => $this->key_to_cursor( $t2->thread_id ),
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->threadsQuery(
+				[
+					'last'   => 1,
+					'before' => $this->key_to_cursor( $t2->thread_id ),
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $t1->thread_id )
 			->hasNextPage();

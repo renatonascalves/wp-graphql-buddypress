@@ -24,8 +24,10 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $u1 ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $u1 ] ],
 				],
 			);
 	}
@@ -44,14 +46,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'excludeBanned' => true ]
+				'where' => [ 'excludeBanned' => true ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $u1 ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $u1 ] ],
 				],
 			);
 	}
@@ -63,7 +67,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'excludeBanned' => true ]
+				'where' => [ 'excludeBanned' => true ],
 			]
 		);
 
@@ -83,14 +87,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'exclude' => $u1 ]
+				'where' => [ 'exclude' => $u1 ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ],
 				],
 			);
 	}
@@ -110,14 +116,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'excludeAdminsMods' => true ]
+				'where' => [ 'excludeAdminsMods' => true ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ],
 				],
 			);
 	}
@@ -137,14 +145,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'groupMemberRoles' => 'MOD' ]
+				'where' => [ 'groupMemberRoles' => 'MOD' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $u2 ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $u2 ] ],
 				],
 			);
 	}
@@ -158,14 +168,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'groupMemberRoles' => 'MEMBER' ]
+				'where' => [ 'groupMemberRoles' => 'MEMBER' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ],
 				],
 			);
 	}
@@ -186,14 +198,16 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'groupMemberRoles' => 'BANNED' ]
+				'where' => [ 'groupMemberRoles' => 'BANNED' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
-					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ]
+			->hasField(
+				'members',
+				[
+					'nodes' => [ 0 => [ 'userId' => $this->random_user ] ],
 				],
 			);
 	}
@@ -214,7 +228,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'groupMemberRoles' => 'BANNED' ]
+				'where' => [ 'groupMemberRoles' => 'BANNED' ],
 			]
 		);
 
@@ -222,11 +236,11 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->expectedErrorMessage( 'Sorry, you do not have the necessary permissions to filter with this param.' );
 	}
 
-	public function test_get_group_members_aphabetically() {
+	public function test_get_group_members_alphabetically() {
 		$this->bp->set_current_user( $this->admin );
 
-		$u1 = $this->bp_factory->user->create( [ 'name' => 'Jorge' ]);
-		$u2 = $this->bp_factory->user->create( [ 'name' => 'Alfred' ]);
+		$u1 = $this->bp_factory->user->create( [ 'name' => 'Jorge' ] );
+		$u2 = $this->bp_factory->user->create( [ 'name' => 'Alfred' ] );
 		$this->bp->add_user_to_group( $u1, $this->group );
 		$this->bp->add_user_to_group( $u2, $this->group );
 
@@ -234,17 +248,19 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'type' => 'ALPHABETICAL' ]
+				'where' => [ 'type' => 'ALPHABETICAL' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
+			->hasField(
+				'members',
+				[
 					'nodes' => [
 						0 => [ 'userId' => $u1 ],
-						1 => [ 'userId' => $u2 ]
-					]
+						1 => [ 'userId' => $u2 ],
+					],
 				],
 			);
 	}
@@ -261,17 +277,19 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'type' => 'FIRST_JOINED' ]
+				'where' => [ 'type' => 'FIRST_JOINED' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
+			->hasField(
+				'members',
+				[
 					'nodes' => [
 						0 => [ 'userId' => $u1 ],
-						1 => [ 'userId' => $u2 ]
-					]
+						1 => [ 'userId' => $u2 ],
+					],
 				],
 			);
 	}
@@ -289,17 +307,19 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response  = $this->get_group_members(
 			[
 				'id'    => $global_id,
-				'where' => [ 'type' => 'LAST_JOINED' ]
+				'where' => [ 'type' => 'LAST_JOINED' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'id', $global_id )
-			->hasField( 'members', [
+			->hasField(
+				'members',
+				[
 					'nodes' => [
 						0 => [ 'userId' => $u1 ],
-						1 => [ 'userId' => $u2 ]
-					]
+						1 => [ 'userId' => $u2 ],
+					],
 				],
 			);
 	}
@@ -316,7 +336,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			$where:GroupToUserConnectionWhereArgs
 		) {
 			groupBy(id: $id) {
-				id,
+				id
 				members(where: $where) {
 					nodes {
 						userId

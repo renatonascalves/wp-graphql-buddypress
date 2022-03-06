@@ -36,10 +36,13 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'blog', $blog ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'blog', $blog ),
-			]);
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'blog', $blog ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'blog', $blog ),
+				]
+			);
 
 		// Confirm that the default avatar is not present.
 		$this->assertTrue( false === strpos( $response['data']['uploadAttachmentAvatar']['attachment']['full'], 'mistery-man' ) );

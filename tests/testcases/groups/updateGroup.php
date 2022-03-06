@@ -93,7 +93,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	public function test_update_group_with_valid_status() {
 		$this->bp->set_current_user( $this->user );
 
-		$this->assertQuerySuccessful( $this->update_group( [  'status' => 'PRIVATE' ] ) )
+		$this->assertQuerySuccessful( $this->update_group( [ 'status' => 'PRIVATE' ] ) )
 			->hasField( 'status', 'PRIVATE' );
 	}
 

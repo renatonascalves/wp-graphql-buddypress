@@ -134,8 +134,8 @@ class Test_Friendship_deleteFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 	/**
 	 * Delete friendship.
 	 *
-	 * @param int $initiator Initiator ID.
-	 * @param int $friend Friend ID.
+	 * @param int  $initiator Initiator ID.
+	 * @param int  $friend Friend ID.
 	 * @param bool $force Force.
 	 * @return array
 	 */

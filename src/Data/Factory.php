@@ -32,13 +32,56 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionRes
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivitiesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\SignupConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\GroupInvitationsConnectionResolver;
 use stdClass;
+use WP_User;
 use BP_Friends_Friendship;
 
 /**
  * Class Factory.
  */
 class Factory {
+
+	/**
+	 * Get the user object, if the ID is valid.
+	 *
+	 * @param int $user_id Supplied user ID.
+	 * @return WP_User|null
+	 */
+	public static function get_user( int $user_id ): ?WP_User {
+		if ( $user_id <= 0 ) {
+			return null;
+		}
+
+		$user = get_userdata( (int) $user_id );
+		if ( empty( $user ) || ! $user->exists() ) {
+			return null;
+		}
+
+		return $user;
+	}
+
+	/**
+	 * Returns an Invitation object.
+	 *
+	 * @param int        $id      Invitation ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_invitation_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$invite_id = absint( $id );
+		$context->get_loader( 'bp_invitation' )->buffer( [ $invite_id ] );
+
+		return new Deferred(
+			function () use ( $invite_id, $context ) {
+				return $context->get_loader( 'bp_invitation' )->load( $invite_id );
+			}
+		);
+	}
 
 	/**
 	 * Returns a Signup object.
@@ -445,6 +488,19 @@ class Factory {
 	 */
 	public static function resolve_group_members_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new GroupMembersConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the GroupMembershipRequestsConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Query args to pass to the connection resolver.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_group_invitations_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new GroupInvitationsConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
 	/**

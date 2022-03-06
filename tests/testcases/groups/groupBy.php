@@ -125,10 +125,13 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
 			->hasField( 'id', $global_child_id )
 			->hasField( 'databaseId', $child_id )
-			->hasField( 'parent', [
-				'id'      => $global_id,
-				'databaseId' => $parent_id
-			] );
+			->hasField(
+				'parent',
+				[
+					'id'         => $global_id,
+					'databaseId' => $parent_id,
+				]
+			);
 	}
 
 	public function test_get_group_with_invalid_id() {
@@ -202,7 +205,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$query = "
 			query {
 				groupBy(groupId: {$group}) {
-					id,
+					id
 					databaseId
 					name
 					status

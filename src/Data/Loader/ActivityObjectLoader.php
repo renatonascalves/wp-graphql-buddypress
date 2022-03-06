@@ -51,6 +51,8 @@ class ActivityObjectLoader extends AbstractDataLoader {
 
 		// Get all objects.
 		foreach ( $keys as $key ) {
+
+			// This is cached.
 			$loaded_activities[ $key ] = ActivityHelper::get_activity( absint( $key ) );
 		}
 

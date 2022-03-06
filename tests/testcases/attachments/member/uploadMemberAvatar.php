@@ -25,10 +25,13 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
+				]
+			);
 
 		// Confirm that the default avatar IS NOT present.
 		$this->assertTrue( false === strpos( $response['data']['uploadAttachmentAvatar']['attachment']['full'], 'mistery-man' ) );
@@ -44,10 +47,13 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
 		$this->assertQuerySuccessful( $response )
-			->hasField( 'attachment', [
-				'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
-				'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
-			] );
+			->hasField(
+				'attachment',
+				[
+					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
+				]
+			);
 
 		// Confirm that the default avatar IS NOT present.
 		$this->assertTrue( false === strpos( $response['data']['uploadAttachmentAvatar']['attachment']['full'], 'mistery-man' ) );

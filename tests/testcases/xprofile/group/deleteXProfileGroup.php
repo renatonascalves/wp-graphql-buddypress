@@ -8,7 +8,7 @@
  */
 class Test_XProfile_deleteXProfileGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-    /**
+	/**
 	 * XProfile Group ID.
 	 *
 	 * @var int
@@ -39,14 +39,14 @@ class Test_XProfile_deleteXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_delete_xprofile_group_without_logged_in_user() {
-        $this->assertQueryFailed( $this->delete_xprofile_group() )
+		$this->assertQueryFailed( $this->delete_xprofile_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_xprofile_group_with_user_without_permission() {
 		$this->bp->set_current_user( $this->user );
 
-        $this->assertQueryFailed( $this->delete_xprofile_group() )
+		$this->assertQueryFailed( $this->delete_xprofile_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 

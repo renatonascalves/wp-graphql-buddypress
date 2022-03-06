@@ -113,13 +113,15 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	public function test_get_activities_from_multiple_types() {
 		$g1 = $this->create_group_id( [ 'status' => 'public' ] );
 		$a1 = $this->create_activity_id();
-		$a2 = $this->create_activity_id( [
-			'component'     => buddypress()->groups->id,
-			'type'          => 'created_group',
-			'user_id'       => $this->admin,
-			'item_id'       => $g1,
-			'hide_sitewide' => true,
-		] );
+		$a2 = $this->create_activity_id(
+			[
+				'component'     => buddypress()->groups->id,
+				'type'          => 'created_group',
+				'user_id'       => $this->admin,
+				'item_id'       => $g1,
+				'hide_sitewide' => true,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
@@ -143,8 +145,18 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_get_public_group_activities() {
 		$component = buddypress()->groups->id;
-		$g1        = $this->create_group_id( [ 'status' => 'private', 'user_id' => $this->user ] );
-		$g2        = $this->create_group_id( [ 'status' => 'public', 'user_id'  => $this->user ] );
+		$g1        = $this->create_group_id(
+			[
+				'status'  => 'private',
+				'user_id' => $this->user,
+			]
+		);
+		$g2        = $this->create_group_id(
+			[
+				'status'  => 'public',
+				'user_id' => $this->user,
+			]
+		);
 
 		$a1 = $this->create_activity_id(
 			[
@@ -264,7 +276,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQuerySuccessful(
-			$this->activityQuery( [ 'where' => [ 'component' => 'GROUPS', 'primaryId' => $g1 ] ] )
+			$this->activityQuery(
+				[
+					'where' => [
+						'component' => 'GROUPS',
+						'primaryId' => $g1,
+					],
+				]
+			)
 		)
 			->notHasEdges()
 			->notHasNodes();
@@ -321,7 +340,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$results = $this->activityQuery( [ 'where' => [ 'component' => 'GROUPS', 'primaryId' => $g2 ] ] );
+		$results = $this->activityQuery(
+			[
+				'where' => [
+					'component' => 'GROUPS',
+					'primaryId' => $g2,
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $results )
 			->hasNodes();
@@ -435,7 +461,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$results = $this->activityQuery( [ 'where' => [ 'component' => 'ACTIVITY', 'groupId' => $g2 ] ] );
+		$results = $this->activityQuery(
+			[
+				'where' => [
+					'component' => 'ACTIVITY',
+					'groupId'   => $g2,
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $results )
 			->hasNodes();
@@ -526,7 +559,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$results = $this->activityQuery( [ 'where' => [ 'userId' => $u, 'scope' => [ 'GROUPS' ] ] ] );
+		$results = $this->activityQuery(
+			[
+				'where' => [
+					'userId' => $u,
+					'scope'  => [ 'GROUPS' ],
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $results )
 			->hasNodes();
@@ -550,10 +590,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$this->bp->set_current_user( $this->admin );
 
 		// The first here is the last one created. The latest activity.
-		$this->assertQuerySuccessful( $this->activityQuery( [
-			'first' => 1,
-			'after' => ''
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->activityQuery(
+				[
+					'first' => 1,
+					'after' => '',
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a1 )
 			->hasNextPage();
@@ -579,10 +623,14 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->activityQuery( [
-			'last'   => 1,
-			'before' => $this->key_to_cursor( $a3 )
-		] ) )
+		$this->assertQuerySuccessful(
+			$this->activityQuery(
+				[
+					'last'   => 1,
+					'before' => $this->key_to_cursor( $a3 ),
+				]
+			)
+		)
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a2 )
 			->hasNextPage();
@@ -620,28 +668,31 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			->hasNodes()
 			->firstNodesNodeField( 'id', $this->toRelayId( 'activity', (string) $a ) )
 			->firstNodesNodeField( 'databaseId', $a )
-			->firstNodesNodeField( 'comments', [
-				'nodes' => [
-					0 => [
-						'id'               => $this->toRelayId( 'activity', (string) $c1 ),
-						'databaseId'       => $c1,
-						'parentDatabaseId' => $a,
-						'parentId'         => $this->toRelayId( 'activity', (string) $a ),
-						'type'             => 'ACTIVITY_COMMENT',
-						'primaryItemId'    => $a,
-						'secondaryItemId'  => $a,
+			->firstNodesNodeField(
+				'comments',
+				[
+					'nodes' => [
+						0 => [
+							'id'               => $this->toRelayId( 'activity', (string) $c1 ),
+							'databaseId'       => $c1,
+							'parentDatabaseId' => $a,
+							'parentId'         => $this->toRelayId( 'activity', (string) $a ),
+							'type'             => 'ACTIVITY_COMMENT',
+							'primaryItemId'    => $a,
+							'secondaryItemId'  => $a,
+						],
+						1 => [
+							'id'               => $this->toRelayId( 'activity', (string) $c2 ),
+							'databaseId'       => $c2,
+							'parentDatabaseId' => $a,
+							'parentId'         => $this->toRelayId( 'activity', (string) $a ),
+							'type'             => 'ACTIVITY_COMMENT',
+							'primaryItemId'    => $a,
+							'secondaryItemId'  => $a,
+						],
 					],
-					1 => [
-						'id'               => $this->toRelayId( 'activity', (string) $c2 ),
-						'databaseId'       => $c2,
-						'parentDatabaseId' => $a,
-						'parentId'         => $this->toRelayId( 'activity', (string) $a ),
-						'type'             => 'ACTIVITY_COMMENT',
-						'primaryItemId'    => $a,
-						'secondaryItemId'  => $a,
-					]
 				]
-			] );
+			);
 	}
 
 	public function test_public_activity_comments_stream() {
@@ -676,8 +727,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 					'primaryItemId'   => $a,
 					'secondaryItemId' => $a,
 					'comments'        => [
-						'nodes' => []
-					]
+						'nodes' => [],
+					],
 				],
 				1 => [
 					'id'              => $this->toRelayId( 'activity', (string) $a ),
@@ -695,8 +746,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 								'primaryItemId'    => $a,
 								'secondaryItemId'  => $a,
 							],
-						]
-					]
+						],
+					],
 				],
 			],
 			$results['data']['activities']['nodes']
@@ -742,28 +793,31 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			->firstNodesNodeField( 'databaseId', $a )
 			->firstNodesNodeField( 'primaryItemId', $g )
 			->firstNodesNodeField( 'secondaryItemId', 0 )
-			->firstNodesNodeField( 'comments', [
-				'nodes' => [
-					0 => [
-						'id'               => $this->toRelayId( 'activity', (string) $c1 ),
-						'databaseId'       => $c1,
-						'parentDatabaseId' => $a,
-						'parentId'         => $this->toRelayId( 'activity', (string) $a ),
-						'type'             => 'ACTIVITY_COMMENT',
-						'primaryItemId'    => $a,
-						'secondaryItemId'  => $a,
+			->firstNodesNodeField(
+				'comments',
+				[
+					'nodes' => [
+						0 => [
+							'id'               => $this->toRelayId( 'activity', (string) $c1 ),
+							'databaseId'       => $c1,
+							'parentDatabaseId' => $a,
+							'parentId'         => $this->toRelayId( 'activity', (string) $a ),
+							'type'             => 'ACTIVITY_COMMENT',
+							'primaryItemId'    => $a,
+							'secondaryItemId'  => $a,
+						],
+						1 => [
+							'id'               => $this->toRelayId( 'activity', (string) $c2 ),
+							'databaseId'       => $c2,
+							'parentDatabaseId' => $a,
+							'parentId'         => $this->toRelayId( 'activity', (string) $a ),
+							'type'             => 'ACTIVITY_COMMENT',
+							'primaryItemId'    => $a,
+							'secondaryItemId'  => $a,
+						],
 					],
-					1 => [
-						'id'               => $this->toRelayId( 'activity', (string) $c2 ),
-						'databaseId'       => $c2,
-						'parentDatabaseId' => $a,
-						'parentId'         => $this->toRelayId( 'activity', (string) $a ),
-						'type'             => 'ACTIVITY_COMMENT',
-						'primaryItemId'    => $a,
-						'secondaryItemId'  => $a,
-					]
 				]
-			] );
+			);
 	}
 
 	/**
@@ -792,13 +846,20 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 				'item_id'     => $g,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
-				'component' => buddypress()->groups->id,
+				'component'   => buddypress()->groups->id,
 			]
 		);
 
 		$this->bp->set_current_user( $this->admin );
 
-		$results = $this->activityQuery( [ 'where' => [ 'groupId' => $g, 'displayComments' => true ] ] );
+		$results = $this->activityQuery(
+			[
+				'where' => [
+					'groupId'         => $g,
+					'displayComments' => true,
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $results )
 			->hasEdges()
@@ -812,8 +873,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 					'id'         => $this->toRelayId( 'activity', (string) $c ),
 					'databaseId' => $c,
 					'comments'   => [
-						'nodes' => []
-					]
+						'nodes' => [],
+					],
 				],
 				1 => [
 					'id'         => $this->toRelayId( 'activity', (string) $a ),
@@ -829,8 +890,8 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 								'primaryItemId'    => $a,
 								'secondaryItemId'  => $a,
 							],
-						]
-					]
+						],
+					],
 				],
 			],
 			$results['data']['activities']['nodes']

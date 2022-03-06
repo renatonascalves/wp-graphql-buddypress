@@ -41,40 +41,45 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// assert that star is set.
 		$this->assertTrue( $star );
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $this->admin,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $this->admin,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
-					],
-					1 => [
-						'id'          => $this->toRelayId( 'message', (string) $m2->id ),
-						'threadId'    => $m2->thread_id,
-						'databaseId'  => $m2->id,
-						'sender'      => [
-							'databaseId' => $this->random_user,
+						1 => [
+							'id'         => $this->toRelayId( 'message', (string) $m2->id ),
+							'threadId'   => $m2->thread_id,
+							'databaseId' => $m2->id,
+							'sender'     => [
+								'databaseId' => $this->random_user,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $m2->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $m2->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $m2->message ) ),
+							'isStarred'  => true,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $m2->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $m2->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $m2->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $m2->message ) ),
-						'isStarred'   => true,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $m2->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_thread_messages_order_desc() {
@@ -93,41 +98,46 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id,
-			[ 'where' => [ 'order' => 'DESC' ] ]
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id,
+				[ 'where' => [ 'order' => 'DESC' ] ]
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $m2->id ),
-						'threadId'    => $m2->thread_id,
-						'databaseId'  => $m2->id,
-						'sender'      => [
-							'databaseId' => $this->random_user,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $m2->id ),
+							'threadId'   => $m2->thread_id,
+							'databaseId' => $m2->id,
+							'sender'     => [
+								'databaseId' => $this->random_user,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $m2->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $m2->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $m2->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $m2->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $m2->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $m2->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $m2->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $m2->date_sent ),
-					],
-					1 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $this->admin,
+						1 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $this->admin,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_thread_messages_as_sender() {
@@ -136,27 +146,32 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Create thread.
 		$message = $this->create_thread_object();
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $this->admin,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $this->admin,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_thread_messages_as_recipient() {
@@ -165,27 +180,32 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Create thread.
 		$message = $this->create_thread_object();
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $this->admin,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $this->admin,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_thread_messages_as_another_recipient() {
@@ -198,60 +218,70 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$message = $this->create_thread_object(
 			[
 				'sender_id'  => $u1,
-				'recipients' => [ $u1, $u2 ]
+				'recipients' => [ $u1, $u2 ],
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $u1,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $u1,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	public function test_get_thread_messages_as_a_moderator() {
 		$this->bp->set_current_user( $this->admin );
 
 		// Create thread.
-		$message = $this->create_thread_object( [ 'sender_id'  => $this->user ] );
+		$message = $this->create_thread_object( [ 'sender_id' => $this->user ] );
 
-		$this->assertQuerySuccessful( $this->get_thread_messages(
-			$message->thread_id
-		) )
+		$this->assertQuerySuccessful(
+			$this->get_thread_messages(
+				$message->thread_id
+			)
+		)
 			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
-			->hasField( 'messages', [
-				'nodes' => [
-					0 => [
-						'id'          => $this->toRelayId( 'message', (string) $message->id ),
-						'threadId'    => $message->thread_id,
-						'databaseId'  => $message->id,
-						'sender'      => [
-							'databaseId' => $this->user,
+			->hasField(
+				'messages',
+				[
+					'nodes' => [
+						0 => [
+							'id'         => $this->toRelayId( 'message', (string) $message->id ),
+							'threadId'   => $message->thread_id,
+							'databaseId' => $message->id,
+							'sender'     => [
+								'databaseId' => $this->user,
+							],
+							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
+							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
+							'message'    => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
+							'isStarred'  => false,
+							'dateSent'   => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 						],
-						'subject'     => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
-						'excerpt'     => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),
-						'message'     => apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) ),
-						'isStarred'   => false,
-						'dateSent'    => WPGraphQL\Utils\Utils::prepare_date_response( $message->date_sent ),
 					],
 				]
-			] );
+			);
 	}
 
 	/**
