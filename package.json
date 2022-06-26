@@ -2,7 +2,7 @@
   "name": "wp-graphql-buddypress",
   "version": "0.0.1-alpha",
   "description": "Bringing the power of GraphQL to BuddyPress.",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
   "author": {
     "name": "Renato Alves",

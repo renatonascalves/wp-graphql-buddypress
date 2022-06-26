@@ -21,11 +21,12 @@ use BP_Notifications_Notification;
  * @property int $userId User ID.
  * @property int $primaryItemId Primary Item ID.
  * @property int $secondaryItemId Secondary Item ID.
- * @property string $component Component.
- * @property string $action Action.
+ * @property string $componentName Component.
+ * @property string $componentAction Action.
  * @property string $date Date.
  * @property string $dateGmt Date as GMT.
  * @property boolean $isNew New notification.
+ * @property object $object Object.
  */
 class Notification extends Model {
 

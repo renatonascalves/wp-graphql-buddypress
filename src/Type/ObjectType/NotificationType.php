@@ -61,6 +61,40 @@ class NotificationType {
 						'type'        => 'String',
 						'description' => __( 'The name of the component\'s action the notification is about.', 'wp-graphql-buddypress' ),
 					],
+					'object'          => [
+						'type'        => 'NotificationObjectUnion',
+						'description' => __( 'The object primarily associated with this one.', 'wp-graphql-buddypress' ),
+						'resolve'     => function( Notification $notification, array $args, AppContext $context ) {
+							$object = null;
+
+							if (
+								bp_is_active( 'activity' )
+								&& 'activity' === $notification->componentName
+								&& ! empty( $notification->primaryItemId ) ) {
+								$object = $context->get_loader( 'bp_activity' )->load_deferred( $notification->primaryItemId );
+							}
+
+							if (
+								bp_is_active( 'groups' )
+								&& 'groups' === $notification->componentName
+								&& ! empty( $notification->primaryItemId ) ) {
+								$object = $context->get_loader( 'bp_group' )->load_deferred( $notification->primaryItemId );
+							}
+
+							if (
+								bp_is_active( 'blogs' )
+								&& 'blogs' === $notification->componentName
+								&& ! empty( $notification->primaryItemId ) ) {
+								$object = $context->get_loader( 'bp_blog' )->load_deferred( $notification->primaryItemId );
+							}
+
+							if ( bp_is_active( 'members' ) && empty( $object ) ) {
+								$object = $context->get_loader( 'user' )->load_deferred( $notification->userId );
+							}
+
+							return $object;
+						},
+					],
 					'date'            => [
 						'type'        => 'String',
 						'description' => __( 'The date the notification was created, in the site\'s timezone.', 'wp-graphql-buddypress' ),

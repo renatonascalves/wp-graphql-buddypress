@@ -7,13 +7,6 @@
  */
 class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_blog_query() {
 		$this->skipWithoutMultisite();
 
@@ -88,7 +81,6 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * @return array
 	 */
 	protected function get_a_blog( $blog_id = null ): array {
-		;
 		$query = "
 			query {
 				blogBy(blogId: {$blog_id}) {

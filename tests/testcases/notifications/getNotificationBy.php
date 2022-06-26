@@ -26,14 +26,48 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', 'groups' )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] );
+			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'object', [
+					'__typename' => 'Group',
+					'databaseId' => $group_id,
+				]
+			);
+	}
+
+	public function test_get_group_notification_as_admin() {
+		$group_id        = $this->bp_factory->group->create();
+		$notification_id = $this->bp_factory->notification->create(
+				[
+					'component_name' => buddypress()->groups->id,
+					'item_id'        => $group_id,
+					'user_id'        => $this->user,
+				]
+		);
+
+		$this->bp->set_current_user( $this->admin );
+
+		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
+			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
+			->hasField( 'databaseId', $notification_id )
+			->hasField( 'primaryItemId', $group_id )
+			->hasField( 'secondaryItemId', 0 )
+			->hasField( 'isNew', true )
+			->hasField( 'componentName', 'groups' )
+			->hasField( 'componentAction', '' )
+			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'object', [
+					'__typename' => 'Group',
+					'databaseId' => $group_id,
+				]
+			);
 	}
 
 	public function test_get_activity_notification() {
+		$component       = buddypress()->activity->id;
 		$activity_id     = $this->bp_factory->activity->create();
 		$notification_id = $this->bp_factory->notification->create(
 			[
-				'component_name' => buddypress()->activity->id,
+				'component_name' => $component,
 				'item_id'        => $activity_id,
 				'user_id'        => $this->user,
 			]
@@ -47,12 +81,52 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			->hasField( 'primaryItemId', $activity_id )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'isNew', true )
-			->hasField( 'componentName', 'activity' )
+			->hasField( 'componentName', $component )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] );
+			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'object', [
+					'__typename' => 'Activity',
+					'databaseId' => $activity_id,
+				]
+			);
 	}
 
-	public function test_notification_with_user_not_logged_in() {
+	public function test_get_blog_notification() {
+		$this->skipWithoutMultisite();
+
+		$blog_title = 'The Foo Bar Blog';
+		$component  = buddypress()->blogs->id;
+
+		$this->bp->set_current_user( $this->user );
+
+		$blog_id = $this->bp_factory->blog->create(
+			[ 'title' => $blog_title ]
+		);
+
+		$notification_id = $this->bp_factory->notification->create(
+			[
+				'component_name' => $component,
+				'item_id'        => $blog_id,
+			]
+		);
+
+		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
+			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
+			->hasField( 'databaseId', $notification_id )
+			->hasField( 'primaryItemId', $activity_id )
+			->hasField( 'secondaryItemId', 0 )
+			->hasField( 'isNew', true )
+			->hasField( 'componentName', $component )
+			->hasField( 'componentAction', '' )
+			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'object', [
+					'__typename' => 'Blos',
+					'databaseId' => $blog_id,
+				]
+			);
+	}
+
+	public function test_get_notification_with_unauthenticated_user() {
 		$group_id        = $this->bp_factory->group->create();
 		$notification_id = $this->bp_factory->notification->create(
 				[
@@ -67,7 +141,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 		$this->assertEmpty( $response['data']['notificationBy'] );
 	}
 
-	public function test_notification_with_unauthorized_user() {
+	public function test_get_notification_with_unauthorized_user() {
 		$group_id        = $this->bp_factory->group->create();
 		$notification_id = $this->bp_factory->notification->create(
 				[
@@ -84,7 +158,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 		$this->assertEmpty( $response['data']['notificationBy'] );
 	}
 
-	public function test_notification_with_invalid_id() {
+	public function test_get_notification_with_invalid_id() {
 		$this->bp->set_current_user( $this->admin );
 
 		$this->assertQueryFailed( $this->get_a_notification( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
@@ -113,6 +187,21 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 					date
 					dateGmt
 					isNew
+					object {
+						__typename
+						... on User {
+							databaseId
+						}
+						... on Group {
+							databaseId
+						}
+						... on Activity {
+							databaseId
+						}
+						... on Blog {
+							databaseId
+						}
+					}
 				}
 			}
 		";

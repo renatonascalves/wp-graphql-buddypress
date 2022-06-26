@@ -56,6 +56,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupActivate;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
+use WPGraphQL\Extensions\BuddyPress\Type\Union\NotificationObjectUnion;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
@@ -248,8 +249,10 @@ class TypeRegistry {
 
 	/**
 	 * Registers BuddyPress types, connections, and mutations to GraphQL schema.
+	 *
+	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry The Type Registry.
 	 */
-	public static function graphql_register_types(): void {
+	public static function graphql_register_types( $type_registry ): void {
 
 		// General Enum(s).
 		GeneralEnums::register();
@@ -434,6 +437,9 @@ class TypeRegistry {
 			AttachmentCoverUpload::register_mutation();
 			AttachmentCoverDelete::register_mutation();
 		}
+
+		// Unions.
+		NotificationObjectUnion::register( $type_registry );
 	}
 
 	/**
