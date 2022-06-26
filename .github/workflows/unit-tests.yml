@@ -13,7 +13,7 @@ jobs:
         wp_version: ['master']
         include:
           - php: '7.4'
-            wp_version: '5.9'
+            wp_version: '6.0'
     env:
       WP_ENV_PHP_VERSION: ${{ matrix.php }}
       WP_VERSION: ${{ matrix.wp_version }}

@@ -113,14 +113,14 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
 			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
 			->hasField( 'databaseId', $notification_id )
-			->hasField( 'primaryItemId', $activity_id )
+			->hasField( 'primaryItemId', $blog_id )
 			->hasField( 'secondaryItemId', 0 )
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', $component )
 			->hasField( 'componentAction', '' )
 			->hasField( 'user', [ 'databaseId' => $this->user ] )
 			->hasField( 'object', [
-					'__typename' => 'Blos',
+					'__typename' => 'Blog',
 					'databaseId' => $blog_id,
 				]
 			);
