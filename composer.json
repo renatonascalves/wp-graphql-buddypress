@@ -3,7 +3,7 @@
   "type": "wordpress-plugin",
   "description": "Bringing the power of GraphQL to BuddyPress.",
   "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "keywords": [
     "wordpress",
     "graphql",
