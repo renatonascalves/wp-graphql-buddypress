@@ -5,13 +5,13 @@
  * @package  WPGraphQL\Extensions\BuddyPress
  * @author   Renato Alves
  * @version  0.0.1-alpha
- * @license  GPL-3
+ * @license  GPL-3.0
  *
  * @wordpress-plugin
  * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
  * GitHub Plugin URI: https://github.com/wp-graphql/wp-graphql-buddypress
- * Description:       Adds BuddyPress functionality to the WPGraphQL schema.
+ * Description:       Bringing the power of GraphQL to BuddyPress.
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
@@ -20,7 +20,7 @@
  * Requires PHP:      7.4
  * Requires WP:       5.9
  * Tested up to:      5.9
- * License:           GPL-3
+ * License:           GPL-3.0
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -57,7 +57,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
 				self::$instance = new self();
 				self::$instance->setup_constants();
-				self::$instance->dependencies();
 				if ( self::$instance->includes() ) {
 					self::$instance->actions();
 					self::$instance->filters();
@@ -155,6 +154,18 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		private function includes(): bool {
 
+			// Checks if BuddyPress is installed.
+			if ( ! class_exists( 'BuddyPress' ) ) {
+				add_action( 'admin_notices', [ $this, 'buddypress_missing_notice' ] );
+				return false;
+			}
+
+			// Checks if WPGraphQL is installed.
+			if ( ! class_exists( 'WPGraphQL' ) ) {
+				add_action( 'admin_notices', [ $this, 'wpgraphql_missing_notice' ] );
+				return false;
+			}
+
 			// Autoload Required Classes.
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
 
@@ -170,26 +181,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			}
 
 			return true;
-		}
-
-		/**
-		 * Class dependencies.
-		 *
-		 * @since 0.0.1-alpha
-		 */
-		private function dependencies(): void {
-
-			// Checks if BuddyPress is installed.
-			if ( ! class_exists( 'BuddyPress' ) ) {
-				add_action( 'admin_notices', [ $this, 'buddypress_missing_notice' ] );
-				return;
-			}
-
-			// Checks if WPGraphQL is installed.
-			if ( ! class_exists( 'WPGraphQL' ) ) {
-				add_action( 'admin_notices', [ $this, 'wpgraphql_missing_notice' ] );
-				return;
-			}
 		}
 
 		/**
@@ -225,7 +216,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 			?>
 			<div class="notice notice-error">
-				<p><strong><?php esc_html_e( 'WP GraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of Buddypress to work!', 'wp-graphql-buddypress' ); ?></p>
+				<p><strong><?php esc_html_e( 'WPGraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of Buddypress to work!', 'wp-graphql-buddypress' ); ?></p>
 			</div>
 			<?php
 		}
@@ -243,7 +234,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 			?>
 			<div class="notice notice-error">
-				<p><strong><?php esc_html_e( 'WP GraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of WPGraphQL to work!', 'wp-graphql-buddypress' ); ?></p>
+				<p><strong><?php esc_html_e( 'WPGraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of WPGraphQL to work!', 'wp-graphql-buddypress' ); ?></p>
 			</div>
 			<?php
 		}
@@ -381,7 +372,7 @@ endif;
  */
 function wp_graphql_buddypress_init(): \WP_GraphQL_BuddyPress {
 
-	// Return an instance of the action.
+	// Return an instance of the plugin.
 	return \WP_GraphQL_BuddyPress::instance();
 }
 add_action( 'graphql_init', 'wp_graphql_buddypress_init' );

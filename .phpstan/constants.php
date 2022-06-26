@@ -17,6 +17,10 @@ if ( ! defined( 'BP_DIR' ) ) {
 
 require_once BP_DIR . '/bp-loader.php';
 
+// Notification component.
+require_once BP_DIR . '/src/bp-notifications/classes/class-bp-notifications-notification.php';
+require_once BP_DIR . '/src/bp-notifications/bp-notifications-functions.php';
+
 // Friends component.
 require_once BP_DIR . '/src/bp-friends/bp-friends-functions.php';
 require_once BP_DIR . '/src/bp-friends/classes/class-bp-friends-friendship.php';

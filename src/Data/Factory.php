@@ -62,6 +62,28 @@ class Factory {
 	}
 
 	/**
+	 * Returns an Notification object.
+	 *
+	 * @param int        $id      Notification ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_notification_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$notification_id = absint( $id );
+		$context->get_loader( 'bp_notification' )->buffer( [ $notification_id ] );
+
+		return new Deferred(
+			function () use ( $notification_id, $context ) {
+				return $context->get_loader( 'bp_notification' )->load( $notification_id );
+			}
+		);
+	}
+
+	/**
 	 * Returns an Invitation object.
 	 *
 	 * @param int        $id      Invitation ID or null.

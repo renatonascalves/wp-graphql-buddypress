@@ -81,6 +81,10 @@ class MemberEnums {
 			];
 		}
 
+		if ( empty( $types ) ) {
+			return;
+		}
+
 		register_graphql_enum_type(
 			'MemberTypesEnum',
 			[

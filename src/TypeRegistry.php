@@ -50,6 +50,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
 use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\SignupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupActivate;
@@ -61,6 +62,10 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\NotificationType;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
@@ -68,6 +73,8 @@ use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\InvitationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\NotificationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
@@ -84,11 +91,6 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
-use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
 
 /**
  * Class TypeRegistry
@@ -254,6 +256,12 @@ class TypeRegistry {
 
 		// Register Interfaces.
 		Invitation::register_type();
+
+		if ( bp_is_active( 'notifications' ) ) {
+
+			// Fields.
+			NotificationType::register();
+		}
 
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
@@ -439,16 +447,17 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
-				'bp_signup'         => new SignupObjectLoader( $context ),
-				'bp_group'          => new GroupObjectLoader( $context ),
-				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
-				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
-				'bp_friend'         => new FriendshipObjectLoader( $context ),
-				'bp_blog'           => new BlogObjectLoader( $context ),
-				'bp_thread'         => new ThreadObjectLoader( $context ),
-				'bp_message'        => new MessageObjectLoader( $context ),
 				'bp_activity'       => new ActivityObjectLoader( $context ),
+				'bp_blog'           => new BlogObjectLoader( $context ),
+				'bp_friend'         => new FriendshipObjectLoader( $context ),
+				'bp_group'          => new GroupObjectLoader( $context ),
 				'bp_invitation'     => new InvitationObjectLoader( $context ),
+				'bp_message'        => new MessageObjectLoader( $context ),
+				'bp_notification'   => new NotificationObjectLoader( $context ),
+				'bp_signup'         => new SignupObjectLoader( $context ),
+				'bp_thread'         => new ThreadObjectLoader( $context ),
+				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
+				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
 			]
 		);
 	}

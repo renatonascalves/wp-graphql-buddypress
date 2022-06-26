@@ -3,7 +3,7 @@
   "type": "wordpress-plugin",
   "description": "Bringing the power of GraphQL to BuddyPress.",
   "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-3.0",
   "keywords": [
     "wordpress",
     "graphql",
@@ -33,7 +33,6 @@
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-    "johnkary/phpunit-speedtrap": "^4.0",
     "phpcompatibility/phpcompatibility-wp": "^2.1.0",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^0.12.82",
