@@ -36,7 +36,7 @@ class FriendshipType {
 				'description'       => __( 'Info about a BuddyPress Friendship.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'initiator'   => [
+					'initiator'      => [
 						'type'        => 'User',
 						'description' => __( 'The initiator of the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
@@ -45,7 +45,7 @@ class FriendshipType {
 								: null;
 						},
 					],
-					'friend'      => [
+					'friend'         => [
 						'type'        => 'User',
 						'description' => __( 'The friend, the one invited to the friendship.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
@@ -54,13 +54,17 @@ class FriendshipType {
 								: null;
 						},
 					],
-					'isConfirmed' => [
+					'isConfirmed'    => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the friendship been confirmed or accepted.', 'wp-graphql-buddypress' ),
 					],
-					'dateCreated' => [
+					'dateCreated'    => [
 						'type'        => 'String',
 						'description' => __( 'The date the friendship was created, in the site\'s timezone.', 'wp-graphql-buddypress' ),
+					],
+					'dateCreatedGmt' => [
+						'type'        => 'String',
+						'description' => __( 'The date the friendship was created, as GMT.', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve_node'      => function( $node, $id, string $type ) {

@@ -11,6 +11,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Model;
 use WPGraphQL\Model\Model;
 use WPGraphQL\Utils\Utils;
 use BP_XProfile_ProfileData;
+
 /**
  * Class XProfile Field Value - Models the data for the XProfile Field Value object type.
  */
@@ -59,16 +60,19 @@ class XProfileFieldValue extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'raw'          => function() {
+				'raw'            => function() {
 					return $this->data->value ?? null;
 				},
-				'unserialized' => function() {
+				'unserialized'   => function() {
 					return $this->get_unserialized_value( $this->data->value );
 				},
-				'rendered'     => function() {
+				'rendered'       => function() {
 					return $this->get_rendered_value( $this->data->value, $this->data->field_id );
 				},
-				'lastUpdated'  => function() {
+				'lastUpdated'    => function() {
+					return Utils::prepare_date_response( $this->data->last_updated, get_date_from_gmt( $this->data->last_updated ) );
+				},
+				'lastUpdatedGmt' => function() {
 					return Utils::prepare_date_response( $this->data->last_updated );
 				},
 			];

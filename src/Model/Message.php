@@ -24,6 +24,7 @@ use BP_Messages_Message;
  * @property string $message Message content.
  * @property string $excerpt Messate excerpt.
  * @property string $dateSent Date the message was sent.
+ * @property string $dateSentGmt Date the message was sent, as GMT.
  */
 class Message extends Model {
 
@@ -70,30 +71,33 @@ class Message extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'         => function() {
+				'id'          => function() {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'message', (string) $this->data->id )
 						: null;
 				},
-				'databaseId' => function() {
+				'databaseId'  => function() {
 					return $this->data->id ?? null;
 				},
-				'threadId'   => function() {
+				'threadId'    => function() {
 					return $this->data->thread_id ?? null;
 				},
-				'sender'     => function() {
+				'sender'      => function() {
 					return $this->data->sender_id ?? null;
 				},
-				'subject'    => function() {
+				'subject'     => function() {
 					return $this->data->subject ?? null;
 				},
-				'excerpt'    => function() {
+				'excerpt'     => function() {
 					return $this->data->message ?? null;
 				},
-				'message'    => function() {
+				'message'     => function() {
 					return $this->data->message ?? null;
 				},
-				'dateSent'   => function() {
+				'dateSent'    => function() {
+					return Utils::prepare_date_response( $this->data->date_sent, get_date_from_gmt( $this->data->date_sent ) );
+				},
+				'dateSentGmt' => function() {
 					return Utils::prepare_date_response( $this->data->date_sent );
 				},
 			];

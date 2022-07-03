@@ -29,21 +29,25 @@ class XProfileFieldValueType {
 			[
 				'description' => __( 'Info about a BuddyPress XProfile field value.', 'wp-graphql-buddypress' ),
 				'fields'      => [
-					'raw'          => [
+					'raw'            => [
 						'type'        => 'String',
 						'description' => __( 'Field value directly from the database.', 'wp-graphql-buddypress' ),
 					],
-					'rendered'     => [
+					'rendered'       => [
 						'type'        => 'String',
 						'description' => __( 'Field value with WordPress field rendering.', 'wp-graphql-buddypress' ),
 					],
-					'unserialized' => [
+					'unserialized'   => [
 						'type'        => [ 'list_of' => 'String' ],
 						'description' => __( 'Unserialized field value(s) with WordPress field rendering.', 'wp-graphql-buddypress' ),
 					],
-					'lastUpdated'  => [
+					'lastUpdated'    => [
 						'type'        => 'String',
-						'description' => __( 'The date the field value was last updated.', 'wp-graphql-buddypress' ),
+						'description' => __( 'The date the field value was last updated, in the site\'s timezone', 'wp-graphql-buddypress' ),
+					],
+					'lastUpdatedGmt' => [
+						'type'        => 'String',
+						'description' => __( 'The date the field value was last updated, as GMT.', 'wp-graphql-buddypress' ),
 					],
 				],
 			]
