@@ -94,6 +94,8 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationUpdate;
 
 /**
  * Class TypeRegistry
@@ -272,6 +274,10 @@ class TypeRegistry {
 
 			// Connections.
 			NotificationConnection::register_connections();
+
+			// Mutations.
+			NotificationDelete::register_mutation();
+			NotificationUpdate::register_mutation();
 		}
 
 		// Members component.
