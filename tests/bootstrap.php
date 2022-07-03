@@ -65,8 +65,8 @@ tests_add_filter(
 echo "Loading WP testing environment...\n";
 require_once WP_TESTS_DIR . '/includes/bootstrap.php';
 
-echo "Loading WPGraphQL BuddyPress testcase...\n";
-require_once dirname( __FILE__ ) . '/includes/testcase.php';
-
 echo "Loading BuddyPress testcase...\n";
 require_once BP_TESTS_DIR . '/includes/testcase.php';
+
+echo "Loading WPGraphQL BuddyPress testcase...\n";
+require_once dirname( __FILE__ ) . '/includes/testcase.php';

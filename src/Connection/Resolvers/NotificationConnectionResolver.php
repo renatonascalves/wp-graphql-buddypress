@@ -81,14 +81,17 @@ class NotificationConnectionResolver extends AbstractConnectionResolver {
 		// Pass the graphql $this->args.
 		$query_args['graphql_args'] = $this->args;
 
+		// Set User.
 		if ( true === is_object( $this->source ) && $this->source instanceof User ) {
 			$query_args['user_id'] = $this->source->userId;
 		}
 
+		// Set Group.
 		if ( true === is_object( $this->source ) && $this->source instanceof Group ) {
 			$query_args['item_id'] = $this->source->databaseId;
 		}
 
+		// Set Blog.
 		if ( true === is_object( $this->source ) && $this->source instanceof Blog ) {
 			$query_args['item_id'] = $this->source->databaseId;
 		}
@@ -156,23 +159,30 @@ class NotificationConnectionResolver extends AbstractConnectionResolver {
 			return true;
 		}
 
+		// ID of the current logged in user.
+		$user_id = bp_loggedin_user_id();
+
 		// Logged in user is the same one from the current user object.
 		if (
 			$this->source instanceof User
 			&& isset( $this->source->userId )
-			&& bp_loggedin_user_id() !== $this->source->userId
+			&& $user_id === $this->source->userId
 		) {
-			return false;
+			return true;
 		}
 
-		// @todo account for those objects.
-		// $this->source instanceof Group
-		// $this->source instanceof Blog
+		if (
+			$this->source instanceof Group
+			&& isset( $this->source->databaseId )
+			&& true === groups_is_user_admin( $user_id, $this->source->databaseId )
+		) {
+			return true;
+		}
 
 		// Logged in user is the same on from the params.
 		if (
 			! empty( $this->args['where']['userIds'] )
-			&& false === in_array( bp_loggedin_user_id(), $this->args['where']['userIds'], true )
+			&& false === in_array( $user_id, $this->args['where']['userIds'], true )
 		) {
 			return false;
 		}

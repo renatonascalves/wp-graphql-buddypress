@@ -93,7 +93,7 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 4 );
+		$this->assertCount( 4, $response['data']['groupBy']['invitations']['nodes'] );
 	}
 
 	public function test_get_group_invites_as_group_moderator() {

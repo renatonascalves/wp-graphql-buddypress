@@ -8,8 +8,7 @@
 class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_notifications_authenticated() {
-		$u = $this->bp_factory->user->create();
-
+		$u  = $this->bp_factory->user->create();
 		$n1 = $this->create_notification_id( [ 'component_name' => 'messages', 'user_id' => $u ] );
 		$n2 = $this->create_notification_id( [ 'component_name' => 'activity', 'user_id' => $u ] );
 
@@ -28,11 +27,10 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_get_new_notifications_only() {
-		$u = $this->bp_factory->user->create();
-
-		$n1 = $this->create_notification_id( [ 'is_new' => true, 'component_name' => 'messages', 'user_id' => $u ] );
+		$u  = $this->bp_factory->user->create();
+		$n1 = $this->create_notification_id( [ 'component_name' => 'messages', 'user_id' => $u ] );
 		$n2 = $this->create_notification_id( [ 'is_new' => false, 'component_name' => 'activity', 'user_id' => $u ] );
-		$n3 = $this->create_notification_id( [ 'is_new' => true, 'component_name' => 'groups', 'user_id' => $u ] );
+		$n3 = $this->create_notification_id( [ 'component_name' => 'groups', 'user_id' => $u ] );
 
 		$this->bp->set_current_user( $u );
 
@@ -44,6 +42,7 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 		$ids = wp_list_pluck( $results['data']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
+		$this->assertCount( 2, $ids );
 		$this->assertTrue( in_array( $n1, $ids, true ) );
 		$this->assertTrue( in_array( $n3, $ids, true ) );
 		$this->assertFalse( in_array( $n2, $ids, true ) );
@@ -51,9 +50,9 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 
 	public function test_get_notifications_by_component_name() {
 		$u  = $this->bp_factory->user->create();
-		$n1 = $this->create_notification_id( [ 'is_new' => true, 'component_name' => 'messages', 'user_id' => $u ] );
+		$n1 = $this->create_notification_id( [ 'component_name' => 'messages', 'user_id' => $u ] );
 		$n2 = $this->create_notification_id( [ 'is_new' => false, 'component_name' => 'activity', 'user_id' => $u ] );
-		$n3 = $this->create_notification_id( [ 'is_new' => true, 'component_name' => 'groups', 'user_id' => $u ] );
+		$n3 = $this->create_notification_id( [ 'component_name' => 'groups', 'user_id' => $u ] );
 
 		$this->bp->set_current_user( $u );
 
@@ -64,7 +63,6 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 
 		$ids = wp_list_pluck( $results['data']['notifications']['nodes'], 'databaseId' );
 
-
 		// Check notifications.
 		$this->assertCount( 1, $ids );
 		$this->assertTrue( in_array( $n3, $ids, true ) );
@@ -73,9 +71,8 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_get_notifications_by_item_id() {
-		$g = $this->bp_factory->group->create();
-		$u = $this->bp_factory->user->create();
-
+		$g  = $this->bp_factory->group->create();
+		$u  = $this->bp_factory->user->create();
 		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'groups', 'user_id' => $u ] );
 		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u ] );
 		$n3 = $this->create_notification_id( [ 'component_name' => 'activity', 'user_id' => $u ] );
@@ -104,7 +101,6 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 	public function test_admin_can_get_notifications_from_multiple_users() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
-
 		$n1 = $this->create_notification_id( [ 'component_name' => 'messages', 'user_id' => $u1 ] );
 		$n2 = $this->create_notification_id( [ 'component_name' => 'activity', 'user_id' => $u2 ] );
 
@@ -118,12 +114,14 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 		$ids = wp_list_pluck( $results['data']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
+		$this->assertCount( 2, $ids );
 		$this->assertTrue( in_array( $n1, $ids, true ) );
 		$this->assertTrue( in_array( $n2, $ids, true ) );
 
 		// Check the users.
 		$user_ids = wp_list_pluck( wp_list_pluck( $results['data']['notifications']['nodes'], 'user' ), 'databaseId' );
 
+		$this->assertCount( 2, $user_ids );
 		$this->assertEqualSets( [ $u1, $u2 ], $user_ids );
 
 		// Pass the user ID directly.
@@ -132,6 +130,7 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 		$ids = wp_list_pluck( $results['data']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
+		$this->assertCount( 1, $ids );
 		$this->assertTrue( in_array( $n1, $ids, true ) );
 	}
 
@@ -139,7 +138,6 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
-
 		$n1 = $this->create_notification_id( [ 'component_name' => 'messages', 'user_id' => $u1 ] );
 		$n2 = $this->create_notification_id( [ 'component_name' => 'activity', 'user_id' => $u2 ] );
 
