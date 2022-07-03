@@ -8,27 +8,29 @@
  */
 class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	public function test_get_group_notifications() {
-		$u  = $this->bp_factory->user->create();
-		$g  = $this->bp_factory->group->create();
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u ] );
+	public function test_group_admin_can_not_get_group_notifications() {
+		$u1  = $this->bp_factory->user->create();
+		$u2  = $this->bp_factory->user->create();
+		$g   = $this->bp_factory->group->create();
+
+		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u1 ] );
+		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u1 ] );
+
+		$this->bp->add_user_to_group( $u1, $g );
 
 		// Make user group admin.
-		$this->bp->add_user_to_group( $u, $g );
+		$this->bp->add_user_to_group( $u2, $g, [ 'is_admin' => true ] );
 
-		$this->bp->set_current_user( $u );
+		$this->bp->set_current_user( $u2 );
 
 		$response = $this->groupNotificationsQuery( [ 'id' => $g ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' );
+		$nodes = $response['data']['groupBy']['notifications']['nodes'];
 
-		// Check notifications.
-		$this->assertCount( 2, $ids );
-		$this->assertTrue( in_array( $n1, $ids, true ) );
-		$this->assertTrue( in_array( $n2, $ids, true ) );
+		$this->assertEmpty( $nodes );
+		$this->assertCount( 0, $nodes );
 	}
 
 	public function test_group_mod_can_not_get_group_notifications() {
@@ -224,21 +226,21 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 	 */
 	protected function groupNotificationsQuery( array $variables = [] ): array {
 		$query = 'query groupNotificationsQuery(
-			$first:Int
-			$last:Int
 			$after:String
 			$before:String
-			$where:GroupToNotificationConnectionWhereArgs
+			$first:Int
 			$id:Int
+			$last:Int
+			$where:GroupToNotificationConnectionWhereArgs
 		) {
 			groupBy(groupId: $id) {
 				id
 				databaseId
 				notifications(
-					first:$first
-					last:$last
 					after:$after
 					before:$before
+					first:$first
+					last:$last
 					where:$where
 				) {
 					pageInfo {

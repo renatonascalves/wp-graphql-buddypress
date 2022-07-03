@@ -119,7 +119,7 @@ class NotificationConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * Returns the notification query.
 	 *
-	 * @return array
+	 * @return BP_Notifications_Notification[]
 	 */
 	public function get_query(): array {
 		return BP_Notifications_Notification::get( $this->query_args );
@@ -167,14 +167,6 @@ class NotificationConnectionResolver extends AbstractConnectionResolver {
 			$this->source instanceof User
 			&& isset( $this->source->userId )
 			&& $user_id === $this->source->userId
-		) {
-			return true;
-		}
-
-		if (
-			$this->source instanceof Group
-			&& isset( $this->source->databaseId )
-			&& true === groups_is_user_admin( $user_id, $this->source->databaseId )
 		) {
 			return true;
 		}
