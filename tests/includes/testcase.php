@@ -468,6 +468,24 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Create notification id.
+	 *
+	 * @param array $args Arguments.
+	 * @return int
+	 */
+	protected function create_notification_id( array $args = [] ): int {
+		return $this->bp_factory->notification->create(
+			array_merge(
+				[
+					'user_id' => $this->user,
+					'is_new'  => 1,
+				],
+				$args
+			)
+		);
+	}
+
+	/**
 	 * Create signup id.
 	 *
 	 * @param array $args Arguments.

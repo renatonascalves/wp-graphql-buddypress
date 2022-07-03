@@ -40,11 +40,11 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 				[
 					'component_name' => buddypress()->groups->id,
 					'item_id'        => $group_id,
-					'user_id'        => $this->user,
+					'user_id'        => $this->admin,
 				]
 		);
 
-		$this->bp->set_current_user( $this->admin );
+		$this->set_user();
 
 		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
 			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
@@ -54,7 +54,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', 'groups' )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'user', [ 'databaseId' => $this->admin ] )
 			->hasField( 'object', [
 					'__typename' => 'Group',
 					'databaseId' => $group_id,
@@ -69,11 +69,11 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			[
 				'component_name' => $component,
 				'item_id'        => $activity_id,
-				'user_id'        => $this->user,
+				'user_id'        => $this->admin,
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->set_user();
 
 		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
 			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
@@ -83,7 +83,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', $component )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'user', [ 'databaseId' => $this->admin ] )
 			->hasField( 'object', [
 					'__typename' => 'Activity',
 					'databaseId' => $activity_id,
@@ -97,7 +97,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 		$blog_title = 'The Foo Bar Blog';
 		$component  = buddypress()->blogs->id;
 
-		$this->bp->set_current_user( $this->user );
+		$this->set_user();
 
 		$blog_id = $this->bp_factory->blog->create(
 			[ 'title' => $blog_title ]
@@ -159,7 +159,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 	}
 
 	public function test_get_notification_with_invalid_id() {
-		$this->bp->set_current_user( $this->admin );
+		$this->set_user();
 
 		$this->assertQueryFailed( $this->get_a_notification( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This notification does not exist.' );

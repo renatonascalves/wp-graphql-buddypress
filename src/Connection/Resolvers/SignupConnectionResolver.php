@@ -147,14 +147,14 @@ class SignupConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'include'        => 'include',
-				'user_login'     => 'userLogin',
-				'user_email'     => 'userEmail',
-				'usersearch'     => 'search',
-				'order'          => 'order',
-				'orderby'        => 'orderBy',
-				'active'         => 'active',
-				'activation_key' => 'activationKey',
+				'include'       => 'include',
+				'userLogin'     => 'user_login',
+				'userEmail'     => 'user_email',
+				'search'        => 'usersearch',
+				'order'         => 'order',
+				'orderBy'       => 'orderby',
+				'active'        => 'active',
+				'activationKey' => 'activation_key',
 			]
 		);
 

@@ -56,15 +56,31 @@ class NotificationHelper {
 	}
 
 	/**
-	 * Can this user see the notification?
+	 * Check if a notification exists.
 	 *
 	 * @param int $notification_id Notification ID.
 	 * @return bool
 	 */
-	public static function can_see( $notification_id = 0 ): bool {
+	public static function notification_exists( int $notification_id ): bool {
+		$notification = self::get_notification_from_input( absint( $notification_id ) );
+		return ( $notification instanceof BP_Notifications_Notification && ! empty( $notification->id ) );
+	}
+
+	/**
+	 * Can this user see the notification?
+	 *
+	 * @param int $notification_id Notification ID.
+	 * @param int $user_id         User ID to check access.
+	 * @return bool
+	 */
+	public static function can_see( $notification_id = 0, $user_id = 0 ): bool {
+
+		if ( empty( $user_id ) ) {
+			$user_id = bp_loggedin_user_id();
+		}
 
 		// Check notification access.
-		if ( ! empty( $notification_id ) && (bool) BP_Notifications_Notification::check_access( bp_loggedin_user_id(), $notification_id ) ) {
+		if ( ! empty( $notification_id ) && (bool) BP_Notifications_Notification::check_access( $user_id, $notification_id ) ) {
 			return true;
 		}
 

@@ -39,6 +39,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\SignupConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\NotificationEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupCreate;
@@ -56,7 +57,6 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupActivate;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
-use WPGraphQL\Extensions\BuddyPress\Type\Union\NotificationObjectUnion;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
@@ -64,6 +64,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\NotificationType;
+use WPGraphQL\Extensions\BuddyPress\Connection\NotificationConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
@@ -74,6 +75,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\InvitationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
+use WPGraphQL\Extensions\BuddyPress\Type\Union\NotificationObjectUnion;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\NotificationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
@@ -262,8 +264,14 @@ class TypeRegistry {
 
 		if ( bp_is_active( 'notifications' ) ) {
 
+			// Enum(s).
+			NotificationEnums::register();
+
 			// Fields.
 			NotificationType::register();
+
+			// Connections.
+			NotificationConnection::register_connections();
 		}
 
 		// Members component.
