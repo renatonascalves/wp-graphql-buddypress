@@ -1,5 +1,6 @@
 {
   "name": "wp-graphql-buddypress",
+  "version": "0.0.1-alpha",
   "description": "Bringing the power of GraphQL to BuddyPress.",
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
@@ -20,6 +21,13 @@
     "bp",
     "rest"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wp-graphql/wp-graphql-buddypress.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wp-graphql/wp-graphql-buddypress/issues"
+  },
   "devDependencies": {
     "@wordpress/env": "^4.1.3"
   },

@@ -29,6 +29,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MembersConnectionResolv
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ThreadConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\MessagesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\RecipientsConnectionResolver;
+use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\NotificationConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivitiesConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\ActivityCommentsConnectionResolver;
 use WPGraphQL\Extensions\BuddyPress\Connection\Resolvers\SignupConnectionResolver;
@@ -59,6 +60,28 @@ class Factory {
 		}
 
 		return $user;
+	}
+
+	/**
+	 * Returns an Notification object.
+	 *
+	 * @param int        $id      Notification ID or null.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_notification_object( $id, AppContext $context ): ?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$notification_id = absint( $id );
+		$context->get_loader( 'bp_notification' )->buffer( [ $notification_id ] );
+
+		return new Deferred(
+			function () use ( $notification_id, $context ) {
+				return $context->get_loader( 'bp_notification' )->load( $notification_id );
+			}
+		);
 	}
 
 	/**
@@ -566,5 +589,18 @@ class Factory {
 	 */
 	public static function resolve_signup_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
 		return ( new SignupConnectionResolver( $source, $args, $context, $info ) )->get_connection();
+	}
+
+	/**
+	 * Wrapper for the NotificationConnectionResolver class.
+	 *
+	 * @param mixed       $source  Source.
+	 * @param array       $args    Array of args to be passed down to the resolve method.
+	 * @param AppContext  $context The context of the query to pass along.
+	 * @param ResolveInfo $info    The ResolveInfo object.
+	 * @return Deferred
+	 */
+	public static function resolve_notification_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
+		return ( new NotificationConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 }

@@ -63,23 +63,29 @@ class Activity extends Model {
 						: null;
 				},
 				'databaseId'       => function() {
-					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
+					return ! empty( $this->data->id )
+						? absint( $this->data->id )
+						: null;
 				},
 				'parentId'         => function() {
-					$id = 'activity_comment' === $this->data->type ? $this->data->secondary_item_id : 0;
+					$id = 'activity_comment' === $this->data->type
+						? $this->data->secondary_item_id
+						: 0;
 
 					return ! empty( $id )
 						? Relay::toGlobalId( 'activity', (string) $id )
 						: null;
 				},
 				'parentDatabaseId' => function() {
-					return 'activity_comment' === $this->data->type ? absint( $this->data->secondary_item_id ) : 0;
+					return 'activity_comment' === $this->data->type
+						? absint( $this->data->secondary_item_id )
+						: 0;
 				},
 				'primaryItemId'    => function() {
-					return absint( $this->data->item_id ?? 0 );
+					return absint( $this->data->item_id );
 				},
 				'secondaryItemId'  => function() {
-					return absint( $this->data->secondary_item_id ?? 0 );
+					return absint( $this->data->secondary_item_id );
 				},
 				'status'           => function() {
 					return $this->data->is_spam ? 'spam' : 'published';

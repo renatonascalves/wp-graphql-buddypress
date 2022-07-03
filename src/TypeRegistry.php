@@ -39,6 +39,7 @@ use WPGraphQL\Extensions\BuddyPress\Connection\SignupConnection;
 use WPGraphQL\Extensions\BuddyPress\Connection\ThreadConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Thread\StarMessage;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GroupMembersEnums;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\NotificationEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\MessageType;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\BlogObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupCreate;
@@ -50,6 +51,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\Enum\XProfileFieldEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\ActivityType;
 use WPGraphQL\Extensions\BuddyPress\Connection\ActivityConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\GroupObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\SignupObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ThreadObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupActivate;
@@ -61,6 +63,11 @@ use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityUpdate;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\NotificationType;
+use WPGraphQL\Extensions\BuddyPress\Connection\NotificationConnection;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileGroupType;
 use WPGraphQL\Extensions\BuddyPress\Connection\XProfileFieldConnection;
@@ -68,6 +75,9 @@ use WPGraphQL\Extensions\BuddyPress\Connection\XProfileGroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\FriendshipObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\InvitationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityFavorite;
+use WPGraphQL\Extensions\BuddyPress\Type\Union\NotificationObjectUnion;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
+use WPGraphQL\Extensions\BuddyPress\Data\Loader\NotificationObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Friendship\FriendshipUpdate;
@@ -84,11 +94,8 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationCreate;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationAccept;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Invites\InvitationReject;
-use WPGraphQL\Extensions\BuddyPress\Type\InterfaceType\Invitation;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\InvitationGroupType;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationUpdate;
 
 /**
  * Class TypeRegistry
@@ -246,14 +253,32 @@ class TypeRegistry {
 
 	/**
 	 * Registers BuddyPress types, connections, and mutations to GraphQL schema.
+	 *
+	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry The Type Registry.
 	 */
-	public static function graphql_register_types(): void {
+	public static function graphql_register_types( $type_registry ): void {
 
 		// General Enum(s).
 		GeneralEnums::register();
 
 		// Register Interfaces.
 		Invitation::register_type();
+
+		if ( bp_is_active( 'notifications' ) ) {
+
+			// Enum(s).
+			NotificationEnums::register();
+
+			// Fields.
+			NotificationType::register();
+
+			// Connections.
+			NotificationConnection::register_connections();
+
+			// Mutations.
+			NotificationDelete::register_mutation();
+			NotificationUpdate::register_mutation();
+		}
 
 		// Members component.
 		if ( bp_is_active( 'members' ) ) {
@@ -426,6 +451,9 @@ class TypeRegistry {
 			AttachmentCoverUpload::register_mutation();
 			AttachmentCoverDelete::register_mutation();
 		}
+
+		// Unions.
+		NotificationObjectUnion::register( $type_registry );
 	}
 
 	/**
@@ -439,16 +467,17 @@ class TypeRegistry {
 		return array_merge(
 			$loaders,
 			[
-				'bp_signup'         => new SignupObjectLoader( $context ),
-				'bp_group'          => new GroupObjectLoader( $context ),
-				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
-				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
-				'bp_friend'         => new FriendshipObjectLoader( $context ),
-				'bp_blog'           => new BlogObjectLoader( $context ),
-				'bp_thread'         => new ThreadObjectLoader( $context ),
-				'bp_message'        => new MessageObjectLoader( $context ),
 				'bp_activity'       => new ActivityObjectLoader( $context ),
+				'bp_blog'           => new BlogObjectLoader( $context ),
+				'bp_friend'         => new FriendshipObjectLoader( $context ),
+				'bp_group'          => new GroupObjectLoader( $context ),
 				'bp_invitation'     => new InvitationObjectLoader( $context ),
+				'bp_message'        => new MessageObjectLoader( $context ),
+				'bp_notification'   => new NotificationObjectLoader( $context ),
+				'bp_signup'         => new SignupObjectLoader( $context ),
+				'bp_thread'         => new ThreadObjectLoader( $context ),
+				'bp_xprofile_field' => new XProfileFieldObjectLoader( $context ),
+				'bp_xprofile_group' => new XProfileGroupObjectLoader( $context ),
 			]
 		);
 	}

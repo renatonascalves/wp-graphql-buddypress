@@ -8,7 +8,7 @@ Bringing the power of GraphQL to BuddyPress.
 
 * PHP >= 7.4+
 * WP >= 5.9+
-* WPGraphQL >= 1.6.12+
+* WPGraphQL >= latest
 * BuddyPress >= latest
 
 ## Quick Install

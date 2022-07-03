@@ -52,11 +52,7 @@ class GroupConnection {
 		register_graphql_connection( self::get_group_invitations_connection_config() );
 
 		// Register connection from User > GroupInvitation (Request|Invite).
-		register_graphql_connection(
-			self::get_group_invitations_connection_config(
-				[ 'fromType' => 'User' ]
-			)
-		);
+		register_graphql_connection( self::get_group_invitations_connection_config( [ 'fromType' => 'User' ] ) );
 	}
 
 	/**

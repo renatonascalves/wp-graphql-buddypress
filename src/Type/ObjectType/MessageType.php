@@ -34,11 +34,11 @@ class MessageType {
 				'description'       => __( 'Info about a BuddyPress thread message.', 'wp-graphql-buddypress' ),
 				'interfaces'        => [ 'Node', 'DatabaseIdentifier' ],
 				'fields'            => [
-					'threadId'  => [
+					'threadId'    => [
 						'type'        => 'Int',
 						'description' => __( 'The ID of the thread.', 'wp-graphql-buddypress' ),
 					],
-					'sender'    => [
+					'sender'      => [
 						'type'        => 'User',
 						'description' => __( 'The sender of the message.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Message $message, array $args, AppContext $context ) {
@@ -47,7 +47,7 @@ class MessageType {
 								: null;
 						},
 					],
-					'subject'   => [
+					'subject'     => [
 						'type'        => 'String',
 						'description' => __( 'The subject of the message.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -68,7 +68,7 @@ class MessageType {
 							return apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) );
 						},
 					],
-					'excerpt'   => [
+					'excerpt'     => [
 						'type'        => 'String',
 						'description' => __( 'Summary of the message.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -91,7 +91,7 @@ class MessageType {
 							return apply_filters( 'bp_get_message_thread_excerpt', $excerpt );
 						},
 					],
-					'message'   => [
+					'message'     => [
 						'type'        => 'String',
 						'description' => __( 'The content of the message.', 'wp-graphql-buddypress' ),
 						'args'        => [
@@ -112,7 +112,7 @@ class MessageType {
 							return apply_filters( 'bp_get_the_thread_message_content', wp_staticize_emoji( $message->message ) );
 						},
 					],
-					'isStarred' => [
+					'isStarred'   => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the message was starred.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Message $message ) {
@@ -124,9 +124,13 @@ class MessageType {
 							return bp_messages_is_message_starred( $message->databaseId, bp_loggedin_user_id() );
 						},
 					],
-					'dateSent'  => [
+					'dateSent'    => [
 						'type'        => 'String',
-						'description' => __( 'The date the message was sent.', 'wp-graphql-buddypress' ),
+						'description' => __( 'The date the message was sent, in the site\'s timezone.', 'wp-graphql-buddypress' ),
+					],
+					'dateSentGmt' => [
+						'type'        => 'String',
+						'description' => __( 'The date the message was sent, as GMT.', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {

@@ -10,7 +10,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 	}
 
