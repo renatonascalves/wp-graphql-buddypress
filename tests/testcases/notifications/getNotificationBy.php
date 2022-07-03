@@ -91,7 +91,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 			);
 	}
 
-	public function test_get_blog_notification() {
+	public function get_blog_notification() {
 		$this->skipWithoutMultisite();
 
 		$blog_title = 'The Foo Bar Blog';

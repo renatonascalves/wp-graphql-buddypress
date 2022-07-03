@@ -5,7 +5,7 @@
  * @package  WPGraphQL\Extensions\BuddyPress
  * @author   Renato Alves
  * @version  0.0.1-alpha
- * @license  GPL-3.0
+ * @license  GPL-3.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name:       WPGraphQL BuddyPress
@@ -19,8 +19,8 @@
  * Domain Path:       /languages/
  * Requires PHP:      7.4
  * Requires WP:       5.9
- * Tested up to:      5.9
- * License:           GPL-3.0
+ * Tested up to:      6.0
+ * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
 
