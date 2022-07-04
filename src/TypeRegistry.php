@@ -25,7 +25,6 @@ use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\BlogType;
 use WPGraphQL\Extensions\BuddyPress\Connection\BlogConnection;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\AttachmentEnums;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\FriendshipEnums;
-use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupType;
 use WPGraphQL\Extensions\BuddyPress\Connection\GroupConnection;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Group\GroupDelete;
@@ -59,6 +58,7 @@ use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\AttachmentType;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\FriendshipType;
 use WPGraphQL\Extensions\BuddyPress\Connection\FriendshipConnection;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\MessageObjectLoader;
+use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\GroupObjectType;
 use WPGraphQL\Extensions\BuddyPress\Data\Loader\ActivityObjectLoader;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Activity\ActivityDelete;
@@ -90,12 +90,13 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupCreate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\XProfile\XProfileGroupUpdate;
 use WPGraphQL\Extensions\BuddyPress\Type\ObjectType\XProfileFieldValueType;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationDelete;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationUpdate;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationDelete;
-use WPGraphQL\Extensions\BuddyPress\Mutation\Notification\NotificationUpdate;
+use WPGraphQL\Type\ObjectType\TermObject;
 
 /**
  * Class TypeRegistry
@@ -232,6 +233,25 @@ class TypeRegistry {
 			3
 		);
 
+		// Register the Group Type taxonomy object.
+		add_filter(
+			'register_taxonomy_args',
+			function( $args, $taxonomy ) {
+
+				if ( false === bp_is_active( 'groups' ) || bp_get_group_type_tax_name() !== $taxonomy ) {
+					return $args;
+				}
+
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'GroupTypeTerm';
+				$args['graphql_plural_name'] = 'GroupTypeTerms';
+
+				return $args;
+			},
+			10,
+			2
+		);
+
 		/**
 		 * Change the visibility of the user to `restricted`.
 		 *
@@ -338,7 +358,7 @@ class TypeRegistry {
 			GroupMembersEnums::register();
 
 			// Object(s).
-			GroupType::register();
+			GroupObjectType::register();
 			InvitationGroupType::register();
 
 			// Connections.

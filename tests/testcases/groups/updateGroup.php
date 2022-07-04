@@ -7,13 +7,6 @@
  */
 class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_update_group() {
 		$this->bp->set_current_user( $this->user );
 
@@ -108,7 +101,17 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
-			->hasField( 'types', [ 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 	}
 
 	public function test_update_group_remove_nonexist_type() {
@@ -122,7 +125,17 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
-			->hasField( 'types', [ 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 
 		$this->assertQuerySuccessful( $this->remove_group_type() )
 			->hasField( 'types', null );
@@ -133,11 +146,35 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
-			->hasField( 'types', [ 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 
 		// Append new one.
 		$this->assertQuerySuccessful( $this->append_group_type( [ 'appendTypes' => [ 'BAR' ] ] ) )
-			->hasField( 'types', [ 'BAR', 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'bar'
+						],
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 	}
 
 	public function test_update_group_overwrite_types() {
@@ -145,11 +182,31 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
-			->hasField( 'types', [ 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 
 		// This overwrites the old one.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'BAR' ] ] ) )
-			->hasField( 'types', [ 'BAR' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'bar'
+						]
+					]
+				]
+			);
 	}
 
 	/**
@@ -222,7 +279,12 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 				{
 					clientMutationId
 					group {
-						types
+						types {
+							nodes {
+								__typename
+								name
+							}
+						}
 					}
 				}
 			}
@@ -265,7 +327,12 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 				{
 					clientMutationId
 					group {
-						types
+						types {
+							nodes {
+								__typename
+								name
+							}
+						}
 					}
 				}
 			}
@@ -307,7 +374,12 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 				{
 					clientMutationId
 					group {
-						types
+						types {
+							nodes {
+								__typename
+								name
+							}
+						}
 					}
 				}
 			}

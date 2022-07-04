@@ -8,6 +8,8 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 
+use WPGraphQL\Type\WPEnumType;
+
 /**
  * BlogEnums Class.
  */
@@ -17,6 +19,9 @@ class BlogEnums {
 	 * Registers enum type.
 	 */
 	public static function register(): void {
+
+		// Site Language Enum.
+		self::site_languages();
 
 		// Blog Order Types.
 		register_graphql_enum_type(
@@ -45,6 +50,44 @@ class BlogEnums {
 						'value'       => 'random',
 					],
 				],
+			]
+		);
+	}
+
+	/**
+	 * Registers site languages enum.
+	 */
+	public static function site_languages(): void {
+		$languages_enum_values = [
+			WPEnumType::get_safe_name( 'none' ) => [
+				'description' => __( 'No language set yet.', 'wp-graphql-buddypress' ),
+				'value'       => 'none',
+			],
+		];
+
+		/** This filter is documented in wp-signup.php */
+		$languages = (array) apply_filters( 'signup_get_available_languages', get_available_languages() );
+
+		if ( ! empty( $languages ) ) {
+			$languages_enum_values = [];
+
+			foreach ( $languages as $language ) {
+				$languages_enum_values[ WPEnumType::get_safe_name( $language ) ] = [
+					'value'       => $language,
+					'description' => sprintf(
+						/* translators: 1: language */
+						__( 'Language %1$s', 'wp-graphql-buddypress' ),
+						$language
+					),
+				];
+			}
+		}
+
+		register_graphql_enum_type(
+			'SiteLanguagesEnum',
+			[
+				'description' => __( 'Available languages.', 'wp-graphql-buddypress' ),
+				'values'      => $languages_enum_values,
 			]
 		);
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers Group type and queries
+ * Registers Group object type and queries
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
  * @since 0.0.1-alpha
@@ -10,14 +10,15 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use GraphQL\Deferred;
 use WPGraphQL\AppContext;
+use WPGraphQL\Model\Term;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
- * Class GroupType
+ * Class GroupObjectType
  */
-class GroupType {
+class GroupObjectType {
 
 	/**
 	 * Name of the type.
@@ -191,10 +192,6 @@ class GroupType {
 						'type'        => 'GroupStatusEnum',
 						'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 					],
-					'types'            => [
-						'type'        => [ 'list_of' => 'GroupTypeEnum' ],
-						'description' => __( 'The types of the group.', 'wp-graphql-buddypress' ),
-					],
 					'attachmentAvatar' => [
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
@@ -267,6 +264,106 @@ class GroupType {
 					$group = GroupHelper::get_group_from_input( $args );
 
 					return Factory::resolve_group_object( $group->id, $context );
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'singularName',
+			[
+				'type'        => 'String',
+				'description' => __( 'The name of this type in singular form.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+					return get_term_meta( $source->databaseId, 'bp_type_singular_name', true );
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'pluralName',
+			[
+				'type'        => 'String',
+				'description' => __( 'The name of this type in plural form.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+					return get_term_meta( $source->databaseId, 'bp_type_name', true );
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'hasDirectory',
+			[
+				'type'        => 'Boolean',
+				'description' => __( 'Make a list of groups matching this type available on the groups directory.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+
+					if ( false === bp_current_user_can( 'bp_moderate' ) ) {
+						return null;
+					}
+
+					$meta_value = get_term_meta( $source->databaseId, 'bp_type_has_directory', true );
+
+					return wp_validate_boolean( $meta_value );
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'directorySlug',
+			[
+				'type'        => 'String',
+				'description' => __( 'The Group type directory slug.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+
+					if ( false === bp_current_user_can( 'bp_moderate' ) ) {
+						return null;
+					}
+
+					$meta_value = get_term_meta( $source->databaseId, 'bp_type_directory_slug', true );
+
+					return $meta_value;
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'showOnGroup',
+			[
+				'type'        => 'Boolean',
+				'description' => __( 'Show where group types may be listed, like in the group header.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+
+					if ( false === bp_current_user_can( 'bp_moderate' ) ) {
+						return null;
+					}
+
+					$meta_value = get_term_meta( $source->databaseId, 'bp_type_show_in_list', true );
+
+					return wp_validate_boolean( $meta_value );
+				},
+			]
+		);
+
+		register_graphql_field(
+			'GroupTypeTerm',
+			'showOnGroupCreation',
+			[
+				'type'        => 'Boolean',
+				'description' => __( 'Show during group creation, and when a group admin is on the group&rsquo;s settings page.', 'wp-graphql-buddypress' ),
+				'resolve'     => function ( Term $source ) {
+
+					if ( false === bp_current_user_can( 'bp_moderate' ) ) {
+						return null;
+					}
+
+					$meta_value = get_term_meta( $source->databaseId, 'bp_type_show_in_create_screen', true );
+
+					return wp_validate_boolean( $meta_value );
 				},
 			]
 		);

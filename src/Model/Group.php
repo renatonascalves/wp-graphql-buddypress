@@ -132,15 +132,6 @@ class Group extends Model {
 				'status'           => function() {
 					return bp_get_group_status( $this->data );
 				},
-				'types'            => function() {
-					$types = bp_groups_get_group_type( $this->data->id, false );
-
-					if ( empty( $types ) || ! is_array( $types ) ) {
-						return null;
-					}
-
-					return $types;
-				},
 			];
 		}
 	}

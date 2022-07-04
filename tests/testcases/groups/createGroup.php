@@ -76,7 +76,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 			->notHasField( 'random' );
 	}
 
-	public function test_create_group_user_not_logged_in() {
+	public function test_create_group_user_unauthenticated() {
 		$this->assertQueryFailed( $this->create_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
@@ -122,7 +122,17 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 		$this->bp->set_current_user( $this->user );
 
 		$this->assertQuerySuccessful( $this->create_group_type( [ 'types' => [ 'FOO' ] ] ) )
-			->hasField( 'types', [ 'FOO' ] );
+			->hasField(
+				'types',
+				[
+					'nodes' => [
+						[
+							'__typename' => 'GroupTypeTerm',
+							'name'       => 'foo'
+						]
+					]
+				]
+			);
 	}
 
 	public function test_create_group_with_invalid_type() {
@@ -182,7 +192,12 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 						}
 						totalMemberCount
 						lastActivity
-						types
+						types {
+							nodes {
+								__typename
+								name
+							}
+						}
 						attachmentAvatar {
 							full
 						}
@@ -232,7 +247,12 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 				{
 					clientMutationId
 					group {
-						types
+						types {
+							nodes {
+								__typename
+								name
+							}
+						}
 					}
 				}
 			}
