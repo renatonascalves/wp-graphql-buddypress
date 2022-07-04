@@ -70,7 +70,7 @@ class GroupConnection {
 					$taxonomy_name = bp_get_group_type_tax_name();
 					$raw_types     = bp_get_object_terms( $source->databaseId, $taxonomy_name );
 
-					if ( empty( $raw_types ) || is_wp_error( $raw_types ) ) {
+					if ( empty( $raw_types ) ) {
 						return null;
 					}
 
