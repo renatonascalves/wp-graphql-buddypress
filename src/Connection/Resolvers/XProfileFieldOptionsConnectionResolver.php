@@ -39,6 +39,10 @@ class XProfileFieldOptionsConnectionResolver {
 			$source->options->get_children()
 		);
 
+		if ( empty( $fields ) ) {
+			return null;
+		}
+
 		$connection = Relay::connectionFromArray( $fields, $args );
 
 		$nodes = [];
@@ -50,6 +54,6 @@ class XProfileFieldOptionsConnectionResolver {
 
 		$connection['nodes'] = ! empty( $nodes ) ? $nodes : null;
 
-		return ! empty( $fields ) ? $connection : null;
+		return $connection;
 	}
 }

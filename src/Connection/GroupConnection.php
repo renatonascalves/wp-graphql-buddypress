@@ -8,9 +8,11 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Connection;
 
+use WPGraphQL\Data\Connection\TermObjectConnectionResolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Model\Group;
 
 /**
  * Class GroupConnection.
@@ -42,7 +44,7 @@ class GroupConnection {
 				'toType'         => 'User',
 				'fromFieldName'  => 'members',
 				'connectionArgs' => self::get_group_members_connection_args(),
-				'resolve'        => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+				'resolve'        => function ( Group $source, array $args, AppContext $context, ResolveInfo $info ) {
 					return Factory::resolve_group_members_connection( $source, $args, $context, $info );
 				},
 			]
@@ -53,10 +55,43 @@ class GroupConnection {
 
 		// Register connection from User > GroupInvitation (Request|Invite).
 		register_graphql_connection( self::get_group_invitations_connection_config( [ 'fromType' => 'User' ] ) );
+
+		// Register connection from Group > GroupTypeTerm.
+		register_graphql_connection(
+			[
+				'fromType'      => 'Group',
+				'toType'        => 'GroupTypeTerm',
+				'fromFieldName' => 'types',
+				'queryClass'    => 'WP_Term_Query',
+				'resolve'       => function ( Group $source, array $args, AppContext $context, ResolveInfo $info ) {
+					// bp_groups_get_group_type is cached and it is not always up to date.
+					// So fetch the term objects directly.
+
+					$taxonomy_name = bp_get_group_type_tax_name();
+					$raw_types     = bp_get_object_terms( $source->databaseId, $taxonomy_name );
+
+					if ( empty( $raw_types ) ) {
+						return null;
+					}
+
+					// Get and parse IDs.
+					$ids = wp_parse_id_list( wp_list_pluck( $raw_types, 'term_id' ) );
+
+					if ( empty( $ids ) ) {
+						return null;
+					}
+
+					$resolver = new TermObjectConnectionResolver( $source, $args, $context, $info, $taxonomy_name );
+					$resolver->set_query_arg( 'include', $ids );
+
+					return $resolver->get_connection();
+				},
+			]
+		);
 	}
 
 	/**
-	 * This returns a RootQuery > group connection config.
+	 * This returns a RootQuery > Group connection config.
 	 *
 	 * @param array $args Array of arguments.
 	 * @return array

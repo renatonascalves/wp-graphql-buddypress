@@ -8,8 +8,6 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 
-use WPGraphQL\Type\WPEnumType;
-
 /**
  * GeneralEnums Class.
  */
@@ -19,9 +17,6 @@ class GeneralEnums {
 	 * Registers enum type.
 	 */
 	public static function register(): void {
-
-		// Site Language Enum.
-		self::site_languages();
 
 		// Content Field Format.
 		register_graphql_enum_type(
@@ -60,37 +55,6 @@ class GeneralEnums {
 						'value'       => 'request',
 					],
 				],
-			]
-		);
-	}
-
-	/**
-	 * Registers site languages enum.
-	 */
-	public static function site_languages(): void {
-
-		/** This filter is documented in wp-signup.php */
-		$languages             = (array) apply_filters( 'signup_get_available_languages', get_available_languages() );
-		$languages_enum_values = [];
-
-		if ( ! empty( $languages ) ) {
-			foreach ( $languages as $language ) {
-				$languages_enum_values[ WPEnumType::get_safe_name( $language ) ] = [
-					'value'       => $language,
-					'description' => sprintf(
-						/* translators: %1$s: available language */
-						__( 'Language %1$s', 'wp-graphql-buddypress' ),
-						$language
-					),
-				];
-			}
-		}
-
-		register_graphql_enum_type(
-			'SiteLanguagesEnum',
-			[
-				'description' => __( 'Available languages.', 'wp-graphql-buddypress' ),
-				'values'      => $languages_enum_values,
 			]
 		);
 	}

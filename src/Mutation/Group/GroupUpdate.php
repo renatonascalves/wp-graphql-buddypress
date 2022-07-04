@@ -72,21 +72,15 @@ class GroupUpdate {
 				'description' => __( 'The status of the group.', 'wp-graphql-buddypress' ),
 			],
 			'types'       => [
-				'type'        => [
-					'list_of' => 'GroupTypeEnum',
-				],
+				'type'        => [ 'list_of' => 'GroupTypeEnum' ],
 				'description' => __( 'The type(s) of the group.', 'wp-graphql-buddypress' ),
 			],
 			'appendTypes' => [
-				'type'        => [
-					'list_of' => 'GroupTypeEnum',
-				],
+				'type'        => [ 'list_of' => 'GroupTypeEnum' ],
 				'description' => __( 'The type(s) of the group to append.', 'wp-graphql-buddypress' ),
 			],
 			'removeTypes' => [
-				'type'        => [
-					'list_of' => 'GroupTypeEnum',
-				],
+				'type'        => [ 'list_of' => 'GroupTypeEnum' ],
 				'description' => __( 'The type(s) of the group to remove.', 'wp-graphql-buddypress' ),
 			],
 			'hasForum'    => [
@@ -149,7 +143,7 @@ class GroupUpdate {
 
 			// Add group type(s).
 			if ( ! empty( $input['types'] ) ) {
-				bp_groups_set_group_type( $group_id, $input['types'], false );
+				bp_groups_set_group_type( $group_id, $input['types'] );
 			}
 
 			// Append group type(s).
