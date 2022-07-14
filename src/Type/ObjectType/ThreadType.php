@@ -92,13 +92,15 @@ class ThreadType {
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Thread object.', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'       => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
+					'id'     => [
+						'type'        => [
+							'non_null' => 'ID',
+						],
+						'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
 					],
-					'threadId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
+					'idType' => [
+						'type'        => self::$type_name . 'IdTypeEnum',
+						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {

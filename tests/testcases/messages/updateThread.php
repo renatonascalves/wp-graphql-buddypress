@@ -7,13 +7,6 @@
  */
 class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_mark_thread_as_read() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();

@@ -102,7 +102,7 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$global_id = $this->toRelayId( 'bp_xprofile_group', $xprofile_group_id );
 		$query     = "
 			query {
-				xprofileGroupBy(id: \"{$global_id}\") {
+				xprofileGroup(id: \"{$global_id}\") {
 					id,
 					databaseId
 					groupOrder

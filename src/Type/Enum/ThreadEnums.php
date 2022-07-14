@@ -19,6 +19,25 @@ class ThreadEnums {
 	public static function register(): void {
 
 		register_graphql_enum_type(
+			'ThreadIdTypeEnum',
+			[
+				'description' => __( 'The Type of Identifier used to fetch a single resource. Default is ID.', 'wp-graphql-buddypress' ),
+				'values'      => [
+					'ID'          => [
+						'name'        => 'ID',
+						'value'       => 'id',
+						'description' => __( 'The globally unique ID', 'wp-graphql-buddypress' ),
+					],
+					'DATABASE_ID' => [
+						'name'        => 'DATABASE_ID',
+						'value'       => 'database_id',
+						'description' => __( 'The Database ID for the node', 'wp-graphql-buddypress' ),
+					],
+				],
+			]
+		);
+
+		register_graphql_enum_type(
 			'ThreadTypeEnum',
 			[
 				'description' => __( 'Shorthand for certain filter thread type combinations.', 'wp-graphql-buddypress' ),

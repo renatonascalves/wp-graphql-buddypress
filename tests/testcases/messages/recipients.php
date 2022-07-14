@@ -7,13 +7,6 @@
  */
 class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_thread_recipients() {
 		$this->bp->set_current_user( $this->admin );
 
@@ -30,7 +23,12 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			]
 		);
 
-		$results = $this->get_thread_recipients( $message->thread_id );
+		$results = $this->get_thread_recipients(
+			[
+				'id'     => $message->thread_id,
+				'idType' => 'DATABASE_ID'
+			]
+		);
 
 		$this->assertQuerySuccessful( $results )
 			->hasNodes();
@@ -60,8 +58,11 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		);
 
 		$results = $this->get_thread_recipients(
-			$message->thread_id,
-			[ 'where' => [ 'order' => 'DESC' ] ]
+			[
+				'id'     => $message->thread_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'order' => 'DESC' ]
+			]
 		);
 
 		$this->assertQuerySuccessful( $results )
@@ -90,10 +91,11 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		);
 
 		$results = $this->get_thread_recipients(
-			$message->thread_id,
 			[
-				'first' => 1,
-				'after' => '',
+				'id'     => $message->thread_id,
+				'idType' => 'DATABASE_ID',
+				'first'  => 1,
+				'after'  => '',
 			]
 		);
 
@@ -113,21 +115,20 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	/**
 	 * Get thread recipients.
 	 *
-	 * @param int|null $thread_id Thread ID.
-	 * @param array    $variables Variables.
+	 * @param array $variables Variables.
 	 * @return array
 	 */
-	protected function get_thread_recipients( $thread_id = null, array $variables = [] ): array {
-		$variables['threadId'] = $thread_id ?? $this->thread->thread_id;
-		$query                 = 'query recipientsQuery(
-			$threadId:Int
+	protected function get_thread_recipients( array $variables = [] ): array {
+		$query = 'query recipientsQuery(
+			$id:ID!
+			$idType:ThreadIdTypeEnum
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:ThreadToUserConnectionWhereArgs
 		) {
-			thread(threadId: $threadId) {
+			thread(id: $id, idType: $idType ) {
 				databaseId
 				id
 				recipients(

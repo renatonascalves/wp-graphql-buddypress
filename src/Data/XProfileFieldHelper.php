@@ -30,18 +30,34 @@ class XProfileFieldHelper {
 	public static function get_xprofile_field_from_input( $input, $user_id = null ): BP_XProfile_Field {
 		$xprofile_field_id = 0;
 
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
+		if ( is_int( $input ) ) {
+			$id_type = 'integer';
+		} elseif ( isset( $input['fieldId'] ) ) {
+			$id_type = 'field_id';
+		} else {
+			$id_type = $input['idType'] ?? 'global_id';
+		}
 
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
+		switch ( $id_type ) {
+			case 'field_id':
+				$xprofile_field_id = absint( $input['fieldId'] );
+				break;
+			case 'database_id':
+				$xprofile_field_id = absint( $input['id'] );
+				break;
+			case 'integer':
+				$xprofile_field_id = absint( $input );
+				break;
+			case 'global_id':
+			default:
+				$id_components = Relay::fromGlobalId( $input['id'] );
 
-			$xprofile_field_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['fieldId'] ) ) {
-			$xprofile_field_id = absint( $input['fieldId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$xprofile_field_id = absint( $input );
+				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+				}
+
+				$xprofile_field_id = absint( $id_components['id'] );
+				break;
 		}
 
 		$xprofile_field_object = xprofile_get_field( absint( $xprofile_field_id ), $user_id );
@@ -145,6 +161,6 @@ class XProfileFieldHelper {
 	 * @return bool
 	 */
 	public static function can_manage_xprofile_field(): bool {
-		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
+		return is_user_logged_in() && bp_current_user_can( 'bp_moderate' );
 	}
 }

@@ -164,14 +164,14 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	 */
 	protected function get_xprofile_group( array $variables = [] ): array {
 		$query = 'query groupFieldsTest(
-			$id:ID
+			$id:ID!
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:XProfileGroupToXProfileFieldConnectionWhereArgs
 		) {
-			xprofileGroupBy(id: $id) {
+			xprofileGroup(id: $id) {
 				databaseId
 				fields(
 					first:$first

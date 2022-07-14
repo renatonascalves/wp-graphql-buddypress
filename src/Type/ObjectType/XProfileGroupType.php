@@ -88,24 +88,27 @@ class XProfileGroupType {
 
 		register_graphql_field(
 			'RootQuery',
-			'xprofileGroupBy',
+			'xprofileGroup',
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress XProfile Group object.', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'      => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
+					'id'     => [
+						'type'        => [
+							'non_null' => 'ID',
+						],
+						'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
 					],
-					'groupId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
+					'idType' => [
+						'type'        => self::$type_name . 'IdTypeEnum',
+						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_group_object = XProfileGroupHelper::get_xprofile_group_from_input( $args );
-
-					return Factory::resolve_xprofile_group_object( $xprofile_group_object->id, $context );
+					return Factory::resolve_xprofile_group_object(
+						XProfileGroupHelper::get_xprofile_group_from_input( $args )->id,
+						$context
+					);
 				},
 			]
 		);

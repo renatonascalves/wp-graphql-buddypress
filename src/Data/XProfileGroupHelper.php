@@ -28,18 +28,34 @@ class XProfileGroupHelper {
 	public static function get_xprofile_group_from_input( $input ): stdClass {
 		$xprofile_group_id = 0;
 
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
+		if ( is_int( $input ) ) {
+			$id_type = 'integer';
+		} elseif ( isset( $input['groupId'] ) ) {
+			$id_type = 'group_id';
+		} else {
+			$id_type = $input['idType'] ?? 'global_id';
+		}
 
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
+		switch ( $id_type ) {
+			case 'group_id':
+				$xprofile_group_id = absint( $input['groupId'] );
+				break;
+			case 'database_id':
+				$xprofile_group_id = absint( $input['id'] );
+				break;
+			case 'integer':
+				$xprofile_group_id = absint( $input );
+				break;
+			case 'global_id':
+			default:
+				$id_components = Relay::fromGlobalId( $input['id'] );
 
-			$xprofile_group_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['groupId'] ) ) {
-			$xprofile_group_id = absint( $input['groupId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$xprofile_group_id = absint( $input );
+				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+				}
+
+				$xprofile_group_id = absint( $id_components['id'] );
+				break;
 		}
 
 		// Get group object.
@@ -93,6 +109,6 @@ class XProfileGroupHelper {
 	 * @return bool
 	 */
 	public static function can_manage_xprofile_group(): bool {
-		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
+		return is_user_logged_in() && bp_current_user_can( 'bp_moderate' );
 	}
 }

@@ -138,24 +138,27 @@ class XProfileFieldType {
 
 		register_graphql_field(
 			'RootQuery',
-			'xprofileFieldBy',
+			'xprofileField',
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress XProfile Field object', 'wp-graphql-buddypress' ),
 				'args'        => [
-					'id'      => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
+					'id'     => [
+						'type'        => [
+							'non_null' => 'ID',
+						],
+						'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
 					],
-					'fieldId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID', 'wp-graphql-buddypress' ),
+					'idType' => [
+						'type'        => self::$type_name . 'IdTypeEnum',
+						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
 					],
 				],
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $args );
-
-					return Factory::resolve_xprofile_field_object( $xprofile_field_object->id, $context );
+					return Factory::resolve_xprofile_field_object(
+						XProfileFieldHelper::get_xprofile_field_from_input( $args )->id,
+						$context
+					);
 				},
 			]
 		);

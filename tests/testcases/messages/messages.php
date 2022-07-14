@@ -7,13 +7,6 @@
  */
 class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_thread_messages() {
 		$this->bp->set_current_user( $this->admin );
 
@@ -43,7 +36,10 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID'
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
@@ -100,8 +96,11 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id,
-				[ 'where' => [ 'order' => 'DESC' ] ]
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID',
+					'where'  => [ 'order' => 'DESC' ]
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
@@ -148,7 +147,10 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID'
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
@@ -182,7 +184,10 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID'
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
@@ -224,7 +229,10 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID'
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', (string) $message->thread_id ) )
@@ -258,7 +266,10 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
-				$message->thread_id
+				[
+					'id'     => $message->thread_id,
+					'idType' => 'DATABASE_ID'
+				]
 			)
 		)
 			->hasField( 'id', $this->toRelayId( 'thread', $message->thread_id ) )
@@ -287,21 +298,20 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get thread messages.
 	 *
-	 * @param int|null $thread_id Thread ID.
-	 * @param array    $variables Variables.
+	 * @param array $variables Variables.
 	 * @return array
 	 */
-	protected function get_thread_messages( $thread_id = null, array $variables = [] ): array {
-		$variables['threadId'] = $thread_id ?? $this->thread->thread_id;
-		$query                 = 'query messagesQuery(
-			$threadId:Int
+	protected function get_thread_messages( array $variables = [] ): array {
+		$query = 'query messagesQuery(
+			$id:ID!
+			$idType:ThreadIdTypeEnum
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:ThreadToMessageConnectionWhereArgs
 		) {
-			thread(threadId: $threadId) {
+			thread(id: $id, idType: $idType ) {
 				databaseId
 				id
 				messages(

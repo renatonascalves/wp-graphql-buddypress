@@ -29,18 +29,34 @@ class ThreadHelper {
 	public static function get_thread_from_input( $input ): BP_Messages_Thread {
 		$thread_id = 0;
 
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
+		if ( is_int( $input ) ) {
+			$id_type = 'integer';
+		} elseif ( isset( $input['threadId'] ) ) {
+			$id_type = 'thread_id';
+		} else {
+			$id_type = $input['idType'] ?? 'global_id';
+		}
 
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
+		switch ( $id_type ) {
+			case 'thread_id':
+				$thread_id = absint( $input['threadId'] );
+				break;
+			case 'database_id':
+				$thread_id = absint( $input['id'] );
+				break;
+			case 'integer':
+				$thread_id = absint( $input );
+				break;
+			case 'global_id':
+			default:
+				$id_components = Relay::fromGlobalId( $input['id'] );
 
-			$thread_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['threadId'] ) ) {
-			$thread_id = absint( $input['threadId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$thread_id = absint( $input );
+				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+				}
+
+				$thread_id = absint( $id_components['id'] );
+				break;
 		}
 
 		$thread_object = new BP_Messages_Thread( $thread_id, 'ASC', [ 'user_id' => $input['userId'] ?? bp_loggedin_user_id() ] );
@@ -122,7 +138,7 @@ class ThreadHelper {
 		}
 
 		/**
-		 * Allows updating mutation args.
+		 * Allow updating mutation args.
 		 *
 		 * @param array                   $mutation_args Mutation output args.
 		 * @param array                   $input         Mutation input args.
@@ -138,6 +154,6 @@ class ThreadHelper {
 	 * @return bool
 	 */
 	public static function can_update_or_delete_thread( int $thread_id ): bool {
-		return ( null !== messages_check_thread_access( $thread_id, bp_loggedin_user_id() ) );
+		return null !== messages_check_thread_access( $thread_id, bp_loggedin_user_id() );
 	}
 }

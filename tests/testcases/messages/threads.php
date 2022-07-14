@@ -8,13 +8,6 @@
  */
 class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_threads_with_unauthenticated_user() {
 
 		// Create thread.
