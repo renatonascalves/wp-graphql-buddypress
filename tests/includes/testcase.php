@@ -155,7 +155,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
 		$this->assertArrayHasKey( 'data', $this->response );
-		$this->assertArrayNotHasKey( 'errors', $this->response );
 
 		return $this;
 	}
@@ -556,7 +555,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Upload avatar mutation.
 	 *
-	 * @param string $object Object.
+	 * @param string $object   Object.
 	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
@@ -604,7 +603,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Upload cover mutation.
 	 *
-	 * @param string $object Object.
+	 * @param string $object   Object.
 	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
