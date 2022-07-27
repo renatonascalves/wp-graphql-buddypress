@@ -5,6 +5,7 @@
 /vendor
 .vscode
 .wp-env.override.json
+composer.lock
 
 # Operating system specific files
 .DS_Store
