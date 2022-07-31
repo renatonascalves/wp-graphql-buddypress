@@ -128,9 +128,9 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}

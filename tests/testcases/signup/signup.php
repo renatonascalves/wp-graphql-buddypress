@@ -49,7 +49,7 @@ class Test_Signup_signup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$signup = $this->bp_factory->signup->get_object_by_id( $signup_id );
 
-		$this->assertQuerySuccessful( $this->get_signup( $signup_id  ) )
+		$this->assertQuerySuccessful( $this->get_signup( $signup_id ) )
 			->hasField( 'databaseId', $signup->id )
 			->hasField( 'userName', $signup->user_name )
 			->hasField( 'userLogin', $signup->user_login )

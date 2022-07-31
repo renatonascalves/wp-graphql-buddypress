@@ -26,7 +26,7 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 		$results = $this->get_thread_recipients(
 			[
 				'id'     => $message->thread_id,
-				'idType' => 'DATABASE_ID'
+				'idType' => 'DATABASE_ID',
 			]
 		);
 
@@ -61,7 +61,7 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			[
 				'id'     => $message->thread_id,
 				'idType' => 'DATABASE_ID',
-				'where'  => [ 'order' => 'DESC' ]
+				'where'  => [ 'order' => 'DESC' ],
 			]
 		);
 

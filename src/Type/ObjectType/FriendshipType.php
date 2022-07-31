@@ -9,9 +9,9 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
@@ -99,18 +99,7 @@ class FriendshipType {
 						throw new UserError( __( 'Sorry, you need to be logged in to perform this action.', 'wp-graphql-buddypress' ) );
 					}
 
-					$friendship_id = Factory::get_id( $args );
-					$friendship    = Factory::resolve_friendship_object( absint( $friendship_id ) );
-
-					// Only the friendship initiator and the friend, the one invited to the friendship can see it.
-					if ( ! empty( $friendship )
-						&& ! empty( $friendship->initiator )
-						&& ! empty( $friendship->friend )
-						&& ! in_array( bp_loggedin_user_id(), [ $friendship->initiator, $friendship->friend ], true ) ) {
-						throw new UserError( __( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
-					}
-
-					return $friendship;
+					return FriendshipHelper::get_friendship_from_input( $args );
 				},
 			]
 		);

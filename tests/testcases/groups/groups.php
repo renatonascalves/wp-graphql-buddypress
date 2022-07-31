@@ -160,9 +160,9 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}

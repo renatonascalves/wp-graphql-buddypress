@@ -814,7 +814,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 	}
 
 	/**
-	 * Pending implementation.
+	 * @todo Pending implementation.
 	 *
 	 * @see https://wordpress.slack.com/archives/C02RQBYUG/p1644186007153489
 	 */
@@ -837,7 +837,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 				'type'        => 'activity_comment',
 				'user_id'     => $this->random_user,
 				'item_id'     => $g,
-				'activity_id' => $a, // Root activity
+				'activity_id' => $a, // Root activity.
 				'content'     => 'Activity comment',
 				'component'   => buddypress()->groups->id,
 			]
@@ -857,8 +857,6 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$this->assertQuerySuccessful( $results )
 			->hasEdges()
 			->hasNodes();
-
-		return;
 
 		$this->assertEquals(
 			[

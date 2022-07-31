@@ -144,7 +144,7 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'databaseId'         => $this->request_id,
+				'databaseId'       => $this->request_id,
 				'type'             => 'REQUEST',
 			]
 		);

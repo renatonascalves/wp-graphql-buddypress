@@ -173,7 +173,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'databaseId'        => $message_id,
+			'databaseId'       => $message_id,
 		];
 
 		$operation_name = 'starMessageTest';

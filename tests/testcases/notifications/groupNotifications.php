@@ -9,12 +9,24 @@
 class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_group_admin_can_not_get_group_notifications() {
-		$u1  = $this->bp_factory->user->create();
-		$u2  = $this->bp_factory->user->create();
-		$g   = $this->bp_factory->group->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+		$g  = $this->bp_factory->group->create();
 
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u1 ] );
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u1 ] );
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u1,
+			]
+		);
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u1,
+			]
+		);
 
 		$this->bp->add_user_to_group( $u1, $g );
 
@@ -23,7 +35,12 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u2 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -34,12 +51,24 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 	}
 
 	public function test_group_mod_can_not_get_group_notifications() {
-		$u1  = $this->bp_factory->user->create();
-		$u2  = $this->bp_factory->user->create();
-		$g   = $this->bp_factory->group->create();
+		$u1 = $this->bp_factory->user->create();
+		$u2 = $this->bp_factory->user->create();
+		$g  = $this->bp_factory->group->create();
 
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u1 ] );
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u1 ] );
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u1,
+			]
+		);
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u1,
+			]
+		);
 
 		$this->bp->add_user_to_group( $u1, $g );
 
@@ -48,7 +77,12 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u2 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -61,17 +95,50 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 	public function test_get_new_group_notifications_only() {
 		$u  = $this->bp_factory->user->create();
 		$g  = $this->bp_factory->group->create();
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => true, 'component_name' => 'messages', 'user_id' => $u ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => false, 'user_id' => $u ] );
-		$n3 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => true, 'component_name' => 'activity', 'user_id' => $u ] );
-		$this->create_notification_id( [ 'item_id' => $g, 'is_new' => false, 'component_name' => 'activity', 'user_id' => $u ] );
+		$n1 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => true,
+				'component_name' => 'messages',
+				'user_id'        => $u,
+			]
+		);
+		$n2 = $this->create_notification_id(
+			[
+				'item_id' => $g,
+				'is_new'  => false,
+				'user_id' => $u,
+			]
+		);
+		$n3 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => true,
+				'component_name' => 'activity',
+				'user_id'        => $u,
+			]
+		);
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => false,
+				'component_name' => 'activity',
+				'user_id'        => $u,
+			]
+		);
 
 		// Make user group admin.
 		$this->bp->add_user_to_group( $u, $g, [ 'is_admin' => true ] );
 
 		$this->bp->set_current_user( $u );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'isNew' => true ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'isNew' => true ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -92,13 +159,39 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		$this->bp->add_user_to_group( $u1, $g );
 		$this->bp->add_user_to_group( $u2, $g );
 
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => true, 'component_name' => 'messages', 'user_id' => $u1 ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => true, 'component_name' => 'activity', 'user_id' => $u1 ] );
-		$n3 = $this->create_notification_id( [ 'item_id' => $g, 'is_new' => true, 'component_name' => 'activity', 'user_id' => $u2 ] );
+		$n1 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => true,
+				'component_name' => 'messages',
+				'user_id'        => $u1,
+			]
+		);
+		$n2 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => true,
+				'component_name' => 'activity',
+				'user_id'        => $u1,
+			]
+		);
+		$n3 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'is_new'         => true,
+				'component_name' => 'activity',
+				'user_id'        => $u2,
+			]
+		);
 
 		$this->bp->set_current_user( $u1 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -115,12 +208,35 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		$g  = $this->bp_factory->group->create();
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u1 ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u2 ] );
+		$n1 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u1,
+			]
+		);
+		$n2 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u2,
+			]
+		);
 
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'userIds' => [ $u1, $u2 ] ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [
+					'userIds' => [
+						$u1,
+						$u2,
+					],
+				],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -148,18 +264,41 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		$this->bp->add_user_to_group( $u1, $g );
 		$this->bp->add_user_to_group( $u2, $g );
 
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u1 ] );
-		$this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u2 ] );
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u1,
+			]
+		);
+		$this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u2,
+			]
+		);
 
 		$this->bp->set_current_user( $u3 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertEmpty( $response['data']['group']['notifications']['nodes'] );
 
 		// Even passing another user ID directly won't return their notifications.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'userIds' => [ $u1 ] ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'userIds' => [ $u1 ] ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertEmpty( $response['data']['group']['notifications']['nodes'] );
@@ -171,13 +310,31 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->add_user_to_group( $u, $g );
 
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u ] );
+		$n1 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u,
+			]
+		);
+		$n2 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u,
+			]
+		);
 
 		$this->bp->set_current_user( $u );
 
 		// ASC.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'order' => 'ASC' ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'order' => 'ASC' ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -187,7 +344,13 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		);
 
 		// DESC.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'order' => 'DESC' ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'order' => 'DESC' ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 
@@ -203,12 +366,30 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->add_user_to_group( $u, $g );
 
-		$n1 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'messages', 'user_id' => $u ] );
-		$n2 = $this->create_notification_id( [ 'item_id' => $g, 'component_name' => 'activity', 'user_id' => $u ] );
+		$n1 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'messages',
+				'user_id'        => $u,
+			]
+		);
+		$n2 = $this->create_notification_id(
+			[
+				'item_id'        => $g,
+				'component_name' => 'activity',
+				'user_id'        => $u,
+			]
+		);
 
 		$this->bp->set_current_user( $u );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'orderBy' => 'COMPONENT_NAME' ] ] );
+		$response = $this->groupNotificationsQuery(
+			[
+				'id'     => $g,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'orderBy' => 'COMPONENT_NAME' ],
+			]
+		);
 
 		$this->assertQuerySuccessful( $response );
 

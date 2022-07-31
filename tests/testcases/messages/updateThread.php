@@ -191,7 +191,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'databaseId'         => $thread_id,
+				'databaseId'       => $thread_id,
 				'messageId'        => null,
 				'read'             => null,
 				'unRead'           => null,

@@ -12,7 +12,12 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$u1 = $this->bp_factory->user->create();
 		$this->bp->add_user_to_group( $u1, $this->group );
 
-		$response = $this->get_group_members( [ 'id' => $this->group, 'idType' => 'DATABASE_ID', ] );
+		$response = $this->get_group_members(
+			[
+				'id'     => $this->group,
+				'idType' => 'DATABASE_ID',
+			]
+		);
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->group )
@@ -36,9 +41,9 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_group_members(
 			[
-				'id'    => $this->group,
+				'id'     => $this->group,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'excludeBanned' => true ],
+				'where'  => [ 'excludeBanned' => true ],
 			]
 		);
 
@@ -57,9 +62,9 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_group_members(
 			[
-				'id'    => $this->group,
+				'id'     => $this->group,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'excludeBanned' => true ],
+				'where'  => [ 'excludeBanned' => true ],
 			]
 		);
 
@@ -77,9 +82,9 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_group_members(
 			[
-				'id'    => $group_id,
+				'id'     => $group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'exclude' => $u1 ],
+				'where'  => [ 'exclude' => $u1 ],
 			]
 		);
 
@@ -158,9 +163,9 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_group_members(
 			[
-				'id'    => $group_id,
+				'id'     => $group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'groupMemberRoles' => 'MEMBER' ],
+				'where'  => [ 'groupMemberRoles' => 'MEMBER' ],
 			]
 		);
 

@@ -42,9 +42,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -64,9 +64,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -89,9 +89,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -114,9 +114,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -138,9 +138,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 
@@ -151,9 +151,9 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 	public function test_get_group_invites_unauthenticated() {
 		$response = $this->groupInvitesQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'INVITE' ],
+				'where'  => [ 'type' => 'INVITE' ],
 			]
 		);
 

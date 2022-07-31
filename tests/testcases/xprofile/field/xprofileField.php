@@ -71,10 +71,12 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_get_xprofile_field_with_invalid_id() {
-		$this->assertQueryFailed( $this->get_xprofile_field(
+		$this->assertQueryFailed(
+			$this->get_xprofile_field(
 				GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER,
 				'DATABASE_ID'
-			) )
+			)
+		)
 			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 

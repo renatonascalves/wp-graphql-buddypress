@@ -107,9 +107,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}
@@ -131,9 +131,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -152,9 +152,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -166,13 +166,13 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'bar'
+							'name'       => 'bar',
 						],
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}
@@ -188,9 +188,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -202,9 +202,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'bar'
-						]
-					]
+							'name'       => 'bar',
+						],
+					],
 				]
 			);
 	}
@@ -245,7 +245,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'databaseId'          => $this->group,
+				'databaseId'       => $this->group,
 				'status'           => 'PUBLIC',
 				'name'             => 'Group',
 			]
@@ -294,7 +294,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'databaseId'          => $this->group,
+				'databaseId'       => $this->group,
 				'types'            => [ 'FOO' ],
 			]
 		);

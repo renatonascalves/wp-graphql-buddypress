@@ -49,7 +49,7 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$slug     = 'group-test';
 		$group_id = $this->create_group_id();
 
-		$this->assertQuerySuccessful(  $this->get_a_group( $slug, 'SLUG' ) )
+		$this->assertQuerySuccessful( $this->get_a_group( $slug, 'SLUG' ) )
 			->hasField( 'slug', $slug )
 			->hasField( 'databaseId', $group_id );
 	}
@@ -67,7 +67,7 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			]
 		);
 
-		$this->assertQuerySuccessful(  $this->get_a_group( $previous_slug, 'PREVIOUS_SLUG' ) )
+		$this->assertQuerySuccessful( $this->get_a_group( $previous_slug, 'PREVIOUS_SLUG' ) )
 			->hasField( 'slug', 'newslug' )
 			->hasField( 'databaseId', $group_id )
 			->hasField( 'id', $global_id );

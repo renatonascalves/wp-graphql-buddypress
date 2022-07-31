@@ -60,9 +60,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->group,
+				'id'     => $this->group,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -98,9 +98,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -136,9 +136,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -177,9 +177,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -217,9 +217,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -241,9 +241,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -284,9 +284,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -324,9 +324,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		// Try a user without a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [
+				'where'  => [
 					'userId' => $u4,
 					'type'   => 'REQUEST',
 				],
@@ -339,9 +339,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		// Try another user with a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [
+				'where'  => [
 					'userId' => $u1,
 					'type'   => 'REQUEST',
 				],
@@ -355,9 +355,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	public function test_get_group_membership_requests_unauthenticated() {
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'where' => [ 'type' => 'REQUEST' ],
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -433,10 +433,10 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
+				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'after' => $this->key_to_cursor( $r1 ),
-				'where' => [ 'type' => 'REQUEST' ],
+				'after'  => $this->key_to_cursor( $r1 ),
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 

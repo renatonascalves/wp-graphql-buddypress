@@ -164,7 +164,7 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'databaseId'         => $this->invitation_id,
+				'databaseId'       => $this->invitation_id,
 				'type'             => 'INVITE',
 			]
 		);
