@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\InvitationHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Invitation;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * Class InvitationGroupType
@@ -63,24 +64,11 @@ class InvitationGroupType {
 
 		register_graphql_field(
 			'RootQuery',
-			'getInviteBy',
+			'getInvite',
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a Group invitation/request object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'       => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'inviteId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-					'type'     => [
-						'type'        => [ 'non_null' => 'InvitationTypeEnum' ],
-						'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$invite = InvitationHelper::get_invitation_from_input( $args );
 

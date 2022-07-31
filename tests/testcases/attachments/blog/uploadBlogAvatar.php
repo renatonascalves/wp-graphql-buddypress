@@ -8,13 +8,6 @@
  */
 class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_blog_upload_avatar() {
 		$this->skipWithoutMultisite();
 

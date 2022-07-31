@@ -8,13 +8,6 @@
  */
 class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_group_creator_can_upload_avatar() {
 		$this->bp->set_current_user( $this->user );
 

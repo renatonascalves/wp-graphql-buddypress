@@ -42,7 +42,7 @@ class InvitationAccept {
 				'type'        => 'ID',
 				'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 			],
-			'inviteId' => [
+			'databaseId' => [
 				'type'        => 'Int',
 				'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 			],

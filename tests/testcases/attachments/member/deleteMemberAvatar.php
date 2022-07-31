@@ -8,13 +8,6 @@
  */
 class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_member_can_delete_his_own_avatar() {
 		$this->bp->set_current_user( $this->user );
 

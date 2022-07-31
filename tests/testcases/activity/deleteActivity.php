@@ -7,13 +7,6 @@
  */
 class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_activity_creator_can_delete() {
 		$a = $this->create_activity_id();
 
@@ -112,12 +105,12 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$query = '
 			mutation deleteActivityTest(
 				$clientMutationId:String!
-				$activityId:Int
+				$databaseId:Int
 			) {
 				deleteActivity(
 					input: {
 						clientMutationId: $clientMutationId
-						activityId: $activityId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -135,7 +128,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'activityId'       => $activity_id,
+			'databaseId'       => $activity_id,
 		];
 
 		$operation_name = 'deleteActivityTest';

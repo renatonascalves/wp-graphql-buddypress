@@ -23,11 +23,11 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u2 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$nodes = $response['data']['groupBy']['notifications']['nodes'];
+		$nodes = $response['data']['group']['notifications']['nodes'];
 
 		$this->assertEmpty( $nodes );
 		$this->assertCount( 0, $nodes );
@@ -48,11 +48,11 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u2 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$nodes = $response['data']['groupBy']['notifications']['nodes'];
+		$nodes = $response['data']['group']['notifications']['nodes'];
 
 		$this->assertEmpty( $nodes );
 		$this->assertCount( 0, $nodes );
@@ -71,11 +71,11 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'isNew' => true ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'isNew' => true ] ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' );
+		$ids = wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
 		$this->assertCount( 2, $ids );
@@ -98,11 +98,11 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u1 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' );
+		$ids = wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
 		$this->assertCount( 2, $ids );
@@ -120,11 +120,11 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $this->admin );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'userIds' => [ $u1, $u2 ] ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'userIds' => [ $u1, $u2 ] ] ] );
 
 		$this->assertQuerySuccessful( $response );
 
-		$ids = wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' );
+		$ids = wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' );
 
 		// Check notifications.
 		$this->assertCount( 2, $ids );
@@ -132,7 +132,7 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		$this->assertTrue( in_array( $n2, $ids, true ) );
 
 		// Check the users.
-		$user_ids = wp_list_pluck( wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'user' ), 'databaseId' );
+		$user_ids = wp_list_pluck( wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'user' ), 'databaseId' );
 
 		$this->assertCount( 2, $user_ids );
 		$this->assertEqualSets( [ $u1, $u2 ], $user_ids );
@@ -153,16 +153,16 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u3 );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID' ] );
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['notifications']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['notifications']['nodes'] );
 
 		// Even passing another user ID directly won't return their notifications.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'userIds' => [ $u1 ] ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'userIds' => [ $u1 ] ] ] );
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['notifications']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['notifications']['nodes'] );
 	}
 
 	public function test_get_group_notifications_sorted() {
@@ -177,23 +177,23 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 		$this->bp->set_current_user( $u );
 
 		// ASC.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'order' => 'ASC' ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'order' => 'ASC' ] ] );
 
 		$this->assertQuerySuccessful( $response );
 
 		$this->assertSame(
 			[ $n1, $n2 ],
-			wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' )
+			wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' )
 		);
 
 		// DESC.
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'order' => 'DESC' ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'order' => 'DESC' ] ] );
 
 		$this->assertQuerySuccessful( $response );
 
 		$this->assertSame(
 			[ $n2, $n1 ],
-			wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' )
+			wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' )
 		);
 	}
 
@@ -208,13 +208,13 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 
 		$this->bp->set_current_user( $u );
 
-		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'where' => [ 'orderBy' => 'COMPONENT_NAME' ] ] );
+		$response = $this->groupNotificationsQuery( [ 'id' => $g, 'idType' => 'DATABASE_ID', 'where' => [ 'orderBy' => 'COMPONENT_NAME' ] ] );
 
 		$this->assertQuerySuccessful( $response );
 
 		$this->assertSame(
 			[ $n2, $n1 ],
-			wp_list_pluck( $response['data']['groupBy']['notifications']['nodes'], 'databaseId' )
+			wp_list_pluck( $response['data']['group']['notifications']['nodes'], 'databaseId' )
 		);
 	}
 
@@ -226,14 +226,15 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 	 */
 	protected function groupNotificationsQuery( array $variables = [] ): array {
 		$query = 'query groupNotificationsQuery(
+			$id:ID!
+			$idType:GroupIdTypeEnum
 			$after:String
 			$before:String
 			$first:Int
-			$id:Int
 			$last:Int
 			$where:GroupToNotificationConnectionWhereArgs
 		) {
-			groupBy(groupId: $id) {
+			group(id: $id, idType: $idType) {
 				id
 				databaseId
 				notifications(

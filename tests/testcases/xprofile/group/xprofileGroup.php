@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test_xprofileGroupBy_Queries Class.
+ * Test_xprofileGroup_Queries Class.
  *
  * @group xprofile-group
  * @group xprofile
  */
-class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_xprofileGroup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * XProfile Group name.
@@ -41,7 +41,7 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_xprofile_group_by_query() {
-		$u1 = $this->bp_factory->xprofile_group->create(
+		$xprofile_group_id = $this->bp_factory->xprofile_group->create(
 			[
 				'name'        => $this->name,
 				'description' => $this->desc,
@@ -51,19 +51,19 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$field_id_1 = $this->bp_factory->xprofile_field->create(
 			[
 				'name'           => $this->field_name,
-				'field_group_id' => $u1,
+				'field_group_id' => $xprofile_group_id,
 			]
 		);
 
 		$field_id_2 = $this->bp_factory->xprofile_field->create(
 			[
 				'name'           => 'Another field.',
-				'field_group_id' => $u1,
+				'field_group_id' => $xprofile_group_id,
 			]
 		);
 
-		$this->assertQuerySuccessful( $this->get_xprofile_group( $u1 ) )
-			->hasField( 'databaseId', $u1 )
+		$this->assertQuerySuccessful( $this->get_xprofile_group( $xprofile_group_id ) )
+			->hasField( 'databaseId', $xprofile_group_id )
 			->hasField( 'groupOrder', 0 )
 			->hasField( 'canDelete', true )
 			->hasField( 'name', $this->name )
@@ -75,12 +75,12 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						0 => [
 							'name'       => $this->field_name,
 							'databaseId' => $field_id_1,
-							'groupId'    => $u1,
+							'groupId'    => $xprofile_group_id,
 						],
 						1 => [
 							'name'       => 'Another field.',
 							'databaseId' => $field_id_2,
-							'groupId'    => $u1,
+							'groupId'    => $xprofile_group_id,
 						],
 					],
 				]
@@ -95,14 +95,14 @@ class Test_xprofileGroupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get XProfile ID.
 	 *
-	 * @param int $xprofile_group_id XProfile Group ID.
+	 * @param int         $xprofile_group_id XProfile Group ID.
+	 * @param string|null $type              Type.
 	 * @return array
 	 */
-	protected function get_xprofile_group( int $xprofile_group_id ): array {
-		$global_id = $this->toRelayId( 'bp_xprofile_group', $xprofile_group_id );
-		$query     = "
+	protected function get_xprofile_group( int $xprofile_group_id, $type = 'DATABASE_ID' ): array {
+		$query = "
 			query {
-				xprofileGroup(id: \"{$global_id}\") {
+				xprofileGroup(id: \"{$xprofile_group_id}\", idType: {$type}) {
 					id,
 					databaseId
 					groupOrder

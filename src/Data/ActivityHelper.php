@@ -8,9 +8,9 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Activity_Activity;
+use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * ActivityHelper Class.
@@ -26,23 +26,7 @@ class ActivityHelper {
 	 * @return BP_Activity_Activity
 	 */
 	public static function get_activity_from_input( $input ): BP_Activity_Activity {
-		$activity_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$activity_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['activityId'] ) ) {
-			$activity_id = absint( $input['activityId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$activity_id = absint( $input );
-		}
-
-		$activity = self::get_activity( $activity_id );
+		$activity = self::get_activity( Factory::get_id( $input ) );
 
 		// Confirm if activity exists.
 		if ( empty( $activity->id ) || ! $activity instanceof BP_Activity_Activity ) {

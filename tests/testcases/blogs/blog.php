@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Test_Blogs_blogBy_Queries Class.
+ * Test_Blogs_blog_Queries Class.
  *
  * @group blogs
  */
-class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_blog_query() {
 		$this->skipWithoutMultisite();
@@ -77,13 +77,14 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get a blog.
 	 *
-	 * @param int|null $blog_id Blog ID.
+	 * @param int|null    $blog_id Blog ID.
+	 * @param string|null $type    Type.
 	 * @return array
 	 */
-	protected function get_a_blog( $blog_id = null ): array {
+	protected function get_a_blog( $blog_id = null, $type = 'DATABASE_ID' ): array {
 		$query = "
 			query {
-				blogBy(blogId: {$blog_id}) {
+				blog(id: {$blog_id}, idType: {$type}) {
 					id
 					databaseId
 					admin {

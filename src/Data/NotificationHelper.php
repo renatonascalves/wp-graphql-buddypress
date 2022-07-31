@@ -9,8 +9,8 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Notifications_Notification;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * NotificationHelper Class.
@@ -26,26 +26,9 @@ class NotificationHelper {
 	 * @return BP_Notifications_Notification
 	 */
 	public static function get_notification_from_input( $input ): BP_Notifications_Notification {
-		$notification_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$notification_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['databaseId'] ) ) {
-			$notification_id = absint( $input['databaseId'] );
-		} elseif ( ! empty( $input['notificationId'] ) ) {
-			$notification_id = absint( $input['notificationId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$notification_id = absint( $input );
-		}
 
 		// This is not cached.
-		$notification = bp_notifications_get_notification( absint( $notification_id ) );
+		$notification = bp_notifications_get_notification( Factory::get_id( $input ) );
 
 		// Inexistent notification objects return the id being checked, so confirm another field is present.
 		if ( empty( $notification->id ) || null === $notification->item_id ) {

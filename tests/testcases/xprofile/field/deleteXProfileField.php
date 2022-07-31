@@ -69,12 +69,12 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$query = '
 			mutation deleteXProfileFieldTest(
 				$clientMutationId: String!
-				$fieldId: Int
+				$databaseId: Int
 			) {
 				deleteXProfileField(
 					input: {
 						clientMutationId: $clientMutationId
-						fieldId: $fieldId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -89,7 +89,7 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'fieldId'          => $xprofile_field_id ?? $this->xprofile_field_id,
+			'databaseId'       => $xprofile_field_id ?? $this->xprofile_field_id,
 		];
 
 		$operation_name = 'deleteXProfileFieldTest';

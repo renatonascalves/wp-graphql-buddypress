@@ -28,38 +28,7 @@ class XProfileFieldHelper {
 	 * @return BP_XProfile_Field
 	 */
 	public static function get_xprofile_field_from_input( $input, $user_id = null ): BP_XProfile_Field {
-		$xprofile_field_id = 0;
-
-		if ( is_int( $input ) ) {
-			$id_type = 'integer';
-		} elseif ( isset( $input['fieldId'] ) ) {
-			$id_type = 'field_id';
-		} else {
-			$id_type = $input['idType'] ?? 'global_id';
-		}
-
-		switch ( $id_type ) {
-			case 'field_id':
-				$xprofile_field_id = absint( $input['fieldId'] );
-				break;
-			case 'database_id':
-				$xprofile_field_id = absint( $input['id'] );
-				break;
-			case 'integer':
-				$xprofile_field_id = absint( $input );
-				break;
-			case 'global_id':
-			default:
-				$id_components = Relay::fromGlobalId( $input['id'] );
-
-				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-				}
-
-				$xprofile_field_id = absint( $id_components['id'] );
-				break;
-		}
-
+		$xprofile_field_id     = Factory::get_id( $input );
 		$xprofile_field_object = xprofile_get_field( absint( $xprofile_field_id ), $user_id );
 
 		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {

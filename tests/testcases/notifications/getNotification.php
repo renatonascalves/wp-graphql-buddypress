@@ -1,10 +1,10 @@
 <?php
 /**
- * Test_Notification_getNotificationBy_Queries Class.
+ * Test_Notification_getNotification_Queries Class.
  *
  * @group notification
  */
-class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_group_notification() {
 		$group_id        = $this->bp_factory->group->create();
@@ -138,7 +138,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 
 		$response = $this->get_a_notification( $notification_id );
 
-		$this->assertEmpty( $response['data']['notificationBy'] );
+		$this->assertEmpty( $response['data']['notification'] );
 	}
 
 	public function test_get_notification_with_unauthorized_user() {
@@ -155,7 +155,7 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 
 		$response = $this->get_a_notification( $notification_id );
 
-		$this->assertEmpty( $response['data']['notificationBy'] );
+		$this->assertEmpty( $response['data']['notification'] );
 	}
 
 	public function test_get_notification_with_invalid_id() {
@@ -169,12 +169,13 @@ class Test_Notification_getNotificationBy_Queries extends WPGraphQL_BuddyPress_U
 	 * Get a notification.
 	 *
 	 * @param int|null $notification_id Notification ID.
+	 * @param string   $type            Type.
 	 * @return array
 	 */
-	protected function get_a_notification( $notification_id = null ): array {
+	protected function get_a_notification( $notification_id = null, $type = 'DATABASE_ID' ): array {
 		$query = "
 			query {
-				notificationBy(databaseId: {$notification_id}) {
+				notification(id: {$notification_id}, idType: {$type}) {
 					id
 					user {
 						databaseId

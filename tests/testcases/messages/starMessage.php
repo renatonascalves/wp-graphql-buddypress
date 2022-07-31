@@ -151,12 +151,12 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 		$query = '
 			mutation starMessageTest(
 				$clientMutationId:String!
-				$messageId:Int
+				$databaseId:Int
 			) {
 				starMessage(
 					input: {
 						clientMutationId:$clientMutationId
-						messageId:$messageId
+						databaseId:$databaseId
 					}
 				)
 				{
@@ -173,7 +173,7 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'messageId'        => $message_id,
+			'databaseId'        => $message_id,
 		];
 
 		$operation_name = 'starMessageTest';

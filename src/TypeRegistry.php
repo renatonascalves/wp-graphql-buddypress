@@ -96,7 +96,6 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
-use WPGraphQL\Type\ObjectType\TermObject;
 
 /**
  * Class TypeRegistry

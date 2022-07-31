@@ -8,13 +8,6 @@
  */
 class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_member_can_upload_his_own_cover() {
 		$this->bp->set_current_user( $this->user );
 

@@ -7,13 +7,6 @@
  */
 class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp(): void {
-		parent::setUp();
-	}
-
 	public function test_public_activities_authenticated() {
 		$a1 = $this->create_activity_id();
 		$a2 = $this->create_activity_id();

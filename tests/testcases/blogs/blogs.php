@@ -7,13 +7,6 @@
  */
 class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_blogs_query() {
 		$this->skipWithoutMultisite();
 

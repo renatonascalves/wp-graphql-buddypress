@@ -13,6 +13,7 @@ use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Signup;
 use WPGraphQL\Extensions\BuddyPress\Data\SignupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * SignupType Class.
@@ -114,20 +115,11 @@ class SignupType {
 
 		register_graphql_field(
 			'RootQuery',
-			'signupBy',
+			strtolower( self::$type_name ),
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Signup object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'       => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'signupId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 
 					if ( false === SignupHelper::can_see() ) {

@@ -3,7 +3,7 @@
 /**
  * Test_Messages_updateThread_Mutation Class.
  *
- * @group thread
+ * @group threads
  */
 class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
@@ -163,7 +163,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 		$query = '
 			mutation updateThreadTest(
 				$clientMutationId:String!
-				$threadId:Int
+				$databaseId:Int
 				$messageId:Int
 				$read:Boolean
 				$unRead:Boolean
@@ -171,7 +171,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 				updateThread(
 					input: {
 						clientMutationId:$clientMutationId
-						threadId:$threadId
+						databaseId:$databaseId
 						messageId:$messageId
 						read:$read
 						unRead:$unRead
@@ -191,7 +191,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'threadId'         => $thread_id,
+				'databaseId'         => $thread_id,
 				'messageId'        => null,
 				'read'             => null,
 				'unRead'           => null,

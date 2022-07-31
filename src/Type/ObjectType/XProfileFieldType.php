@@ -10,8 +10,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileField;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileFieldHelper;
 
 /**
  * XProfileFieldType Class.
@@ -142,18 +143,7 @@ class XProfileFieldType {
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress XProfile Field object', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'     => [
-						'type'        => [
-							'non_null' => 'ID',
-						],
-						'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
-					],
-					'idType' => [
-						'type'        => self::$type_name . 'IdTypeEnum',
-						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					return Factory::resolve_xprofile_field_object(
 						XProfileFieldHelper::get_xprofile_field_from_input( $args )->id,

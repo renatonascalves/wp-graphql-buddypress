@@ -9,13 +9,6 @@ use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
  */
 class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_create_activity_authenticated() {
 		$this->bp->set_current_user( $this->admin );
 

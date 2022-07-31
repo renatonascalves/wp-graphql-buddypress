@@ -11,6 +11,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Deferred;
+use GraphQLRelay\Relay;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
@@ -42,6 +43,65 @@ use BP_Friends_Friendship;
  * Class Factory.
  */
 class Factory {
+
+	/**
+	 * Get object id.
+	 *
+	 * @throws UserError User error for invalid activity.
+	 *
+	 * @param array|int $input Input.
+	 * @return int
+	 */
+	public static function get_id( $input ): int {
+		$object_id = 0;
+
+		if ( is_int( $input ) ) {
+			$id_type = 'integer';
+		} elseif ( isset( $input['databaseId'] ) ) {
+			$id_type = 'object_id';
+		} elseif ( isset( $input['idType'] ) && 'slug' === $input['idType'] ) {
+			$id_type = 'slug';
+		} elseif ( isset( $input['idType'] ) && 'previous_slug' === $input['idType'] ) {
+			$id_type = 'previous_slug';
+		} else {
+			$id_type = $input['idType'] ? $input['idType'] : 'global_id';
+		}
+
+		switch ( $id_type ) {
+			case 'object_id':
+				$object_id = $input['databaseId'];
+				break;
+
+			case 'database_id':
+				$object_id = $input['id'];
+				break;
+
+			case 'slug':
+				$object_id = groups_get_id( esc_html( $input['id'] ) );
+				break;
+
+			case 'previous_slug':
+				$object_id = groups_get_id_by_previous_slug( esc_html( $input['id'] ) );
+				break;
+
+			case 'integer':
+				$object_id = $input;
+				break;
+
+			case 'global_id':
+			default:
+				$id_components = Relay::fromGlobalId( $input['id'] );
+
+				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
+					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+				}
+
+				$object_id = $id_components['id'];
+				break;
+		}
+
+		return absint( $object_id );
+	}
 
 	/**
 	 * Get the user object, if the ID is valid.

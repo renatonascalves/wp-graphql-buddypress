@@ -139,7 +139,8 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get a thread.
 	 *
-	 * @param int|null $thread_id Thread ID.
+	 * @param int|null    $thread_id Thread ID.
+	 * @param string|null $type      Type.
 	 * @return array
 	 */
 	protected function get_a_thread( $thread_id = null, $type = null ): array {

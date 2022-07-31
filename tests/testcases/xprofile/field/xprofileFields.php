@@ -34,7 +34,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		);
 
 		$global_id = $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id );
-		$response  = $this->get_xprofile_group( [ 'id' => $global_id ] );
+		$response  = $this->get_xprofile_group( [ 'id' => $global_id, 'idType' => 'ID' ] );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField( 'databaseId', $this->xprofile_group_id )
@@ -67,6 +67,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->get_xprofile_group(
 			[
 				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'idType' => 'ID',
 				'where' => [ 'excludeFields' => [ $field_id_1 ] ],
 			]
 		);
@@ -97,6 +98,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$response = $this->get_xprofile_group(
 			[
 				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'idType' => 'ID',
 				'where' => [ 'memberType' => [ 'FOO' ] ],
 			]
 		);
@@ -133,7 +135,8 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_xprofile_group(
 			[
-				'id'    => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'id'     => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'idType' => 'ID',
 				'where' => [
 					'userId'          => $this->user,
 					'hideEmptyFields' => true,
@@ -165,13 +168,14 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	protected function get_xprofile_group( array $variables = [] ): array {
 		$query = 'query groupFieldsTest(
 			$id:ID!
+			$idType:XProfileGroupIdTypeEnum
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:XProfileGroupToXProfileFieldConnectionWhereArgs
 		) {
-			xprofileGroup(id: $id) {
+			xprofileGroup(id: $id, idType: $idType) {
 				databaseId
 				fields(
 					first:$first

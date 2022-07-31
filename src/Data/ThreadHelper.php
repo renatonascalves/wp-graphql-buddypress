@@ -8,10 +8,10 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Messages_Thread;
 use BP_Messages_Message;
+use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * ThreadHelper Class.
@@ -27,38 +27,7 @@ class ThreadHelper {
 	 * @return BP_Messages_Thread
 	 */
 	public static function get_thread_from_input( $input ): BP_Messages_Thread {
-		$thread_id = 0;
-
-		if ( is_int( $input ) ) {
-			$id_type = 'integer';
-		} elseif ( isset( $input['threadId'] ) ) {
-			$id_type = 'thread_id';
-		} else {
-			$id_type = $input['idType'] ?? 'global_id';
-		}
-
-		switch ( $id_type ) {
-			case 'thread_id':
-				$thread_id = absint( $input['threadId'] );
-				break;
-			case 'database_id':
-				$thread_id = absint( $input['id'] );
-				break;
-			case 'integer':
-				$thread_id = absint( $input );
-				break;
-			case 'global_id':
-			default:
-				$id_components = Relay::fromGlobalId( $input['id'] );
-
-				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-				}
-
-				$thread_id = absint( $id_components['id'] );
-				break;
-		}
-
+		$thread_id     = Factory::get_id( $input );
 		$thread_object = new BP_Messages_Thread( $thread_id, 'ASC', [ 'user_id' => $input['userId'] ?? bp_loggedin_user_id() ] );
 
 		// Confirm if thread exists.
@@ -78,22 +47,7 @@ class ThreadHelper {
 	 * @return BP_Messages_Message
 	 */
 	public static function get_message_from_input( $input ): BP_Messages_Message {
-		$message_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$message_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['messageId'] ) ) {
-			$message_id = absint( $input['messageId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$message_id = absint( $input );
-		}
-
+		$message_id     = Factory::get_id( $input );
 		$message_object = new BP_Messages_Message( $message_id );
 
 		// Confirm if message exists.

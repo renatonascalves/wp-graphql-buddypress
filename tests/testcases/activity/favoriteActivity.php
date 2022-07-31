@@ -8,13 +8,6 @@
  */
 class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_favorite_activity_authenticated() {
 		$a = $this->create_activity_id();
 
@@ -174,12 +167,12 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 		$query = '
 			mutation favoriteActivityTest(
 				$clientMutationId:String!
-				$activityId:Int
+				$databaseId:Int
 			) {
 				favoriteActivity(
 					input: {
 						clientMutationId:$clientMutationId
-						activityId:$activityId
+						databaseId:$databaseId
 					}
 				)
 				{
@@ -195,7 +188,7 @@ class Test_Activity_favoriteActivity_Mutation extends WPGraphQL_BuddyPress_UnitT
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'activityId'       => $activity_id,
+			'databaseId'       => $activity_id,
 		];
 
 		$operation_name = 'favoriteActivityTest';

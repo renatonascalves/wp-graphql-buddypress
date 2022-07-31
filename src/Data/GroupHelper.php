@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Groups_Group;
 
 /**
@@ -26,27 +25,7 @@ class GroupHelper {
 	 * @return BP_Groups_Group
 	 */
 	public static function get_group_from_input( $input ): BP_Groups_Group {
-		$group_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$group_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['slug'] ) ) {
-			$group_id = groups_get_id( esc_html( $input['slug'] ) );
-		} elseif ( ! empty( $input['previousSlug'] ) ) {
-			$group_id = groups_get_id_by_previous_slug( esc_html( $input['previousSlug'] ) );
-		} elseif ( ! empty( $input['groupId'] ) ) {
-			$group_id = absint( $input['groupId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$group_id = absint( $input );
-		}
-
-		$group = groups_get_group( $group_id );
+		$group = groups_get_group( Factory::get_id( $input ) );
 
 		// Confirm if group exists.
 		if ( empty( $group->id ) || ! $group instanceof BP_Groups_Group ) {

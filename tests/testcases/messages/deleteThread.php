@@ -3,7 +3,7 @@
 /**
  * Test_Messages_deleteThread_Mutation Class.
  *
- * @group thread
+ * @group threads
  */
 class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
@@ -84,12 +84,12 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 		$query = '
 			mutation deleteThreadTest(
 				$clientMutationId:String!
-				$threadId:Int
+				$databaseId:Int
 			) {
 				deleteThread(
 					input: {
 						clientMutationId:$clientMutationId
-						threadId:$threadId
+						databaseId:$databaseId
 					}
 				)
 				{
@@ -104,7 +104,7 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'threadId'         => $thread_id,
+			'databaseId'       => $thread_id,
 		];
 
 		$operation_name = 'deleteThreadTest';

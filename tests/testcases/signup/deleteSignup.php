@@ -57,12 +57,12 @@ class Test_Signup_deleteSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 		$query = '
 			mutation deleteSignupTest(
 				$clientMutationId:String!
-				$signupId:Int
+				$databaseId:Int
 			) {
 				deleteSignup(
 					input: {
 						clientMutationId: $clientMutationId
-						signupId: $signupId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -78,7 +78,7 @@ class Test_Signup_deleteSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'signupId'         => $signup_id,
+			'databaseId'       => $signup_id,
 		];
 
 		$operation_name = 'deleteSignupTest';

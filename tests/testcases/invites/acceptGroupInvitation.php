@@ -42,7 +42,7 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	public function test_accept_invitation_invalid_id() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->accept_invitation( [ 'inviteId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->accept_invitation( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This invitation does not exist.' );
 	}
 
@@ -115,13 +115,13 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			mutation acceptInvitationTest(
 				$clientMutationId: String!
 				$type:InvitationTypeEnum!
-				$inviteId: Int
+				$databaseId: Int
 			) {
 				acceptInvitation(
 					input: {
 						clientMutationId: $clientMutationId
 						type: $type
-						inviteId: $inviteId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -138,7 +138,7 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'inviteId'         => $this->invitation_id,
+				'databaseId'         => $this->invitation_id,
 				'type'             => 'INVITE',
 			]
 		);

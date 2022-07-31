@@ -43,12 +43,13 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 4 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 4 );
 	}
 
 	public function test_get_group_invites_as_group_creator() {
@@ -64,12 +65,13 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 4 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 4 );
 	}
 
 	public function test_get_group_invites_as_group_admin() {
@@ -88,12 +90,13 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertCount( 4, $response['data']['groupBy']['invitations']['nodes'] );
+		$this->assertCount( 4, $response['data']['group']['invitations']['nodes'] );
 	}
 
 	public function test_get_group_invites_as_group_moderator() {
@@ -112,12 +115,13 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 4 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 4 );
 	}
 
 	public function test_get_group_invites_as_group_member() {
@@ -135,24 +139,26 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['invitations']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['invitations']['nodes'] );
 	}
 
 	public function test_get_group_invites_unauthenticated() {
 		$response = $this->groupInvitesQuery(
 			[
 				'id'    => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'where' => [ 'type' => 'INVITE' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy'] );
+		$this->assertEmpty( $response['data']['group'] );
 	}
 
 	/**
@@ -163,14 +169,15 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 	 */
 	protected function groupInvitesQuery( array $variables = [] ): array {
 		$query = 'query groupInvitesQuery(
+			$id:ID!
+			$idType:GroupIdTypeEnum
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:GroupToGroupInvitationConnectionWhereArgs
-			$id:Int
 		) {
-			groupBy(groupId: $id) {
+			group(id: $id, idType: $idType) {
 				id
 				databaseId
 				invitations(

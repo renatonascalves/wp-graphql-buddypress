@@ -113,13 +113,13 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 
 		$response = $this->get_a_group_invite();
 
-		$this->assertEmpty( $response['data']['getInviteBy'] );
+		$this->assertEmpty( $response['data']['getInvite'] );
 	}
 
 	public function test_group_invite_unauthenticated() {
 		$response = $this->get_a_group_invite();
 
-		$this->assertEmpty( $response['data']['getInviteBy'] );
+		$this->assertEmpty( $response['data']['getInvite'] );
 	}
 
 	public function test_group_invite_with_invalid_id() {
@@ -130,14 +130,15 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 	/**
 	 * Get a group invitation.
 	 *
-	 * @param int|null $invitation_id Invitation ID.
+	 * @param int|null    $invitation_id Invitation ID.
+	 * @param string|null $type          Type.
 	 * @return array
 	 */
-	protected function get_a_group_invite( $invitation_id = null ): array {
+	protected function get_a_group_invite( $invitation_id = null, $type = 'DATABASE_ID' ): array {
 		$invitation_id = $invitation_id ?? $this->invitation_id;
 		$query         = "
 			query {
-				getInviteBy(inviteId: {$invitation_id}, type: INVITE) {
+				getInvite(id: {$invitation_id}, idType: {$type}, type: INVITE) {
 					id
 					databaseId
 					itemId

@@ -26,37 +26,7 @@ class XProfileGroupHelper {
 	 * @return stdClass
 	 */
 	public static function get_xprofile_group_from_input( $input ): stdClass {
-		$xprofile_group_id = 0;
-
-		if ( is_int( $input ) ) {
-			$id_type = 'integer';
-		} elseif ( isset( $input['groupId'] ) ) {
-			$id_type = 'group_id';
-		} else {
-			$id_type = $input['idType'] ?? 'global_id';
-		}
-
-		switch ( $id_type ) {
-			case 'group_id':
-				$xprofile_group_id = absint( $input['groupId'] );
-				break;
-			case 'database_id':
-				$xprofile_group_id = absint( $input['id'] );
-				break;
-			case 'integer':
-				$xprofile_group_id = absint( $input );
-				break;
-			case 'global_id':
-			default:
-				$id_components = Relay::fromGlobalId( $input['id'] );
-
-				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-				}
-
-				$xprofile_group_id = absint( $id_components['id'] );
-				break;
-		}
+		$xprofile_group_id = Factory::get_id( $input );
 
 		// Get group object.
 		$xprofile_group_object = current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );

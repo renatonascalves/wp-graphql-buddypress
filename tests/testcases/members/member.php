@@ -6,13 +6,6 @@
  */
 class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_member_with_user_query() {
 
 		// Set member type.

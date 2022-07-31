@@ -47,7 +47,7 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 	public function test_reject_request_invalid_id() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->reject_request( [ 'inviteId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->reject_request( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This group membership request does not exist.' );
 	}
 
@@ -121,13 +121,13 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 			mutation rejectRequestTest(
 				$clientMutationId: String!
 				$type:InvitationTypeEnum!
-				$inviteId: Int
+				$databaseId: Int
 			) {
 				rejectInvitation(
 					input: {
 						clientMutationId: $clientMutationId
 						type: $type
-						inviteId: $inviteId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -144,7 +144,7 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'inviteId'         => $this->request_id,
+				'databaseId'         => $this->request_id,
 				'type'             => 'REQUEST',
 			]
 		);

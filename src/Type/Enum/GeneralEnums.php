@@ -14,9 +14,72 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;
 class GeneralEnums {
 
 	/**
-	 * Registers enum type.
+	 * Registers enum types.
 	 */
 	public static function register(): void {
+
+		// Register id Type Enums.
+		$id_types = [
+			'Activity',
+			'Blog',
+			'Friendship',
+			'GroupInvitation',
+			'Notification',
+			'Signup',
+			'Thread',
+			'XProfileField',
+			'XProfileGroup',
+		];
+
+		foreach ( $id_types as $type ) {
+			register_graphql_enum_type(
+				$type . 'IdTypeEnum',
+				[
+					'description' => __( 'The Type of the identifier used to fetch a single resource. Default is ID.', 'wp-graphql-buddypress' ),
+					'values'      => [
+						'ID'          => [
+							'name'        => 'ID',
+							'value'       => 'id',
+							'description' => __( 'The globally unique ID', 'wp-graphql-buddypress' ),
+						],
+						'DATABASE_ID' => [
+							'name'        => 'DATABASE_ID',
+							'value'       => 'database_id',
+							'description' => __( 'The Database ID for the node', 'wp-graphql-buddypress' ),
+						],
+					],
+				]
+			);
+		}
+
+		register_graphql_enum_type(
+			'GroupIdTypeEnum',
+			[
+				'description' => __( 'The Type of the identifier used to fetch a single resource. Default is ID.', 'wp-graphql-buddypress' ),
+				'values'      => [
+					'ID'          => [
+						'name'        => 'ID',
+						'value'       => 'id',
+						'description' => __( 'The globally unique ID', 'wp-graphql-buddypress' ),
+					],
+					'DATABASE_ID' => [
+						'name'        => 'DATABASE_ID',
+						'value'       => 'database_id',
+						'description' => __( 'The Database ID for the node', 'wp-graphql-buddypress' ),
+					],
+					'SLUG'          => [
+						'name'        => 'SLUG',
+						'value'       => 'slug',
+						'description' => __( 'The current slug for the node', 'wp-graphql-buddypress' ),
+					],
+					'PREVIOUS_SLUG' => [
+						'name'        => 'PREVIOUS_SLUG',
+						'value'       => 'previous_slug',
+						'description' => __( 'The previous slug for the node', 'wp-graphql-buddypress' ),
+					],
+				],
+			]
+		);
 
 		// Content Field Format.
 		register_graphql_enum_type(
@@ -57,5 +120,35 @@ class GeneralEnums {
 				],
 			]
 		);
+	}
+
+	/**
+	 * ID Type args.
+	 *
+	 * @param string $type_name Type name.
+	 * @return array
+	 */
+	public static function id_type_args( string $type_name ): array {
+		$values = [
+			'id'     => [
+				'type'        => [
+					'non_null' => 'ID',
+				],
+				'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
+			],
+			'idType' => [
+				'type'        => "${type_name}IdTypeEnum",
+				'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
+			],
+		];
+
+		if ( 'GroupInvitation' === $type_name ) {
+			$values['type'] = [
+				'type'        => [ 'non_null' => 'InvitationTypeEnum' ],
+				'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
+			];
+		}
+
+		return $values;
 	}
 }

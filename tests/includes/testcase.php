@@ -84,7 +84,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up(): void {
+	public function set_up() {
 		parent::set_up();
 
 		/**

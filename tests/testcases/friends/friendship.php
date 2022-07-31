@@ -1,18 +1,11 @@
 <?php
 
 /**
- * Test_Friendship_friendshipBy_Queries Class.
+ * Test_Friendship_friendship_Queries Class.
  *
  * @group friends
  */
-class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
-
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
+class Test_Friendship_friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_getting_friendship_with_initiator() {
 		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
@@ -76,7 +69,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 		$global_id = $this->toRelayId( 'friendship', $id );
 		$query     = "
 			query {
-				friendshipBy(id: \"{$global_id}\") {
+				friendship(id: \"{$global_id}\", idType: ID) {
 					id
 					databaseId
 					isConfirmed

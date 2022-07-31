@@ -1,10 +1,10 @@
 <?php
 /**
- * Test_Activity_activityBy_Queries Class.
+ * Test_Activity_activity_Queries Class.
  *
  * @group activity
  */
-class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Activity_activity_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Global ID.
@@ -23,8 +23,8 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->activity  = $this->create_activity_id();
 		$this->global_id = $this->toRelayId( 'activity', (string) $this->activity );
@@ -108,33 +108,13 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	public function test_activity_by_query_with_id_param() {
 		$this->bp->set_current_user( $this->admin );
 
-		$query = "
-			query {
-				activityBy(id: \"{$this->global_id}\") {
-					databaseId
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
+		$this->assertQuerySuccessful( $this->get_an_activity( $this->global_id, 'ID' ) )
 			->hasField( 'databaseId', $this->activity );
 	}
 
 	public function test_get_activity_with_invalid_activity_id() {
 		$this->assertQueryFailed( $this->get_an_activity( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This activity does not exist.' );
-	}
-
-	public function test_get_activity_with_unkown_id_argument() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			activityBy(groupID: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'Unknown argument "groupID" on field "activityBy" of type "RootQuery".' );
 	}
 
 	public function test_get_group_activity_without_access() {
@@ -191,13 +171,14 @@ class Test_Activity_activityBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 	 * Get an activity.
 	 *
 	 * @param int|null $activity_id Activity ID.
+	 * @param string   $type        Type.
 	 * @return array
 	 */
-	protected function get_an_activity( $activity_id = null ): array {
+	protected function get_an_activity( $activity_id = null, $type = 'DATABASE_ID' ): array {
 		$activity = $activity_id ?? $this->activity;
 		$query    = "
 			query {
-				activityBy(activityId: {$activity}) {
+				activity(id: \"{$activity}\", idType: {$type}) {
 					id,
 					parentDatabaseId
 					parentId
