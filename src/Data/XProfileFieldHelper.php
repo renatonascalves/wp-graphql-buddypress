@@ -28,22 +28,7 @@ class XProfileFieldHelper {
 	 * @return BP_XProfile_Field
 	 */
 	public static function get_xprofile_field_from_input( $input, $user_id = null ): BP_XProfile_Field {
-		$xprofile_field_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$xprofile_field_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['fieldId'] ) ) {
-			$xprofile_field_id = absint( $input['fieldId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$xprofile_field_id = absint( $input );
-		}
-
+		$xprofile_field_id     = Factory::get_id( $input );
 		$xprofile_field_object = xprofile_get_field( absint( $xprofile_field_id ), $user_id );
 
 		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
@@ -145,6 +130,6 @@ class XProfileFieldHelper {
 	 * @return bool
 	 */
 	public static function can_manage_xprofile_field(): bool {
-		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
+		return is_user_logged_in() && bp_current_user_can( 'bp_moderate' );
 	}
 }

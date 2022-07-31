@@ -8,13 +8,6 @@
  */
 class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_xprofile_groups_query() {
 		$u1 = $this->bp_factory->xprofile_group->create();
 		$u2 = $this->bp_factory->xprofile_group->create();

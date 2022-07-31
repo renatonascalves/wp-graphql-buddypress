@@ -13,8 +13,8 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 	}

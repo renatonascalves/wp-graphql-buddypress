@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Test_Blogs_blogBy_Queries Class.
+ * Test_Blogs_blog_Queries Class.
  *
  * @group blogs
  */
-class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_blog_query() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$blog_id = $this->bp_factory->blog->create(
 			[
@@ -28,7 +28,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->get_a_blog( $blog_id ) )
 			->hasField( 'id', $this->toRelayId( 'blog', $blog_id ) )
-			->hasField( 'admin', [ 'userId' => $this->user ] )
+			->hasField( 'admin', [ 'userId' => $this->user_id ] )
 			->hasField( 'name', 'The Foo Bar Blog' )
 			->hasField( 'uri', 'http://foo-bar/blog/' )
 			->hasField( 'domain', 'foo-bar' )
@@ -50,7 +50,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_blog_query_invalid_blog_id() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->get_a_blog( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage(
@@ -66,7 +66,7 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		buddypress()->avatar->show_avatars = false;
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_blog( $this->bp_factory->blog->create() ) )
 			->hasField( 'attachmentAvatar', null );
@@ -77,13 +77,14 @@ class Test_Blogs_blogBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Get a blog.
 	 *
-	 * @param int|null $blog_id Blog ID.
+	 * @param int|null    $blog_id Blog ID.
+	 * @param string|null $type    Type.
 	 * @return array
 	 */
-	protected function get_a_blog( $blog_id = null ): array {
+	protected function get_a_blog( $blog_id = null, $type = 'DATABASE_ID' ): array {
 		$query = "
 			query {
-				blogBy(blogId: {$blog_id}) {
+				blog(id: {$blog_id}, idType: {$type}) {
 					id
 					databaseId
 					admin {

@@ -8,16 +8,16 @@
 class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_update_group() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated Group' ] ) )
 			->hasField( 'name', 'Updated Group' );
 	}
 
 	public function test_update_group_invalid_group_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$this->assertQueryFailed( $this->update_group( [ 'groupId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->update_group( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This group does not exist.' );
 	}
 
@@ -84,21 +84,21 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_with_valid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group( [ 'status' => 'PRIVATE' ] ) )
 			->hasField( 'status', 'PRIVATE' );
 	}
 
 	public function test_update_group_with_invalid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_group( [ 'status' => 'random-status' ] ) )
 			->expectedErrorMessage( 'Variable "$status" got invalid value "random-status"; Expected type GroupStatusEnum.' );
 	}
 
 	public function test_update_group_with_new_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField(
@@ -107,22 +107,22 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}
 
 	public function test_update_group_remove_nonexist_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->remove_group_type() )
 			->hasField( 'types', null );
 	}
 
 	public function test_update_group_remove_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField(
@@ -131,9 +131,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -142,7 +142,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_append_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
@@ -152,9 +152,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -166,19 +166,19 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'bar'
+							'name'       => 'bar',
 						],
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 	}
 
 	public function test_update_group_overwrite_types() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
@@ -188,9 +188,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'foo'
-						]
-					]
+							'name'       => 'foo',
+						],
+					],
 				]
 			);
 
@@ -202,9 +202,9 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 					'nodes' => [
 						[
 							'__typename' => 'GroupTypeTerm',
-							'name'       => 'bar'
-						]
-					]
+							'name'       => 'bar',
+						],
+					],
 				]
 			);
 	}
@@ -220,13 +220,13 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			mutation updateGroupTest(
 				$clientMutationId:String!
 				$name:String
-				$groupId:Int
+				$databaseId:Int
 				$status:GroupStatusEnum
 			) {
 				updateGroup(
 					input: {
 						clientMutationId: $clientMutationId
-						groupId: $groupId
+						databaseId: $databaseId
 						name: $name
 						status: $status
 					}
@@ -245,7 +245,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'groupId'          => $this->group,
+				'databaseId'       => $this->group,
 				'status'           => 'PUBLIC',
 				'name'             => 'Group',
 			]
@@ -267,13 +267,13 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			mutation updateGroupTest(
 				$clientMutationId: String!
 				$types:[GroupTypeEnum]
-				$groupId: Int
+				$databaseId: Int
 			) {
 				updateGroup(
 					input: {
 						clientMutationId: $clientMutationId
 						types: $types
-						groupId: $groupId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -294,7 +294,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'groupId'          => $this->group,
+				'databaseId'       => $this->group,
 				'types'            => [ 'FOO' ],
 			]
 		);
@@ -315,13 +315,13 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			mutation updateGroupTest(
 				$clientMutationId: String!
 				$appendTypes:[GroupTypeEnum]
-				$groupId: Int
+				$databaseId: Int
 			) {
 				updateGroup(
 					input: {
 						clientMutationId: $clientMutationId
 						appendTypes: $appendTypes
-						groupId: $groupId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -342,7 +342,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'groupId'          => $this->group,
+				'databaseId'       => $this->group,
 				'appendTypes'      => [],
 			]
 		);
@@ -362,13 +362,13 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			mutation updateGroupTest(
 				$clientMutationId: String!
 				$removeTypes:[GroupTypeEnum]
-				$groupId: Int
+				$databaseId:Int
 			) {
 				updateGroup(
 					input: {
 						clientMutationId: $clientMutationId
 						removeTypes: $removeTypes
-						groupId: $groupId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -387,7 +387,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'groupId'          => $this->group,
+			'databaseId'       => $this->group,
 			'removeTypes'      => [ 'FOO' ],
 		];
 

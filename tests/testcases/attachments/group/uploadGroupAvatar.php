@@ -8,15 +8,8 @@
  */
 class Test_Attachment_uploadGroupAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_group_creator_can_upload_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 

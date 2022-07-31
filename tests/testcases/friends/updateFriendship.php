@@ -7,13 +7,6 @@
  */
 class Test_Friendship_updateFriendship_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_accept_friendship() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
@@ -46,7 +39,7 @@ class Test_Friendship_updateFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 
 		$this->create_friendship_object( $u1, $u2 );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_friendship( $u1, $u2 ) )
 			->expectedErrorMessage( 'Sorry, you do not have permission to perform this action.' );

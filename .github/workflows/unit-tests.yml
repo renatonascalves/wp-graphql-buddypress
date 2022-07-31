@@ -73,13 +73,13 @@ jobs:
           npm run wp-env start -- --update
 
       - name: Unit tests - single site
-        run: npm run phpunit
         if: ${{ success() || failure() }}
+        run: npm run phpunit
 
       - name: Unit tests - MU Network
-        run: npm run phpunit:mu
         if: ${{ success() || failure() }}
+        run: npm run phpunit:mu
 
       - name: Stop Docker environment
-        run: npm run wp-env stop
         if: ${{ success() || failure() }}
+        run: npm run wp-env stop

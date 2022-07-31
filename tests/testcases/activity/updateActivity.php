@@ -7,19 +7,12 @@
  */
 class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_update_activity_authenticated() {
 		$a = $this->create_activity_id();
 
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->update_activity( [ 'activityId' => $a ] ) )
+		$this->assertQuerySuccessful( $this->update_activity( [ 'databaseId' => $a ] ) )
 			->hasField( 'content', 'Updated Activity content' )
 			->hasField( 'databaseId', $a );
 	}
@@ -32,7 +25,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId' => $a,
+					'databaseId' => $a,
 					'component'  => 'GROUPS',
 				]
 			)
@@ -49,7 +42,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId' => $a,
+					'databaseId' => $a,
 					'type'       => 'ACTIVITY_COMMENT',
 				]
 			)
@@ -68,7 +61,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId'    => $c,
+					'databaseId'    => $c,
 					'type'          => 'ACTIVITY_COMMENT',
 					'primaryItemId' => $a,
 				]
@@ -88,7 +81,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId' => $a,
+					'databaseId' => $a,
 					'content'    => '',
 				]
 			)
@@ -99,7 +92,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId' => $a,
+					'databaseId' => $a,
 					'type'       => '',
 				]
 			)
@@ -108,16 +101,16 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_with_invalid_activity_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->update_activity( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This activity does not exist.' );
 	}
 
 	public function test_update_activity_unauthenticated() {
 		$a = $this->create_activity_id();
 
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $a ] ) )
+		$this->assertQueryFailed( $this->update_activity( [ 'databaseId' => $a ] ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
@@ -126,7 +119,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->update_activity( [ 'activityId' => $a ] ) )
+		$this->assertQueryFailed( $this->update_activity( [ 'databaseId' => $a ] ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
@@ -145,7 +138,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId'    => $a,
+					'databaseId'    => $a,
 					'primaryItemId' => $g,
 				]
 			)
@@ -160,18 +153,18 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId'    => $c,
+					'databaseId'    => $c,
 					'primaryItemId' => $a,
 					'type'          => 'ACTIVITY_COMMENT',
 					'content'       => 'Updated commment',
@@ -189,7 +182,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -198,7 +191,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId'    => $c,
+					'databaseId'    => $c,
 					'primaryItemId' => $a,
 					'type'          => 'ACTIVITY_COMMENT',
 					'content'       => 'Updated commment',
@@ -213,7 +206,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -224,7 +217,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQuerySuccessful(
 			$this->update_activity(
 				[
-					'activityId'    => $c,
+					'databaseId'    => $c,
 					'primaryItemId' => $a,
 					'type'          => 'ACTIVITY_COMMENT',
 					'content'       => 'Updated commment',
@@ -242,7 +235,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -253,7 +246,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId'    => $c,
+					'databaseId'    => $c,
 					'primaryItemId' => $a,
 					'type'          => 'ACTIVITY_COMMENT',
 					'content'       => 'Updated commment',
@@ -268,19 +261,19 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Test without content.
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId' => $c,
+					'databaseId' => $c,
 					'content'    => '',
 				]
 			)
@@ -291,7 +284,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$this->assertQueryFailed(
 			$this->update_activity(
 				[
-					'activityId' => $c,
+					'databaseId' => $c,
 					'type'       => '',
 				]
 			)
@@ -310,7 +303,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			mutation updateActivityTest(
 				$clientMutationId:String!
 				$content:String!
-				$activityId:Int
+				$databaseId:Int
 				$primaryItemId:Int
 				$secondaryItemId:Int
 				$type:ActivityTypeEnum!
@@ -319,7 +312,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 				updateActivity(
 					input: {
 						clientMutationId: $clientMutationId
-						activityId: $activityId
+						databaseId: $databaseId
 						primaryItemId: $primaryItemId
 						secondaryItemId: $secondaryItemId
 						content: $content

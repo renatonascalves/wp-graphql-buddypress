@@ -8,23 +8,16 @@
  */
 class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_member_can_delete_his_own_cover() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
+		$response = $this->upload_cover( 'MEMBERS', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
+		$cover = $this->get_cover_image( 'members', absint( $this->user_id ) );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField(
@@ -35,7 +28,7 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 				]
 			);
 
-		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->hasField( 'deleted', true )
 			->hasField(
 				'attachment',
@@ -46,19 +39,19 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 			);
 
 		// There is no default member cover.
-		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user ) ) ) );
+		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user_id ) ) ) );
 	}
 
 	public function test_regular_admins_can_delete_other_member_cover() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
+		$response = $this->upload_cover( 'MEMBERS', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$cover = $this->get_cover_image( 'members', absint( $this->user ) );
+		$cover = $this->get_cover_image( 'members', absint( $this->user_id ) );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField(
@@ -72,7 +65,7 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->hasField( 'deleted', true )
 			->hasField(
 				'attachment',
@@ -83,30 +76,30 @@ class Test_Attachment_deleteMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 			);
 
 		// There is no default member cover.
-		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user ) ) ) );
+		$this->assertTrue( empty( $this->get_cover_image( 'members', absint( $this->user_id ) ) ) );
 	}
 
 	public function test_member_can_not_delete_other_member_cover() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_can_not_delete_member_cover_without_logged_in_user() {
-		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_delete_member_cover_without_uploaded_covers() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, there are no uploaded covers to delete.' );
 	}
 
 	public function test_delete_member_cover_with_invalid_member_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_cover( 'MEMBERS', GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'There was a problem confirming if user is valid.' );

@@ -3,16 +3,9 @@
 /**
  * Test_Messages_deleteThread_Mutation Class.
  *
- * @group thread
+ * @group threads
  */
 class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
-
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
 
 	public function test_delete_thread_from_sender() {
 		$u1 = $this->bp_factory->user->create();
@@ -75,7 +68,7 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_delete_thread_invalid_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This thread does not exist.' );
@@ -91,12 +84,12 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 		$query = '
 			mutation deleteThreadTest(
 				$clientMutationId:String!
-				$threadId:Int
+				$databaseId:Int
 			) {
 				deleteThread(
 					input: {
 						clientMutationId:$clientMutationId
-						threadId:$threadId
+						databaseId:$databaseId
 					}
 				)
 				{
@@ -111,7 +104,7 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'threadId'         => $thread_id,
+			'databaseId'       => $thread_id,
 		];
 
 		$operation_name = 'deleteThreadTest';

@@ -19,12 +19,12 @@ class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPre
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -131,7 +131,7 @@ class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPre
 
 		$response = $this->get_a_group_membership_request( $request_id );
 
-		$this->assertEmpty( $response['data']['getInviteBy'] );
+		$this->assertEmpty( $response['data']['getInvite'] );
 	}
 
 	public function test_get_group_membership_request_unauthenticated() {
@@ -144,7 +144,7 @@ class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPre
 
 		$response = $this->get_a_group_membership_request( $request_id );
 
-		$this->assertEmpty( $response['data']['getInviteBy'] );
+		$this->assertEmpty( $response['data']['getInvite'] );
 	}
 
 	public function test_get_group_membership_request_with_invalid_id() {
@@ -155,13 +155,14 @@ class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPre
 	/**
 	 * Get a group membership request.
 	 *
-	 * @param int $request_id Request ID.
+	 * @param int         $request_id Request ID.
+	 * @param string|null $type       Type.
 	 * @return array
 	 */
-	protected function get_a_group_membership_request( int $request_id ): array {
+	protected function get_a_group_membership_request( int $request_id, $type = 'DATABASE_ID' ): array {
 		$query = "
 			query {
-				getInviteBy(inviteId: {$request_id}, type: REQUEST) {
+				getInvite(id: {$request_id}, idType: {$type}, type: REQUEST) {
 					id
 					databaseId
 					itemId

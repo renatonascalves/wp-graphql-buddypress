@@ -27,13 +27,13 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->requester_id     = $this->bp_factory->user->create();
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -140,7 +140,7 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 	}
 
 	public function test_group_creator_request_membership_to_group() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->request_membership_to_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -188,14 +188,14 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 	}
 
 	public function test_request_membership_to_group_with_invalid_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->request_membership_to_group( [ 'type' => 'random-status' ] ) )
 			->expectedErrorMessage( 'Variable "$type" got invalid value "random-status"; Expected type InvitationTypeEnum.' );
 	}
 
 	public function test_request_membership_to_group_with_null_user_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->request_membership_to_group( [ 'userId' => null ] ) )
 			->expectedErrorMessage( 'Variable "$userId" of non-null type "Int!" must not be null.' );

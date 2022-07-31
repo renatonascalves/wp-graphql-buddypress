@@ -8,12 +8,38 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
+use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
 use BP_Friends_Friendship;
 
 /**
  * FriendshipHelper Class.
  */
 class FriendshipHelper {
+
+	/**
+	 * Get friendship ID helper.
+	 *
+	 * @throws UserError User error for invalid friendship.
+	 *
+	 * @param array|int $input Array of possible input fields or a single integer.
+	 * @return Friendship
+	 */
+	public static function get_friendship_from_input( $input ): ?Friendship {
+		$friendship_id = Factory::get_id( $input );
+		$friendship    = Factory::resolve_friendship_object( absint( $friendship_id ) );
+
+		// Only the friendship initiator and the friend, the one invited to the friendship can see it.
+		if ( ! empty( $friendship )
+			&& ! empty( $friendship->initiator )
+			&& ! empty( $friendship->friend )
+			&& ! in_array( bp_loggedin_user_id(), [ $friendship->initiator, $friendship->friend ], true ) ) {
+			throw new UserError( __( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
+		}
+
+		return $friendship;
+	}
 
 	/**
 	 * Check if friendship exists.

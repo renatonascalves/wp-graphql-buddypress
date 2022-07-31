@@ -43,7 +43,7 @@ class ThreadCreate {
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'The list of the recipients user IDs of the Message.', 'wp-graphql-buddypress' ),
 			],
-			'threadId'   => [
+			'databaseId' => [
 				'type'        => 'Int',
 				'description' => __( 'ID of the Messages Thread. Required when replying to an existing Thread.', 'wp-graphql-buddypress' ),
 			],
@@ -93,7 +93,7 @@ class ThreadCreate {
 				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
-			if ( ! empty( $input['threadId'] ) ) {
+			if ( ! empty( $input['databaseId'] ) ) {
 				$thread = ThreadHelper::get_thread_from_input( $input );
 
 				// Check if user can perform this action.

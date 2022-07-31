@@ -1,40 +1,33 @@
 <?php
 
 /**
- * Test_Friendship_friendshipBy_Queries Class.
+ * Test_Friendship_friendship_Queries Class.
  *
  * @group friends
  */
-class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
-
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
+class Test_Friendship_friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_getting_friendship_with_initiator() {
-		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user_id ) );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
 			->hasField( 'databaseId', $friendship )
 			->hasField( 'isConfirmed', false )
-			->hasField( 'friend', [ 'userId' => $this->user ] )
+			->hasField( 'friend', [ 'userId' => $this->user_id ] )
 			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
 	}
 
 	public function test_getting_friendship_with_friendship_initiator() {
-		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user ) );
+		$friendship = $this->create_friendship_object( absint( $this->random_user ), absint( $this->user_id ) );
 
 		$this->bp->set_current_user( $this->random_user );
 
 		$this->assertQuerySuccessful( $this->get_friendship( $friendship ) )
 			->hasField( 'databaseId', $friendship )
 			->hasField( 'isConfirmed', false )
-			->hasField( 'friend', [ 'userId' => $this->user ] )
+			->hasField( 'friend', [ 'userId' => $this->user_id ] )
 			->hasField( 'initiator', [ 'userId' => $this->random_user ] );
 	}
 
@@ -60,7 +53,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 	public function test_friendship_with_unauthorized_member() {
 		$friendship = $this->create_friendship_object();
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->get_friendship( $friendship ) )
 			->expectedErrorMessage( 'Sorry, you don\'t have permission to see this friendship.' );
@@ -76,7 +69,7 @@ class Test_Friendship_friendshipBy_Queries extends WPGraphQL_BuddyPress_UnitTest
 		$global_id = $this->toRelayId( 'friendship', $id );
 		$query     = "
 			query {
-				friendshipBy(id: \"{$global_id}\") {
+				friendship(id: \"{$global_id}\", idType: ID) {
 					id
 					databaseId
 					isConfirmed

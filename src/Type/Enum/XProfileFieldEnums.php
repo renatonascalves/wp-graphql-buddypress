@@ -36,7 +36,7 @@ class XProfileFieldEnums {
 			$levels[ WPEnumType::get_safe_name( $level['id'] ) ] = [
 				'value'       => $level['id'],
 				'description' => sprintf(
-					/* translators: visibility level */
+					/* translators: 1: visibility level */
 					__( 'Visibility Level: %1$s', 'wp-graphql-buddypress' ),
 					$level['label']
 				),
@@ -61,7 +61,7 @@ class XProfileFieldEnums {
 		foreach ( (array) buddypress()->profile->field_types as $type ) {
 			$types[ WPEnumType::get_safe_name( $type ) ] = [
 				'description' => sprintf(
-					/* translators: field type */
+					/* translators: 1: field type */
 					__( 'Field Type: %1$s', 'wp-graphql-buddypress' ),
 					$type
 				),

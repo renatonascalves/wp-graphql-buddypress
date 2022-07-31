@@ -21,8 +21,8 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
@@ -60,13 +60,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->group,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->group,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['invitations']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['invitations']['nodes'] );
 	}
 
 	public function test_get_group_membership_requests() {
@@ -97,13 +98,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 3 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 3 );
 	}
 
 	public function test_get_group_membership_requests_as_group_creator() {
@@ -134,13 +136,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 3 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 3 );
 	}
 
 	public function test_get_group_membership_requests_as_group_admin() {
@@ -174,13 +177,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 3 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 3 );
 	}
 
 	public function test_get_group_membership_requests_as_group_moderator() {
@@ -213,13 +217,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 3 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 3 );
 	}
 
 	public function test_get_group_membership_requests_as_requestor() {
@@ -236,8 +241,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
@@ -245,7 +251,7 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		// User is not from private group, so it can't see the group itself,
 		// let alone the requests in it.
-		$this->assertEmpty( $response['data']['groupBy'] );
+		$this->assertEmpty( $response['data']['group'] );
 	}
 
 	public function test_get_group_membership_requests_as_group_member() {
@@ -278,13 +284,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['invitations']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['invitations']['nodes'] );
 	}
 
 	public function test_get_group_membership_requests_using_user_id_param() {
@@ -317,8 +324,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		// Try a user without a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [
 					'userId' => $u4,
 					'type'   => 'REQUEST',
 				],
@@ -326,13 +334,14 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy']['invitations']['nodes'] );
+		$this->assertEmpty( $response['data']['group']['invitations']['nodes'] );
 
 		// Try another user with a request.
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [
 					'userId' => $u1,
 					'type'   => 'REQUEST',
 				],
@@ -340,19 +349,20 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertTrue( count( $response['data']['groupBy']['invitations']['nodes'] ) === 1 );
+		$this->assertTrue( count( $response['data']['group']['invitations']['nodes'] ) === 1 );
 	}
 
 	public function test_get_group_membership_requests_unauthenticated() {
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertEmpty( $response['data']['groupBy'] );
+		$this->assertEmpty( $response['data']['group'] );
 	}
 
 	public function test_get_group_membership_requests_before() {
@@ -384,6 +394,7 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		$response = $this->groupMembershipRequestsQuery(
 			[
 				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
 				'last'   => 1,
 				'before' => $this->key_to_cursor( $r2 ),
 				'where'  => [ 'type' => 'REQUEST' ],
@@ -391,7 +402,7 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertSame( $r1, $response['data']['groupBy']['invitations']['edges'][0]['node']['databaseId'] );
+		$this->assertSame( $r1, $response['data']['group']['invitations']['edges'][0]['node']['databaseId'] );
 	}
 
 	public function test_get_group_membership_requests_after() {
@@ -422,14 +433,15 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 
 		$response = $this->groupMembershipRequestsQuery(
 			[
-				'id'    => $this->private_group_id,
-				'after' => $this->key_to_cursor( $r1 ),
-				'where' => [ 'type' => 'REQUEST' ],
+				'id'     => $this->private_group_id,
+				'idType' => 'DATABASE_ID',
+				'after'  => $this->key_to_cursor( $r1 ),
+				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertSame( $r2, $response['data']['groupBy']['invitations']['edges'][0]['node']['databaseId'] );
+		$this->assertSame( $r2, $response['data']['group']['invitations']['edges'][0]['node']['databaseId'] );
 	}
 
 	/**
@@ -440,14 +452,15 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	 */
 	protected function groupMembershipRequestsQuery( array $variables = [] ): array {
 		$query = 'query groupMembershipRequestsQuery(
+			$id:ID!
+			$idType:GroupIdTypeEnum
 			$first:Int
 			$last:Int
 			$after:String
 			$before:String
 			$where:GroupToGroupInvitationConnectionWhereArgs
-			$id:Int
 		) {
-			groupBy(groupId: $id) {
+			group(id: $id, idType: $idType) {
 				id
 				databaseId
 				invitations(

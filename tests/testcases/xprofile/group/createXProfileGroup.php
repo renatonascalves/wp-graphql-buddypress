@@ -8,13 +8,6 @@
  */
 class Test_XProfile_createXProfileGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_admins_can_create_xprofile_group() {
 		$this->bp->set_current_user( $this->admin );
 
@@ -37,7 +30,7 @@ class Test_XProfile_createXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_create_xprofile_group_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_xprofile_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

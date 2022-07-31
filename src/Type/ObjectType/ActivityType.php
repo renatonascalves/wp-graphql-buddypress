@@ -14,6 +14,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Activity;
 use WPGraphQL\Extensions\BuddyPress\Data\ActivityHelper;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 use BP_Activity_Activity;
 
 /**
@@ -155,20 +156,11 @@ class ActivityType {
 
 		register_graphql_field(
 			'RootQuery',
-			'activityBy',
+			'activity',
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Activity object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'         => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'activityId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$activity = ActivityHelper::get_activity_from_input( $args );
 

@@ -33,13 +33,13 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->inviter          = $this->bp_factory->user->create();
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -59,7 +59,7 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	public function test_reject_invitation_invalid_id() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->reject_invitation( [ 'inviteId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->reject_invitation( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This invitation does not exist.' );
 	}
 
@@ -87,7 +87,7 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	}
 
 	public function test_group_creator_can_reject_invitation() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->reject_invitation() )
 			->hasField( 'deleted', true );
@@ -141,13 +141,13 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			mutation rejectInvitationTest(
 				$clientMutationId: String!
 				$type:InvitationTypeEnum!
-				$inviteId: Int
+				$databaseId: Int
 			) {
 				rejectInvitation(
 					input: {
 						clientMutationId: $clientMutationId
 						type: $type
-						inviteId: $inviteId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -164,7 +164,7 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'inviteId'         => $this->invitation_id,
+				'databaseId'       => $this->invitation_id,
 				'type'             => 'INVITE',
 			]
 		);

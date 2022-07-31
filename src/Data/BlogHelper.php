@@ -9,7 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * BlogHelper Class.
@@ -25,21 +25,7 @@ class BlogHelper {
 	 * @return object
 	 */
 	public static function get_blog_from_input( $input ): object {
-		$blog_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$blog_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['blogId'] ) ) {
-			$blog_id = absint( $input['blogId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$blog_id = absint( $input );
-		}
+		$blog_id = Factory::get_id( $input );
 
 		// Get the blog object.
 		$blogs       = bp_blogs_get_blogs( [ 'include_blog_ids' => absint( $blog_id ) ] );

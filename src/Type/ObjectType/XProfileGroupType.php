@@ -10,8 +10,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\XProfileGroup;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
+use WPGraphQL\Extensions\BuddyPress\Data\XProfileGroupHelper;
 
 /**
  * XProfileGroupType Class.
@@ -88,24 +89,16 @@ class XProfileGroupType {
 
 		register_graphql_field(
 			'RootQuery',
-			'xprofileGroupBy',
+			'xprofileGroup',
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress XProfile Group object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'      => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'groupId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
-					$xprofile_group_object = XProfileGroupHelper::get_xprofile_group_from_input( $args );
-
-					return Factory::resolve_xprofile_group_object( $xprofile_group_object->id, $context );
+					return Factory::resolve_xprofile_group_object(
+						XProfileGroupHelper::get_xprofile_group_from_input( $args )->id,
+						$context
+					);
 				},
 			]
 		);

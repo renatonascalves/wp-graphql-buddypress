@@ -7,13 +7,6 @@
  */
 class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_activity_creator_can_delete() {
 		$a = $this->create_activity_id();
 
@@ -29,7 +22,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -49,13 +42,13 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->delete_activity( $c ) )
 			->hasField( 'deleted', true )
@@ -69,7 +62,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -112,12 +105,12 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$query = '
 			mutation deleteActivityTest(
 				$clientMutationId:String!
-				$activityId:Int
+				$databaseId:Int
 			) {
 				deleteActivity(
 					input: {
 						clientMutationId: $clientMutationId
-						activityId: $activityId
+						databaseId: $databaseId
 					}
 				)
 				{
@@ -135,7 +128,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 
 		$variables = [
 			'clientMutationId' => $this->client_mutation_id,
-			'activityId'       => $activity_id,
+			'databaseId'       => $activity_id,
 		];
 
 		$operation_name = 'deleteActivityTest';

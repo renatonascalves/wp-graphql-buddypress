@@ -26,21 +26,7 @@ class XProfileGroupHelper {
 	 * @return stdClass
 	 */
 	public static function get_xprofile_group_from_input( $input ): stdClass {
-		$xprofile_group_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$xprofile_group_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['groupId'] ) ) {
-			$xprofile_group_id = absint( $input['groupId'] );
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$xprofile_group_id = absint( $input );
-		}
+		$xprofile_group_id = Factory::get_id( $input );
 
 		// Get group object.
 		$xprofile_group_object = current( bp_xprofile_get_groups( [ 'profile_group_id' => $xprofile_group_id ] ) );
@@ -93,6 +79,6 @@ class XProfileGroupHelper {
 	 * @return bool
 	 */
 	public static function can_manage_xprofile_group(): bool {
-		return ( is_user_logged_in() && bp_current_user_can( 'bp_moderate' ) );
+		return is_user_logged_in() && bp_current_user_can( 'bp_moderate' );
 	}
 }

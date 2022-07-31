@@ -28,7 +28,7 @@
     "source": "https://github.com/wp-graphql/wp-graphql-buddypress"
   },
   "require": {
-    "php": "^7.4|^8.0",
+    "php": "^7.4 || ^8.0",
     "composer/installers": "^1.10.0"
   },
   "require-dev": {

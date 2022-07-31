@@ -1,10 +1,10 @@
 <?php
 /**
- * Test_Groups_groupBy_Queries Class.
+ * Test_Groups_group_Queries Class.
  *
  * @group groups
  */
-class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Global ID.
@@ -16,8 +16,8 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->global_id = $this->toRelayId( 'group', (string) $this->group );
 	}
@@ -35,7 +35,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'parent', null )
 			->hasField( 'admins', null )
 			->hasField( 'mods', null )
-			->hasField( 'creator', [ 'userId' => $this->user ] )
+			->hasField( 'creator', [ 'userId' => $this->user_id ] )
 			->hasField( 'uri', bp_get_group_permalink( new \BP_Groups_Group( $this->group ) ) );
 	}
 
@@ -45,35 +45,12 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'id', $this->global_id );
 	}
 
-	public function test_group_by_query_with_id_param() {
-		$query = "
-			query {
-				groupBy(id: \"{$this->global_id}\") {
-					databaseId
-					name
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
-			->hasField( 'name', 'Group Test' )
-			->hasField( 'databaseId', $this->group );
-	}
-
 	public function test_group_by_query_with_slug_param() {
 		$slug     = 'group-test';
 		$group_id = $this->create_group_id();
-		$query    = "
-			query {
-				groupBy(slug: \"{$slug}\") {
-					databaseId
-					slug
-				}
-			}
-		";
 
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
-			->hasField( 'slug', 'group-test' )
+		$this->assertQuerySuccessful( $this->get_a_group( $slug, 'SLUG' ) )
+			->hasField( 'slug', $slug )
 			->hasField( 'databaseId', $group_id );
 	}
 
@@ -90,17 +67,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			]
 		);
 
-		$query = "
-			query {
-				groupBy(previousSlug: \"{$previous_slug}\") {
-					id
-					databaseId
-					slug
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
+		$this->assertQuerySuccessful( $this->get_a_group( $previous_slug, 'PREVIOUS_SLUG' ) )
 			->hasField( 'slug', 'newslug' )
 			->hasField( 'databaseId', $group_id )
 			->hasField( 'id', $global_id );
@@ -111,18 +78,8 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$child_id        = $this->bp_factory->group->create( [ 'parent_id' => $parent_id ] );
 		$global_id       = $this->toRelayId( 'group', (string) $parent_id );
 		$global_child_id = $this->toRelayId( 'group', (string) $child_id );
-		$query           = "{
-			groupBy(id: \"{$global_child_id}\") {
-				id
-				databaseId
-				parent {
-					id
-					databaseId
-				}
-			}
-		}";
 
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
+		$this->assertQuerySuccessful( $this->get_a_group( $child_id, 'DATABASE_ID' ) )
 			->hasField( 'id', $global_child_id )
 			->hasField( 'databaseId', $child_id )
 			->hasField(
@@ -134,33 +91,9 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			);
 	}
 
-	public function test_get_group_with_invalid_id() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			groupBy(id: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'The "id" is invalid.' );
-	}
-
 	public function test_get_group_with_invalid_group_id() {
 		$this->assertQueryFailed( $this->get_a_group( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This group does not exist.' );
-	}
-
-	public function test_get_group_with_unkown_id_argument() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			groupBy(groupID: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'Unknown argument "groupID" on field "groupBy" of type "RootQuery". Did you mean "groupId"?' );
 	}
 
 	public function test_get_group_with_avatar_disabled() {
@@ -175,9 +108,9 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_hidden_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->add_user_to_group( $this->user, $g );
+		$this->bp->add_user_to_group( $this->user_id, $g );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_group( $g ) )
 			->hasField( 'status', 'HIDDEN' )
@@ -187,32 +120,34 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_hidden_group_without_being_from_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_a_group( $g );
 
-		$this->assertEmpty( $response['data']['groupBy'] );
+		$this->assertEmpty( $response['data']['group'] );
 	}
 
 	/**
 	 * Get a group.
 	 *
-	 * @param int|null $group_id Group ID.
+	 * @param int|string|null $group_id Group ID.
+	 * @param string|null     $type     Type.
 	 * @return array
 	 */
-	protected function get_a_group( $group_id = null ): array {
+	protected function get_a_group( $group_id = null, $type = 'DATABASE_ID' ): array {
 		$group = $group_id ?? $this->group;
 		$query = "
 			query {
-				groupBy(groupId: {$group}) {
-					id
+				group(id: \"{$group}\", idType: {$type}) {
 					databaseId
-					name
-					status
 					description(format: RAW)
-					totalMemberCount
-					lastActivity
 					hasForum
+					id
+					lastActivity
+					name
+					slug
+					status
+					totalMemberCount
 					uri
 					creator {
 						userId
@@ -224,6 +159,7 @@ class Test_Groups_groupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 						userId
 					}
 					parent {
+						id
 						databaseId
 					}
 					attachmentAvatar {

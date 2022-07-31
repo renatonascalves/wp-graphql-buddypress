@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\NotificationHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Notification;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * Class NotificationType
@@ -127,20 +128,11 @@ class NotificationType {
 
 		register_graphql_field(
 			'RootQuery',
-			'notificationBy',
+			strtolower( self::$type_name ),
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Notification object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'         => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'databaseId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$notification = NotificationHelper::get_notification_from_input( $args );
 

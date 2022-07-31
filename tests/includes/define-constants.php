@@ -1,6 +1,6 @@
 <?php
 /**
- * Define constants needed by test suite.
+ * Define constants needed by the test suite.
  *
  * @since 0.0.1-alpha
  * @package WPGraphQL\Extensions\BuddyPress

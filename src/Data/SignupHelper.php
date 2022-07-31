@@ -8,9 +8,9 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Signup;
+use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * SignupHelper Class.
@@ -29,23 +29,13 @@ class SignupHelper {
 		$query_args    = [];
 		$error_message = __( 'This signup does not exist.', 'wp-graphql-buddypress' );
 
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$query_args['include'] = [ absint( $id_components['id'] ) ];
-		} elseif ( ! empty( $input['signupId'] ) ) {
-			$query_args['include'] = [ absint( $input['signupId'] ) ];
-		} elseif ( ! empty( $input['activationKey'] ) ) {
+		if ( ! empty( $input['activationKey'] ) ) {
 			$query_args['activation_key'] = $input['activationKey'];
 			$error_message                = __( 'Invalid activation key.', 'wp-graphql-buddypress' );
-		} elseif ( is_email( $input ) ) {
+		} elseif ( is_string( $input ) && is_email( $input ) ) {
 			$query_args['usersearch'] = $input;
-		} elseif ( ! empty( $input ) && is_numeric( $input ) ) {
-			$query_args['include'] = [ absint( $input ) ];
+		} else {
+			$query_args['include'] = Factory::get_id( $input );
 		}
 
 		// Get signup.
@@ -86,11 +76,7 @@ class SignupHelper {
 	 * @return bool
 	 */
 	public static function can_see(): bool {
-		$capability = is_multisite()
-			? 'manage_network_users'
-			: 'edit_users';
-
-		return ( is_user_logged_in() && bp_current_user_can( $capability ) );
+		return bp_current_user_can( is_multisite() ? 'manage_network_users' : 'edit_users' );
 	}
 
 	/**

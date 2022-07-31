@@ -7,25 +7,18 @@
  */
 class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_friends_from_member() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
 
-		$this->create_friendship_object( $u1, absint( $this->user ) );
-		$this->create_friendship_object( $u2, absint( $this->user ) );
-		$this->create_friendship_object( $u3, absint( $this->user ) );
+		$this->create_friendship_object( $u1, absint( $this->user_id ) );
+		$this->create_friendship_object( $u2, absint( $this->user_id ) );
+		$this->create_friendship_object( $u3, absint( $this->user_id ) );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$response = $this->get_friends( [ 'id' => $this->toRelayId( 'user', (string) $this->user ) ] );
+		$response = $this->get_friends( [ 'id' => $this->toRelayId( 'user', (string) $this->user_id ) ] );
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertTrue( count( $response['data']['user']['friends']['nodes'] ) === 3 );
@@ -35,14 +28,14 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 
-		$this->create_friendship_object( $u1, absint( $this->user ) );
-		$this->create_friendship_object( $u2, absint( $this->user ) );
+		$this->create_friendship_object( $u1, absint( $this->user_id ) );
+		$this->create_friendship_object( $u2, absint( $this->user_id ) );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_friends(
 			[
-				'id'    => $this->toRelayId( 'user', (string) $this->user ),
+				'id'    => $this->toRelayId( 'user', (string) $this->user_id ),
 				'first' => 1,
 				'after' => '',
 			]
@@ -50,7 +43,7 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
-		$this->assertSame( $this->user, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
+		$this->assertSame( $this->user_id, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
 	}
 
 	public function test_get_friends_from_member_after() {
@@ -58,22 +51,22 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
 
-		$this->create_friendship_object( $u1, absint( $this->user ) );
-		$this->create_friendship_object( $u2, absint( $this->user ) );
-		$this->create_friendship_object( $u3, absint( $this->user ) );
+		$this->create_friendship_object( $u1, absint( $this->user_id ) );
+		$this->create_friendship_object( $u2, absint( $this->user_id ) );
+		$this->create_friendship_object( $u3, absint( $this->user_id ) );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_friends(
 			[
-				'id'    => $this->toRelayId( 'user', (string) $this->user ),
-				'after' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) ),
+				'id'    => $this->toRelayId( 'user', (string) $this->user_id ),
+				'after' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user_id ) ),
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u3, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
-		$this->assertSame( $this->user, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
+		$this->assertSame( $this->user_id, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
 	}
 
 	public function test_get_friends_from_member_before() {
@@ -81,23 +74,23 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();
 
-		$this->create_friendship_object( $u1, absint( $this->user ) );
-		$this->create_friendship_object( $u2, absint( $this->user ) );
-		$this->create_friendship_object( $u3, absint( $this->user ) );
+		$this->create_friendship_object( $u1, absint( $this->user_id ) );
+		$this->create_friendship_object( $u2, absint( $this->user_id ) );
+		$this->create_friendship_object( $u3, absint( $this->user_id ) );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_friends(
 			[
-				'id'     => $this->toRelayId( 'user', (string) $this->user ),
+				'id'     => $this->toRelayId( 'user', (string) $this->user_id ),
 				'last'   => 1,
-				'before' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user ) ),
+				'before' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user_id ) ),
 			]
 		);
 
 		$this->assertQuerySuccessful( $response );
 		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
-		$this->assertSame( $this->user, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
+		$this->assertSame( $this->user_id, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
 	}
 
 	/**

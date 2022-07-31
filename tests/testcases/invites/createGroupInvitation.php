@@ -33,14 +33,14 @@ class Test_Invitation_createGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->inviter          = $this->bp_factory->user->create();
 		$this->invitee          = $this->bp_factory->user->create();
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -88,27 +88,27 @@ class Test_Invitation_createGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	}
 
 	public function test_group_creator_invite_user_to_group() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->invite_user_to_group() );
 	}
 
 	public function test_invite_user_to_group_with_invalid_invitee_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->invite_user_to_group( [ 'userId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'Invalid member ID.' );
 	}
 
 	public function test_invite_user_to_group_with_invalid_inviter_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->invite_user_to_group( [ 'inviterId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'Invalid member ID.' );
 	}
 
 	public function test_invite_user_to_group_with_invalid_group_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->invite_user_to_group( [ 'itemId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'Invalid group ID.' );
@@ -147,14 +147,14 @@ class Test_Invitation_createGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	}
 
 	public function test_invite_user_to_group_with_invalid_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->invite_user_to_group( [ 'type' => 'random-status' ] ) )
 			->expectedErrorMessage( 'Variable "$type" got invalid value "random-status"; Expected type InvitationTypeEnum.' );
 	}
 
 	public function test_invite_user_to_group_with_null_user_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->invite_user_to_group( [ 'userId' => null ] ) )
 			->expectedErrorMessage( 'Variable "$userId" of non-null type "Int!" must not be null.' );

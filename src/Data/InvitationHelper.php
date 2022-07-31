@@ -8,9 +8,9 @@
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
-use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use BP_Invitation;
+use GraphQL\Error\UserError;
+use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
  * InvitationHelper Class.
@@ -26,19 +26,7 @@ class InvitationHelper {
 	 * @return BP_Invitation
 	 */
 	public static function get_invitation_from_input( $input ): BP_Invitation {
-		$invitation_id = 0;
-
-		if ( ! empty( $input['id'] ) ) {
-			$id_components = Relay::fromGlobalId( $input['id'] );
-
-			if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-				throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-			}
-
-			$invitation_id = absint( $id_components['id'] );
-		} elseif ( ! empty( $input['inviteId'] ) ) {
-			$invitation_id = absint( $input['inviteId'] );
-		}
+		$invitation_id = Factory::get_id( $input );
 
 		// Check the invitation type.
 		if ( empty( $input['type'] ) ) {

@@ -18,8 +18,8 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create(
 			[ 'name' => 'XProfile Group Name' ]
@@ -44,7 +44,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_update_xprofile_group_with_invalid_group_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQueryFailed( $this->update_xprofile_group( [ 'groupId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->update_xprofile_group( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This XProfile group does not exist.' );
 	}
 
@@ -54,7 +54,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_update_xprofile_group_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_xprofile_group( [ 'name' => 'Updated XProfile Group' ] ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -68,7 +68,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->assertQuerySuccessful(
 			$this->update_xprofile_group(
 				[
-					'groupId'    => $xprofile_group_id,
+					'databaseId' => $xprofile_group_id,
 					'groupOrder' => 1,
 				]
 			)
@@ -92,7 +92,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 		$query = '
 			mutation updateXProfileGroupTest(
 				$clientMutationId: String!
-				$groupId: Int
+				$databaseId: Int
 				$name: String
 				$groupOrder: Int
 				$canDelete:Boolean
@@ -100,7 +100,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 				updateXProfileGroup(
 					input: {
 						clientMutationId: $clientMutationId
-						groupId: $groupId
+						databaseId: $databaseId
 						name: $name
 						groupOrder: $groupOrder
 						canDelete: $canDelete
@@ -122,7 +122,7 @@ class Test_XProfile_updateXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'groupId'          => $this->xprofile_group_id,
+				'databaseId'       => $this->xprofile_group_id,
 				'name'             => 'Updated XProfile Group',
 				'groupOrder'       => null,
 				'canDelete'        => null,

@@ -8,19 +8,12 @@
  */
 class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_member_can_upload_his_own_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
+		$response = $this->upload_avatar( 'USER', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -28,8 +21,8 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 			->hasField(
 				'attachment',
 				[
-					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
-					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
+					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user_id ) ),
 				]
 			);
 
@@ -42,7 +35,7 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
+		$response = $this->upload_avatar( 'USER', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -50,8 +43,8 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 			->hasField(
 				'attachment',
 				[
-					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ),
-					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) ),
+					'full'  => $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ),
+					'thumb' => $this->get_avatar_image( 'thumb', 'user', absint( $this->user_id ) ),
 				]
 			);
 
@@ -63,17 +56,17 @@ class Test_Attachment_uploadMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		// Disabling avatar upload.
 		add_filter( 'bp_disable_avatar_uploads', '__return_true' );
 
-		$this->assertQueryFailed( $this->upload_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, member avatar upload is disabled.' );
 	}
 
 	public function test_member_avatar_upload_without_loggin_in_user() {
-		$this->assertQueryFailed( $this->upload_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->upload_avatar( 'USER', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_regular_member_can_not_upload_another_member_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->upload_avatar( 'USER', absint( $this->random_user ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

@@ -6,37 +6,30 @@
  */
 class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_get_member_with_user_query() {
 
 		// Set member type.
-		bp_set_member_type( $this->user, 'foo' );
+		bp_set_member_type( $this->user_id, 'foo' );
 
 		// Add one friendship.
-		friends_add_friend( $this->user, $this->random_user, true );
+		friends_add_friend( $this->user_id, $this->random_user, true );
 
 		$this->assertQuerySuccessful( $this->get_a_member() )
-			->hasField( 'mentionName', bp_activity_get_user_mentionname( $this->user ) )
-			->hasField( 'link', bp_core_get_user_domain( $this->user ) )
+			->hasField( 'mentionName', bp_activity_get_user_mentionname( $this->user_id ) )
+			->hasField( 'link', bp_core_get_user_domain( $this->user_id ) )
 			->hasField( 'totalFriendCount', 1 )
 			->hasField( 'latestUpdate', null )
-			->hasField( 'attachmentAvatar', [ 'full' => $this->get_avatar_image( 'full', 'user', absint( $this->user ) ) ] )
+			->hasField( 'attachmentAvatar', [ 'full' => $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ) ] )
 			->hasField( 'attachmentCover', null );
 	}
 
 	public function test_get_member_with_latest_update() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		bp_activity_post_update(
 			[
 				'type'    => 'activity_update',
-				'user_id' => $this->user,
+				'user_id' => $this->user_id,
 				'content' => 'The Joshua Tree',
 			]
 		);
@@ -47,7 +40,7 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_member_with_avatar_disabled() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		buddypress()->avatar->show_avatars = false;
 
@@ -64,7 +57,7 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	 * @return array
 	 */
 	protected function get_a_member( $user_id = null ): array {
-		$u         = $user_id ?? $this->user;
+		$u         = $user_id ?? $this->user_id;
 		$global_id = $this->toRelayId( 'user', (string) $u );
 		$query     = "
 			query {

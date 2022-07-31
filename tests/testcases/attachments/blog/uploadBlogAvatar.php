@@ -8,13 +8,6 @@
  */
 class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_blog_upload_avatar() {
 		$this->skipWithoutMultisite();
 
@@ -51,7 +44,7 @@ class Test_Attachment_Blog_Avatar_Mutation extends WPGraphQL_BuddyPress_UnitTest
 	public function test_blog_avatar_upload_with_upload_disabled() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Disabling blog avatar upload.
 		buddypress()->avatar->show_avatars = false;

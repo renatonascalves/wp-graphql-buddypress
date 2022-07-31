@@ -30,7 +30,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @var array
 	 */
-	public $response;
+	public $response = [];
 
 	/**
 	 * Mutation ID.
@@ -51,7 +51,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @var int
 	 */
-	public $user;
+	public $user_id;
 
 	/**
 	 * Random regular user.
@@ -84,7 +84,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up(): void {
+	public function set_up() {
 		parent::set_up();
 
 		/**
@@ -98,13 +98,13 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		$this->bp                 = new BP_UnitTestCase();
 		$this->client_mutation_id = 'someUniqueId';
 		$this->image_file         = dirname( dirname( __FILE__ ) ) . '/assets/test-image.jpeg';
-		$this->user               = $this->bp_factory->user->create();
+		$this->user_id            = $this->bp_factory->user->create();
 		$this->random_user        = $this->bp_factory->user->create();
 		$this->admin              = $this->bp_factory->user->create( [ 'role' => 'administrator' ] );
 		$this->thread             = $this->bp_factory->message->create_and_get(
 			[
 				'sender_id'  => $this->random_user,
-				'recipients' => [ $this->user ],
+				'recipients' => [ $this->user_id ],
 				'subject'    => 'Threat Test',
 				'content'    => 'Bar',
 			]
@@ -113,7 +113,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			[
 				'name'        => 'Group Test',
 				'description' => 'Group Description',
-				'creator_id'  => $this->user,
+				'creator_id'  => $this->user_id,
 			]
 		);
 
@@ -147,6 +147,15 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Wrapper for the "\WPGraphQL\Utils\Utils::get_database_id_from_id" function.
+	 *
+	 * @return int
+	 */
+	public function toDatabaseId( $id ) {
+		return \WPGraphQL\Utils\Utils::get_database_id_from_id( $id );
+	}
+
+	/**
 	 * Assert query was successfull.
 	 *
 	 * @param array $response Query response.
@@ -155,7 +164,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
 		$this->assertArrayHasKey( 'data', $this->response );
-		$this->assertArrayNotHasKey( 'errors', $this->response );
 
 		return $this;
 	}
@@ -418,7 +426,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 				[
 					'user_id'     => $user_id,
 					'group_id'    => $group_id ?? $this->group,
-					'inviter_id'  => $inviter_id ?? $this->user,
+					'inviter_id'  => $inviter_id ?? $this->user_id,
 					'send_invite' => 1,
 				]
 			);
@@ -430,8 +438,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	protected function set_user(): void {
 		if ( is_multisite() ) {
-			$this->bp->grant_super_admin( $this->user );
-			$this->bp->set_current_user( $this->user );
+			$this->bp->grant_super_admin( $this->user_id );
+			$this->bp->set_current_user( $this->user_id );
 		} else {
 			$this->bp->set_current_user( $this->admin );
 		}
@@ -477,7 +485,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		return $this->bp_factory->notification->create(
 			array_merge(
 				[
-					'user_id' => $this->user,
+					'user_id' => $this->user_id,
 					'is_new'  => 1,
 				],
 				$args
@@ -556,7 +564,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Upload avatar mutation.
 	 *
-	 * @param string $object Object.
+	 * @param string $object   Object.
 	 * @param int    $objectId Object ID.
 	 * @return array
 	 */
@@ -604,7 +612,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Upload cover mutation.
 	 *
-	 * @param string $object Object.
+	 * @param string $object   Object.
 	 * @param int    $objectId Object ID.
 	 * @return array
 	 */

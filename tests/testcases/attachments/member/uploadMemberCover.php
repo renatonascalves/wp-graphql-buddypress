@@ -8,19 +8,12 @@
  */
 class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_member_can_upload_his_own_cover() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
+		$response = $this->upload_cover( 'MEMBERS', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -28,7 +21,7 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 			->hasField(
 				'attachment',
 				[
-					'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
+					'full'  => $this->get_cover_image( 'members', absint( $this->user_id ) ),
 					'thumb' => null,
 				]
 			);
@@ -43,7 +36,7 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_cover( 'MEMBERS', absint( $this->user ) );
+		$response = $this->upload_cover( 'MEMBERS', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -51,7 +44,7 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 			->hasField(
 				'attachment',
 				[
-					'full'  => $this->get_cover_image( 'members', absint( $this->user ) ),
+					'full'  => $this->get_cover_image( 'members', absint( $this->user_id ) ),
 					'thumb' => null,
 				]
 			);
@@ -64,19 +57,19 @@ class Test_Attachment_uploadMemberCover_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_member_cover_upload_when_member_cover_upload_is_disabled() {
 		add_filter( 'bp_disable_cover_image_uploads', '__return_true' );
 
-		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, member cover upload is disabled.' );
 	}
 
 	public function test_member_cover_upload_without_loggin_in_user() {
-		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_regular_member_can_not_upload_another_member_cover() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->upload_cover( 'MEMBERS', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 

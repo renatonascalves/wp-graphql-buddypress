@@ -3,11 +3,11 @@
 use WPGraphQL\Utils\Utils;
 
 /**
- * Test_Signup_signupBy_Queries Class.
+ * Test_Signup_signup_Queries Class.
  *
  * @group signup
  */
-class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
+class Test_Signup_signup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
 	 * Global ID.
@@ -33,8 +33,8 @@ class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 
@@ -43,13 +43,13 @@ class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_signup() {
+		$signup_id = $this->create_signup_id();
+
 		$this->set_user();
 
-		$signup_id = $this->signup_id;
-		$signup    = $this->bp_factory->signup->get_object_by_id( $signup_id );
+		$signup = $this->bp_factory->signup->get_object_by_id( $signup_id );
 
-		$this->assertQuerySuccessful( $this->get_signup() )
-			->hasField( 'id', $this->global_id )
+		$this->assertQuerySuccessful( $this->get_signup( $signup_id ) )
 			->hasField( 'databaseId', $signup->id )
 			->hasField( 'userName', $signup->user_name )
 			->hasField( 'userLogin', $signup->user_login )
@@ -61,21 +61,6 @@ class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'dateSentGmt', Utils::prepare_date_response( $signup->date_sent ), get_date_from_gmt( $signup->date_sent ) );
 	}
 
-	public function test_get_signup_with_id_param() {
-		$this->set_user();
-
-		$query = "
-			query {
-				signupBy(id: \"{$this->global_id}\") {
-					databaseId
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
-			->hasField( 'databaseId', $this->signup_id );
-	}
-
 	public function test_get_signup_with_invalid_id() {
 		$this->set_user();
 
@@ -84,42 +69,30 @@ class Test_Signup_signupBy_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_signup_unauthenticated() {
-		$response = $this->get_signup();
+		$response = $this->get_signup( $this->signup_id );
 
-		$this->assertEmpty( $response['data']['signupBy'] );
+		$this->assertEmpty( $response['data']['signup'] );
 	}
 
 	public function test_get_signup_unauthorized() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$response = $this->get_signup();
+		$response = $this->get_signup( $this->signup_id );
 
-		$this->assertEmpty( $response['data']['signupBy'] );
-	}
-
-	public function test_get_signup_with_unkown_id_argument() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			signupBy(groupID: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'Unknown argument "groupID" on field "signupBy" of type "RootQuery".' );
+		$this->assertEmpty( $response['data']['signup'] );
 	}
 
 	/**
 	 * Get a signup.
 	 *
-	 * @param int|null $signup_id Signup ID.
+	 * @param int    $signup_id Signup ID.
+	 * @param string $type      Type.
 	 * @return array
 	 */
-	protected function get_signup( $signup_id = null ): array {
-		$signup = $signup_id ?? $this->signup_id;
-		$query  = "
+	protected function get_signup( int $signup_id, $type = 'DATABASE_ID' ): array {
+		$query = "
 			query {
-				signupBy(signupId: {$signup}) {
+				signup(id: {$signup_id}, idType: {$type}) {
 					id,
 					databaseId
 					userName

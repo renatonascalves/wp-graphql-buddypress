@@ -14,6 +14,7 @@ use WPGraphQL\Model\Term;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\GroupHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Group;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * Class GroupObjectType
@@ -238,28 +239,11 @@ class GroupObjectType {
 
 		register_graphql_field(
 			'RootQuery',
-			'groupBy',
+			strtolower( self::$type_name ),
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Group object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'           => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'groupId'      => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-					'slug'         => [
-						'type'        => 'String',
-						'description' => __( 'Get the object by its current slug.', 'wp-graphql-buddypress' ),
-					],
-					'previousSlug' => [
-						'type'        => 'String',
-						'description' => __( 'Get the object by its previous slug.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$group = GroupHelper::get_group_from_input( $args );
 

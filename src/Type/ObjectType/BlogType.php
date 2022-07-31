@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\BlogHelper;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Model\Blog;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * BlogType Class.
@@ -130,20 +131,11 @@ class BlogType {
 
 		register_graphql_field(
 			'RootQuery',
-			'blogBy',
+			strtolower( self::$type_name ),
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Blog object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'     => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'blogId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					$blog = BlogHelper::get_blog_from_input( $args );
 

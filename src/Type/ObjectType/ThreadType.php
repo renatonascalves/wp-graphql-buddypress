@@ -11,8 +11,9 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 use GraphQL\Deferred;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
-use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Thread;
+use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * Class ThreadType
@@ -91,16 +92,7 @@ class ThreadType {
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Thread object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'       => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'threadId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args, AppContext $context ) {
 					return Factory::resolve_thread_object(
 						ThreadHelper::get_thread_from_input( $args )->thread_id,

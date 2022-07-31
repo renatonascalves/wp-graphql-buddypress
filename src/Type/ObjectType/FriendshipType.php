@@ -9,10 +9,11 @@
 namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
+use WPGraphQL\Extensions\BuddyPress\Data\FriendshipHelper;
 use WPGraphQL\Extensions\BuddyPress\Model\Friendship;
+use WPGraphQL\Extensions\BuddyPress\Type\Enum\GeneralEnums;
 
 /**
  * FriendshipType Class.
@@ -86,20 +87,11 @@ class FriendshipType {
 
 		register_graphql_field(
 			'RootQuery',
-			'friendshipBy',
+			strtolower( self::$type_name ),
 			[
 				'type'        => self::$type_name,
 				'description' => __( 'Get a BuddyPress Friendship object.', 'wp-graphql-buddypress' ),
-				'args'        => [
-					'id'           => [
-						'type'        => 'ID',
-						'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
-					],
-					'friendshipId' => [
-						'type'        => 'Int',
-						'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
-					],
-				],
+				'args'        => GeneralEnums::id_type_args( self::$type_name ),
 				'resolve'     => function ( $source, array $args ) {
 
 					// Require user to be logged in.
@@ -107,31 +99,7 @@ class FriendshipType {
 						throw new UserError( __( 'Sorry, you need to be logged in to perform this action.', 'wp-graphql-buddypress' ) );
 					}
 
-					$friendship_id = 0;
-
-					if ( ! empty( $args['id'] ) ) {
-						$id_components = Relay::fromGlobalId( $args['id'] );
-
-						if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-							throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
-						}
-
-						$friendship_id = $id_components['id'];
-					} elseif ( ! empty( $args['friendshipId'] ) ) {
-						$friendship_id = $args['friendshipId'];
-					}
-
-					$friendship = Factory::resolve_friendship_object( absint( $friendship_id ) );
-
-					// Only the friendship initiator and the friend, the one invited to the friendship can see it.
-					if ( ! empty( $friendship )
-						&& ! empty( $friendship->initiator )
-						&& ! empty( $friendship->friend )
-						&& ! in_array( bp_loggedin_user_id(), [ $friendship->initiator, $friendship->friend ], true ) ) {
-						throw new UserError( __( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
-					}
-
-					return $friendship;
+					return FriendshipHelper::get_friendship_from_input( $args );
 				},
 			]
 		);

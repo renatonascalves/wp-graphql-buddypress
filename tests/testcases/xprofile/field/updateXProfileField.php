@@ -25,8 +25,8 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create( [ 'name' => 'XProfile Group' ] );
 		$this->xprofile_field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
@@ -48,7 +48,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->assertQuerySuccessful(
 			$this->update_xprofile_field(
 				[
-					'fieldId'    => $field_id,
+					'databaseId' => $field_id,
 					'fieldOrder' => 1,
 				]
 			)
@@ -60,7 +60,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$this->assertQuerySuccessful(
 			$this->update_xprofile_field(
 				[
-					'fieldId'    => $this->xprofile_field_id,
+					'databaseId' => $this->xprofile_field_id,
 					'fieldOrder' => 1,
 				]
 			)
@@ -72,7 +72,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	public function test_update_using_invalid_xprofile_field_id() {
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQueryFailed( $this->update_xprofile_field( [ 'fieldId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
+		$this->assertQueryFailed( $this->update_xprofile_field( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This XProfile field does not exist.' );
 	}
 
@@ -82,7 +82,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_update_xprofile_field_with_user_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_xprofile_field() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
@@ -98,14 +98,14 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 		$query = '
 			mutation updateXProfileFieldTest(
 				$clientMutationId: String!
-				$fieldId: Int
+				$databaseId: Int
 				$name: String
 				$fieldOrder: Int
 			) {
 				updateXProfileField(
 					input: {
 						clientMutationId: $clientMutationId
-						fieldId: $fieldId
+						databaseId: $databaseId
                         name: $name
                         fieldOrder: $fieldOrder
 					}
@@ -125,7 +125,7 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 			$args,
 			[
 				'clientMutationId' => $this->client_mutation_id,
-				'fieldId'          => $this->xprofile_field_id,
+				'databaseId'       => $this->xprofile_field_id,
 				'name'             => 'Updated XProfile Group',
 				'fieldOrder'       => null,
 			]

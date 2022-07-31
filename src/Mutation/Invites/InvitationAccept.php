@@ -38,15 +38,15 @@ class InvitationAccept {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id'       => [
+			'id'         => [
 				'type'        => 'ID',
 				'description' => __( 'Get the object by its global ID.', 'wp-graphql-buddypress' ),
 			],
-			'inviteId' => [
+			'databaseId' => [
 				'type'        => 'Int',
 				'description' => __( 'Get the object by its database ID.', 'wp-graphql-buddypress' ),
 			],
-			'type'     => [
+			'type'       => [
 				'type'        => [ 'non_null' => 'InvitationTypeEnum' ],
 				'description' => __( 'The type of the invitation.', 'wp-graphql-buddypress' ),
 			],

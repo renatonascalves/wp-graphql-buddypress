@@ -5,17 +5,10 @@ use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
 /**
  * Test_Messages_createThread_Mutation Class.
  *
- * @group thread
+ * @group threads
  * @group messages
  */
 class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
-
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
 
 	public function test_create_thread() {
 		$u1 = $this->bp_factory->user->create();
@@ -89,7 +82,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 
 		$r2 = $this->create_thread(
 			[
-				'threadId'   => $r1['data']['createThread']['thread']['databaseId'],
+				'databaseId' => $r1['data']['createThread']['thread']['databaseId'],
 				'message'    => 'Another message',
 				'recipients' => [ $u1 ],
 			]
@@ -172,7 +165,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 
 		$response = $this->create_thread(
 			[
-				'threadId'   => $r1['data']['createThread']['thread']['databaseId'],
+				'databaseId' => $r1['data']['createThread']['thread']['databaseId'],
 				'message'    => 'Another message',
 				'recipients' => [ $u1 ],
 			]
@@ -190,7 +183,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 
 		$response = $this->create_thread(
 			[
-				'threadId'   => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER,
+				'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER,
 				'message'    => 'Another message',
 				'recipients' => [ $u2 ],
 			]
@@ -271,14 +264,14 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 				$clientMutationId:String!
 				$message:String!
 				$subject:String
-				$threadId:Int
+				$databaseId:Int
 				$recipients:[Int]
 			) {
 				createThread(
 					input: {
 						clientMutationId: $clientMutationId
 						message: $message
-						threadId: $threadId
+						databaseId: $databaseId
 						subject: $subject
 						recipients: $recipients
 					}
@@ -320,7 +313,7 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 				'message'          => 'Message',
 				'subject'          => 'Message Subject',
 				'recipients'       => [],
-				'threadId'         => null,
+				'databaseId'       => null,
 			]
 		);
 

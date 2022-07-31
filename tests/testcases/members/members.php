@@ -7,13 +7,6 @@
  */
 class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_members_query() {
 		$this->bp->set_current_user( $this->admin );
 

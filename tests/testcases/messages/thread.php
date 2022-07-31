@@ -17,8 +17,8 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->global_id = $this->toRelayId( 'thread', $this->thread->thread_id );
 	}
@@ -26,7 +26,7 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_a_thread_as_sender() {
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->get_a_thread() )
+		$this->assertQuerySuccessful( $this->get_a_thread( $this->thread->thread_id, 'DATABASE_ID' ) )
 			->hasField( 'id', $this->global_id )
 			->hasField( 'databaseId', $this->thread->thread_id )
 			->hasField( 'unreadCount', null );
@@ -35,7 +35,7 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_a_thread_as_recipient() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQuerySuccessful( $this->get_a_thread() )
+		$this->assertQuerySuccessful( $this->get_a_thread( $this->thread->thread_id, 'DATABASE_ID' ) )
 			->hasField( 'id', $this->global_id )
 			->hasField( 'databaseId', $this->thread->thread_id )
 			->hasField( 'unreadCount', null );
@@ -60,7 +60,7 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Moderator can see it all.
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id ) )
+		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id, 'DATABASE_ID' ) )
 			->hasField( 'id', $this->toRelayId( 'thread', $thread->thread_id ) )
 			->hasField( 'databaseId', $thread->thread_id );
 	}
@@ -84,14 +84,14 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		// Check as the sender.
 		$this->bp->set_current_user( $u1 );
 
-		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id ) )
+		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id, 'DATABASE_ID' ) )
 			->hasField( 'databaseId', $thread->thread_id )
 			->hasField( 'unreadCount', 0 );
 
 		// Check as the recipient.
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id ) )
+		$this->assertQuerySuccessful( $this->get_a_thread( $thread->thread_id, 'DATABASE_ID' ) )
 			->hasField( 'databaseId', $thread->thread_id )
 			->hasField( 'unreadCount', 2 );
 	}
@@ -115,81 +115,39 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->bp->set_current_user( $u2 );
 
-		$response = $this->get_a_thread( $thread->thread_id );
+		$response = $this->get_a_thread( $thread->thread_id, 'DATABASE_ID' );
 
 		$this->assertEmpty( $response['data']['thread'] );
 	}
 
 	public function test_get_a_thread_with_unauthenticated_user() {
-		$response = $this->get_a_thread();
+		$response = $this->get_a_thread( $this->thread->thread_id, 'DATABASE_ID' );
 
 		$this->assertEmpty( $response['data']['thread'] );
 	}
 
-	public function test_thread_by_query_with_threadid_param() {
-		$this->bp->set_current_user( $this->admin );
-
-		$this->assertQuerySuccessful( $this->get_a_thread() )
-			->hasField( 'id', $this->global_id );
-	}
-
-	public function test_thread_by_query_with_id_param() {
-		$this->bp->set_current_user( $this->admin );
-
-		$query = "
-			query {
-				thread(id: \"{$this->global_id}\") {
-					id,
-					databaseId
-				}
-			}
-		";
-
-		$this->assertQuerySuccessful( $this->graphql( compact( 'query' ) ) )
-			->hasField( 'databaseId', $this->thread->thread_id )
-			->hasField( 'id', $this->global_id );
-	}
-
 	public function test_get_thread_with_invalid_id() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			thread(id: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
+		$this->assertQueryFailed( $this->get_a_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER, 'ID' ) )
 			->expectedErrorMessage( 'The "id" is invalid.' );
 	}
 
 	public function test_get_thread_with_invalid_thread_id() {
-		$this->assertQueryFailed( $this->get_a_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
+		$this->assertQueryFailed( $this->get_a_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER, 'DATABASE_ID' ) )
 			->expectedErrorMessage( 'This thread does not exist.' );
-	}
-
-	public function test_get_thread_with_unknown_id_argument() {
-		$id    = GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER;
-		$query = "{
-			thread(threadID: \"{$id}\") {
-				id
-			}
-		}";
-
-		$this->assertQueryFailed( $this->graphql( compact( 'query' ) ) )
-			->expectedErrorMessage( 'Unknown argument "threadID" on field "thread" of type "RootQuery". Did you mean "threadId"?' );
 	}
 
 	/**
 	 * Get a thread.
 	 *
-	 * @param int|null $thread_id Thread ID.
+	 * @param int|null    $thread_id Thread ID.
+	 * @param string|null $type      Type.
 	 * @return array
 	 */
-	protected function get_a_thread( $thread_id = null ): array {
+	protected function get_a_thread( $thread_id = null, $type = null ): array {
 		$thread = $thread_id ?? $this->thread->thread_id;
 		$query  = "
 			query {
-				thread(threadId: {$thread}) {
+				thread(id: {$thread}, idType: {$type}) {
 					databaseId
 					id
 					unreadCount

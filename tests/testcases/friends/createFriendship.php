@@ -7,13 +7,6 @@
  */
 class Test_Friendship_createFriendship_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	/**
-	 * Set up.
-	 */
-	public function setUp() {
-		parent::setUp();
-	}
-
 	public function test_create_friendship() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
@@ -105,12 +98,12 @@ class Test_Friendship_createFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 	}
 
 	public function test_create_friendship_with_invalid_friend_id() {
-		$this->assertQueryFailed( $this->create_friendship( absint( $this->user ), GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
+		$this->assertQueryFailed( $this->create_friendship( absint( $this->user_id ), GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'There was a problem confirming if user is valid.' );
 	}
 
 	public function test_create_friendship_with_invalid_initiator_id() {
-		$this->assertQueryFailed( $this->create_friendship( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER, absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->create_friendship( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER, absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'There was a problem confirming if user is valid.' );
 	}
 
