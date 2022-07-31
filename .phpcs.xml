@@ -8,6 +8,9 @@
 	<!-- Load PHPCompatibilityWP standards -->
 	<rule ref="PHPCompatibilityWP" />
 
+	<!-- Load WordPress VIP standards -->
+	<rule ref="WordPress-VIP-Go" />
+
 	<!-- Configure the PHP version -->
 	<config name="testVersion" value="7.4-" />
 
@@ -58,5 +61,10 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+	</rule>
+
+	<!-- False positive. -->
+	<rule ref="WordPress-VIP-Go">
+		<exclude name="WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude"/>
 	</rule>
 </ruleset>

@@ -9,6 +9,7 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
+use stdClass;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
@@ -22,9 +23,9 @@ class BlogHelper {
 	 * @throws UserError User error for invalid blog.
 	 *
 	 * @param array|int $input Array of possible input fields or a single integer.
-	 * @return object
+	 * @return stClass
 	 */
-	public static function get_blog_from_input( $input ): object {
+	public static function get_blog_from_input( $input ): stdClass {
 		$blog_id = Factory::get_id( $input );
 
 		// Get the blog object.
