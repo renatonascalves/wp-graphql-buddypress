@@ -32,7 +32,7 @@ class SignupHelper {
 		if ( ! empty( $input['activationKey'] ) ) {
 			$query_args['activation_key'] = $input['activationKey'];
 			$error_message                = __( 'Invalid activation key.', 'wp-graphql-buddypress' );
-		} elseif ( isset( $input ) && is_string( $input ) && is_email( $input ) ) {
+		} elseif ( is_string( $input ) && is_email( $input ) ) {
 			$query_args['usersearch'] = $input;
 		} else {
 			$query_args['include'] = Factory::get_id( $input );

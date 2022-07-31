@@ -39,23 +39,23 @@ class ThreadUpdate {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id'        => [
+			'id'         => [
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the thread.', 'wp-graphql-buddypress' ),
 			],
-			'databaseId'  => [
+			'databaseId' => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_Messages_Thread->thread_id field.', 'wp-graphql-buddypress' ),
 			],
-			'messageId' => [
+			'messageId'  => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_Messages_Message->id field.', 'wp-graphql-buddypress' ),
 			],
-			'read'      => [
+			'read'       => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to mark the thread as read.', 'wp-graphql-buddypress' ),
 			],
-			'unRead'    => [
+			'unRead'     => [
 				'type'        => 'Boolean',
 				'description' => __( 'Whether to mark the thread as unread.', 'wp-graphql-buddypress' ),
 			],

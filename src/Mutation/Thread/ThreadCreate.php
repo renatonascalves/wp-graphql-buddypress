@@ -43,7 +43,7 @@ class ThreadCreate {
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'The list of the recipients user IDs of the Message.', 'wp-graphql-buddypress' ),
 			],
-			'databaseId'   => [
+			'databaseId' => [
 				'type'        => 'Int',
 				'description' => __( 'ID of the Messages Thread. Required when replying to an existing Thread.', 'wp-graphql-buddypress' ),
 			],

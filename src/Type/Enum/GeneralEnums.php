@@ -57,12 +57,12 @@ class GeneralEnums {
 			[
 				'description' => __( 'The Type of the identifier used to fetch a single resource. Default is ID.', 'wp-graphql-buddypress' ),
 				'values'      => [
-					'ID'          => [
+					'ID'            => [
 						'name'        => 'ID',
 						'value'       => 'id',
 						'description' => __( 'The globally unique ID', 'wp-graphql-buddypress' ),
 					],
-					'DATABASE_ID' => [
+					'DATABASE_ID'   => [
 						'name'        => 'DATABASE_ID',
 						'value'       => 'database_id',
 						'description' => __( 'The Database ID for the node', 'wp-graphql-buddypress' ),

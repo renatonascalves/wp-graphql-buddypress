@@ -38,7 +38,7 @@ class ThreadDelete {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id'       => [
+			'id'         => [
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the thread.', 'wp-graphql-buddypress' ),
 			],

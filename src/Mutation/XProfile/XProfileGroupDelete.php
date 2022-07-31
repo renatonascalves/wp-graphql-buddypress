@@ -38,7 +38,7 @@ class XProfileGroupDelete {
 	 */
 	public static function get_input_fields(): array {
 		return [
-			'id'      => [
+			'id'         => [
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile group.', 'wp-graphql-buddypress' ),
 			],

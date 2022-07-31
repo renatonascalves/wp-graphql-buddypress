@@ -43,7 +43,7 @@ class XProfileFieldUpdate {
 				'type'        => 'ID',
 				'description' => __( 'The globally unique identifier for the XProfile field.', 'wp-graphql-buddypress' ),
 			],
-			'databaseId'               => [
+			'databaseId'            => [
 				'type'        => 'Int',
 				'description' => __( 'The id field that matches the BP_XProfile_Field->id field.', 'wp-graphql-buddypress' ),
 			],
