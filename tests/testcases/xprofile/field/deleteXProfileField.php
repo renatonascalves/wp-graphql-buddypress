@@ -25,8 +25,8 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create( [ 'name' => 'XProfile Group' ] );
 		$this->xprofile_field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
@@ -53,7 +53,7 @@ class Test_XProfile_deleteXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_delete_xprofile_field_user_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_xprofile_field() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

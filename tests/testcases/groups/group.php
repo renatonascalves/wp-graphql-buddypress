@@ -16,8 +16,8 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->global_id = $this->toRelayId( 'group', (string) $this->group );
 	}
@@ -35,7 +35,7 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'parent', null )
 			->hasField( 'admins', null )
 			->hasField( 'mods', null )
-			->hasField( 'creator', [ 'userId' => $this->user ] )
+			->hasField( 'creator', [ 'userId' => $this->user_id ] )
 			->hasField( 'uri', bp_get_group_permalink( new \BP_Groups_Group( $this->group ) ) );
 	}
 
@@ -108,9 +108,9 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_hidden_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->add_user_to_group( $this->user, $g );
+		$this->bp->add_user_to_group( $this->user_id, $g );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_group( $g ) )
 			->hasField( 'status', 'HIDDEN' )
@@ -120,7 +120,7 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_hidden_group_without_being_from_group() {
 		$g = $this->bp_factory->group->create( [ 'status' => 'hidden' ] );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_a_group( $g );
 

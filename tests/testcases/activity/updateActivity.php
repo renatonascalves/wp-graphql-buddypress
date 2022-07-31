@@ -101,7 +101,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	}
 
 	public function test_update_with_invalid_activity_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_activity( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This activity does not exist.' );
@@ -153,13 +153,13 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful(
 			$this->update_activity(
@@ -182,7 +182,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -206,7 +206,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -235,7 +235,7 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -261,13 +261,13 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Test without content.
 		$this->assertQueryFailed(

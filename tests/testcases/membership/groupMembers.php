@@ -58,7 +58,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_group_members_excluding_banned_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_group_members(
 			[

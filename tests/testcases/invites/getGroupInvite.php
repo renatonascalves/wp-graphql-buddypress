@@ -25,14 +25,14 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->invitation_id = groups_invite_user(
 			[
 				'user_id'     => $this->random_user,
 				'group_id'    => $this->group,
-				'inviter_id'  => $this->user,
+				'inviter_id'  => $this->user_id,
 				'send_invite' => 1,
 			]
 		);
@@ -50,14 +50,14 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 			->hasField( 'accepted', false )
 			->hasField( 'type', 'INVITE' )
 			->hasField( 'inviteSent', true )
-			->hasField( 'inviter', [ 'databaseId' => $this->user ] )
+			->hasField( 'inviter', [ 'databaseId' => $this->user_id ] )
 			->hasField( 'invitee', [ 'databaseId' => $this->random_user ] )
 			->hasField( 'group', [ 'databaseId' => $this->group ] )
 			->hasField( 'message', null );
 	}
 
 	public function test_group_invite_as_inviter() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_group_invite() )
 			->hasField( 'id', $this->global_id )
@@ -66,7 +66,7 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 			->hasField( 'accepted', false )
 			->hasField( 'type', 'INVITE' )
 			->hasField( 'inviteSent', true )
-			->hasField( 'inviter', [ 'databaseId' => $this->user ] )
+			->hasField( 'inviter', [ 'databaseId' => $this->user_id ] )
 			->hasField( 'invitee', [ 'databaseId' => $this->random_user ] )
 			->hasField( 'group', [ 'databaseId' => $this->group ] )
 			->hasField( 'message', null );

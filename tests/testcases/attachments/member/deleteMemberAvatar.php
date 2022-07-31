@@ -9,16 +9,16 @@
 class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_member_can_delete_his_own_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
+		$response = $this->upload_avatar( 'USER', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user ) );
-		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );
+		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) );
+		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user_id ) );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField(
@@ -29,7 +29,7 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 				]
 			);
 
-		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user_id ) ) )
 			->hasField( 'deleted', true )
 			->hasField(
 				'attachment',
@@ -40,20 +40,20 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 			);
 
 		// Confirm that the group default avatar IS present.
-		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user ) ), 'mystery-man' ) );
+		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ), 'mystery-man' ) );
 	}
 
 	public function test_regular_admins_can_delete_other_member_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$response = $this->upload_avatar( 'USER', absint( $this->user ) );
+		$response = $this->upload_avatar( 'USER', absint( $this->user_id ) );
 
 		remove_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
-		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user ) );
-		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user ) );
+		$full  = $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) );
+		$thumb = $this->get_avatar_image( 'thumb', 'user', absint( $this->user_id ) );
 
 		$this->assertQuerySuccessful( $response )
 			->hasField(
@@ -67,7 +67,7 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 		// Switch to the admin user here.
 		$this->bp->set_current_user( $this->admin );
 
-		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_avatar( 'USER', absint( $this->user_id ) ) )
 			->hasField( 'deleted', true )
 			->hasField(
 				'attachment',
@@ -78,18 +78,18 @@ class Test_Attachment_deleteMemberAvatar_Mutation extends WPGraphQL_BuddyPress_U
 			);
 
 		// Confirm that the group default avatar IS present.
-		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user ) ), 'mystery-man' ) );
+		$this->assertTrue( false !== strpos( $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ), 'mystery-man' ) );
 	}
 
 	public function test_member_can_not_delete_other_member_avatar() {
 		$this->bp->set_current_user( $this->random_user );
 
-		$this->assertQueryFailed( $this->delete_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_avatar( 'USER', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_member_can_not_delete_avatar_without_logged_in_user() {
-		$this->assertQueryFailed( $this->delete_avatar( 'USER', absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_avatar( 'USER', absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 

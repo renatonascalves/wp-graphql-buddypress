@@ -146,7 +146,7 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function update_thread_invalid_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This thread does not exist.' );

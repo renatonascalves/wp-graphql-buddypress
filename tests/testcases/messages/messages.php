@@ -262,7 +262,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->bp->set_current_user( $this->admin );
 
 		// Create thread.
-		$message = $this->create_thread_object( [ 'sender_id' => $this->user ] );
+		$message = $this->create_thread_object( [ 'sender_id' => $this->user_id ] );
 
 		$this->assertQuerySuccessful(
 			$this->get_thread_messages(
@@ -282,7 +282,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 							'threadId'   => $message->thread_id,
 							'databaseId' => $message->id,
 							'sender'     => [
-								'databaseId' => $this->user,
+								'databaseId' => $this->user_id,
 							],
 							'subject'    => apply_filters( 'bp_get_message_thread_subject', wp_staticize_emoji( $message->subject ) ),
 							'excerpt'    => apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $message->message, 75 ) ) ),

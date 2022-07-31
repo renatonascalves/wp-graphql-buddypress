@@ -69,7 +69,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 	 * Group creation is open by default to regular users.
 	 */
 	public function test_create_group_as_a_regular_user() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->create_group() )
 			->hasField( 'name', 'Group Test' )
@@ -84,42 +84,42 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 	public function test_create_group_when_disabled() {
 		add_filter( 'bp_user_can_create_groups', '__return_false' );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_group() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );
 	}
 
 	public function test_create_group_with_valid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->create_group( [ 'status' => 'PRIVATE' ] ) )
 			->hasField( 'status', 'PRIVATE' );
 	}
 
 	public function test_create_group_with_invalid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_group( [ 'status' => 'random-status' ] ) )
 			->expectedErrorMessage( 'Variable "$status" got invalid value "random-status"; Expected type GroupStatusEnum.' );
 	}
 
 	public function test_create_group_with_null_name_field() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_group( [ 'name' => null ] ) )
 			->expectedErrorMessage( 'Variable "$name" of non-null type "String!" must not be null.' );
 	}
 
 	public function test_create_group_with_empty_name_field() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_group( [ 'name' => '' ] ) )
 			->expectedErrorMessage( 'Please, enter the name of the group.' );
 	}
 
 	public function test_create_group_with_types() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->create_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField(
@@ -136,7 +136,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 	}
 
 	public function test_create_group_with_invalid_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_group_type( [ 'types' => [ 'DOOR' ] ] ) )
 			->expectedErrorMessage( 'Variable "$types" got invalid value ["DOOR"]; Expected type GroupTypeEnum at value[0]; did you mean FOO?' );

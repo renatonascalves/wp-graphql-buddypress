@@ -10,10 +10,19 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
+	}
+
+	/**
+	 * Set up.
+	 */
+	public function set_down() {
+		remove_filter( 'bp_get_signup_allowed', '__return_true' );
+
+		parent::set_down();
 	}
 
 	public function test_get_signups_authenticated() {
@@ -40,9 +49,7 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->create_signup_id();
 		$this->create_signup_id();
 
-		$results = $this->signupQuery();
-
-		$this->assertQuerySuccessful( $results )
+		$this->assertQuerySuccessful( $this->signupQuery() )
 			->notHasNodes();
 	}
 

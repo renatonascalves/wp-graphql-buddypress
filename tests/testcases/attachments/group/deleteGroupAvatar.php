@@ -9,7 +9,7 @@
 class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_regular_admins_can_delete_any_group_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -47,7 +47,7 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_group_creator_can_delete_avatar() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -85,7 +85,7 @@ class Test_Attachment_deleteGroupAvatar_Mutation extends WPGraphQL_BuddyPress_Un
 		// Add user to group as an admin.
 		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_admin' => true ] );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 

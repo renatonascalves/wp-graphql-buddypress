@@ -21,8 +21,8 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[

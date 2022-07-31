@@ -26,12 +26,12 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -67,7 +67,7 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 	}
 
 	public function test_group_creator_can_reject_request() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->reject_request() )
 			->hasField( 'deleted', true );

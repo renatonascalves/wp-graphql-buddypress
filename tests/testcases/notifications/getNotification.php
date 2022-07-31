@@ -12,11 +12,11 @@ class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_Uni
 			[
 				'component_name' => buddypress()->groups->id,
 				'item_id'        => $group_id,
-				'user_id'        => $this->user,
+				'user_id'        => $this->user_id,
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_notification( $notification_id ) )
 			->hasField( 'id', $this->toRelayId( 'notification', (string) $notification_id ) )
@@ -26,7 +26,7 @@ class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', 'groups' )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'user', [ 'databaseId' => $this->user_id ] )
 			->hasField(
 				'object',
 				[
@@ -124,7 +124,7 @@ class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_Uni
 			->hasField( 'isNew', true )
 			->hasField( 'componentName', $component )
 			->hasField( 'componentAction', '' )
-			->hasField( 'user', [ 'databaseId' => $this->user ] )
+			->hasField( 'user', [ 'databaseId' => $this->user_id ] )
 			->hasField(
 				'object',
 				[
@@ -140,7 +140,7 @@ class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_Uni
 			[
 				'component_name' => buddypress()->groups->id,
 				'item_id'        => $group_id,
-				'user_id'        => $this->user,
+				'user_id'        => $this->user_id,
 			]
 		);
 
@@ -155,7 +155,7 @@ class Test_Notification_getNotification_Queries extends WPGraphQL_BuddyPress_Uni
 			[
 				'component_name' => buddypress()->groups->id,
 				'item_id'        => $group_id,
-				'user_id'        => $this->user,
+				'user_id'        => $this->user_id,
 			]
 		);
 

@@ -19,8 +19,8 @@ class Test_Group_groupInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[

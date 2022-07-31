@@ -33,8 +33,8 @@ class Test_Signup_signup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 
@@ -75,7 +75,7 @@ class Test_Signup_signup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_signup_unauthorized() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->get_signup( $this->signup_id );
 

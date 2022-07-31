@@ -8,45 +8,45 @@
 class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_member_can_delete_his_own_account() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$guid = $this->toRelayId( 'user', (string) $this->user );
+		$guid = $this->toRelayId( 'user', (string) $this->user_id );
 
-		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user_id ) ) )
 			->hasField( 'deletedId', $guid )
 			->hasField(
 				'user',
 				[
-					'userId' => $this->user,
+					'userId' => $this->user_id,
 					'id'     => $guid,
 				]
 			);
 
 		// Make sure the user actually got deleted.
-		$this->assertFalse( get_user_by( 'id', $this->user ) );
+		$this->assertFalse( get_user_by( 'id', $this->user_id ) );
 	}
 
 	public function test_admins_can_delete_members() {
 		$this->bp->set_current_user( $this->admin );
 
-		$guid = $this->toRelayId( 'user', (string) $this->user );
+		$guid = $this->toRelayId( 'user', (string) $this->user_id );
 
-		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user ) ) )
+		$this->assertQuerySuccessful( $this->delete_member( absint( $this->user_id ) ) )
 			->hasField( 'deletedId', $guid )
 			->hasField(
 				'user',
 				[
-					'userId' => $this->user,
+					'userId' => $this->user_id,
 					'id'     => $guid,
 				]
 			);
 
 		// Make sure the user actually got deleted.
-		$this->assertFalse( get_user_by( 'id', $this->user ) );
+		$this->assertFalse( get_user_by( 'id', $this->user_id ) );
 	}
 
 	public function test_member_can_not_delete_other_members_account() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_member( absint( $this->admin ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
@@ -58,21 +58,21 @@ class Test_Member_deleteUser_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 		// Account deletion is disabled.
 		$this->assertTrue( bp_disable_account_deletion() );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
-		$this->assertQueryFailed( $this->delete_member( absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_member( absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 
 		bp_update_option( 'bp-disable-account-deletion', false );
 	}
 
 	public function test_member_needs_to_be_loggin_to_delete_account() {
-		$this->assertQueryFailed( $this->delete_member( absint( $this->user ) ) )
+		$this->assertQueryFailed( $this->delete_member( absint( $this->user_id ) ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );
 	}
 
 	public function test_delete_member_with_invalid_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_member( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to delete users.' );

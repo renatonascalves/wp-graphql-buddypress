@@ -19,12 +19,12 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 				'status'     => 'private',
 			]
 		);
@@ -33,7 +33,7 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			[
 				'user_id'     => $this->random_user,
 				'group_id'    => $this->private_group_id,
-				'inviter_id'  => $this->user,
+				'inviter_id'  => $this->user_id,
 				'send_invite' => 1,
 			]
 		);
@@ -61,7 +61,7 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	}
 
 	public function test_group_creator_can_accept_invitation() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->accept_invitation() )
 			->hasField( 'databaseId', $this->random_user );

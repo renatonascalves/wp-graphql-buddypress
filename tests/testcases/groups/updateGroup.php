@@ -8,14 +8,14 @@
 class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_update_group() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group( [ 'name' => 'Updated Group' ] ) )
 			->hasField( 'name', 'Updated Group' );
 	}
 
 	public function test_update_group_invalid_group_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_group( [ 'databaseId' => GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ] ) )
 			->expectedErrorMessage( 'This group does not exist.' );
@@ -84,21 +84,21 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_with_valid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group( [ 'status' => 'PRIVATE' ] ) )
 			->hasField( 'status', 'PRIVATE' );
 	}
 
 	public function test_update_group_with_invalid_status() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->update_group( [ 'status' => 'random-status' ] ) )
 			->expectedErrorMessage( 'Variable "$status" got invalid value "random-status"; Expected type GroupStatusEnum.' );
 	}
 
 	public function test_update_group_with_new_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField(
@@ -115,14 +115,14 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_remove_nonexist_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->remove_group_type() )
 			->hasField( 'types', null );
 	}
 
 	public function test_update_group_remove_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
 			->hasField(
@@ -142,7 +142,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_append_type() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )
@@ -178,7 +178,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_update_group_overwrite_types() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		// Add type.
 		$this->assertQuerySuccessful( $this->update_group_type( [ 'types' => [ 'FOO' ] ] ) )

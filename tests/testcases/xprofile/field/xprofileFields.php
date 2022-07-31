@@ -18,8 +18,8 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create();
 	}
@@ -136,14 +136,14 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			[ 'field_group_id' => $this->xprofile_group_id ]
 		);
 
-		xprofile_set_field_data( $field_id_1, $this->user, 'foo' );
+		xprofile_set_field_data( $field_id_1, $this->user_id, 'foo' );
 
 		$response = $this->get_xprofile_group(
 			[
 				'id'     => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
 				'idType' => 'ID',
 				'where'  => [
-					'userId'          => $this->user,
+					'userId'          => $this->user_id,
 					'hideEmptyFields' => true,
 				],
 			]

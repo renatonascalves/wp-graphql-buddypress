@@ -9,7 +9,7 @@
 class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_regular_admins_can_delete_any_group_cover() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -43,7 +43,7 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 	}
 
 	public function test_group_creator_can_delete_cover() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 
@@ -77,7 +77,7 @@ class Test_Attachment_deleteGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 		// Add user to group as an admin.
 		$this->bp->add_user_to_group( $this->random_user, $this->group, [ 'is_admin' => true ] );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		add_filter( 'pre_move_uploaded_file', [ $this, 'copy_file' ], 10, 3 );
 

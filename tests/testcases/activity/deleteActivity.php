@@ -22,7 +22,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -42,13 +42,13 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->delete_activity( $c ) )
 			->hasField( 'deleted', true )
@@ -62,7 +62,7 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]

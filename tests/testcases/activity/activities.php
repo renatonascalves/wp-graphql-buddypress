@@ -141,13 +141,13 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$g1        = $this->create_group_id(
 			[
 				'status'  => 'private',
-				'user_id' => $this->user,
+				'user_id' => $this->user_id,
 			]
 		);
 		$g2        = $this->create_group_id(
 			[
 				'status'  => 'public',
-				'user_id' => $this->user,
+				'user_id' => $this->user_id,
 			]
 		);
 
@@ -155,7 +155,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
-				'user_id'       => $this->user,
+				'user_id'       => $this->user_id,
 				'item_id'       => $g1,
 				'hide_sitewide' => true,
 			]
@@ -165,7 +165,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -196,7 +196,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -205,7 +205,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -214,7 +214,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
-				'user_id'       => $this->user,
+				'user_id'       => $this->user_id,
 				'item_id'       => $g2,
 				'hide_sitewide' => true,
 			]
@@ -224,7 +224,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g1,
 			]
 		);
@@ -252,7 +252,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$g1 = $this->create_group_id(
 			[
 				'status'     => 'private',
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 			]
 		);
 
@@ -260,7 +260,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component'     => buddypress()->groups->id,
 				'type'          => 'created_group',
-				'user_id'       => $this->user,
+				'user_id'       => $this->user_id,
 				'item_id'       => $g1,
 				'hide_sitewide' => true,
 			]
@@ -298,7 +298,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -307,7 +307,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -316,7 +316,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
-				'user_id'       => $this->user,
+				'user_id'       => $this->user_id,
 				'item_id'       => $g2,
 				'hide_sitewide' => true,
 			]
@@ -326,7 +326,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g1,
 			]
 		);
@@ -370,7 +370,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$g2 = $this->create_group_id(
 			[
 				'status'     => 'public',
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 			]
 		);
 
@@ -388,7 +388,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -419,7 +419,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -428,7 +428,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g2,
 			]
 		);
@@ -437,7 +437,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component'     => $component,
 				'type'          => 'created_group',
-				'user_id'       => $this->user,
+				'user_id'       => $this->user_id,
 				'item_id'       => $g2,
 				'hide_sitewide' => true,
 			]
@@ -447,7 +447,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			[
 				'component' => $component,
 				'type'      => 'created_group',
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'item_id'   => $g1,
 			]
 		);
@@ -641,7 +641,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$c1 = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -700,7 +700,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$c1 = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -754,7 +754,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 				'component' => buddypress()->groups->id,
 				'content'   => 'Foo',
 				'item_id'   => $g,
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'type'      => 'activity_update',
 			]
 		);
@@ -762,7 +762,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$c1 = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'item_id'     => $g,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
@@ -827,7 +827,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 				'component' => buddypress()->groups->id,
 				'content'   => 'Foo',
 				'item_id'   => $g,
-				'user_id'   => $this->user,
+				'user_id'   => $this->user_id,
 				'type'      => 'activity_update',
 			]
 		);

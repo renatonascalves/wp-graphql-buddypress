@@ -18,8 +18,8 @@ class Test_XProfile_createXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create( [ 'name' => 'XProfile Group' ] );
 	}
@@ -83,7 +83,7 @@ class Test_XProfile_createXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 	}
 
 	public function test_create_xprofile_field_without_permission() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->create_xprofile_field() )
 			->expectedErrorMessage( 'Sorry, you are not allowed to perform this action.' );

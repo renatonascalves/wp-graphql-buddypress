@@ -27,7 +27,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	}
 
 	public function test_get_private_groups_with_where_param_and_unauthenticated_user() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful(
 			$this->groupsQuery(
@@ -144,7 +144,7 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->groupsQuery() )
 			->hasNodes()
-			->firstNodesNodeField( 'admins', [ [ 'userId' => $this->user ] ] );
+			->firstNodesNodeField( 'admins', [ [ 'userId' => $this->user_id ] ] );
 	}
 
 	public function test_get_group_types() {

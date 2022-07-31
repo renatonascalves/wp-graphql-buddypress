@@ -68,7 +68,7 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 	}
 
 	public function test_delete_thread_invalid_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This thread does not exist.' );

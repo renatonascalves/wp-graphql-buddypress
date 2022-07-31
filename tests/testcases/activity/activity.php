@@ -64,7 +64,7 @@ class Test_Activity_activity_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$c = bp_activity_new_comment(
 			[
 				'type'        => 'activity_comment',
-				'user_id'     => $this->user,
+				'user_id'     => $this->user_id,
 				'activity_id' => $a, // Root activity
 				'content'     => 'Activity comment',
 			]
@@ -129,7 +129,7 @@ class Test_Activity_activity_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			]
 		);
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->get_an_activity( $a1 ) )
 			->expectedErrorMessage( 'Sorry, you are not allowed to see this activity.' );

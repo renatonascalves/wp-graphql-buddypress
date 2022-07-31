@@ -32,8 +32,8 @@ class Test_xprofileGroup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->name       = 'XProfile Group Name';
 		$this->field_name = 'XProfile Field name';

@@ -15,8 +15,8 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->g1 = $this->bp_factory->group->create(
 			[

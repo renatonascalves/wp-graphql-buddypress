@@ -17,13 +17,13 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	/**
 	 * Set up.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->group_id = $this->bp_factory->group->create(
 			[
 				'name'       => 'Deleted Group',
-				'creator_id' => $this->user,
+				'creator_id' => $this->user_id,
 			]
 		);
 	}
@@ -37,7 +37,7 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 	}
 
 	public function test_delete_group_with_invalid_group_id() {
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->delete_group( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage( 'This group does not exist.' );

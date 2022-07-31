@@ -76,11 +76,7 @@ class SignupHelper {
 	 * @return bool
 	 */
 	public static function can_see(): bool {
-		$capability = is_multisite()
-			? 'manage_network_users'
-			: 'edit_users';
-
-		return ( is_user_logged_in() && bp_current_user_can( $capability ) );
+		return bp_current_user_can( is_multisite() ? 'manage_network_users' : 'edit_users' );
 	}
 
 	/**

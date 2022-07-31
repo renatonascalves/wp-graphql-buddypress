@@ -100,12 +100,12 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	public function test_non_member_create_activity_in_a_public_group() {
 		$g = $this->create_group_id( [ 'status' => 'public' ] );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->create_activity(
 			[
 				'primaryItemId' => $g,
-				'userId'        => $this->user,
+				'userId'        => $this->user_id,
 				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
@@ -117,14 +117,14 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 	public function test_member_create_activity_in_a_public_group() {
 		$g = $this->create_group_id( [ 'status' => 'public' ] );
 
-		$this->bp->add_user_to_group( $this->user, $g );
+		$this->bp->add_user_to_group( $this->user_id, $g );
 
-		$this->bp->set_current_user( $this->user );
+		$this->bp->set_current_user( $this->user_id );
 
 		$response = $this->create_activity(
 			[
 				'primaryItemId' => $g,
-				'userId'        => $this->user,
+				'userId'        => $this->user_id,
 				'component'     => strtoupper( buddypress()->groups->id ),
 			]
 		);
@@ -275,7 +275,7 @@ class Test_Activity_createActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 		$a = $this->create_activity_id(
 			[
 				'item_id' => $g,
-				'user_id' => $this->user,
+				'user_id' => $this->user_id,
 			]
 		);
 
