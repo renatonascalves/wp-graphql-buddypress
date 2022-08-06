@@ -35,16 +35,6 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Log information
-        run: |
-          echo "$GITHUB_REF"
-          echo "$GITHUB_EVENT_NAME"
-          npm --version
-          node --version
-          git --version
-          php --version
-          composer --version
-
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
         with:

@@ -7,11 +7,11 @@
  */
 
 if ( ! defined( 'BP_TESTS_DIR' ) ) {
-	define( 'BP_TESTS_DIR', dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/buddypress/tests/phpunit' );
+	define( 'BP_TESTS_DIR', dirname( __FILE__, 4 ) . '/buddypress/tests/phpunit' );
 }
 
 if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR_TEST' ) ) {
-	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/wp-graphql' );
+	define( 'WPGRAPHQL_PLUGIN_DIR_TEST', dirname( __FILE__, 4 ) . '/wp-graphql' );
 }
 
 // My version of REST_TESTS_IMPOSSIBLY_HIGH_NUMBER.
@@ -38,7 +38,7 @@ if ( false !== getenv( 'WP_PHPUNIT__DIR' ) && defined( 'WPGRAPHQL_BP_USE_WP_ENV_
 	if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 		define( 'WP_ROOT_DIR', getenv( 'WP_DEVELOP_DIR' ) );
 	} else {
-		define( 'WP_ROOT_DIR', dirname( dirname( dirname( dirname( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) ) ) ) );
+		define( 'WP_ROOT_DIR', dirname( __FILE__, 7 ) );
 	}
 
 	define( 'WP_TESTS_DIR', WP_ROOT_DIR . '/tests/phpunit' );

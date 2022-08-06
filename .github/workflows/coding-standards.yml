@@ -28,14 +28,6 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Log information
-        run: |
-          echo "$GITHUB_REF"
-          echo "$GITHUB_EVENT_NAME"
-          git --version
-          php --version
-          composer --version
-
       - name: Install dependencies
         uses: ramsey/composer-install@v1
         with:
