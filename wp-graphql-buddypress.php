@@ -11,7 +11,7 @@
  * Plugin Name:       WPGraphQL BuddyPress
  * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
  * GitHub Plugin URI: https://github.com/wp-graphql/wp-graphql-buddypress
- * Description:       Bringing the power of GraphQL to BuddyPress.
+ * Description:       BuddyPress extension for the WPGraphQL plugin: bringing the power of GraphQL to BuddyPress!
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
@@ -25,9 +25,7 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
