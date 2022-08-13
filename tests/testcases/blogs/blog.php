@@ -33,7 +33,6 @@ class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'uri', 'http://foo-bar/blog/' )
 			->hasField( 'domain', 'foo-bar' )
 			->hasField( 'path', '/blog/' )
-			->hasField( 'description', 'Just another Test Blog Network site' )
 			->hasField(
 				'attachmentAvatar',
 				[

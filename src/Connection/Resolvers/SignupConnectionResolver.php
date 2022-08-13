@@ -65,7 +65,7 @@ class SignupConnectionResolver extends AbstractConnectionResolver {
 		$query_args['number'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
-		$query_args['graphql_cursor_offset']  = $this->get_offset();
+		$query_args['graphql_cursor_offset']  = $this->get_offset_for_cursor();
 		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
@@ -107,10 +107,6 @@ class SignupConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_ids(): array {
 		$signups = $this->query['signups'] ?? [];
-
-		if ( ! empty( $this->args['last'] ) ) {
-			$signups = array_reverse( $signups );
-		}
 
 		return array_values( array_filter( wp_parse_id_list( $signups ) ) );
 	}

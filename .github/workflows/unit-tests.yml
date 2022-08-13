@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false # do not fail fast, let all tests fail.
       matrix:
-        php: ['8.0']
+        php: ['8.0', '8.1']
         wp_version: ['master']
         include:
           - php: '7.4'
@@ -41,7 +41,7 @@ jobs:
           composer-options: "--ignore-platform-reqs"
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:

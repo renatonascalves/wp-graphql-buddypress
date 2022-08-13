@@ -42,7 +42,7 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		);
 
 		$this->assertQuerySuccessful( $response );
-		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
+		$this->assertSame( $u2, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
 		$this->assertSame( $this->user_id, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
 	}
 
@@ -60,6 +60,7 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 		$response = $this->get_friends(
 			[
 				'id'    => $this->toRelayId( 'user', (string) $this->user_id ),
+				'first' => 1,
 				'after' => $this->key_to_cursor( BP_Friends_Friendship::get_friendship_id( $u2, $this->user_id ) ),
 			]
 		);
@@ -88,8 +89,10 @@ class Test_Friendship_friends_Queries extends WPGraphQL_BuddyPress_UnitTestCase 
 			]
 		);
 
-		$this->assertQuerySuccessful( $response );
-		$this->assertSame( $u1, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
+		$this->assertQuerySuccessful( $response )
+			->hasEdges();
+
+		$this->assertSame( $u3, $response['data']['user']['friends']['edges'][0]['node']['initiator']['userId'] );
 		$this->assertSame( $this->user_id, $response['data']['user']['friends']['edges'][0]['node']['friend']['userId'] );
 	}
 
