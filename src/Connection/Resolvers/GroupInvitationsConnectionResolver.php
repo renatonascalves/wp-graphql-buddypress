@@ -37,9 +37,11 @@ class GroupInvitationsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query_args(): array {
 		$query_args = [
-			'item_id' => 0,
-			'user_id' => 0,
-			'fields'  => 'ids',
+			'fields'     => 'ids',
+			'item_id'    => 0,
+			'sort_order' => 'ASC',
+			'order_by'   => 'id',
+			'user_id'    => 0,
 		];
 
 		// Prepare for later use.
@@ -51,6 +53,11 @@ class GroupInvitationsConnectionResolver extends AbstractConnectionResolver {
 
 		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
+		}
+
+		// Set order when using the last param.
+		if ( ! empty( $last ) ) {
+			$query_args['sort_order'] = 'DESC';
 		}
 
 		// Set group.
@@ -79,7 +86,7 @@ class GroupInvitationsConnectionResolver extends AbstractConnectionResolver {
 		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
-		$query_args['graphql_cursor_offset']  = $this->get_offset();
+		$query_args['graphql_cursor_offset']  = $this->get_offset_for_cursor();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
 		// Pass the graphql $this->args.

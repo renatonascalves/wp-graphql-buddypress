@@ -39,7 +39,7 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = [
 			'user_id'      => null,
 			'is_confirmed' => null,
-			'sort_order'   => 'DESC',
+			'sort_order'   => 'ASC',
 		];
 
 		// Prepare for later use.
@@ -58,11 +58,11 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
-			$query_args['sort_order'] = 'ASC';
+			$query_args['sort_order'] = 'DESC';
 		}
 
 		// Set the graphql_cursor_offset.
-		$query_args['graphql_cursor_offset']  = $this->get_offset();
+		$query_args['graphql_cursor_offset']  = $this->get_offset_for_cursor();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
@@ -109,10 +109,6 @@ class FriendshipsConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_ids(): array {
 		$friend_ids = array_map( 'absint', array_values( wp_list_pluck( $this->query, 'id' ) ) );
-
-		if ( ! empty( $this->args['last'] ) ) {
-			$friend_ids = array_reverse( $friend_ids );
-		}
 
 		return array_values( array_filter( wp_parse_id_list( $friend_ids ) ) );
 	}

@@ -56,7 +56,7 @@ class XProfileFieldsConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		// Set the graphql_cursor_offset.
-		$query_args['graphql_cursor_offset']  = $this->get_offset();
+		$query_args['graphql_cursor_offset']  = $this->get_offset_for_cursor();
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
 
 		// Pass the graphql $this->args.

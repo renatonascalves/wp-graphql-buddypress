@@ -602,10 +602,9 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$this->bp->set_current_user( $this->admin );
 
-		// Here $a1 is the second activity created after $a2.
-		$this->assertQuerySuccessful( $this->activityQuery( [ 'after' => $this->key_to_cursor( $a2 ) ] ) )
+		$this->assertQuerySuccessful( $this->activityQuery( [ 'after' => $this->key_to_cursor( $a1 ) ] ) )
 			->HasEdges()
-			->firstEdgeNodeField( 'databaseId', $a1 )
+			->firstEdgeNodeField( 'databaseId', $a2 )
 			->hasPreviousPage();
 	}
 
