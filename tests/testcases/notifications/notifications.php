@@ -361,10 +361,10 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 		$this->bp->set_current_user( $u );
 
 		$this->assertQuerySuccessful(
-			$this->notificationQuery( [ 'after' => $this->key_to_cursor( $n2 ) ] )
+			$this->notificationQuery( [ 'after' => $this->key_to_cursor( $n1 ) ] )
 		)
 			->HasEdges()
-			->firstEdgeNodeField( 'databaseId', $n1 )
+			->firstEdgeNodeField( 'databaseId', $n2 )
 			->hasPreviousPage();
 	}
 

@@ -70,14 +70,14 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 
 		// Set order when using the last param.
 		if ( ! empty( $last ) ) {
-			$query_args['order'] = 'DESC';
+			$query_args['order'] = 'ASC';
 		}
 
 		// Set per_page the highest value of $first and $last, with a (filterable) max of 100.
 		$query_args['per_page'] = min( max( absint( $first ), absint( $last ), 20 ), $this->get_query_amount() ) + 1;
 
 		// Set the graphql_cursor_offset.
-		$query_args['graphql_cursor_offset']  = $this->get_offset();
+		$query_args['graphql_cursor_offset']  = $this->get_offset_for_cursor();
 		$query_args['graphql_cursor_compare'] = ! empty( $last ) ? '>' : '<';
 
 		// Pass the graphql $this->args.
@@ -123,13 +123,9 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids(): array {
-		$group_ids = $this->query['groups'] ?? [];
+		$ids = $this->query['groups'] ?? [];
 
-		if ( ! empty( $this->args['last'] ) ) {
-			$group_ids = array_reverse( $group_ids );
-		}
-
-		return array_values( array_filter( wp_parse_id_list( $group_ids ) ) );
+		return array_values( array_filter( wp_parse_id_list( $ids ) ) );
 	}
 
 	/**
@@ -164,18 +160,18 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input(
 			$args,
 			[
-				'showHidden' => 'show_hidden',
-				'type'       => 'type',
+				'exclude'    => 'exclude',
+				'groupType'  => 'group_type',
+				'include'    => 'include',
 				'order'      => 'order',
 				'orderBy'    => 'orderby',
 				'parent'     => 'parent_id',
 				'search'     => 'search_terms',
+				'showHidden' => 'show_hidden',
 				'slug'       => 'slug',
 				'status'     => 'status',
+				'type'       => 'type',
 				'userId'     => 'user_id',
-				'groupType'  => 'group_type',
-				'include'    => 'include',
-				'exclude'    => 'exclude',
 			]
 		);
 

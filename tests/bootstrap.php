@@ -11,7 +11,7 @@ const WP_TESTS_PHPUNIT_POLYFILLS_PATH = __DIR__ . '/../vendor/yoast/phpunit-poly
 
 // Use WP PHPUnit.
 if ( defined( 'WPGRAPHQL_BP_USE_WP_ENV_TESTS' ) ) {
-	require_once dirname( dirname( __FILE__ ) ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
+	require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
 }
 
 // Define constants.

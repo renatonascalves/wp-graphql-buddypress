@@ -12,7 +12,7 @@ define( 'WPGRAPHQL_PLUGIN_URL', true );
 define( 'WPGRAPHQL_BUDDYPRESS_PLUGIN_DIR', true );
 
 if ( ! defined( 'BP_DIR' ) ) {
-	define( 'BP_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/buddypress' );
+	define( 'BP_DIR', dirname( __FILE__, 3 ) . '/buddypress' );
 }
 
 require_once BP_DIR . '/bp-loader.php';
@@ -60,7 +60,7 @@ require_once BP_DIR . '/src/bp-xprofile/bp-xprofile-functions.php';
 require_once BP_DIR . '/src/bp-xprofile/bp-xprofile-template.php';
 
 if ( ! defined( 'WPGRAPHQL_PLUGIN_DIR' ) ) {
-	define( 'WPGRAPHQL_PLUGIN_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-graphql' );
+	define( 'WPGRAPHQL_PLUGIN_DIR', dirname( __FILE__, 3 ) . '/wp-graphql' );
 }
 
 require_once WPGRAPHQL_PLUGIN_DIR . '/vendor/autoload.php';

@@ -223,10 +223,9 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$a1 = $this->create_signup_id();
 		$a2 = $this->create_signup_id();
 
-		// Here $a1 is the second signup created after $a2.
-		$this->assertQuerySuccessful( $this->signupQuery( [ 'after' => $this->key_to_cursor( $a2 ) ] ) )
+		$this->assertQuerySuccessful( $this->signupQuery( [ 'after' => $this->key_to_cursor( $a1 ) ] ) )
 			->HasEdges()
-			->firstEdgeNodeField( 'databaseId', $a1 )
+			->firstEdgeNodeField( 'databaseId', $a2 )
 			->hasPreviousPage();
 	}
 

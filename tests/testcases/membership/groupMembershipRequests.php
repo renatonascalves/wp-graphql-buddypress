@@ -401,7 +401,9 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 			]
 		);
 
-		$this->assertQuerySuccessful( $response );
+		$this->assertQuerySuccessful( $response )
+			->HasEdges();
+
 		$this->assertSame( $r1, $response['data']['group']['invitations']['edges'][0]['node']['databaseId'] );
 	}
 
@@ -435,13 +437,17 @@ class Test_Group_groupMembershipRequests_Queries extends WPGraphQL_BuddyPress_Un
 			[
 				'id'     => $this->private_group_id,
 				'idType' => 'DATABASE_ID',
-				'after'  => $this->key_to_cursor( $r1 ),
+				'last'   => 1,
+				'after'  => $this->key_to_cursor( $r2 ),
 				'where'  => [ 'type' => 'REQUEST' ],
 			]
 		);
 
-		$this->assertQuerySuccessful( $response );
-		$this->assertSame( $r2, $response['data']['group']['invitations']['edges'][0]['node']['databaseId'] );
+		$this->assertQuerySuccessful( $response )
+			->HasEdges()
+			->hasPreviousPage();
+
+		$this->assertSame( $r1, $response['data']['group']['invitations']['edges'][0]['node']['databaseId'] );
 	}
 
 	/**
