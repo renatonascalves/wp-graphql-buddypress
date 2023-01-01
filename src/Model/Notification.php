@@ -71,10 +71,10 @@ class Notification extends Model {
 					return ! empty( $this->data->secondary_item_id ) ? absint( $this->data->secondary_item_id ) : null;
 				},
 				'componentName'   => function() {
-					return $this->data->component_name ?? null;
+					return ! empty( $this->data->component_name ) ? $this->data->component_name : null;
 				},
 				'componentAction' => function() {
-					return $this->data->component_action ?? null;
+					return ! empty( $this->data->component_action ) ? $this->data->component_action : null;
 				},
 				'date'            => function() {
 					return Utils::prepare_date_response( $this->data->date_notified, get_date_from_gmt( $this->data->date_notified ) );

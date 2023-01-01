@@ -144,7 +144,9 @@ class GroupsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function is_valid_offset( $offset ): bool {
-		return ! empty( groups_get_group( absint( $offset ) ) );
+		$group = groups_get_group( absint( $offset ) );
+
+		return ! empty( $group->id );
 	}
 
 	/**

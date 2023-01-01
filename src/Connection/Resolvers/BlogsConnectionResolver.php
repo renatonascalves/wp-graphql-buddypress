@@ -155,10 +155,12 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * This allows plugins/themes to hook in and alter what $args should be allowed.
 		 *
-		 * @param array       $query_args An array of query_args being passed.
-		 * @param array       $args       An array of arguments input in the field as part of the GraphQL query
-		 * @param AppContext  $context    Context being passed.
-		 * @param ResolveInfo $info       Info about the resolver.
+		 * @param array              $query_args The mapped query arguments.
+		 * @param array              $args       Query "where" args.
+		 * @param mixed              $source     The query results for a query calling this.
+		 * @param array              $all_args   All of the arguments for the query (not just the "where" args).
+		 * @param AppContext         $context    The AppContext object.
+		 * @param ResolveInfo        $info       The ResolveInfo object.
 		 */
 		return (array) apply_filters(
 			'graphql_map_input_fields_to_blogs_query',

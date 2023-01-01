@@ -87,7 +87,7 @@ class RecipientsConnectionResolver extends AbstractConnectionResolver {
 	public function get_query(): array {
 		$thread = new BP_Messages_Thread( $this->source->databaseId, 'ASC', $this->query_args );
 
-		return $thread->recipients ?? [];
+		return $thread->recipients;
 	}
 
 	/**

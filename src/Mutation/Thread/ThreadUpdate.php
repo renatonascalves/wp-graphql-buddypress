@@ -12,6 +12,7 @@ use GraphQL\Error\UserError;
 use WPGraphQL\AppContext;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 use WPGraphQL\Extensions\BuddyPress\Data\ThreadHelper;
+use BP_Messages_Message;
 
 /**
  * ThreadUpdate Class.

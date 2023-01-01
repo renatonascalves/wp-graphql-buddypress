@@ -38,7 +38,7 @@ class MemberType {
 				'resolve'     => function ( User $source ) {
 					$types = bp_get_member_type( $source->databaseId ?? 0, false );
 
-					return $types ?? null;
+					return ! empty( $types ) ? $types : null;
 				},
 			]
 		);
@@ -56,7 +56,7 @@ class MemberType {
 
 					$mention_name = bp_activity_get_user_mentionname( $source->databaseId ?? 0 );
 
-					return $mention_name ?? null;
+					return ! empty( $mention_name ) ? $mention_name : null;
 				},
 			]
 		);
@@ -70,7 +70,7 @@ class MemberType {
 				'resolve'     => function ( User $source ) {
 					$link = bp_core_get_user_domain( $source->databaseId ?? 0 );
 
-					return $link ?? null;
+					return ! empty( $link ) ? $link : null;
 				},
 			]
 		);

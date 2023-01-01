@@ -98,16 +98,16 @@ class Invitation extends Model {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'invitee'         => function() {
-					return $this->data->user_id ?? null;
+					return ! empty( $this->data->user_id ) ? $this->data->user_id : null;
 				},
 				'inviter'         => function() {
-					return $this->data->inviter_id ?? null;
+					return ! empty( $this->data->inviter_id ) ? $this->data->inviter_id : null;
 				},
 				'type'            => function() {
-					return $this->data->type ?? null;
+					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
 				'itemId'          => function() {
-					return $this->data->item_id ?? null;
+					return ! empty( $this->data->item_id ) ? $this->data->item_id : null;
 				},
 				'dateModified'    => function() {
 					return Utils::prepare_date_response( $this->data->date_modified, get_date_from_gmt( $this->data->date_modified ) );
@@ -116,13 +116,13 @@ class Invitation extends Model {
 					return Utils::prepare_date_response( $this->data->date_modified );
 				},
 				'message'         => function() {
-					return $this->data->content ?? null;
+					return ! empty( $this->data->content ) ? $this->data->content : null;
 				},
 				'inviteSent'      => function() {
-					return $this->data->invite_sent ?? null;
+					return wp_validate_boolean( $this->data->invite_sent );
 				},
 				'accepted'        => function() {
-					return $this->data->accepted ?? null;
+					return wp_validate_boolean( $this->data->accepted );
 				},
 			];
 		}

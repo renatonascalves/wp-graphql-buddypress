@@ -47,8 +47,8 @@ class XProfileFieldValue extends Model {
 		}
 
 		$hidden_user_fields = (array) bp_xprofile_get_hidden_fields_for_user(
-			$this->data->user_id ?? 0,
-			$this->current_user->ID ?? 0
+			$this->data->user_id,
+			$this->current_user->ID
 		);
 
 		return in_array( $this->data->id, $hidden_user_fields, true );
@@ -61,7 +61,7 @@ class XProfileFieldValue extends Model {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
 				'raw'            => function() {
-					return $this->data->value ?? null;
+					return ! empty( $this->data->value ) ? $this->data->value : null;
 				},
 				'unserialized'   => function() {
 					return $this->get_unserialized_value( $this->data->value );

@@ -86,7 +86,7 @@ class Blog extends Model {
 					return Utils::prepare_date_response( $this->data->last_activity );
 				},
 				'public'       => function() {
-					return $this->data->meta['public'] ?? null;
+					return wp_validate_boolean( $this->data->meta['public'] );
 				},
 				'language'     => function() {
 					return $this->data->meta['WPLANG'] ?? null;

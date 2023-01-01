@@ -91,25 +91,29 @@ class Activity extends Model {
 					return $this->data->is_spam ? 'spam' : 'published';
 				},
 				'title'            => function() {
-					return $this->data->action ?? null;
+					return ! empty( $this->data->action ) ? $this->data->action : null;
 				},
 				'type'             => function() {
-					return $this->data->type ?? null;
+					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
 				'hidden'           => function() {
-					return $this->data->hide_sitewide ?? null;
+					return ! empty( $this->data->hide_sitewide ) ? $this->data->hide_sitewide : null;
 				},
 				'uri'              => function() {
-					return bp_activity_get_permalink( $this->data->id ?? 0, $this->data ?? false );
+					if ( empty( $this->data->id ) ) {
+						return null;
+					}
+
+					return bp_activity_get_permalink( $this->data->id, $this->data );
 				},
 				'userId'           => function() {
-					return $this->data->user_id ?? null;
+					return ! empty( $this->data->user_id ) ? $this->data->user_id : null;
 				},
 				'component'        => function() {
-					return $this->data->component ?? null;
+					return ! empty( $this->data->component ) ? $this->data->component : null;
 				},
 				'data'             => function() {
-					return $this->data ?? null;
+					return $this->data;
 				},
 				'date'             => function() {
 					return Utils::prepare_date_response( $this->data->date_recorded, get_date_from_gmt( $this->data->date_recorded ) );

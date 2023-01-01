@@ -48,7 +48,7 @@ class FriendshipHelper {
 	 * @return bool
 	 */
 	public static function friendship_exists( $friendship ): bool {
-		return ( $friendship instanceof BP_Friends_Friendship && ( 0 !== $friendship->id ?? 0 ) );
+		return ! empty( $friendship->id );
 	}
 
 	/**

@@ -74,22 +74,22 @@ class Thread extends Model {
 						: null;
 				},
 				'databaseId'  => function() {
-					return $this->data->thread_id ?? null;
+					return ! empty( $this->data->thread_id ) ? $this->data->thread_id : null;
 				},
 				'lastMessage' => function() {
-					return $this->data->last_message_id ?? null;
+					return ! empty( $this->data->last_message_id ) ? $this->data->last_message_id : null;
 				},
 				'senderIds'   => function() {
-					return $this->data->sender_ids ?? null;
+					return ! empty( $this->data->sender_ids ) ? $this->data->sender_ids : null;
 				},
 				'unreadCount' => function() {
-					return $this->data->unread_count ?? null;
+					return ! empty( $this->data->unread_count ) ? $this->data->unread_count : null;
 				},
 				'recipients'  => function() {
-					return $this->data->recipients ?? null;
+					return ! empty( $this->data->recipients ) ? $this->data->recipients : null;
 				},
 				'messages'    => function() {
-					return $this->data->messages ?? null;
+					return ! empty( $this->data->messages ) ? $this->data->messages : null;
 				},
 			];
 		}

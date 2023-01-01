@@ -97,22 +97,22 @@ class Group extends Model {
 					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
 				'creator'          => function() {
-					return $this->data->creator_id ?? null;
+					return ! empty( $this->data->creator_id ) ? $this->data->creator_id : null;
 				},
 				'name'             => function() {
-					return $this->data->name ?? null;
+					return ! empty( $this->data->name ) ? $this->data->name : null;
 				},
 				'slug'             => function() {
-					return bp_get_group_slug( $this->data->slug ?? false );
+					return bp_get_group_slug( $this->data->slug );
 				},
 				'description'      => function() {
-					return $this->data->description ?? null;
+					return ! empty( $this->data->description ) ? $this->data->description : null;
 				},
 				'uri'              => function() {
-					return bp_get_group_permalink( $this->data ?? null );
+					return bp_get_group_permalink( $this->data );
 				},
 				'hasForum'         => function() {
-					return $this->data->enable_forum ?? null;
+					return wp_validate_boolean( $this->data->enable_forum );
 				},
 				'totalMemberCount' => [
 					'callback'   => function() {

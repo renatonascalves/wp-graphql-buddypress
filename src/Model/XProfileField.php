@@ -62,16 +62,16 @@ class XProfileField extends Model {
 					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
 				'name'            => function() {
-					return $this->data->name ?? null;
+					return ! empty( $this->data->name ) ? $this->data->name : null;
 				},
 				'type'            => function() {
-					return $this->data->type ?? null;
+					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
 				'canDelete'       => function() {
-					return $this->data->can_delete;
+					return wp_validate_boolean( $this->data->can_delete );
 				},
 				'isRequired'      => function() {
-					return $this->data->is_required;
+					return wp_validate_boolean( $this->data->is_required );
 				},
 				'fieldOrder'      => function() {
 					return $this->data->field_order;
@@ -80,28 +80,32 @@ class XProfileField extends Model {
 					return $this->data->option_order;
 				},
 				'orderBy'         => function() {
-					return $this->data->order_by ?? null;
+					return ! empty( $this->data->order_by ) ? $this->data->order_by : null;
 				},
 				'isDefaultOption' => function() {
 					return $this->data->is_default_option;
 				},
 				'visibilityLevel' => function() {
-					return $this->data->get_default_visibility() ?? null;
+					$visibility = $this->data->get_default_visibility();
+
+					return ! empty( $visibility ) ? $visibility : null;
 				},
 				'doAutolink'      => function() {
 					return bp_xprofile_get_meta( $this->data->id, 'field', 'do_autolink' );
 				},
 				'description'     => function() {
-					return $this->data->description ?? null;
+					return ! empty( $this->data->description ) ? $this->data->description : null;
 				},
 				'options'         => function() {
-					return $this->data ?? null;
+					return $this->data;
 				},
 				'value'           => function() {
-					return $this->data->data ?? null;
+					return $this->data->data;
 				},
 				'memberTypes'     => function() {
-					return $this->data->get_member_types() ?? null;
+					$types = $this->data->get_member_types();
+
+					return ! empty( $types ) ? $types : null;
 				},
 			];
 		}
