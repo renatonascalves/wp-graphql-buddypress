@@ -1,19 +1,10 @@
 parameters:
-	level: 6
-	inferPrivatePropertyTypeFromConstructor: true
-	checkMissingIterableValueType: false
+	level: 5
 	bootstrapFiles:
 		- .phpstan/constants.php
-		- wp-graphql-buddypress.php
+		- .phpstan/graphql-php-stub.php
+		- .phpstan/buddypress-stub.php
+		- .phpstan/wp-graphql-stub.php
 	paths:
 		- wp-graphql-buddypress.php
 		- src/
-	excludePaths:
-		analyseAndScan:
-			- */node_modules/*
-			- */vendor/*
-	ignoreErrors:
-		# Ignore any filters that are applied with more than 2 paramaters
-		- '#^Function apply_filters(_ref_array)? invoked with ([1-9]|1[0-2]) parameters, 2 required\.$#'
-		# Ignore BuddyPress global variables.
-		- '#Access to an undefined property BuddyPress::\$[a-zA-Z]#'

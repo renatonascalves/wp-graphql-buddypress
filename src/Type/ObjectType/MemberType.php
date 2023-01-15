@@ -180,9 +180,10 @@ class MemberType {
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Avatar of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
+					$bp = buddypress();
 
 					// Bail early, if disabled.
-					if ( false === buddypress()->avatar->show_avatars ) {
+					if ( isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 						return null;
 					}
 
