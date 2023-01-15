@@ -100,12 +100,11 @@ class MessagesConnectionResolver extends AbstractConnectionResolver {
 
 		// Handle starred messages.
 		if ( 'starred' === $this->query_args['type'] ) {
-			$ids = array_values(
+			$user_id = bp_loggedin_user_id();
+			$ids     = array_values(
 				array_filter(
 					$ids,
-					function( $id ) {
-						return true === bp_messages_is_message_starred( $id, bp_loggedin_user_id() );
-					}
+					fn( $id ) => true === bp_messages_is_message_starred( $id, $user_id )
 				)
 			);
 		}

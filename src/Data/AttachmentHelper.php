@@ -115,7 +115,7 @@ class AttachmentHelper {
 
 			case 'members':
 			default:
-				/** @phpstan-ignore-next-line */
+				// @phpstan-ignore-next-line
 				$bp->displayed_user     = new stdClass();
 				$bp->displayed_user->id = (int) $item_id;
 				break;
@@ -238,7 +238,7 @@ class AttachmentHelper {
 			default:
 				$upload_main_dir = 'bp_members_avatar_upload_dir';
 
-				/** @phpstan-ignore-next-line */
+				// @phpstan-ignore-next-line
 				$bp->displayed_user     = new stdClass();
 				$bp->displayed_user->id = (int) $item_id;
 				break;
@@ -295,7 +295,7 @@ class AttachmentHelper {
 		$bp = buddypress();
 
 		if ( ! isset( $bp->avatar_admin ) ) {
-			/** @phpstan-ignore-next-line */
+			// @phpstan-ignore-next-line
 			$bp->avatar_admin = new stdClass();
 		}
 
