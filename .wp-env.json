@@ -3,7 +3,7 @@
   "plugins": [
     ".",
     "buddypress/buddypress#master",
-    "wp-graphql/wp-graphql#develop"
+    "https://downloads.wordpress.org/plugin/wp-graphql.1.13.7.zip"
   ],
   "config": {
     "WP_DEBUG": true,
