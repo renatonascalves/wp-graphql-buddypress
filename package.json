@@ -29,7 +29,7 @@
     "url": "https://github.com/renatonascalves/wp-graphql-buddypress/issues"
   },
   "devDependencies": {
-    "@wordpress/env": "^5.9.0"
+    "@wordpress/env": "^4.9.0"
   },
   "engines": {
     "node": ">=14.15.0",
