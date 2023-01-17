@@ -64,6 +64,7 @@ jobs:
           chmod -R 767 ./
           npm run wp-env start -- --update
 
+      - name: Running single site unit tests
         if: ${{ success() || failure() }}
         run: npm run phpunit
 
