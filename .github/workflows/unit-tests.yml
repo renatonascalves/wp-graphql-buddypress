@@ -50,6 +50,9 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
+      - name: Validate node modules
+        run: if [[ -f package.json ]]; then npm audit --audit-level=high --production --cache ~/.npm; fi
+
       - name: Install node modules
         run: npm ci --cache ~/.npm
 
@@ -57,10 +60,12 @@ jobs:
         run: |
           echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
           chmod -R 767 ./
-          npm run wp-env start
+          npm run wp-env start -- --update
 
       - name: Unit tests - single site
+        if: ${{ success() || failure() }}
         run: npm run phpunit
 
       - name: Unit tests - MU Network
+        if: ${{ success() || failure() }}
         run: npm run phpunit:mu
