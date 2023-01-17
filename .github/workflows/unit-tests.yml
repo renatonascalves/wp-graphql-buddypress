@@ -57,15 +57,21 @@ jobs:
         run: npm ci --cache ~/.npm
 
       - name: Setup WordPress
-        run: |
-          echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
-          chmod -R 767 ./
-          npm run wp-env start
+        run: echo "{\"core\":\"WordPress/WordPress#${WP_VERSION}\"}" >> .wp-env.override.json
 
-      - name: Unit tests - single site
+      - name: Install WordPress
+        run: |
+          chmod -R 767 ./
+          npm run wp-env start -- --update
+
+      - name: Running single site unit tests
         if: ${{ success() || failure() }}
         run: npm run phpunit
 
-      - name: Unit tests - MU Network
+      - name: Running multi site unit tests
         if: ${{ success() || failure() }}
         run: npm run phpunit:mu
+
+      - name: Stop Docker environment
+        if: ${{ success() || failure() }}
+        run: npm run wp-env stop
