@@ -37,8 +37,8 @@
   },
   "scripts": {
     "wp-env": "wp-env",
-    "phpunit": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.xml'",
-    "phpunit:mu": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/phpunit/phpunit/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.multisite.xml'",
+    "phpunit": "wp-env run phpunit 'env WP_PHPUNIT__TESTS_CONFIG=/wordpress-phpunit/wp-tests-config.php WORDPRESS_TABLE_PREFIX=wptests_ WP_TESTS_DIR=/var/www/wordpress-develop/tests/phpunit /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.xml'",
+    "phpunit:mu": "wp-env run phpunit 'env WP_PHPUNIT__TESTS_CONFIG=/wordpress-phpunit/wp-tests-config.php WORDPRESS_TABLE_PREFIX=wptests_ WP_TESTS_DIR=/var/www/wordpress-develop/tests/phpunit /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/tests/env.multisite.xml'",
     "phpstan": "npm run wp-env run phpunit 'php /var/www/html/wp-content/plugins/wp-graphql-buddypress/vendor/bin/phpstan analyze --ansi --memory-limit=1G -c /var/www/html/wp-content/plugins/wp-graphql-buddypress/phpstan.neon.dist'"
   }
 }
