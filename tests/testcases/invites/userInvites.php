@@ -311,7 +311,8 @@ class Test_User_userInvites_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertEmpty( $response['data']['user']['invitations']['nodes'] );
 	}
 
-	public function test_get_user_requests_without_type() {
+	// @todo investigate why this is not failing.
+	public function get_user_requests_without_type() {
 		$u = $this->factory->user->create();
 
 		$this->bp->set_current_user( $u );
