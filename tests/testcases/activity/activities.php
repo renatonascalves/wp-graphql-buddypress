@@ -7,7 +7,7 @@
  */
 class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	public function test_public_activities_authenticated() {
+	public function test_get_public_activities_authenticated() {
 		$a1 = $this->create_activity_id();
 		$a2 = $this->create_activity_id();
 		$a3 = $this->create_activity_id();
@@ -21,13 +21,12 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$ids = wp_list_pluck( $results['data']['activities']['nodes'], 'databaseId' );
 
-		// Check activities.
-		$this->assertTrue( in_array( $a1, $ids, true ) );
-		$this->assertTrue( in_array( $a2, $ids, true ) );
-		$this->assertTrue( in_array( $a3, $ids, true ) );
+		$this->assertContains( $a1, $ids );
+		$this->assertContains( $a2, $ids );
+		$this->assertContains( $a3, $ids );
 	}
 
-	public function test_public_activities_unauthenticated() {
+	public function test_get_public_activities_unauthenticated() {
 		$a1 = $this->create_activity_id();
 		$a2 = $this->create_activity_id();
 		$a3 = $this->create_activity_id();
@@ -44,11 +43,10 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 
 		$ids = wp_list_pluck( $nodes, 'databaseId' );
 
-		// Check activities.
-		$this->assertTrue( in_array( $a1, $ids, true ) );
-		$this->assertTrue( in_array( $a2, $ids, true ) );
-		$this->assertTrue( in_array( $a3, $ids, true ) );
-		$this->assertFalse( in_array( $a4, $ids, true ) );
+		$this->assertContains( $a1, $ids );
+		$this->assertContains( $a2, $ids );
+		$this->assertContains( $a3, $ids );
+		$this->assertNotContains( $a4, $ids );
 	}
 
 	public function test_get_hidden_activities_authenticated_and_with_access() {
@@ -74,7 +72,7 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 		$a2 = $this->create_activity_id();
 		$a3 = $this->create_activity_id( [ 'is_spam' => true ] );
 
-		$this->bp->set_current_user( $this->admin );
+		$this->set_user( $this->admin );
 
 		$results = $this->activityQuery( [ 'where' => [ 'status' => 'SPAM_ONLY' ] ] );
 

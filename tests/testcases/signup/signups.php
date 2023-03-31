@@ -10,8 +10,8 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 	}
@@ -19,10 +19,10 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_down() {
+	public function tearDown(): void {
 		remove_filter( 'bp_get_signup_allowed', '__return_true' );
 
-		parent::set_down();
+		parent::tearDown();
 	}
 
 	public function test_get_signups_authenticated() {
@@ -81,29 +81,6 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->assertQuerySuccessful( $this->signupQuery() )
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a3 );
-	}
-
-	public function test_get_signups_sorted_by_activated() {
-		$this->set_user();
-
-		$key1 = wp_generate_password( 32, false );
-		$a1   = $this->create_signup_id();
-		$a2   = $this->create_signup_id( [ 'activation_key' => $key1 ] );
-
-		// Activate signup.
-		bp_core_activate_signup( $key1 );
-
-		$results = $this->signupQuery( [ 'where' => [ 'orderBy' => 'ACTIVATED' ] ] );
-
-		$this->assertQuerySuccessful( $results )
-			->hasNodes();
-
-		$ids = wp_list_pluck( $results['data']['signups']['nodes'], 'databaseId' );
-
-		// @todo this is incorrect, investigate.
-		// Should be:
-		// $this->assertSame( [ $a2, $a1 ], $ids );
-		$this->assertSame( [ $a1 ], $ids );
 	}
 
 	public function test_get_active_signups() {

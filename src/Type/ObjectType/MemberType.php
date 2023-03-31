@@ -68,7 +68,7 @@ class MemberType {
 				'type'        => 'String',
 				'description' => __( 'Profile URL of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
-					$link = bp_core_get_user_domain( $source->databaseId ?? 0 );
+					$link = bp_members_get_user_url( $source->databaseId ?? 0 );
 
 					return ! empty( $link ) ? $link : null;
 				},

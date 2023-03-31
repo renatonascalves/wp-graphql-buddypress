@@ -20,11 +20,10 @@ class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$ids = wp_list_pluck( $response['data']['xprofileGroups']['nodes'], 'databaseId' );
 
-		// Check our four XProfile groups.
-		$this->assertTrue( in_array( $u1, $ids, true ) );
-		$this->assertTrue( in_array( $u2, $ids, true ) );
-		$this->assertTrue( in_array( $u3, $ids, true ) );
-		$this->assertTrue( in_array( $u4, $ids, true ) );
+		$this->assertContains( $u1, $ids );
+		$this->assertContains( $u2, $ids );
+		$this->assertContains( $u3, $ids );
+		$this->assertContains( $u4, $ids );
 	}
 
 	public function test_xprofile_groups_query_paginated() {

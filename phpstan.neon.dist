@@ -2,9 +2,9 @@ parameters:
 	level: 5
 	bootstrapFiles:
 		- .phpstan/constants.php
-		- .phpstan/graphql-php-stub.php
-		- .phpstan/buddypress-stub.php
-		- .phpstan/wp-graphql-stub.php
 	paths:
 		- wp-graphql-buddypress.php
 		- src/
+	scanDirectories:
+		- ../buddypress/
+		- ../wp-graphql/

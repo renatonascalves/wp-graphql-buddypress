@@ -25,8 +25,8 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create();
 		$this->xprofile_field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );

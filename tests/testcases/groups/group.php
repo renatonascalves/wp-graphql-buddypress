@@ -16,8 +16,8 @@ class Test_Groups_group_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->global_id = $this->toRelayId( 'group', (string) $this->group );
 	}

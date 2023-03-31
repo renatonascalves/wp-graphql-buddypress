@@ -19,8 +19,8 @@ class Test_Invitation_getGroupRequestInviteBy_Queries extends WPGraphQL_BuddyPre
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[

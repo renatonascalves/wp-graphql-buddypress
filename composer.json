@@ -5,17 +5,17 @@
   "homepage": "https://github.com/renatonascalves/wp-graphql-buddypress",
   "license": "GPL-3.0-or-later",
   "keywords": [
-    "wordpress",
-    "graphql",
     "api",
+    "bp",
+    "buddypress",
+    "buddypress-extension",
+    "community",
+    "graphql",
+    "rest",
+    "wordpress",
     "wp-graphql",
     "wp-graphql-buddypress",
-    "wp-graphql-extension",
-    "buddypress-extension",
-    "buddypress",
-    "community",
-    "bp",
-    "rest"
+    "wp-graphql-extension"
   ],
   "authors": [
     {
@@ -27,27 +27,47 @@
     "issues": "https://github.com/renatonascalves/wp-graphql-buddypress/issues",
     "source": "https://github.com/renatonascalves/wp-graphql-buddypress"
   },
+  "extra": {
+    "installer-paths": {
+      "../{$name}": [
+        "type:wordpress-plugin"
+      ]
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
+    }
+  ],
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": "^8.0",
     "composer/installers": "^1.10.0"
   },
   "require-dev": {
-    "automattic/vipwpcs": "^2.3",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-    "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+    "alleyinteractive/alley-coding-standards": "^0.3.0",
+    "alleyinteractive/pest-plugin-wordpress": "^0.4.1",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^1.8",
-    "squizlabs/php_codesniffer": "^3.5.4",
-    "szepeviktor/phpstan-wordpress": "^1.1.6",
-    "wp-coding-standards/wpcs": "*",
     "wp-phpunit/wp-phpunit": "^6.1",
-    "yoast/phpunit-polyfills": "^1.0.1"
+    "szepeviktor/phpstan-wordpress": "^1.1.6",
+    "wpackagist-plugin/buddypress": "^11.1.0",
+    "wpackagist-plugin/wp-graphql": "^1.14.0"
   },
   "scripts": {
-    "phpcs" : "phpcs . --basepath=.",
+    "phpcs": "phpcs . --basepath=.",
     "phpcbf": "phpcbf . --basepath=.",
-    "phpstan": ["phpstan analyze --ansi --memory-limit=1G"],
-    "phpunit": "phpunit"
+    "phpstan": [
+      "phpstan analyze --ansi --memory-limit=1G"
+    ],
+    "test": "pest",
+    "phpunit": "@test",
+    "setup": [
+      "composer install"
+    ]
   },
   "config": {
     "optimize-autoloader": true,
@@ -56,7 +76,9 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
-      "composer/installers": false
+      "composer/installers": false,
+      "pestphp/pest-plugin": true,
+      "alleyinteractive/composer-wordpress-autoloader": true
     }
   },
   "autoload": {

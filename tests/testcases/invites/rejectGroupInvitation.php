@@ -33,8 +33,8 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->inviter          = $this->bp_factory->user->create();
 		$this->private_group_id = $this->bp_factory->group->create(

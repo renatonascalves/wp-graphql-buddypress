@@ -1,59 +1,37 @@
 <?php
 /**
- * PHPUnit bootstrap file
+ * PHPUnit bootstrap file.
  *
  * @since 0.0.1-alpha
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
-// Setting PHPUnit polyfills.
-const WP_TESTS_PHPUNIT_POLYFILLS_PATH = __DIR__ . '/../vendor/yoast/phpunit-polyfills';
+require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/factory.php';
 
-// Use WP PHPUnit.
-if ( defined( 'WPGRAPHQL_BP_USE_WP_ENV_TESTS' ) ) {
-	require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
-}
+\Mantle\Testing\manager()
+	->before( function() {
+		require_once dirname( __FILE__ ) . '/includes/define-constants.php';
+	})
+	->loaded(
+		function() {
+			// Load plugins.
+			require_once BP_TESTS_DIR . '/includes/loader.php';
+			require_once dirname( __FILE__, 3 ) . '/wp-graphql/wp-graphql.php';
+			require_once dirname( __DIR__ ) . '/wp-graphql-buddypress.php';
+		}
+	)
+	->after( function() {
+		require_once BP_TESTS_DIR . '/includes/testcase.php';
+		require_once dirname( __FILE__ ) . '/includes/testcase.php';
 
-// Define constants.
-require dirname( __FILE__ ) . '/includes/define-constants.php';
-
-if ( ! file_exists( WP_TESTS_DIR . '/includes/functions.php' ) ) {
-	die( "The WordPress PHPUnit test suite could not be found.\n" );
-}
-
-if ( ! file_exists( BP_TESTS_DIR . '/includes/loader.php' ) ) {
-	die( "The BuddyPress plugin could not be found.\n" );
-}
-
-if ( ! file_exists( WPGRAPHQL_PLUGIN_DIR_TEST . '/wp-graphql.php' ) ) {
-	die( "The WP Graphql plugin could not be found.\n" );
-}
-
-// Give access to tests_add_filter() function.
-require_once WP_TESTS_DIR . '/includes/functions.php';
-
-/**
- * Manually load the plugins being tested.
- */
-tests_add_filter(
-	'muplugins_loaded',
-	function() {
-
-		// Load BuddyPress
-		require_once BP_TESTS_DIR . '/includes/loader.php';
-
-		// Load WP-GraphQL
-		require_once WPGRAPHQL_PLUGIN_DIR_TEST . '/wp-graphql.php';
-
-		// Load our plugin.
-		require_once dirname( __FILE__ ) . '/../wp-graphql-buddypress.php';
-	}
-);
+		uses( \WPGraphQL_BuddyPress_UnitTestCase::class )->in( __DIR__ );
+	})
+	->install();
 
 /**
  * Remove Extensions from the response.
  */
-tests_add_filter(
+\Mantle\Testing\tests_add_filter(
 	'graphql_request_results',
 	function( $response ) {
 		unset( $response['extensions'] );
@@ -61,12 +39,3 @@ tests_add_filter(
 		return $response;
 	}
 );
-
-echo "Loading WP testing environment...\n";
-require_once WP_TESTS_DIR . '/includes/bootstrap.php';
-
-echo "Loading BuddyPress testcase...\n";
-require_once BP_TESTS_DIR . '/includes/testcase.php';
-
-echo "Loading WPGraphQL BuddyPress testcase...\n";
-require_once dirname( __FILE__ ) . '/includes/testcase.php';

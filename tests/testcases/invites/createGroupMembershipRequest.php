@@ -27,8 +27,8 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->requester_id     = $this->bp_factory->user->create();
 		$this->private_group_id = $this->bp_factory->group->create(
