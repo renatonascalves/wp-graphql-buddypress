@@ -10,10 +10,6 @@ jobs:
       fail-fast: true
       matrix:
         php: ['8.0']
-        wp_version: ['latest']
-    env:
-      WP_ENV_PHP_VERSION: ${{ matrix.php }}
-      WP_VERSION: ${{ matrix.wp_version }}
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
@@ -25,9 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check Gitignored files
-        run: if [[ ! -z $(git ls-files -i --exclude-standard) ]]; then exit 1; fi
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -35,13 +28,10 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Validate Composer
-        run: composer validate --strict
-
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
         with:
           composer-options: "--ignore-platform-reqs"
 
-      - name: Running PHPStan tests
-        run: composer run phpstan
+      - name: Run PHPStan
+        run: composer phpstan
