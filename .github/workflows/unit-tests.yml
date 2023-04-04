@@ -55,6 +55,7 @@ jobs:
           cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress && composer install
 
       - name: Run all tests
+        shell: bash
         run: |
           cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress
-          composer run test
+          composer phpunit
