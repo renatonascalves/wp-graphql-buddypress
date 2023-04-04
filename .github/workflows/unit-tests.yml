@@ -50,7 +50,7 @@ jobs:
           rm -rf "${WP_CORE_DIR}wp-content/plugins"
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
-          cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress && composer install
+          cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress && composer install --dev
 
       - name: Run all tests
         run: |
