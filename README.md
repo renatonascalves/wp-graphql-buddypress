@@ -6,7 +6,7 @@ Bringing the power of GraphQL to BuddyPress.
 
 ## System Requirements
 
-* PHP >= 7.4+
+* PHP >= 8.0+
 * WP >= 5.9+
 * WPGraphQL >= latest
 * BuddyPress >= latest
@@ -16,4 +16,4 @@ Bringing the power of GraphQL to BuddyPress.
 1. Install & activate [BuddyPress](https://buddypress.org/)
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
 3. Clone or download the zip of this repository into your WordPress plugin directory, and activate the plugin.
-4. Run `composer install` before activating the plugin/extension
+4. Run `composer install --no-dev` before activating the plugin/extension

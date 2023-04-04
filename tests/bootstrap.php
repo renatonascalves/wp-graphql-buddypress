@@ -6,6 +6,7 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
+// TODO: remove it after Mantle shims factories.
 require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/factory.php';
 
 \Mantle\Testing\manager()

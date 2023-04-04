@@ -21,7 +21,7 @@ jobs:
       WP_DB_PASSWORD: '""'
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
@@ -58,4 +58,4 @@ jobs:
         shell: bash
         run: |
           cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress
-          composer phpunit
+          composer run phpunit

@@ -8,11 +8,12 @@
 
 use Mantle\Testing\Concerns\Core_Shim;
 use Mantle\Testing\Concerns\Refresh_Database;
+use Pest\PestPluginWordPress\FrameworkTestCase as Test_Case;
 
 /**
  * WPGraphQL_BuddyPress_UnitTestCase Class.
  */
-class WPGraphQL_BuddyPress_UnitTestCase extends \Pest\PestPluginWordPress\FrameworkTestCase {
+class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 
 	use Core_Shim, Refresh_Database;
 
@@ -128,16 +129,6 @@ class WPGraphQL_BuddyPress_UnitTestCase extends \Pest\PestPluginWordPress\Framew
 
 		// Add member type.
 		bp_register_member_type( 'foo' );
-	}
-
-	/**
-	 * Tear down.
-	 */
-	public function tearDown(): void {
-		parent::tearDown();
-
-		// Reset the response.
-		$this->response = [];
 	}
 
 	/**

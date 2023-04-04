@@ -31,6 +31,9 @@
     "installer-paths": {
       "../{$name}": [
         "type:wordpress-plugin"
+      ],
+      "../buddypress": [
+        "buddypress/buddypress"
       ]
     }
   },
@@ -41,6 +44,19 @@
       "only": [
         "wpackagist-plugin/*"
       ]
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "buddypress/buddypress",
+        "version": "dev-master",
+        "type": "wordpress-plugin",
+        "source": {
+          "url": "https://github.com/buddypress/buddypress.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
     }
   ],
   "require": {
@@ -50,11 +66,11 @@
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^0.3.0",
     "alleyinteractive/pest-plugin-wordpress": "^0.4.1",
+    "buddypress/buddypress": "dev-master",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^1.8",
     "wp-phpunit/wp-phpunit": "^6.1",
     "szepeviktor/phpstan-wordpress": "^1.1.6",
-    "wpackagist-plugin/buddypress": "^11.1.0",
     "wpackagist-plugin/wp-graphql": "^1.14.0"
   },
   "scripts": {
@@ -70,13 +86,11 @@
     ]
   },
   "config": {
-    "optimize-autoloader": true,
-    "process-timeout": 1800,
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
-      "composer/installers": false,
+      "composer/installers": true,
       "pestphp/pest-plugin": true,
       "alleyinteractive/composer-wordpress-autoloader": true
     }
