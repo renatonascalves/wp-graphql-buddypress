@@ -18,7 +18,7 @@ jobs:
       WP_MULTISITE: ${{ matrix.multisite }}
       WP_DB_HOST: 127.0.0.1
       WP_DB_USER: root
-      WP_DB_PASSWORD: '""'
+      WP_DB_PASSWORD: 'password'
     services:
       mysql:
         image: mysql:5.7
