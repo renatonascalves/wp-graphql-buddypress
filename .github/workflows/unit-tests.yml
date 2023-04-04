@@ -45,8 +45,13 @@ jobs:
 
       - name: Set up WordPress
         run: |
-          composer install
+          bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/mantle-ci/HEAD/install-wp-tests.sh") wordpress_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
+          rm -rf "${WP_CORE_DIR}wp-content/plugins"
+          mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
+          rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
+          cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress && composer install
 
       - name: Run all tests
         run: |
+          cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress
           composer phpunit

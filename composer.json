@@ -79,7 +79,7 @@
     "phpstan": [
       "phpstan analyze --ansi --memory-limit=1G"
     ],
-    "test": "pest",
+    "test": "pest --version",
     "phpunit": "@test",
     "setup": [
       "composer install"
