@@ -16,9 +16,6 @@ jobs:
       WP_CORE_DIR: /tmp/wordpress/
       WP_VERSION: ${{ matrix.wp_version }}
       WP_MULTISITE: ${{ matrix.multisite }}
-      WP_DB_HOST: 127.0.0.1
-      WP_DB_USER: root
-      WP_DB_PASSWORD: '""'
     services:
       mysql:
         image: mysql:5.7
@@ -48,6 +45,7 @@ jobs:
 
       - name: Set up WordPress
         run: |
+          rm -rf $WP_CORE_DIR
           bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/mantle-ci/HEAD/install-wp-tests.sh") wordpress_unit_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
           rm -rf "${WP_CORE_DIR}wp-content/plugins"
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
