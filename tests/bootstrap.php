@@ -10,6 +10,7 @@
 require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/factory.php';
 
 \Mantle\Testing\manager()
+	->maybe_rsync_plugin()
 	->before( function() {
 		require_once dirname( __FILE__ ) . '/includes/define-constants.php';
 	})
