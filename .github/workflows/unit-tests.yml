@@ -14,7 +14,6 @@ jobs:
         wp_version: ["latest"]
     env:
       WP_CORE_DIR: /tmp/wordpress/
-      WP_TESTS_DIR: /tmp/wordpress/wp-content/plugins/buddypress/tests/phpunit
       WP_VERSION: ${{ matrix.wp_version }}
       WP_MULTISITE: ${{ matrix.multisite }}
     services:
@@ -51,6 +50,7 @@ jobs:
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           cd ${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress && composer install
+          cd ${WP_CORE_DIR} && ls
 
       - name: Run all tests
         run: |
