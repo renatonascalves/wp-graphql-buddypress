@@ -9,6 +9,12 @@
 // TODO: remove it after Mantle shims factories.
 require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/factory.php';
 
+define( 'WP_TESTS_CONFIG_FILE_PATH', ABSPATH . '/wp-tests-config.php' );
+define( 'WP_TESTS_CONFIG_PATH', WP_TESTS_CONFIG_FILE_PATH );
+
+require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
+
+
 \Mantle\Testing\manager()
 	->before( function() {
 		require_once dirname( __FILE__ ) . '/includes/define-constants.php';
