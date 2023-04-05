@@ -14,6 +14,8 @@ jobs:
         wp_version: ["latest"]
     env:
       WP_CORE_DIR: /tmp/wordpress/
+      WP_TESTS_CONFIG_FILE_PATH: /tmp/wordpress-tests-lib/wp-tests-config.php
+      WP_TESTS_CONFIG_PATH: /tmp/wordpress-tests-lib/wp-tests-config.php
       WP_VERSION: ${{ matrix.wp_version }}
       WP_MULTISITE: ${{ matrix.multisite }}
     services:
@@ -45,7 +47,7 @@ jobs:
 
       - name: Set up WordPress
         run: |
-          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
+          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
           rm -rf "${WP_CORE_DIR}wp-content/plugins"
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
