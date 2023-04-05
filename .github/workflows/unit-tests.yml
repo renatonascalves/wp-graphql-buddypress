@@ -14,8 +14,6 @@ jobs:
         wp_version: ["latest"]
     env:
       WP_CORE_DIR: /tmp/wordpress/
-      WP_TESTS_CONFIG_FILE_PATH: /tmp/wordpress/wp-tests-config.php
-      WP_TESTS_CONFIG_PATH: /tmp/wordpress/wp-tests-config.php
       WP_VERSION: ${{ matrix.wp_version }}
       WP_MULTISITE: ${{ matrix.multisite }}
     services:

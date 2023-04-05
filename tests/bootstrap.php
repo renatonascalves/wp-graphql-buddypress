@@ -17,6 +17,7 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 		function() {
 			define( 'WP_TESTS_CONFIG_FILE_PATH', '/tmp/wordpress/wp-tests-config.php' );
 			define( 'WP_TESTS_CONFIG_PATH', '/tmp/wordpress/wp-tests-config.php' );
+			define( 'WP_DEVELOP_DIR', '/tmp/wordpress' );
 
 			// Load plugins.
 			require_once BP_TESTS_DIR . '/includes/loader.php';
