@@ -15,10 +15,6 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 	})
 	->loaded(
 		function() {
-			define( 'WP_TESTS_CONFIG_FILE_PATH', '/tmp/wordpress/wp-tests-config.php' );
-			define( 'WP_TESTS_CONFIG_PATH', '/tmp/wordpress/wp-tests-config.php' );
-			define( 'WP_DEVELOP_DIR', '/tmp/wordpress' );
-
 			// Load plugins.
 			require_once BP_TESTS_DIR . '/includes/loader.php';
 			require_once dirname( __FILE__, 3 ) . '/wp-graphql/wp-graphql.php';
@@ -29,7 +25,7 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 		require_once BP_TESTS_DIR . '/includes/testcase.php';
 		require_once dirname( __FILE__ ) . '/includes/testcase.php';
 
-		uses( \WPGraphQL_BuddyPress_UnitTestCase::class )->in( __DIR__ );
+		uses( \WPGraphQL_BuddyPress_UnitTestCase::class );
 	})
 	->install();
 
