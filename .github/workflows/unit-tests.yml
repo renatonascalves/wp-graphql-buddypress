@@ -45,7 +45,7 @@ jobs:
 
       - name: Set up WordPress
         run: |
-          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root root 127.0.0.1 ${{ matrix.wp_version }}
+          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
           rm -rf "${WP_CORE_DIR}wp-content/plugins"
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
