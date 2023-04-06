@@ -15,6 +15,11 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 	})
 	->loaded(
 		function() {
+			define( 'WP_TESTS_CONFIG_FILE_PATH', '/tmp/wordpress-tests-lib/wp-tests-config.php' );
+			define( 'WP_TESTS_CONFIG_PATH', '/tmp/wordpress-tests-lib/wp-tests-config.php' );
+
+			require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
+
 			// Load plugins.
 			require_once BP_TESTS_DIR . '/includes/loader.php';
 			require_once dirname( __FILE__, 3 ) . '/wp-graphql/wp-graphql.php';
