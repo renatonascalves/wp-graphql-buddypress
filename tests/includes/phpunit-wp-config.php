@@ -20,16 +20,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'tests-wordpress');
+define( 'DB_NAME', 'wordpress_unit_tests');
 
 /** MySQL database username */
 define( 'DB_USER', 'root');
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'password');
+define( 'DB_PASSWORD', '');
 
 /** MySQL hostname */
-define( 'DB_HOST', 'tests-mysql');
+define( 'DB_HOST', 'localhost');
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8');
@@ -57,6 +57,14 @@ define('NONCE_SALT',       'N{M_y&/:)E7RS]FE#T|i~AWq|M]LU: L+zD$8JN#)vTU|=BI35=z
 
 /**#@-*/
 
+/*
+ * Path to the theme to test with.
+ *
+ * The 'default' theme is symlinked from test/phpunit/data/themedir1/default into
+ * the themes directory of the WordPress installation defined above.
+ */
+defined( 'WP_DEFAULT_THEME' ) || define( 'WP_DEFAULT_THEME', 'default' );
+
 /**
  * WordPress Database Table prefix.
  *
@@ -73,11 +81,11 @@ define( 'WP_DEBUG', true );
 // Set Site domain, email and title constants.
 define( 'WP_TESTS_DOMAIN', 'example.org' );
 define( 'WP_TESTS_EMAIL', 'admin@example.org' );
-define( 'WP_TESTS_TITLE', 'Test' );
+define( 'WP_TESTS_TITLE', 'Test Blog' );
 
 define( 'WP_PHP_BINARY', 'php' );
 
+define( 'WPLANG', '' );
+
 /** Absolute path to the WordPress directory. */
-if ( ! defined( 'ABSPATH' ) ) {
-        define( 'ABSPATH', '/tmp/wordpress/' );
-}
+defined( 'ABSPATH' ) || define( 'ABSPATH', '/tmp/wordpress/' );
