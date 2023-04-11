@@ -20,7 +20,7 @@ jobs:
         wp_version: ["latest"]
     env:
       WP_CORE_DIR: /tmp/wordpress/
-      WP_TESTS_DIR: /tmp/wordpress-develop/
+      WP_TESTS_DIR: /tmp/wordpress-develop
       WP_VERSION: ${{ matrix.wp_version }}
       WP_MULTISITE: ${{ matrix.multisite }}
     services:
