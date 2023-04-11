@@ -25,6 +25,8 @@ jobs:
     services:
       mysql:
         image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -46,9 +48,13 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Set up WordPress Develop
+        run: |
+          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root 'root' localhost ${{ matrix.wp_version }} true
+
       - name: Set up WordPress and Plugin
         run: |
-          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root 'root' localhost ${{ matrix.wp_version }}
+          bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/mantle-ci/HEAD/install-wp-tests.sh") wordpress_unit_tests root 'root' localhost ${{ matrix.wp_version }}
           rm -rf "${WP_CORE_DIR}wp-content/plugins"
           mkdir -p "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
           rsync -a --exclude=.git . "${WP_CORE_DIR}wp-content/plugins/wp-graphql-buddypress"
