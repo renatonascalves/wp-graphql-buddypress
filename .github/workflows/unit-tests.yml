@@ -48,6 +48,12 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Set up WordPress Develop
+        run: |
+          bash <(curl -s "https://raw.githubusercontent.com/wp-cli/scaffold-command/main/templates/install-wp-tests.sh") wordpress_unit_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
+          cd /tmp/wordpress-tests-lib
+          ls
+
       - name: Set up WordPress and Plugin
         run: |
           bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/mantle-ci/HEAD/install-wp-tests.sh") wordpress_unit_tests root '' 127.0.0.1 ${{ matrix.wp_version }}
