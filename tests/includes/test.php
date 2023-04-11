@@ -32,7 +32,7 @@ define( 'WP_DEBUG', true );
 
 define( 'DB_NAME', 'wordpress_unit_tests' );
 define( 'DB_USER', 'root' );
-define( 'DB_PASSWORD', 'root' );
+define( 'DB_PASSWORD', '' );
 define( 'DB_HOST', 'localhost' );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
