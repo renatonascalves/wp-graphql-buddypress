@@ -13,6 +13,12 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 	->maybe_rsync_plugin()
 	->before( function() {
 		require_once dirname( __FILE__ ) . '/includes/define-constants.php';
+
+		define( 'WP_TESTS_CONFIG_FILE_PATH', dirname( __FILE__ )  . '/includes/test.php' );
+		define( 'WP_TESTS_CONFIG_PATH', WP_TESTS_CONFIG_FILE_PATH );
+
+		// Use WP PHPUnit.
+		require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/__loaded.php';
 	})
 	->loaded(
 		function() {
