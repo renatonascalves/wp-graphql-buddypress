@@ -12,6 +12,11 @@ require_once dirname( __FILE__, 2 ) . '/vendor/wp-phpunit/wp-phpunit/includes/fa
 \Mantle\Testing\manager()
 	->maybe_rsync_plugin()
 	->before( function() {
+
+		// Test CI.
+		define( 'WP_TESTS_CONFIG_FILE_PATH', '/tmp/wordpress-tests-lib/wp-tests-config.php' );
+		define( 'WP_TESTS_CONFIG_PATH', WP_TESTS_CONFIG_FILE_PATH );
+
 		require_once dirname( __FILE__ ) . '/includes/define-constants.php';
 	})
 	->loaded(
