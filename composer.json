@@ -39,6 +39,10 @@
   },
   "repositories": [
     {
+      "type": "vcs",
+      "url": "https://github.com/alleyinteractive/WordPress-Coding-Standards"
+    },
+    {
       "type": "composer",
       "url": "https://wpackagist.org",
       "only": [
@@ -64,7 +68,8 @@
     "composer/installers": "^1.10.0"
   },
   "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^0.3.0",
+    "alleyinteractive/alley-coding-standards": "^1.0",
+    "wp-coding-standards/wpcs": "dev-php-8-1 as 2.3.x-dev",
     "alleyinteractive/pest-plugin-wordpress": "^0.4.1",
     "buddypress/buddypress": "dev-master",
     "phpstan/extension-installer": "^1.1",

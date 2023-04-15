@@ -6,8 +6,10 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
-use Mantle\Testing\Concerns\Core_Shim;
+declare(strict_types=1);
+
 use Mantle\Testing\Concerns\Refresh_Database;
+use Mantle\Testing\Concerns\With_Faker;
 use Pest\PestPluginWordPress\FrameworkTestCase as Test_Case;
 
 /**
@@ -15,7 +17,7 @@ use Pest\PestPluginWordPress\FrameworkTestCase as Test_Case;
  */
 class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 
-	use Core_Shim, Refresh_Database;
+	use Refresh_Database, With_Faker;
 
 	/**
 	 * BuddyPress unit test factory class.
