@@ -29,7 +29,7 @@ class Test_Groups_createGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase
 							'name'             => 'Group Test',
 							'slug'             => 'group-slug',
 							'status'           => 'PUBLIC',
-							'uri'              => bp_get_group_permalink( $group ),
+							'uri'              => bp_get_group_url( $group ),
 							'hasForum'         => false,
 							'dateCreated'      => Utils::prepare_date_response(
 								$group->date_created,

@@ -109,7 +109,7 @@ class Group extends Model {
 					return ! empty( $this->data->description ) ? $this->data->description : null;
 				},
 				'uri'              => function() {
-					return bp_get_group_permalink( $this->data );
+					return bp_get_group_url( $this->data );
 				},
 				'hasForum'         => function() {
 					return wp_validate_boolean( $this->data->enable_forum );

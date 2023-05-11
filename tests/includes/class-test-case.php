@@ -504,9 +504,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 	 * Create notification id.
 	 *
 	 * @param array $args Arguments.
-	 * @return int
+	 * @return int|bool
 	 */
-	protected function create_notification_id( array $args = [] ): int {
+	protected function create_notification_id( array $args = [] ) {
 		return $this->bp_factory->notification->create(
 			wp_parse_args(
 				$args,
@@ -776,9 +776,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 	 *
 	 * @param string $object Object (members/groups).
 	 * @param int    $item_id Item ID.
-	 * @return string
+	 * @return string|bool
 	 */
-	protected function get_cover_image( string $object, int $item_id ): string {
+	protected function get_cover_image( string $object, int $item_id ) {
 		return bp_attachments_get_attachment(
 			'url',
 			[
@@ -792,8 +792,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 	 * Copy file.
 	 *
 	 * @source https://core.trac.wordpress.org/browser/tags/5.9/src/wp-admin/includes/file.php#L979
+	 *
+	 * @return bool
 	 */
-	public function copy_file( $return, $file, $new_file ) {
+	public function copy_file( $return, $file, $new_file ): bool {
 		return @copy( $file['tmp_name'], $new_file );
 	}
 }

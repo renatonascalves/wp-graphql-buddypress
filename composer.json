@@ -70,13 +70,13 @@
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^1.0",
     "wp-coding-standards/wpcs": "dev-php-8-1 as 2.3.x-dev",
-    "alleyinteractive/pest-plugin-wordpress": "^0.4.1",
     "buddypress/buddypress": "dev-master",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^1.8",
     "wp-phpunit/wp-phpunit": "^6.1",
     "szepeviktor/phpstan-wordpress": "^1.1.6",
-    "wpackagist-plugin/wp-graphql": "^1.14.0"
+    "wpackagist-plugin/wp-graphql": "^1.14.0",
+    "yoast/phpunit-polyfills": "^1.0.1"
   },
   "scripts": {
     "phpcs": "phpcs . --basepath=.",
@@ -84,7 +84,7 @@
     "phpstan": [
       "phpstan analyze --ansi --memory-limit=1G"
     ],
-    "test": "pest",
+    "test": "phpunit",
     "phpunit": "@test",
     "setup": [
       "composer install"
@@ -96,8 +96,8 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
       "composer/installers": true,
-      "pestphp/pest-plugin": true,
-      "alleyinteractive/composer-wordpress-autoloader": true
+      "alleyinteractive/composer-wordpress-autoloader": true,
+      "pestphp/pest-plugin": false
     }
   },
   "autoload": {
