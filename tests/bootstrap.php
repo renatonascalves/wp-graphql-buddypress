@@ -6,6 +6,8 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
+declare(strict_types=1);
+
 // Setting PHPUnit polyfills.
 const WP_TESTS_PHPUNIT_POLYFILLS_PATH = __DIR__ . '/../vendor/yoast/phpunit-polyfills';
 
@@ -46,7 +48,7 @@ tests_add_filter(
 		require_once WPGRAPHQL_PLUGIN_DIR_TEST . '/wp-graphql.php';
 
 		// Load our plugin.
-		require_once dirname( __FILE__ ) . '/../wp-graphql-buddypress.php';
+		require_once dirname( __FILE__, 2 ) . '/wp-graphql-buddypress.php';
 	}
 );
 
@@ -69,4 +71,4 @@ echo "Loading BuddyPress testcase...\n";
 require_once BP_TESTS_DIR . '/includes/testcase.php';
 
 echo "Loading WPGraphQL BuddyPress testcase...\n";
-require_once dirname( __FILE__ ) . '/includes/testcase.php';
+require_once dirname( __FILE__ ) . '/includes/class-test-case.php';

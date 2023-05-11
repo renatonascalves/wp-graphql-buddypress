@@ -92,7 +92,8 @@ class AttachmentAvatarUpload {
 			}
 
 			// Check if upload is enabled for blog.
-			if ( 'blog' === $object && false === buddypress()->avatar->show_avatars ) {
+			$bp = buddypress();
+			if ( 'blog' === $object && isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 				throw new UserError( __( 'Sorry, blog avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 

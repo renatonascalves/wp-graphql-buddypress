@@ -382,7 +382,7 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 				'user_id'        => $u,
 			]
 		);
-		$n3 = $this->create_notification_id(
+		$this->create_notification_id(
 			[
 				'component_name' => 'activity',
 				'user_id'        => $u,

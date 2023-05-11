@@ -25,8 +25,8 @@ class Test_Invitation_getGroupInviteBy_Queries extends WPGraphQL_BuddyPress_Unit
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->invitation_id = groups_invite_user(
 			[

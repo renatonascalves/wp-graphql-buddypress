@@ -6,10 +6,19 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
+declare(strict_types=1);
+
 /**
  * WPGraphQL_BuddyPress_UnitTestCase Class.
  */
 class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
+
+	/**
+	 * Wrapper for WP_UnitTest_Factory.
+	 *
+	 * @var WP_UnitTest_Factory
+	 */
+	protected $factory;
 
 	/**
 	 * BuddyPress unit test factory class.
@@ -84,8 +93,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp(): void {
+		parent::setUp();
 
 		/**
 		 * Reset the WPGraphQL schema before each test.
@@ -94,6 +103,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 		 */
 		WPGraphQL::clear_schema();
 
+		$this->factory            = self::factory();
 		$this->bp_factory         = new BP_UnitTest_Factory();
 		$this->bp                 = new BP_UnitTestCase();
 		$this->client_mutation_id = 'someUniqueId';
@@ -151,7 +161,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @return int
 	 */
-	public function toDatabaseId( $id ) {
+	public function toDatabaseId( $id ): int {
 		return \WPGraphQL\Utils\Utils::get_database_id_from_id( $id );
 	}
 
@@ -241,6 +251,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	protected function get_field_value_from_response( string $object_field ) {
 		foreach ( $this->response['data'] as $fields ) {
+			if ( ! is_array( $fields ) ) {
+				continue;
+			}
+
 			foreach ( $fields as $field => $value ) {
 				if ( $object_field === $field ) {
 					$object = [ $field => $value ];
@@ -401,14 +415,14 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	protected function create_thread_object( array $args = [] ): BP_Messages_Message {
 		return $this->bp_factory->message->create_and_get(
-			array_merge(
+			wp_parse_args(
+				$args,
 				[
 					'sender_id'  => $this->admin,
 					'recipients' => [ $this->random_user ],
 					'subject'    => 'Thread  Subject',
 					'content'    => 'Foo',
 				],
-				$args
 			)
 		);
 	}
@@ -434,9 +448,17 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Set current user based on MU environment.
+	 * Set current user.
+	 *
+	 * @param int $user_id ID of the user to set as current/active.
 	 */
-	protected function set_user(): void {
+	protected function set_user( int $user_id = 0 ): void {
+
+		if ( ! empty( $user_id ) ) {
+			$this->bp->set_current_user( $user_id );
+			return;
+		}
+
 		if ( is_multisite() ) {
 			$this->bp->grant_super_admin( $this->user_id );
 			$this->bp->set_current_user( $this->user_id );
@@ -453,14 +475,14 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	protected function create_group_id( array $args = [] ): int {
 		return $this->bp_factory->group->create(
-			array_merge(
+			wp_parse_args(
+				$args,
 				[
-					'slug'        => 'group-test',
-					'name'        => 'Group Test',
-					'description' => 'Group Description',
 					'creator_id'  => $this->admin,
+					'description' => 'Group Description',
+					'name'        => 'Group Test',
+					'slug'        => 'group-test',
 				],
-				$args
 			)
 		);
 	}
@@ -472,23 +494,28 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @return int
 	 */
 	protected function create_activity_id( array $args = [] ): int {
-		return $this->bp_factory->activity->create( array_merge( [ 'user_id' => $this->admin ], $args ) );
+		return $this->bp_factory->activity->create(
+			wp_parse_args(
+				$args,
+				[ 'user_id' => $this->admin ],
+			)
+		);
 	}
 
 	/**
 	 * Create notification id.
 	 *
 	 * @param array $args Arguments.
-	 * @return int
+	 * @return int|bool
 	 */
-	protected function create_notification_id( array $args = [] ): int {
+	protected function create_notification_id( array $args = [] ) {
 		return $this->bp_factory->notification->create(
-			array_merge(
+			wp_parse_args(
+				$args,
 				[
 					'user_id' => $this->user_id,
 					'is_new'  => 1,
 				],
-				$args
 			)
 		);
 	}
@@ -501,7 +528,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	protected function create_signup_id( array $args = [] ): int {
 		return $this->bp_factory->signup->create(
-			array_merge(
+			wp_parse_args(
+				$args,
 				[
 					'user_login'     => 'user' . wp_rand( 1, 20 ),
 					'user_email'     => sprintf( 'user%d@example.com', wp_rand( 1, 20 ) ),
@@ -512,8 +540,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 						'meta1'    => 'meta2',
 						'password' => wp_generate_password( 12, false ),
 					],
-				],
-				$args
+				]
 			)
 		);
 	}
@@ -751,9 +778,9 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @param string $object Object (members/groups).
 	 * @param int    $item_id Item ID.
-	 * @return string
+	 * @return string|bool
 	 */
-	protected function get_cover_image( string $object, int $item_id ): string {
+	protected function get_cover_image( string $object, int $item_id ) {
 		return bp_attachments_get_attachment(
 			'url',
 			[
@@ -767,8 +794,10 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * Copy file.
 	 *
 	 * @source https://core.trac.wordpress.org/browser/tags/5.9/src/wp-admin/includes/file.php#L979
+	 *
+	 * @return bool
 	 */
-	public function copy_file( $return, $file, $new_file ) {
+	public function copy_file( $return, $file, $new_file ): bool {
 		return @copy( $file['tmp_name'], $new_file );
 	}
 }

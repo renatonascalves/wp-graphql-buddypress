@@ -26,8 +26,8 @@ class Test_Invitation_rejectGroupRequest_Mutation extends WPGraphQL_BuddyPress_U
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[

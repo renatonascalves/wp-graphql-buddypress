@@ -16,7 +16,7 @@ class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->assertQuerySuccessful( $this->get_a_member() )
 			->hasField( 'mentionName', bp_activity_get_user_mentionname( $this->user_id ) )
-			->hasField( 'link', bp_core_get_user_domain( $this->user_id ) )
+			->hasField( 'link', bp_members_get_user_url( $this->user_id ) )
 			->hasField( 'totalFriendCount', 1 )
 			->hasField( 'latestUpdate', null )
 			->hasField( 'attachmentAvatar', [ 'full' => $this->get_avatar_image( 'full', 'user', absint( $this->user_id ) ) ] )

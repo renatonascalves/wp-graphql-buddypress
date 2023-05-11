@@ -1,21 +1,21 @@
 {
-  "name": "wp-graphql/wp-graphql-buddypress",
+  "name": "renatonascalves/wp-graphql-buddypress",
   "type": "wordpress-plugin",
   "description": "Bringing the power of GraphQL to BuddyPress.",
-  "homepage": "https://github.com/wp-graphql/wp-graphql-buddypress",
+  "homepage": "https://github.com/renatonascalves/wp-graphql-buddypress",
   "license": "GPL-3.0-or-later",
   "keywords": [
-    "wordpress",
-    "graphql",
     "api",
+    "bp",
+    "buddypress",
+    "buddypress-extension",
+    "community",
+    "graphql",
+    "rest",
+    "wordpress",
     "wp-graphql",
     "wp-graphql-buddypress",
-    "wp-graphql-extension",
-    "buddypress-extension",
-    "buddypress",
-    "community",
-    "bp",
-    "rest"
+    "wp-graphql-extension"
   ],
   "authors": [
     {
@@ -24,39 +24,80 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/wp-graphql/wp-graphql-buddypress/issues",
-    "source": "https://github.com/wp-graphql/wp-graphql-buddypress"
+    "issues": "https://github.com/renatonascalves/wp-graphql-buddypress/issues",
+    "source": "https://github.com/renatonascalves/wp-graphql-buddypress"
   },
+  "extra": {
+    "installer-paths": {
+      "../{$name}": [
+        "type:wordpress-plugin"
+      ],
+      "../buddypress": [
+        "buddypress/buddypress"
+      ]
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/alleyinteractive/WordPress-Coding-Standards"
+    },
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "buddypress/buddypress",
+        "version": "dev-master",
+        "type": "wordpress-plugin",
+        "source": {
+          "url": "https://github.com/buddypress/buddypress.git",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    }
+  ],
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": "^8.0",
     "composer/installers": "^1.10.0"
   },
   "require-dev": {
-    "automattic/vipwpcs": "^2.3",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-    "phpcompatibility/phpcompatibility-wp": "^2.1.0",
+    "alleyinteractive/alley-coding-standards": "^1.0",
+    "wp-coding-standards/wpcs": "dev-php-8-1 as 2.3.x-dev",
+    "buddypress/buddypress": "dev-master",
     "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan": "^0.12.82",
-    "squizlabs/php_codesniffer": "^3.5.4",
-    "szepeviktor/phpstan-wordpress": "^0.7.5",
-    "wp-coding-standards/wpcs": "*",
-    "wp-phpunit/wp-phpunit": "^6.0",
+    "phpstan/phpstan": "^1.8",
+    "wp-phpunit/wp-phpunit": "^6.1",
+    "szepeviktor/phpstan-wordpress": "^1.1.6",
+    "wpackagist-plugin/wp-graphql": "^1.14.0",
     "yoast/phpunit-polyfills": "^1.0.1"
   },
   "scripts": {
-    "phpcs" : "phpcs . --basepath=.",
+    "phpcs": "phpcs . --basepath=.",
     "phpcbf": "phpcbf . --basepath=.",
-    "phpstan": ["phpstan analyze --ansi --memory-limit=1G"],
-    "phpunit": "phpunit"
+    "phpstan": [
+      "phpstan analyze --ansi --memory-limit=1G"
+    ],
+    "test": "phpunit",
+    "phpunit": "@test",
+    "setup": [
+      "composer install"
+    ]
   },
   "config": {
-    "optimize-autoloader": true,
-    "process-timeout": 1800,
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
-      "composer/installers": false
+      "composer/installers": true,
+      "alleyinteractive/composer-wordpress-autoloader": true,
+      "pestphp/pest-plugin": false
     }
   },
   "autoload": {
