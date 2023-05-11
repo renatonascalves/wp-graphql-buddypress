@@ -8,16 +8,17 @@
 
 declare(strict_types=1);
 
-use Mantle\Testing\Concerns\Refresh_Database;
-use Mantle\Testing\Concerns\With_Faker;
-use Pest\PestPluginWordPress\FrameworkTestCase as Test_Case;
-
 /**
  * WPGraphQL_BuddyPress_UnitTestCase Class.
  */
-class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
+class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
-	use Refresh_Database, With_Faker;
+	/**
+	 * Wrapper for WP_UnitTest_Factory.
+	 *
+	 * @var WP_UnitTest_Factory
+	 */
+	protected $factory;
 
 	/**
 	 * BuddyPress unit test factory class.
@@ -102,6 +103,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends Test_Case {
 		 */
 		WPGraphQL::clear_schema();
 
+		$this->factory            = self::factory();
 		$this->bp_factory         = new BP_UnitTest_Factory();
 		$this->bp                 = new BP_UnitTestCase();
 		$this->client_mutation_id = 'someUniqueId';
