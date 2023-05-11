@@ -86,7 +86,7 @@ class GroupObjectType {
 							$context->get_loader( 'user' )->buffer( $admins );
 							return new Deferred(
 								function() use ( $context, $admins ) {
-									return $context->get_loader( 'user' )->loadMany( $admins );
+									return $context->get_loader( 'user' )->load_many( $admins );
 								}
 							);
 						},
@@ -122,7 +122,7 @@ class GroupObjectType {
 							$context->get_loader( 'user' )->buffer( $mods );
 							return new Deferred(
 								function() use ( $context, $mods ) {
-									return $context->get_loader( 'user' )->loadMany( $mods );
+									return $context->get_loader( 'user' )->load_many( $mods );
 								}
 							);
 						},
@@ -197,9 +197,10 @@ class GroupObjectType {
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the group.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Group $group ) {
+							$bp = buddypress();
 
 							// Bail early, if disabled.
-							if ( false === buddypress()->avatar->show_avatars ) {
+							if ( isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 								return null;
 							}
 

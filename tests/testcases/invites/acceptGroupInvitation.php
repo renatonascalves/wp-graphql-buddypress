@@ -10,6 +10,13 @@
 class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	/**
+	 * Private group ID.
+	 *
+	 * @var int
+	 */
+	public $private_group_id;
+
+	/**
 	 * Invitation ID.
 	 *
 	 * @var int
@@ -19,8 +26,8 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		$this->private_group_id = $this->bp_factory->group->create(
 			[

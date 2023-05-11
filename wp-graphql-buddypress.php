@@ -17,9 +17,9 @@
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
- * Requires PHP:      7.4
+ * Requires PHP:      8.0
  * Requires WP:       5.9
- * Tested up to:      6.0
+ * Tested up to:      6.1
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -54,7 +54,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		public static function instance(): self {
 
-			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
+			if ( ! is_a( self::$instance, __CLASS__ ) ) {
 				self::$instance = new self();
 				self::$instance->setup_constants();
 				if ( self::$instance->includes() ) {
@@ -368,11 +368,11 @@ endif;
  *
  * @since 0.0.1-alpha
  *
- * @return WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
+ * @return void
  */
-function wp_graphql_buddypress_init(): \WP_GraphQL_BuddyPress {
+function wp_graphql_buddypress_init(): void {
 
-	// Return an instance of the plugin.
-	return \WP_GraphQL_BuddyPress::instance();
+	// Start plugin.
+	\WP_GraphQL_BuddyPress::instance();
 }
 add_action( 'graphql_init', 'wp_graphql_buddypress_init' );

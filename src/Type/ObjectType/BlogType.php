@@ -95,9 +95,10 @@ class BlogType {
 						'type'        => 'Attachment',
 						'description' => __( 'Attachment Avatar of the blog.', 'wp-graphql-buddypress' ),
 						'resolve'     => function ( Blog $blog ) {
+							$bp = buddypress();
 
 							// Bail early, if disabled.
-							if ( false === buddypress()->avatar->show_avatars ) {
+							if ( isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 								return null;
 							}
 

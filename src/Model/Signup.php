@@ -63,19 +63,19 @@ class Signup extends Model {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
 				'userLogin'     => function() {
-					return $this->data->user_login ?? null;
+					return ! empty( $this->data->user_login ) ? $this->data->user_login : null;
 				},
 				'userEmail'     => function() {
-					return $this->data->user_email ?? null;
+					return ! empty( $this->data->user_email ) ? $this->data->user_email : null;
 				},
 				'userName'      => function() {
-					return $this->data->user_name ?? null;
+					return ! empty( $this->data->user_name ) ? $this->data->user_name : null;
 				},
 				'blog'          => function() {
 					return $this->data;
 				},
 				'active'        => function() {
-					return $this->data->active ?? null;
+					return wp_validate_boolean( $this->data->active );
 				},
 				'registered'    => function() {
 					return Utils::prepare_date_response( $this->data->registered, get_date_from_gmt( $this->data->registered ) );
@@ -90,7 +90,7 @@ class Signup extends Model {
 					return Utils::prepare_date_response( $this->data->date_sent );
 				},
 				'countSent'     => function() {
-					return $this->data->count_sent ?? null;
+					return ! empty( $this->data->count_sent ) ? $this->data->count_sent : null;
 				},
 			];
 		}

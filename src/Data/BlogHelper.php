@@ -23,9 +23,9 @@ class BlogHelper {
 	 * @throws UserError User error for invalid blog.
 	 *
 	 * @param array|int $input Array of possible input fields or a single integer.
-	 * @return stdClass
+	 * @return object
 	 */
-	public static function get_blog_from_input( $input ): stdClass {
+	public static function get_blog_from_input( $input ): object {
 		$blog_id = Factory::get_id( $input );
 
 		// Get the blog object.

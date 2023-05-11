@@ -77,22 +77,22 @@ class Message extends Model {
 						: null;
 				},
 				'databaseId'  => function() {
-					return $this->data->id ?? null;
+					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
 				'threadId'    => function() {
-					return $this->data->thread_id ?? null;
+					return ! empty( $this->data->thread_id ) ? $this->data->thread_id : null;
 				},
 				'sender'      => function() {
-					return $this->data->sender_id ?? null;
+					return ! empty( $this->data->sender_id ) ? $this->data->sender_id : null;
 				},
 				'subject'     => function() {
-					return $this->data->subject ?? null;
+					return ! empty( $this->data->subject ) ? $this->data->subject : null;
 				},
 				'excerpt'     => function() {
-					return $this->data->message ?? null;
+					return ! empty( $this->data->message ) ? $this->data->message : null;
 				},
 				'message'     => function() {
-					return $this->data->message ?? null;
+					return ! empty( $this->data->message ) ? $this->data->message : null;
 				},
 				'dateSent'    => function() {
 					return Utils::prepare_date_response( $this->data->date_sent, get_date_from_gmt( $this->data->date_sent ) );

@@ -55,16 +55,16 @@ class Friendship extends Model {
 						: null;
 				},
 				'databaseId'     => function() {
-					return $this->data->id ?? null;
+					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
 				'initiator'      => function() {
-					return $this->data->initiator_user_id ?? null;
+					return ! empty( $this->data->initiator_user_id ) ? $this->data->initiator_user_id : null;
 				},
 				'friend'         => function() {
-					return $this->data->friend_user_id ?? null;
+					return ! empty( $this->data->friend_user_id ) ? $this->data->friend_user_id : null;
 				},
 				'isConfirmed'    => function() {
-					return $this->data->is_confirmed ?? null;
+					return wp_validate_boolean( $this->data->is_confirmed );
 				},
 				'dateCreated'    => function() {
 					return Utils::prepare_date_response( $this->data->date_created, get_date_from_gmt( $this->data->date_created ) );

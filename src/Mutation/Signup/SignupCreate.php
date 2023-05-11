@@ -241,7 +241,7 @@ class SignupCreate {
 				/** This filter is documented in bp-members/bp-members-functions.php */
 				if ( apply_filters( 'bp_core_signup_send_activation_key', true, false, $signup->user_email, $signup->activation_key, $signup->meta ) ) {
 					$salutation = $signup->user_login;
-					if ( isset( $signup->user_name ) && $signup->user_name ) {
+					if ( ! empty( $signup->user_name ) ) {
 						$salutation = $signup->user_name;
 					}
 

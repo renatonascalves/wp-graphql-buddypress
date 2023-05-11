@@ -66,7 +66,7 @@ class XProfileGroup extends Model {
 					return $this->data->group_order;
 				},
 				'canDelete'   => function() {
-					return $this->data->can_delete ?? null;
+					return wp_validate_boolean( $this->data->can_delete );
 				},
 				'userId'      => function() {
 					return $this->data->userId ?? null;

@@ -38,7 +38,7 @@ class MemberType {
 				'resolve'     => function ( User $source ) {
 					$types = bp_get_member_type( $source->databaseId ?? 0, false );
 
-					return $types ?? null;
+					return ! empty( $types ) ? $types : null;
 				},
 			]
 		);
@@ -56,7 +56,7 @@ class MemberType {
 
 					$mention_name = bp_activity_get_user_mentionname( $source->databaseId ?? 0 );
 
-					return $mention_name ?? null;
+					return ! empty( $mention_name ) ? $mention_name : null;
 				},
 			]
 		);
@@ -68,9 +68,9 @@ class MemberType {
 				'type'        => 'String',
 				'description' => __( 'Profile URL of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
-					$link = bp_core_get_user_domain( $source->databaseId ?? 0 );
+					$link = bp_members_get_user_url( $source->databaseId ?? 0 );
 
-					return $link ?? null;
+					return ! empty( $link ) ? $link : null;
 				},
 			]
 		);
@@ -180,9 +180,10 @@ class MemberType {
 				'type'        => 'Attachment',
 				'description' => __( 'Attachment Avatar of the member.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
+					$bp = buddypress();
 
 					// Bail early, if disabled.
-					if ( false === buddypress()->avatar->show_avatars ) {
+					if ( isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 						return null;
 					}
 

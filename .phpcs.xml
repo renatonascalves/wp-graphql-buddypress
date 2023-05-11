@@ -3,19 +3,7 @@
 	<description>PHP_CodeSniffer standard for the WPGraphQL BuddyPress extension.</description>
 
 	<!-- Load WordPress Coding standards -->
-	<rule ref="WordPress" />
-
-	<!-- Load PHPCompatibilityWP standards -->
-	<rule ref="PHPCompatibilityWP" />
-
-	<!-- Load WordPress VIP standards -->
-	<rule ref="WordPress-VIP-Go" />
-
-	<!-- Configure the PHP version -->
-	<config name="testVersion" value="7.4-" />
-
-	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="5.9" />
+	<rule ref="Alley-Interactive" />
 
 	<!--
 	Pass some flags to PHPCS:
@@ -41,6 +29,12 @@
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 
+	<!-- Configure the PHP version -->
+	<config name="testVersion" value="8.0-" />
+
+	<!-- Check against minimum WP version. -->
+	<config name="minimum_supported_wp_version" value="5.9" />
+
 	<!-- Name our classes files however we want. -->
 	<rule ref="WordPress.Files.FileName">
 		<properties>
@@ -48,19 +42,18 @@
 		</properties>
 	</rule>
 
+	<!-- Set the text domain for i18n. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array">
-				<element value="wp-graphql-buddypress" />
-			</property>
+			<property name="text_domain" type="array" value="wp-graphql-buddypress"/>
 		</properties>
 	</rule>
 
 	<!-- Silencing off rules. -->
 	<rule ref="WordPress">
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
 		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
 	</rule>
 
 	<!-- False positive. -->

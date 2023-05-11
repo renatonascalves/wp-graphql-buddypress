@@ -118,7 +118,7 @@ class GroupInvitationsConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_query(): array {
-		$request_query = 'request' === $this->query_args['type'] ?? '';
+		$request_query = 'request' === $this->query_args['type'];
 
 		// Remove type before querying.
 		unset( $this->query_args['type'] );

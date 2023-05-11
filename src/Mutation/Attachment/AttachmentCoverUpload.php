@@ -92,7 +92,8 @@ class AttachmentCoverUpload {
 			}
 
 			// Check if cover upload is enabled for blogs.
-			if ( 'blogs' === $object && false === buddypress()->avatar->show_avatars ) {
+			$bp = buddypress();
+			if ( 'blogs' === $object && isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
 				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 

@@ -33,8 +33,8 @@ class Test_Signup_signup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	public function set_up() {
-		parent::set_up();
+	public function setUp() : void {
+		parent::setUp();
 
 		add_filter( 'bp_get_signup_allowed', '__return_true' );
 

@@ -54,16 +54,16 @@ class ThreadType {
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'All users of all messages in the thread.', 'wp-graphql-buddypress' ),
 						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
-							$users = array_unique( $thread->senderIds ?? [] );
+							$user_ids = array_unique( $thread->senderIds ?? [] );
 
-							if ( empty( $users ) ) {
+							if ( empty( $user_ids ) ) {
 								return null;
 							}
 
-							$context->get_loader( 'user' )->buffer( $users );
+							$context->get_loader( 'user' )->buffer( $user_ids );
 							return new Deferred(
-								function() use ( $context, $users ) {
-									return $context->get_loader( 'user' )->loadMany( $users );
+								function() use ( $context, $user_ids ) {
+									return $context->get_loader( 'user' )->load_many( $user_ids );
 								}
 							);
 						},

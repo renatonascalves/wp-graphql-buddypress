@@ -7,7 +7,7 @@ WPGraphQL BuddyPress is a free and open-source extension for the WPGraphQL plugi
 
 ## System Requirements
 
-* PHP >= 7.4+
+* PHP >= 8.0+
 * WP >= 5.9+
 * WPGraphQL >= latest
 * BuddyPress >= latest
@@ -18,7 +18,3 @@ WPGraphQL BuddyPress is a free and open-source extension for the WPGraphQL plugi
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
 3. Clone or download the zip of this repository into your WordPress plugin directory, and activate the plugin.
 4. Run `composer install --no-dev` before activating the plugin/extension
-
-## Change Log
-
-Change log under [CHANGELOG.md](CHANGELOG.md).

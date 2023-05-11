@@ -18,6 +18,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
+				'date_sent'  => '2030-10-27 19:21:40',
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
 			]
@@ -89,6 +90,7 @@ class Test_Messages_messages_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			[
 				'thread_id'  => $message->thread_id,
 				'sender_id'  => $this->random_user,
+				'date_sent'  => '2030-10-27 19:21:40',
 				'recipients' => [ $this->admin ],
 				'content'    => 'Bar',
 			]
