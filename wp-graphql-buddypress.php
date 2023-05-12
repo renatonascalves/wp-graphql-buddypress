@@ -4,7 +4,7 @@
  *
  * @package  WPGraphQL\Extensions\BuddyPress
  * @author   Renato Alves
- * @version  0.1
+ * @version  1.0
  * @license  GPL-3.0-or-later
  *
  * @wordpress-plugin
@@ -12,7 +12,7 @@
  * Plugin URI:        https://github.com/renatonascalves/wp-graphql-buddypress
  * GitHub Plugin URI: https://github.com/renatonascalves/wp-graphql-buddypress
  * Description:       BuddyPress extension for the WPGraphQL plugin: bringing the power of GraphQL to BuddyPress!
- * Version:           0.1
+ * Version:           1.0
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
