@@ -28,7 +28,7 @@ WPGraphQL BuddyPress has support to all BuddyPress components.
 
 This plugin is in active development. If you're interested in contributing to BuddyPress or the WPGraphQL BuddyPress plugin, we'd love to have you. \o/
 
-Head over to the [BuddyPress Documentation](https://codex.buddypress.org/participate-and-contribute/) site to find out how you can pitch in or to the [WPGraphQL BuddyPress Github repo](https://github.com/wp-graphql/wp-graphql-buddypress) to contribute to this WPGraphQL extension.
+Head over to the [BuddyPress Documentation](https://codex.buddypress.org/participate-and-contribute/) site to find out how you can pitch in or to the [WPGraphQL BuddyPress Github repo](https://github.com/renatonascalves/wp-graphql-buddypress) to contribute to this WPGraphQL extension.
 
 == Changelog ==
 

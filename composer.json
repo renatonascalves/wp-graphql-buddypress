@@ -91,6 +91,10 @@
     ]
   },
   "config": {
+    "platform": {
+      "php": "8.0"
+    },
+    "optimize-autoloader": true,
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -105,6 +109,23 @@
     },
     "classmap": [
       "src/"
+    ]
+  },
+  "archive": {
+    "exclude": [
+      "*.xml",
+      "*.dist",
+      "*.cache",
+      "*.xml",
+      ".distignore",
+      ".github/",
+      ".phpcs/",
+      ".phpstan/",
+      "plugin-build/",
+      "tests/",
+      "wp-graphql-buddypress.zip",
+      "!vendor/",
+      "!.wordpress-org/"
     ]
   }
 }
