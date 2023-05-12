@@ -3,7 +3,7 @@
  * XProfileFieldHelper Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Data;

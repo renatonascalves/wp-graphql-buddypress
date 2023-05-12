@@ -3,7 +3,7 @@
  * XProfileGroupsConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;

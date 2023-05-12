@@ -3,7 +3,7 @@
  * Activity Enums.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\Enum
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;

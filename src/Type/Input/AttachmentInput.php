@@ -3,7 +3,7 @@
  * Registers BuddyPress Attachment Input(s).
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\Input
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Input;

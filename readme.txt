@@ -6,7 +6,7 @@ License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP:      8.0
 Requires at least: 5.9
 Tested up to:      6.1
-Stable tag:        0.0.1-alpha
+Stable tag:        0.1
 
 == Description ==
 
@@ -32,6 +32,6 @@ Head over to the [BuddyPress Documentation](https://codex.buddypress.org/partici
 
 == Changelog ==
 
-= 0.0.1-alpha =
+= 0.1 =
 
 Public Stable Release.
