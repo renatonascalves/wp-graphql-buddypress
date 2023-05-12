@@ -3,7 +3,7 @@
  * Registers BuddyPress types to the schema.
  *
  * @package WPGraphQL\Extensions\BuddyPress
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress;

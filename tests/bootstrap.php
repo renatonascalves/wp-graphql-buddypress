@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @since 0.0.1-alpha
+ * @since 1.0
  * @package WPGraphQL\Extensions\BuddyPress
  */
 

@@ -6,7 +6,7 @@ License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP:      8.0
 Requires at least: 5.9
 Tested up to:      6.1
-Stable tag:        0.0.1-alpha
+Stable tag:        1.0
 
 == Description ==
 
@@ -18,7 +18,7 @@ WPGraphQL BuddyPress is built on top of [WPGraphQL](https://wordpress.org/plugin
 
 = Powerful Debugging Tools =
 
-WPGraphQL ships with GraphiQL in your WordPress dashboard, allowing you to browse your BuddyPress site's GraphQL Schema, Queries and Mutations.
+WPGraphQL ships with GraphiQL in your WordPress dashboard, allowing you to browse your BuddyPress site's GraphQL Schema, Queries, and Mutations.
 
 = Features =
 
@@ -32,6 +32,6 @@ Head over to the [BuddyPress Documentation](https://codex.buddypress.org/partici
 
 == Changelog ==
 
-= 0.0.1-alpha =
+= 1.0 =
 
 Public Stable Release.

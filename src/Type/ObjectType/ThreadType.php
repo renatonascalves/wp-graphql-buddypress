@@ -3,7 +3,7 @@
  * Registers Thread type and queries.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;

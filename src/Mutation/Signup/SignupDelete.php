@@ -3,7 +3,7 @@
  * SignupDelete Mutation.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Mutation\Signup
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Signup;

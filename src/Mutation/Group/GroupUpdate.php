@@ -3,7 +3,7 @@
  * GroupUpdate Mutation.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Mutation\Group
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Group;

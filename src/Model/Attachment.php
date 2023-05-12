@@ -3,7 +3,7 @@
  * Attachment Model Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Model
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;

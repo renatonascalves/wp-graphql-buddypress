@@ -3,7 +3,7 @@
  * ThreadUpdate Mutation.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Mutation\Thread
- * @since 0.0.1-alpha
+ * @since 1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Thread;
@@ -122,7 +122,7 @@ class ThreadUpdate {
 			/**
 			 * Filter here to allow more users to edit the message meta (eg: the recipients).
 			 *
-			 * @since 0.0.1-alpha
+			 * @since 1.0
 			 *
 			 * @param bool               $value    Whether the user can edit the message meta.
 			 *                                     By default: only the sender, for now.
