@@ -1,7 +1,7 @@
 {
   "name": "renatonascalves/wp-graphql-buddypress",
   "type": "wordpress-plugin",
-  "description": "Bringing the power of GraphQL to BuddyPress.",
+  "description": "WPGraphQL BuddyPress is a free and open-source extension for the WPGraphQL plugin, bringing the power of GraphQL to BuddyPress.",
   "homepage": "https://github.com/renatonascalves/wp-graphql-buddypress",
   "license": "GPL-3.0-or-later",
   "keywords": [
@@ -91,13 +91,16 @@
     ]
   },
   "config": {
+    "platform": {
+      "php": "8.0"
+    },
+    "optimize-autoloader": true,
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
       "composer/installers": true,
-      "alleyinteractive/composer-wordpress-autoloader": true,
-      "pestphp/pest-plugin": false
+      "alleyinteractive/composer-wordpress-autoloader": true
     }
   },
   "autoload": {
@@ -106,6 +109,23 @@
     },
     "classmap": [
       "src/"
+    ]
+  },
+  "archive": {
+    "exclude": [
+      "*.xml",
+      "*.dist",
+      "*.cache",
+      "*.xml",
+      ".distignore",
+      ".github/",
+      ".phpcs/",
+      ".phpstan/",
+      "plugin-build/",
+      "tests/",
+      "wp-graphql-buddypress.zip",
+      "!vendor/",
+      "!.wordpress-org/"
     ]
   }
 }

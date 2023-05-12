@@ -1,10 +1,7 @@
 # Files and folders related to build/test tools
 /phpunit.xml
-/node_modules
-/npm-debug.log
 /vendor
 .vscode
-.wp-env.override.json
 composer.lock
 
 # Operating system specific files

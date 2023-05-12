@@ -9,9 +9,9 @@
  *
  * @wordpress-plugin
  * Plugin Name:       WPGraphQL BuddyPress
- * Plugin URI:        https://github.com/wp-graphql/wp-graphql-buddypress
- * GitHub Plugin URI: https://github.com/wp-graphql/wp-graphql-buddypress
- * Description:       Bringing the power of GraphQL to BuddyPress.
+ * Plugin URI:        https://github.com/renatonascalves/wp-graphql-buddypress
+ * GitHub Plugin URI: https://github.com/renatonascalves/wp-graphql-buddypress
+ * Description:       BuddyPress extension for the WPGraphQL plugin: bringing the power of GraphQL to BuddyPress!
  * Version:           0.0.1-alpha
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
@@ -160,12 +160,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 				return false;
 			}
 
-			// Checks if WPGraphQL is installed.
-			if ( ! class_exists( 'WPGraphQL' ) ) {
-				add_action( 'admin_notices', [ $this, 'wpgraphql_missing_notice' ] );
-				return false;
-			}
-
 			// Autoload Required Classes.
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
 
@@ -222,31 +216,12 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		}
 
 		/**
-		 * WPGraphQL missing notice.
-		 *
-		 * @since 0.0.1-alpha
-		 */
-		public function wpgraphql_missing_notice(): void {
-
-			if ( ! current_user_can( 'manage_options' ) ) {
-				return;
-			}
-
-			?>
-			<div class="notice notice-error">
-				<p><strong><?php esc_html_e( 'WPGraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of WPGraphQL to work!', 'wp-graphql-buddypress' ); ?></p>
-			</div>
-			<?php
-		}
-
-		/**
 		 * Sets up actions.
 		 *
 		 * @since 0.0.1-alpha
 		 */
 		private function actions(): void {
 
-			// Setup actions.
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_actions();
 		}
 
@@ -364,11 +339,9 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 endif;
 
 /**
- * Function that instantiates the plugin main class.
+ * Function that instantiates the plugin's main class.
  *
  * @since 0.0.1-alpha
- *
- * @return void
  */
 function wp_graphql_buddypress_init(): void {
 
