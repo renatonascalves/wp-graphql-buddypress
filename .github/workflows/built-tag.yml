@@ -1,0 +1,11 @@
+name: Create a -built tag
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - '!*-built'
+
+jobs:
+  built-tag:
+    uses: alleyinteractive/.github/.github/workflows/built-tag.yml@main
