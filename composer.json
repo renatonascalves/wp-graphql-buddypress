@@ -120,6 +120,7 @@
       ".editorconfig",
       ".gitignore",
       ".distignore",
+      ".deployignore",
       ".github/",
       ".phpcs/",
       ".phpstan/",
