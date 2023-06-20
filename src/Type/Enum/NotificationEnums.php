@@ -3,7 +3,7 @@
  * Notification Enums.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\Enum
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\Enum;

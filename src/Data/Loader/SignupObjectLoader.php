@@ -3,7 +3,7 @@
  * SignupObjectLoader Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Data\Loader
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Data\Loader;

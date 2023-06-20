@@ -3,7 +3,7 @@
  * Registers the Invitation interface.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\InterfaceType
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\InterfaceType;

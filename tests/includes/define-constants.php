@@ -2,7 +2,7 @@
 /**
  * Define constants needed by the test suite.
  *
- * @since 1.0
+ * @since 0.1.0
  * @package WPGraphQL\Extensions\BuddyPress
  */
 

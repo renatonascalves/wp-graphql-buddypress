@@ -3,7 +3,7 @@
  * SignupCreate Mutation.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Mutation\Signup
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Signup;
@@ -200,7 +200,7 @@ class SignupCreate {
 			/**
 			 * Filter here to add custom signup meta.
 			 *
-			 * @since 1.0
+			 * @since 0.1.0
 			 *
 			 * @param array $meta The signup meta.
 			 */

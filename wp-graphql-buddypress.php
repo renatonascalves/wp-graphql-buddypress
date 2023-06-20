@@ -4,7 +4,7 @@
  *
  * @package  WPGraphQL\Extensions\BuddyPress
  * @author   Renato Alves
- * @version  1.0
+ * @version  0.1.0
  * @license  GPL-3.0-or-later
  *
  * @wordpress-plugin
@@ -12,14 +12,14 @@
  * Plugin URI:        https://github.com/renatonascalves/wp-graphql-buddypress
  * GitHub Plugin URI: https://github.com/renatonascalves/wp-graphql-buddypress
  * Description:       BuddyPress extension for the WPGraphQL plugin: bringing the power of GraphQL to BuddyPress!
- * Version:           1.0
+ * Version:           0.1.0
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
  * Requires PHP:      8.0
  * Requires WP:       5.9
- * Tested up to:      6.1
+ * Tested up to:      6.2
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -39,16 +39,12 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Stores the instance of the WP_GraphQL_BuddyPress class
 		 *
-		 * @since 1.0
-		 *
 		 * @var WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
 		private static $instance;
 
 		/**
 		 * The instance of the WP_GraphQL_BuddyPress object
-		 *
-		 * @since 1.0
 		 *
 		 * @return WP_GraphQL_BuddyPress The one true WP_GraphQL_BuddyPress
 		 */
@@ -66,7 +62,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			/**
 			 * Fire off init action.
 			 *
-			 * @param WP_GraphQL_BuddyPress $instance The instance of the WP_GraphQL_BuddyPress class
+			 * @param WP_GraphQL_BuddyPress $instance The instance of the WP_GraphQL_BuddyPress class.
 			 */
 			do_action( 'graphql_buddypress_init', self::$instance );
 
@@ -78,8 +74,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Throw error on object clone.
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.
-		 *
-		 * @since 1.0
 		 */
 		public function __clone() {
 
@@ -96,8 +90,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * Disable unserializing of the class.
-		 *
-		 * @since 1.0
 		 */
 		public function __wakeup() {
 
@@ -114,8 +106,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * Setup plugin constants.
-		 *
-		 * @since 1.0
 		 */
 		private function setup_constants(): void {
 
@@ -148,8 +138,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Uses composer's autoload to include required files.
 		 *
-		 * @since 1.0
-		 *
 		 * @return bool
 		 */
 		private function includes(): bool {
@@ -179,8 +167,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * WPGraphQL BuddyPress missing notice.
-		 *
-		 * @since 1.0
 		 */
 		public function wp_graphql_buddypress_missing_notice(): void {
 
@@ -199,8 +185,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * BuddyPress missing notice.
-		 *
-		 * @since 1.0
 		 */
 		public function buddypress_missing_notice(): void {
 
@@ -217,8 +201,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * Sets up actions.
-		 *
-		 * @since 1.0
 		 */
 		private function actions(): void {
 
@@ -227,8 +209,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 
 		/**
 		 * Set up filters.
-		 *
-		 * @since 1.0
 		 */
 		private function filters(): void {
 
@@ -340,8 +320,6 @@ endif;
 
 /**
  * Function that instantiates the plugin's main class.
- *
- * @since 1.0
  */
 function wp_graphql_buddypress_init(): void {
 

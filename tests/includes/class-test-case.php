@@ -2,7 +2,7 @@
 /**
  * WPGraphQL BuddyPress test utility functions/assertions.
  *
- * @since 1.0
+ * @since 0.1.0
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
