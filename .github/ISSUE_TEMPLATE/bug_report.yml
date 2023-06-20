@@ -1,0 +1,41 @@
+name: Bug Report
+description: "Report something that's broken or otherwise not working as expected."
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report!
+        Before submitting your issue, please ensure that you have read through existing issues (opened and closed) so as to avoid creating duplicates. 🙏
+
+  - type: textarea
+    attributes:
+      id: bug-description
+      label: Description of the bug
+      description: Please write a brief description of the bug, including what you expect to happen and what is currently happening.
+      placeholder: |
+        <Some feature> is not working properly.
+        I would expect <x> to happen, but instead <y> happens.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: Provide detailed steps to reproduce your issue.
+      placeholder: |
+        1. Configure <...> with <...>
+        2. Go to <...>
+        3. Click on <...>
+        4. Scroll down to <...>
+        5. See error <...>
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: |
+        Provide any additional information such as graphQL query, logs, links, gists, screenshots, scenarios in which the bug occurs so that it facilitates resolving the issue, etc.
