@@ -1,5 +1,5 @@
-
 name: Deploy to WordPress.org
+
 on:
   release:
     types: [ published ]
@@ -23,7 +23,7 @@ jobs:
       - name: Install PHP dependencies
         uses: ramsey/composer-install@v2
         with:
-          composer-options: "--no-dev"
+          composer-options: "--no-dev --optimize-autoloader"
 
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
