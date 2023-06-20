@@ -3,7 +3,7 @@ name: Create a -built tag
 on:
   push:
     tags:
-      - '*.*.*'
+      - 'v*.*.*'
       - '!*-built'
 
 jobs:
