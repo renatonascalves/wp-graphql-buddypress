@@ -3,7 +3,7 @@
  * Notification Model Class.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Model
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Model;

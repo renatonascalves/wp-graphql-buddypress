@@ -3,7 +3,7 @@
  * StarMessage Mutation.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Mutation\Thread
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Mutation\Thread;

@@ -3,7 +3,7 @@
  * GroupInvitationsConnectionResolver Class
  *
  * @package WPGraphQL\Extensions\BuddyPress\Connection\Resolvers
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Connection\Resolvers;

@@ -3,7 +3,7 @@
  * Register Activity object type and queries.
  *
  * @package WPGraphQL\Extensions\BuddyPress\Type\ObjectType
- * @since 1.0
+ * @since 0.1.0
  */
 
 namespace WPGraphQL\Extensions\BuddyPress\Type\ObjectType;
