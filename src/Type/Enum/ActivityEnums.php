@@ -111,16 +111,26 @@ class ActivityEnums {
 	 * Registers activity types enum.
 	 */
 	public static function activity_types(): void {
-		$activity_types_enum_values = [];
-		$activity_types             = array_keys( bp_activity_get_types() );
+		$activity_types_enum_values = [
+			WPEnumType::get_safe_name( 'none' ) => [
+				'description' => __( 'No activity type created yet.', 'wp-graphql-buddypress' ),
+				'value'       => 'none',
+			],
+		];
 
-		if ( ! empty( $activity_types ) ) {
+		$activity_types = array_keys( bp_activity_get_types() );
+
+		if ( ! empty( $activity_types ) && is_array( $activity_types ) ) {
+
+			// Reset the array.
+			$activity_types_enum_values = [];
+
 			// Loop through the activity types.
 			foreach ( $activity_types as $type ) {
 				$activity_types_enum_values[ WPEnumType::get_safe_name( $type ) ] = [
 					'value'       => $type,
 					'description' => sprintf(
-						/* translators: the %1$s: activity type */
+						/* translators: %1$s: activity type */
 						__( 'Activity with the %1$s type', 'wp-graphql-buddypress' ),
 						$type
 					),
