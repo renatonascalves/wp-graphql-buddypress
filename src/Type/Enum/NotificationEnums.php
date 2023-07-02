@@ -66,33 +66,39 @@ class NotificationEnums {
 
 	/**
 	 * Notification Component Names Enum.
-	 *
-	 * Return an array of component names that are currently active and have
-	 * registered Notifications callbacks.
 	 */
 	public static function component_names(): void {
-		$component_names = [];
+		$component_names_enum_values = [
+			WPEnumType::get_safe_name( 'none' ) => [
+				'description' => __( 'There is no active component with registered Notifications callbacks.', 'wp-graphql-buddypress' ),
+				'value'       => 'none',
+			],
+		];
 
-		foreach ( (array) bp_notifications_get_registered_components() as $component ) {
-			$component_names[ WPEnumType::get_safe_name( $component ) ] = [
-				'description' => sprintf(
-					/* translators: component name */
-					__( 'Component Name: %1$s', 'wp-graphql-buddypress' ),
-					$component
-				),
-				'value'       => $component,
-			];
-		}
+		$component_names = (array) bp_notifications_get_registered_components();
 
-		if ( empty( $component_names ) ) {
-			return;
+		if ( ! empty( $component_names ) && is_array( $component_names ) ) {
+
+			// Reset the array.
+			$component_names_enum_values = [];
+
+			foreach ( $component_names as $component ) {
+				$component_names_enum_values[ WPEnumType::get_safe_name( $component ) ] = [
+					'description' => sprintf(
+						/* translators: %1$s: component name */
+						__( 'Component Name: %1$s', 'wp-graphql-buddypress' ),
+						$component
+					),
+					'value'       => $component,
+				];
+			}
 		}
 
 		register_graphql_enum_type(
 			'NotificationComponentNamesEnum',
 			[
-				'description' => __( 'Component Names with support for notifications.', 'wp-graphql-buddypress' ),
-				'values'      => $component_names,
+				'description' => __( 'Actice component names with Notifications callbacks.', 'wp-graphql-buddypress' ),
+				'values'      => $component_names_enum_values,
 			]
 		);
 	}

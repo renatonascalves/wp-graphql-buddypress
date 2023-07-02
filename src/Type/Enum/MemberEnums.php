@@ -68,28 +68,37 @@ class MemberEnums {
 	 * Member Types Enum.
 	 */
 	public static function member_types_enum(): void {
-		$types = [];
+		$member_types_enum_values = [
+			WPEnumType::get_safe_name( 'none' ) => [
+				'description' => __( 'No member type created yet.', 'wp-graphql-buddypress' ),
+				'value'       => 'none',
+			],
+		];
 
-		foreach ( (array) bp_get_member_types() as $type ) {
-			$types[ WPEnumType::get_safe_name( $type ) ] = [
-				'description' => sprintf(
-					/* translators: member type */
-					__( 'Member Type: %1$s', 'wp-graphql-buddypress' ),
-					$type
-				),
-				'value'       => $type,
-			];
-		}
+		$member_types = (array) bp_get_member_types();
 
-		if ( empty( $types ) ) {
-			return;
+		if ( ! empty( $member_types ) && is_array( $member_types ) ) {
+
+			// Reset the array.
+			$member_types_enum_values = [];
+
+			foreach ( $member_types as $member_type ) {
+				$member_types_enum_values[ WPEnumType::get_safe_name( $member_type ) ] = [
+					'description' => sprintf(
+						/* translators: %1$s: member type */
+						__( 'Member Type: %1$s', 'wp-graphql-buddypress' ),
+						$member_type
+					),
+					'value'       => $member_type,
+				];
+			}
 		}
 
 		register_graphql_enum_type(
 			'MemberTypesEnum',
 			[
 				'description' => __( 'Member types.', 'wp-graphql-buddypress' ),
-				'values'      => $types,
+				'values'      => $member_types_enum_values,
 			]
 		);
 	}

@@ -15,8 +15,6 @@ class AttachmentEnums {
 
 	/**
 	 * Registers enum type.
-	 *
-	 * @todo update to allow automatic insetion of new attachment components.
 	 */
 	public static function register(): void {
 

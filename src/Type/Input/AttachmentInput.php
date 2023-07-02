@@ -14,7 +14,7 @@ namespace WPGraphQL\Extensions\BuddyPress\Type\Input;
 class AttachmentInput {
 
 	/**
-	 * Input registrations.
+	 * Register Upload input type.
 	 */
 	public static function register(): void {
 		register_graphql_input_type(

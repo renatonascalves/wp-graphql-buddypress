@@ -39,13 +39,13 @@ class GeneralEnums {
 					'values'      => [
 						'ID'          => [
 							'name'        => 'ID',
-							'value'       => 'id',
 							'description' => __( 'The globally unique ID', 'wp-graphql-buddypress' ),
+							'value'       => 'id',
 						],
 						'DATABASE_ID' => [
 							'name'        => 'DATABASE_ID',
-							'value'       => 'database_id',
 							'description' => __( 'The Database ID for the node', 'wp-graphql-buddypress' ),
+							'value'       => 'database_id',
 						],
 					],
 				]

@@ -18,9 +18,6 @@ class FriendshipEnums {
 	 */
 	public static function register(): void {
 
-		/**
-		 * Friendship Order By Enum.
-		 */
 		register_graphql_enum_type(
 			'FriendshipOrderByEnums',
 			[

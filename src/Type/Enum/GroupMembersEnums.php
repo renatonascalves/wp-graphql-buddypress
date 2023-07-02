@@ -62,11 +62,13 @@ class GroupMembersEnums {
 	 * Group Member Roles.
 	 */
 	public static function group_member_roles(): void {
-		$roles = [];
-		foreach ( bp_groups_get_group_roles() as $role ) {
-			$roles[ WPEnumType::get_safe_name( $role->id ) ] = [
+		$group_member_roles_enum_values = [];
+		$roles                          = bp_groups_get_group_roles();
+
+		foreach ( $roles as $role ) {
+			$group_member_roles_enum_values[ WPEnumType::get_safe_name( $role->id ) ] = [
 				'description' => sprintf(
-					/* translators: group role */
+					/* translators: %1$s: group member role */
 					__( 'Group member role: %1$s', 'wp-graphql-buddypress' ),
 					$role->name
 				),
@@ -79,7 +81,7 @@ class GroupMembersEnums {
 			'GroupMemberRolesEnum',
 			[
 				'description' => __( 'Ensure result set includes specific Group member roles.', 'wp-graphql-buddypress' ),
-				'values'      => $roles,
+				'values'      => $group_member_roles_enum_values,
 			]
 		);
 	}

@@ -147,8 +147,7 @@ class GroupEnums {
 			],
 		];
 
-		$group_types_enum_values = [];
-		$group_types             = bp_groups_get_group_types();
+		$group_types = bp_groups_get_group_types();
 
 		if ( ! empty( $group_types ) && is_array( $group_types ) ) {
 
@@ -159,7 +158,7 @@ class GroupEnums {
 			foreach ( $group_types as $type ) {
 				$group_types_enum_values[ WPEnumType::get_safe_name( $type ) ] = [
 					'description' => sprintf(
-						/* translators: the %1$s: group type */
+						/* translators: %1$s: group type */
 						__( 'Group with the %1$s type', 'wp-graphql-buddypress' ),
 						$type
 					),
