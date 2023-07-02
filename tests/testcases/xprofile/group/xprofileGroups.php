@@ -79,8 +79,6 @@ class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			}
 		}';
 
-		$operation_name = 'xprofileGroupsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

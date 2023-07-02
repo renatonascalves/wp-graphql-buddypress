@@ -940,8 +940,6 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			}
 		}';
 
-		$operation_name = 'activityQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

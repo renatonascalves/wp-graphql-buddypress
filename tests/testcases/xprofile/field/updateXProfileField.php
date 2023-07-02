@@ -131,8 +131,6 @@ class Test_XProfile_updateXProfileField_Mutation extends WPGraphQL_BuddyPress_Un
 			]
 		);
 
-		$operation_name = 'updateXProfileFieldTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

@@ -343,8 +343,6 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			}
 		}';
 
-		$operation_name = 'groupMembersQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

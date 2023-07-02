@@ -146,8 +146,6 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			}
 		}';
 
-		$operation_name = 'blogsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

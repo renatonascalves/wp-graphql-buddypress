@@ -170,8 +170,6 @@ class Test_Friendship_deleteFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			'force'            => $force,
 		];
 
-		$operation_name = 'deleteFriendshipTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

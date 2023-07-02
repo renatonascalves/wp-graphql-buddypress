@@ -80,9 +80,6 @@ class Test_XProfile_deleteXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 			'databaseId'       => $xprofile_group_id ?? $this->xprofile_group_id,
 		];
 
-		$operation_name = 'deleteXProfileGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
-
 }

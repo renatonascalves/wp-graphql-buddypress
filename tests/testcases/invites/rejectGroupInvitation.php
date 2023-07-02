@@ -169,8 +169,6 @@ class Test_Invitation_rejectGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			]
 		);
 
-		$operation_name = 'rejectInvitationTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

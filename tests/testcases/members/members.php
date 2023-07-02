@@ -79,8 +79,6 @@ class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			}
 		}';
 
-		$operation_name = 'membersQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

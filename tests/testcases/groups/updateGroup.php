@@ -251,9 +251,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			]
 		);
 
-		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -299,9 +297,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			]
 		);
 
-		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -347,9 +343,7 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			]
 		);
 
-		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -391,8 +385,6 @@ class Test_Group_updateGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			'removeTypes'      => [ 'FOO' ],
 		];
 
-		$operation_name = 'updateGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

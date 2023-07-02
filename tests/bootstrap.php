@@ -6,7 +6,7 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 // Setting PHPUnit polyfills.
 const WP_TESTS_PHPUNIT_POLYFILLS_PATH = __DIR__ . '/../vendor/yoast/phpunit-polyfills';

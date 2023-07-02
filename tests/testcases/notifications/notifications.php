@@ -449,8 +449,6 @@ class Test_Notifications_notificationQuery_Query extends WPGraphQL_BuddyPress_Un
 			}
 		}';
 
-		$operation_name = 'notificationQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

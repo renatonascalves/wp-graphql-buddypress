@@ -153,8 +153,6 @@ class Test_Friendship_createFriendship_Mutation extends WPGraphQL_BuddyPress_Uni
 			'force'            => $force,
 		];
 
-		$operation_name = 'createFriendshipTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

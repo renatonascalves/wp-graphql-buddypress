@@ -120,7 +120,7 @@ class TypeRegistry {
 		// Add our custom types to the list of supported node types.
 		add_filter(
 			'graphql_interface_resolve_type',
-			function ( $type, $node, $interface_instance ) {
+			static function ( $type, $node, $interface_instance ) {
 
 				if ( bp_is_active( 'groups' ) && $node instanceof Group ) {
 					return $interface_instance->type_registry->get_type( 'Group' );
@@ -147,7 +147,7 @@ class TypeRegistry {
 		// Resolve URI.
 		add_filter(
 			'graphql_pre_resolve_uri',
-			function ( $node, $uri, $context ) {
+			static function ( $node, $uri, $context ) {
 
 				// Parse URI.
 				$parsed_url = wp_parse_url( $uri );
@@ -235,7 +235,7 @@ class TypeRegistry {
 		// Register the Group Type taxonomy object.
 		add_filter(
 			'register_taxonomy_args',
-			function( $args, $taxonomy ) {
+			static function( $args, $taxonomy ): array {
 
 				if ( false === bp_is_active( 'groups' ) || bp_get_group_type_tax_name() !== $taxonomy ) {
 					return $args;
@@ -258,7 +258,7 @@ class TypeRegistry {
 		 */
 		add_filter(
 			'graphql_object_visibility',
-			function ( $visibility, $model_name ) {
+			static function ( $visibility, $model_name ): string {
 				if ( 'UserObject' === $model_name && 'private' === $visibility ) {
 					return 'restricted';
 				}
@@ -478,8 +478,8 @@ class TypeRegistry {
 	/**
 	 * Registers custom autoloaders.
 	 *
-	 * @param array      $loaders Autoloaders.
-	 * @param AppContext $context Context.
+	 * @param array                 $loaders Autoloaders.
+	 * @param \WPGraphQL\AppContext $context Context.
 	 * @return array
 	 */
 	public static function graphql_register_autoloaders( array $loaders, AppContext $context ): array {

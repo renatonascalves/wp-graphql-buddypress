@@ -91,9 +91,6 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			->expectedErrorMessage( 'There was an error trying to update the message.' );
 	}
 
-	/**
-	 * @todo Add logic to test this using the `bp_graphql_messages_can_edit_item_meta` hook.
-	 */
 	public function test_update_message_with_sender_id() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
@@ -198,8 +195,6 @@ class Test_Messages_updateThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			]
 		);
 
-		$operation_name = 'updateThreadTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

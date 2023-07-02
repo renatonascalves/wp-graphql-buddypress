@@ -267,8 +267,6 @@ class Test_Signup_signupQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 			}
 		}';
 
-		$operation_name = 'signupQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

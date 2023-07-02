@@ -131,8 +131,6 @@ class Test_Group_deleteGroup_Mutation extends WPGraphQL_BuddyPress_UnitTestCase 
 			'databaseId'       => $group_id ?? $this->group_id,
 		];
 
-		$operation_name = 'deleteGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

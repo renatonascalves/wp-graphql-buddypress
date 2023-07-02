@@ -107,8 +107,6 @@ class Test_Messages_deleteThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			'databaseId'       => $thread_id,
 		];
 
-		$operation_name = 'deleteThreadTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

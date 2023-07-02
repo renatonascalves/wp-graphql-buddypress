@@ -81,8 +81,6 @@ class Test_Signup_deleteSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 			'databaseId'       => $signup_id,
 		];
 
-		$operation_name = 'deleteSignupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }
