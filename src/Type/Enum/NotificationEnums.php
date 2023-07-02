@@ -97,7 +97,7 @@ class NotificationEnums {
 		register_graphql_enum_type(
 			'NotificationComponentNamesEnum',
 			[
-				'description' => __( 'Actice component names with Notifications callbacks.', 'wp-graphql-buddypress' ),
+				'description' => __( 'Active component names with Notifications callbacks.', 'wp-graphql-buddypress' ),
 				'values'      => $component_names_enum_values,
 			]
 		);
