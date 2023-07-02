@@ -317,8 +317,6 @@ class Test_Messages_createThread_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			]
 		);
 
-		$operation_name = 'createThreadTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

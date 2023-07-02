@@ -176,8 +176,6 @@ class Test_Messages_starMessage_Mutation extends WPGraphQL_BuddyPress_UnitTestCa
 			'databaseId'       => $message_id,
 		];
 
-		$operation_name = 'starMessageTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

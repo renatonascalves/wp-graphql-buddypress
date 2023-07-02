@@ -6,7 +6,7 @@
  * @package WPGraphQL\Extensions\BuddyPress
  */
 
-declare(strict_types=1);
+declare( strict_types=1 );
 
 /**
  * WPGraphQL_BuddyPress_UnitTestCase Class.
@@ -152,7 +152,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $id   ID.
 	 * @return string
 	 */
-	public function toRelayId( $type, $id ): string {
+	public function toRelayId( string $type, string $id ): string {
 		return \GraphQLRelay\Relay::toGlobalId( $type, $id );
 	}
 
@@ -161,12 +161,12 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @return int
 	 */
-	public function toDatabaseId( $id ): int {
+	public function toDatabaseId( int $id ): int {
 		return \WPGraphQL\Utils\Utils::get_database_id_from_id( $id );
 	}
 
 	/**
-	 * Assert query was successfull.
+	 * Assert query was successful.
 	 *
 	 * @param array $response Query response.
 	 * @return self
@@ -583,9 +583,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 		];
 
-		$operation_name = 'deleteCoverTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -631,9 +629,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			],
 		];
 
-		$operation_name = 'uploadAvatarTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -679,9 +675,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			],
 		];
 
-		$operation_name = 'uploadCoverTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -722,9 +716,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 			'objectId'         => $objectId,
 		];
 
-		$operation_name = 'deleteAvatarTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**

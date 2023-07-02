@@ -106,8 +106,6 @@ class Test_Notification_deleteNotification_Mutation extends WPGraphQL_BuddyPress
 			'databaseId'       => $notification_id,
 		];
 
-		$operation_name = 'deleteNotificationTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

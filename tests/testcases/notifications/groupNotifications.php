@@ -450,8 +450,6 @@ class Test_Notifications_groupNotificationsQuery_Query extends WPGraphQL_BuddyPr
 			}
 		}';
 
-		$operation_name = 'groupNotificationsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

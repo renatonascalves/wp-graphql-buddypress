@@ -131,8 +131,6 @@ class Test_Activity_deleteActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			'databaseId'       => $activity_id,
 		];
 
-		$operation_name = 'deleteActivityTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

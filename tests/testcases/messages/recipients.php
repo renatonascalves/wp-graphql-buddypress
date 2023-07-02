@@ -159,8 +159,6 @@ class Test_Messages_recipients_Queries extends WPGraphQL_BuddyPress_UnitTestCase
 			}
 		}';
 
-		$operation_name = 'recipientsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

@@ -84,8 +84,6 @@ class Test_XProfile_createXProfileGroup_Mutation extends WPGraphQL_BuddyPress_Un
 			]
 		);
 
-		$operation_name = 'createXProfileGroupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

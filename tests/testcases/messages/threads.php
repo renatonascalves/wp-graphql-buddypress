@@ -338,8 +338,6 @@ class Test_Messages_threadsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase
 			}
 		}';
 
-		$operation_name = 'threadsQuery';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

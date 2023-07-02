@@ -233,9 +233,7 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$operation_name = 'createSignupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 
 	/**
@@ -303,8 +301,6 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 			]
 		);
 
-		$operation_name = 'createSignupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

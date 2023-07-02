@@ -127,8 +127,6 @@ class Test_Notification_updateNotification_Mutation extends WPGraphQL_BuddyPress
 			'isNew'            => $is_new,
 		];
 
-		$operation_name = 'updateNotificationTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

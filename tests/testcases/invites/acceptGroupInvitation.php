@@ -150,8 +150,6 @@ class Test_Invitation_acceptGroupInvitation_Mutation extends WPGraphQL_BuddyPres
 			]
 		);
 
-		$operation_name = 'acceptInvitationTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

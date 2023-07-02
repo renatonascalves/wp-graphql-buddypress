@@ -347,8 +347,6 @@ class Test_Activity_updateActivity_Mutation extends WPGraphQL_BuddyPress_UnitTes
 			]
 		);
 
-		$operation_name = 'updateActivityTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

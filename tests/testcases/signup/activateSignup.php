@@ -89,8 +89,6 @@ class Test_Signup_activateSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestC
 			'activationKey'    => $key,
 		];
 
-		$operation_name = 'activateSignupTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }

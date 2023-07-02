@@ -27,8 +27,9 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 			);
 
 		// Confirm the group path.
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
+		$attachment = $response['data']['uploadAttachmentCover']['attachment']['full'];
+		$this->assertTrue( false !== strpos( $attachment, 'buddypress/groups' ) );
+		$this->assertTrue( false !== strpos( $attachment, 'cover-image' ) );
 	}
 
 	public function test_regular_admins_can_upload_any_group_cover() {
@@ -50,8 +51,9 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 			);
 
 		// Confirm the group path.
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
+		$attachment = $response['data']['uploadAttachmentCover']['attachment']['full'];
+		$this->assertTrue( false !== strpos( $attachment, 'buddypress/groups' ) );
+		$this->assertTrue( false !== strpos( $attachment, 'cover-image' ) );
 	}
 
 	public function test_group_admins_can_upload_cover() {
@@ -76,8 +78,9 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 			);
 
 		// Confirm the group path.
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'buddypress/groups' ) );
-		$this->assertTrue( false !== strpos( $response['data']['uploadAttachmentCover']['attachment']['full'], 'cover-image' ) );
+		$attachment = $response['data']['uploadAttachmentCover']['attachment']['full'];
+		$this->assertTrue( false !== strpos( $attachment, 'buddypress/groups' ) );
+		$this->assertTrue( false !== strpos( $attachment, 'cover-image' ) );
 	}
 
 	public function test_group_mods_can_not_delete_cover() {
@@ -91,16 +94,14 @@ class Test_Attachment_uploadGroupCover_Mutation extends WPGraphQL_BuddyPress_Uni
 	}
 
 	public function test_group_cover_upload_when_group_cover_upload_is_disabled() {
-		// Disabling group cover upload.
 		add_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );
 
 		$this->assertQueryFailed( $this->upload_cover( 'GROUPS', absint( $this->group ) ) )
 			->expectedErrorMessage( 'Sorry, group cover upload is disabled.' );
+
+		remove_filter( 'bp_disable_group_cover_image_uploads', '__return_true' );
 	}
 
-	/**
-	 * @todo this should not work at all. Investigate.
-	 */
 	public function test_group_cover_image_feature_is_disabled() {
 		// Disabling group cover feature.
 		add_filter( 'bp_is_groups_cover_image_active', '__return_false' );

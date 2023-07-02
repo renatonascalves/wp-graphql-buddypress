@@ -260,8 +260,6 @@ class Test_Invitation_createGroupMembershipRequest_Mutation extends WPGraphQL_Bu
 			]
 		);
 
-		$operation_name = 'createGroupMembershipRequestTest';
-
-		return $this->graphql( compact( 'query', 'operation_name', 'variables' ) );
+		return $this->graphql( compact( 'query', 'variables' ) );
 	}
 }
