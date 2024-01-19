@@ -43,7 +43,7 @@ class XProfileFieldType {
 					'parent'          => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent field of the current field. This field is equivalent to the BP_XProfile_Field object matching the BP_XProfile_Field->parent_id ID.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( XProfileField $field, array $args, AppContext $context ) {
+						'resolve'     => function ( XProfileField $field, array $args, AppContext $context ) {
 							return Factory::resolve_xprofile_field_object( $field->parent, $context );
 						},
 					],
@@ -100,7 +100,7 @@ class XProfileFieldType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( XProfileField $field, array $args ) {
+						'resolve'     => function ( XProfileField $field, array $args ) {
 							if ( empty( $field->description ) ) {
 								return null;
 							}
@@ -115,19 +115,19 @@ class XProfileFieldType {
 					'value'           => [
 						'type'        => 'XProfileFieldValue',
 						'description' => __( 'The value of the XProfile field.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( XProfileField $field ) {
+						'resolve'     => function ( XProfileField $field ) {
 							return Factory::resolve_xprofile_field_data_object( $field );
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_field_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof XProfileField ) {
 						$type = self::$type_name;
 					}

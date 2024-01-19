@@ -90,7 +90,7 @@ class GroupDelete {
 
 			// Stop now if a user isn't allowed to delete a group.
 			if ( false === GroupHelper::can_update_or_delete_group( $group ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the Group object before it is deleted.
@@ -98,7 +98,7 @@ class GroupDelete {
 
 			// Trying to delete the group.
 			if ( false === groups_delete_group( $group->id ) ) {
-				throw new UserError( __( 'Could not delete the group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted group status and the previous group object.

@@ -90,14 +90,14 @@ class ThreadUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 			$thread     = ThreadHelper::get_thread_from_input( $input );
 			$user_id    = bp_loggedin_user_id();
 			$message_id = $thread->last_message_id;
 
 			// Check if user can perform this action.
 			if ( false === ThreadHelper::can_update_or_delete_thread( $thread->thread_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Is someone updating the thread status?
@@ -145,7 +145,7 @@ class ThreadUpdate {
 					|| ! $can_edit_item_meta
 				)
 			) {
-				throw new UserError( __( 'There was an error trying to update the message.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was an error trying to update the message.', 'wp-graphql-buddypress' ) );
 			}
 
 			return [

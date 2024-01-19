@@ -60,7 +60,7 @@ class ActivityFavorite {
 			'activity' => [
 				'type'        => 'Activity',
 				'description' => __( 'The activity object.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -77,7 +77,7 @@ class ActivityFavorite {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			$user_id = get_current_user_id();
 
@@ -86,7 +86,7 @@ class ActivityFavorite {
 
 			// Bail now if a user isn't allowed to favorite an activity.
 			if ( false === is_user_logged_in() || false === bp_activity_can_favorite() || false === bp_activity_user_can_read( $activity, $user_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			$result         = false;
@@ -101,7 +101,7 @@ class ActivityFavorite {
 			}
 
 			if ( false === $result ) {
-				throw new UserError( $error );
+				throw new UserError( esc_html( $error ) );
 			}
 
 			// Return the activity ID.

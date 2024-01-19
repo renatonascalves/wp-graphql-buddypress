@@ -222,7 +222,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 */
 			add_filter(
 				'map_meta_cap',
-				function( $caps, $cap, $user_id ) {
+				function ( $caps, $cap, $user_id ) {
 
 					// Apply to GraphQL request only.
 					if ( false === is_graphql_request() ) {
@@ -321,7 +321,7 @@ endif;
 /**
  * Function that instantiates the plugin's main class.
  */
-function wp_graphql_buddypress_init(): void {
+function wp_graphql_buddypress_init(): void { // phpcs:ignore Universal.Files.SeparateFunctionsFromOO.Mixed
 
 	// Start plugin.
 	\WP_GraphQL_BuddyPress::instance();

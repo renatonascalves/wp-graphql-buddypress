@@ -35,7 +35,7 @@ class Invitation {
 					'invitee'         => [
 						'type'        => 'User',
 						'description' => __( 'The user object of the invited user.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( $source, array $args, AppContext $context ) {
+						'resolve'     => function ( $source, array $args, AppContext $context ) {
 							return ! empty( $source->invitee )
 								? $context->get_loader( 'user' )->load_deferred( $source->invitee )
 								: null;
@@ -44,7 +44,7 @@ class Invitation {
 					'inviter'         => [
 						'type'        => 'User',
 						'description' => __( 'The user object who made the invite.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( $source, array $args, AppContext $context ) {
+						'resolve'     => function ( $source, array $args, AppContext $context ) {
 							return ! empty( $source->inviter )
 								? $context->get_loader( 'user' )->load_deferred( $source->inviter )
 								: null;

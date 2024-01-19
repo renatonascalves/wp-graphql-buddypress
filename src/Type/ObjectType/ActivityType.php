@@ -43,7 +43,7 @@ class ActivityType {
 					'parent'           => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent activity of the current activity. Usually, the activity object of an activity comment.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Activity $activity, array $args, AppContext $context ) {
+						'resolve'     => function ( Activity $activity, array $args, AppContext $context ) {
 							return Factory::resolve_activity_object( $activity->parentDatabaseId, $context );
 						},
 					],
@@ -66,7 +66,7 @@ class ActivityType {
 					'creator'          => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the activity.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Activity $activity, array $args, AppContext $context ) {
+						'resolve'     => function ( Activity $activity, array $args, AppContext $context ) {
 							return ! empty( $activity->userId )
 								? $context->get_loader( 'user' )->load_deferred( $activity->userId )
 								: null;
@@ -81,7 +81,7 @@ class ActivityType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Activity $activity, array $args ) {
+						'resolve'     => function ( Activity $activity, array $args ) {
 
 							if ( empty( $activity->data->content ) ) {
 								return null;
@@ -125,7 +125,7 @@ class ActivityType {
 					'isFavorited'      => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the activity has been favorited by the current user.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Activity $activity ) {
+						'resolve'     => function ( Activity $activity ) {
 
 							if ( false === is_user_logged_in() ) {
 								return false;
@@ -137,14 +137,14 @@ class ActivityType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_activity_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Activity ) {
 						$type = self::$type_name;
 					}
@@ -165,7 +165,7 @@ class ActivityType {
 					$activity = ActivityHelper::get_activity_from_input( $args );
 
 					if ( false === bp_activity_user_can_read( $activity ) ) {
-						throw new UserError( __( 'Sorry, you are not allowed to see this activity.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'Sorry, you are not allowed to see this activity.', 'wp-graphql-buddypress' ) );
 					}
 
 					return Factory::resolve_activity_object( $activity->id, $context );

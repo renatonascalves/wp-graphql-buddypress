@@ -30,7 +30,7 @@ class ActivityHelper {
 
 		// Confirm if activity exists.
 		if ( empty( $activity->id ) || ! $activity instanceof BP_Activity_Activity ) {
-			throw new UserError( __( 'This activity does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This activity does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $activity;

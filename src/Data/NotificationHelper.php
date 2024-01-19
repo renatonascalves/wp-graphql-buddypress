@@ -32,7 +32,7 @@ class NotificationHelper {
 
 		// Inexistent notification objects return the id being checked, so confirm another field is present.
 		if ( empty( $notification->id ) || null === $notification->item_id ) {
-			throw new UserError( __( 'This notification does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This notification does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $notification;

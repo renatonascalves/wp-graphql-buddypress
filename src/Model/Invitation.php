@@ -89,39 +89,39 @@ class Invitation extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'              => function() {
+				'id'              => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'invitation', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'      => function() {
+				'databaseId'      => function () {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'invitee'         => function() {
+				'invitee'         => function () {
 					return ! empty( $this->data->user_id ) ? $this->data->user_id : null;
 				},
-				'inviter'         => function() {
+				'inviter'         => function () {
 					return ! empty( $this->data->inviter_id ) ? $this->data->inviter_id : null;
 				},
-				'type'            => function() {
+				'type'            => function () {
 					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
-				'itemId'          => function() {
+				'itemId'          => function () {
 					return ! empty( $this->data->item_id ) ? $this->data->item_id : null;
 				},
-				'dateModified'    => function() {
+				'dateModified'    => function () {
 					return Utils::prepare_date_response( $this->data->date_modified, get_date_from_gmt( $this->data->date_modified ) );
 				},
-				'dateModifiedGmt' => function() {
+				'dateModifiedGmt' => function () {
 					return Utils::prepare_date_response( $this->data->date_modified );
 				},
-				'message'         => function() {
+				'message'         => function () {
 					return ! empty( $this->data->content ) ? $this->data->content : null;
 				},
-				'inviteSent'      => function() {
+				'inviteSent'      => function () {
 					return wp_validate_boolean( $this->data->invite_sent );
 				},
-				'accepted'        => function() {
+				'accepted'        => function () {
 					return wp_validate_boolean( $this->data->accepted );
 				},
 			];

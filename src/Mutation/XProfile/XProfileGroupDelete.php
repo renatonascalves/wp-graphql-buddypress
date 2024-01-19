@@ -86,7 +86,7 @@ class XProfileGroupDelete {
 
 			// Stop now if a user isn't allowed to delete a XProfile group.
 			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get the XProfile group object before it is deleted.
@@ -94,7 +94,7 @@ class XProfileGroupDelete {
 
 			// Trying to delete the XProfile group.
 			if ( false === xprofile_delete_field_group( $xprofile_group_object->id ) ) {
-				throw new UserError( __( 'Could not delete the XProfile group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the XProfile group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted XProfile group and the previous XProfile group object.

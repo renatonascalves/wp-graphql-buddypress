@@ -41,7 +41,7 @@ class MessageType {
 					'sender'      => [
 						'type'        => 'User',
 						'description' => __( 'The sender of the message.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Message $message, array $args, AppContext $context ) {
+						'resolve'     => function ( Message $message, array $args, AppContext $context ) {
 							return ! empty( $message->sender )
 								? $context->get_loader( 'user' )->load_deferred( $message->sender )
 								: null;
@@ -56,7 +56,7 @@ class MessageType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Message $message, array $args ) {
+						'resolve'     => function ( Message $message, array $args ) {
 							if ( empty( $message->subject ) ) {
 								return null;
 							}
@@ -77,7 +77,7 @@ class MessageType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Message $message, array $args ) {
+						'resolve'     => function ( Message $message, array $args ) {
 							if ( empty( $message->excerpt ) ) {
 								return null;
 							}
@@ -100,7 +100,7 @@ class MessageType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Message $message, array $args ) {
+						'resolve'     => function ( Message $message, array $args ) {
 							if ( empty( $message->message ) ) {
 								return null;
 							}
@@ -115,7 +115,7 @@ class MessageType {
 					'isStarred'   => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether the message was starred.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Message $message ) {
+						'resolve'     => function ( Message $message ) {
 
 							if ( false === bp_is_active( 'messages', 'star' ) ) {
 								return null;
@@ -133,14 +133,14 @@ class MessageType {
 						'description' => __( 'The date the message was sent, as GMT.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_message_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Message ) {
 						$type = self::$type_name;
 					}

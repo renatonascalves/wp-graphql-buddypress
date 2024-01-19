@@ -47,7 +47,7 @@ class ActivitiesConnectionResolver extends AbstractConnectionResolver {
 			'spam'             => 'ham_only',
 			'fields'           => 'ids',
 			'show_hidden'      => false,
-			'filter'           => false,
+			'filter'           => [],
 		];
 
 		// Prepare for later use.

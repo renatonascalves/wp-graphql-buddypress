@@ -91,12 +91,12 @@ class FriendshipDelete {
 
 			// Check if users are valid.
 			if ( ! $initiator || ! $friend ) {
-				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Stop now if a user isn't allowed to see this friendship.
 			if ( false === FriendshipHelper::can_update_or_delete_friendship( $initiator->ID, $friend->ID ) ) {
-				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
@@ -104,7 +104,7 @@ class FriendshipDelete {
 
 			// Confirm status.
 			if ( 'not_friends' === $friendship_status ) {
-				throw new UserError( __( 'Those users are not yet friends and no friendship request was found.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Those users are not yet friends and no friendship request was found.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get friendship.
@@ -118,27 +118,25 @@ class FriendshipDelete {
 			// Remove a friendship.
 			if ( true === $input['force'] ) {
 				$deleted = friends_remove_friend( $friendship->initiator_user_id, $friendship->friend_user_id );
-			} else {
+			} elseif ( absint( bp_loggedin_user_id() ) === $friendship->initiator_user_id ) {
 				/**
 				 * If this change is being initiated by the initiator,
 				 * use the `reject` function.
 				 *
 				 * This is the user who requested the friendship, and is doing the withdrawing.
 				 */
-				if ( absint( bp_loggedin_user_id() ) === $friendship->initiator_user_id ) {
-					$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
-				} else {
-					/**
-					 * Otherwise, this change is being initiated by the user, friend,
-					 * who received the friendship reject.
-					 */
-					$deleted = friends_reject_friendship( $friendship->id );
-				}
+				$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
+			} else {
+				/**
+				 * Otherwise, this change is being initiated by the user, friend,
+				 * who received the friendship reject.
+				 */
+				$deleted = friends_reject_friendship( $friendship->id );
 			}
 
 			// Trying to delete the friendship.
 			if ( false === $deleted ) {
-				throw new UserError( __( 'Friendship could not be deleted.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Friendship could not be deleted.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted friendship status and the previous friendship object.

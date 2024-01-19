@@ -32,7 +32,7 @@ class ThreadHelper {
 
 		// Confirm if thread exists.
 		if ( false === (bool) $thread_object::is_valid( $thread_id ) ) {
-			throw new UserError( __( 'This thread does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This thread does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $thread_object;
@@ -52,7 +52,7 @@ class ThreadHelper {
 
 		// Confirm if message exists.
 		if ( empty( $message_object->id ) ) {
-			throw new UserError( __( 'This message does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This message does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $message_object;

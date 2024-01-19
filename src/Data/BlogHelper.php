@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
-use stdClass;
 use WPGraphQL\Extensions\BuddyPress\Data\Factory;
 
 /**
@@ -36,7 +35,7 @@ class BlogHelper {
 			throw new UserError(
 				sprintf(
 					// translators: %d is the blog ID.
-					__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
+					esc_html__( 'No Blog was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $blog_id )
 				)
 			);
@@ -48,22 +47,22 @@ class BlogHelper {
 	/**
 	 * Get blog uri/permalink.
 	 *
-	 * @param mixed $object Object.
+	 * @param mixed $bp_object Object.
 	 * @return string|null
 	 */
-	public static function get_blog_uri( $object ): ?string {
+	public static function get_blog_uri( $bp_object ): ?string {
 
 		// Bail early.
-		if ( empty( $object->domain ) && empty( $object->path ) ) {
+		if ( empty( $bp_object->domain ) && empty( $bp_object->path ) ) {
 			return null;
 		}
 
-		if ( empty( $object->domain ) && ! empty( $object->path ) ) {
-			return bp_get_root_domain() . $object->path;
+		if ( empty( $bp_object->domain ) && ! empty( $bp_object->path ) ) {
+			return bp_get_root_url() . $bp_object->path;
 		}
 
 		$protocol  = is_ssl() ? 'https://' : 'http://';
-		$permalink = $protocol . $object->domain . $object->path;
+		$permalink = $protocol . $bp_object->domain . $bp_object->path;
 
 		return apply_filters( 'bp_get_blog_permalink', $permalink );
 	}

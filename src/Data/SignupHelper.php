@@ -43,7 +43,7 @@ class SignupHelper {
 
 		// Confirm if signup exists.
 		if ( empty( $signups['signups'] ) ) {
-			throw new UserError( $error_message );
+			throw new UserError( esc_html( $error_message ) );
 		}
 
 		return reset( $signups['signups'] );

@@ -87,7 +87,7 @@ class AttachmentCoverDelete {
 
 			// Stop now if a user isn't allowed to delete an attachment cover.
 			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object, true ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get the attachment object before it is deleted.
@@ -95,7 +95,7 @@ class AttachmentCoverDelete {
 
 			// Check if object has a cover to delete first.
 			if ( ! $previous_attachment instanceof Attachment ) {
-				throw new UserError( __( 'Sorry, there are no uploaded covers to delete.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, there are no uploaded covers to delete.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Trying to delete the attachment cover.
@@ -109,7 +109,7 @@ class AttachmentCoverDelete {
 
 			// Confirm deletion.
 			if ( false === $deleted ) {
-				throw new UserError( __( 'Could not delete the attachment cover.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the attachment cover.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted attachment cover status and the previous object.

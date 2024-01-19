@@ -235,7 +235,7 @@ class TypeRegistry {
 		// Register the Group Type taxonomy object.
 		add_filter(
 			'register_taxonomy_args',
-			static function( $args, $taxonomy ): array {
+			static function ( $args, $taxonomy ): array {
 
 				if ( false === bp_is_active( 'groups' ) || bp_get_group_type_tax_name() !== $taxonomy ) {
 					return $args;

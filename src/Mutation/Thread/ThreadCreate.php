@@ -85,12 +85,12 @@ class ThreadCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 			$thread = null;
 
 			// Check if user can perform this action.
 			if ( false === is_user_logged_in() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			if ( ! empty( $input['databaseId'] ) ) {
@@ -98,18 +98,18 @@ class ThreadCreate {
 
 				// Check if user can perform this action.
 				if ( false === ThreadHelper::can_update_or_delete_thread( $thread->thread_id ) ) {
-					throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+					throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 				}
 			}
 
 			// Check empty message content.
 			if ( empty( $input['message'] ) ) {
-				throw new UserError( __( 'Please, enter the content of the thread message.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Please, enter the content of the thread message.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check empty recipients.
 			if ( empty( $input['recipients'] ) ) {
-				throw new UserError( __( 'Recipients is a required field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Recipients is a required field.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create thread and return its ID.
@@ -119,7 +119,7 @@ class ThreadCreate {
 
 			// Throw an exception if the thread failed to be created.
 			if ( empty( $thread_id ) || is_wp_error( $thread_id ) ) {
-				throw new UserError( __( 'There was an error trying to create a thread message.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was an error trying to create a thread message.', 'wp-graphql-buddypress' ) );
 			}
 
 			return [

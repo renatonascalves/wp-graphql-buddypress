@@ -29,7 +29,7 @@ class GroupHelper {
 
 		// Confirm if group exists.
 		if ( empty( $group->id ) || ! $group instanceof BP_Groups_Group ) {
-			throw new UserError( __( 'This group does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This group does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $group;

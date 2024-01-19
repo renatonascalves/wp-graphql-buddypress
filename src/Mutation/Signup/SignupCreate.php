@@ -93,7 +93,7 @@ class SignupCreate {
 			'signup' => [
 				'type'        => 'Signup',
 				'description' => __( 'The signup object that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -110,13 +110,13 @@ class SignupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			// Validate user signup.
 			$signup_validation = bp_core_validate_user_signup( $input['userLogin'], $input['userEmail'] );
 
 			if ( is_wp_error( $signup_validation['errors'] ) && $signup_validation['errors']->get_error_messages() ) {
-				throw new UserError( $signup_validation['errors']->get_error_message() );
+				throw new UserError( esc_html( $signup_validation['errors']->get_error_message() ) );
 			}
 
 			// Init the signup meta.
@@ -146,7 +146,7 @@ class SignupCreate {
 						// Validate the blog signup.
 						$blog_signup_validation = bp_core_validate_blog_signup( $site_name, $site_title );
 						if ( is_wp_error( $blog_signup_validation['errors'] ) && $blog_signup_validation['errors']->get_error_messages() ) {
-							throw new UserError( $blog_signup_validation['errors']->get_error_message() );
+							throw new UserError( esc_html( $blog_signup_validation['errors']->get_error_message() ) );
 						}
 
 						$domain        = $blog_signup_validation['domain'];
@@ -164,14 +164,14 @@ class SignupCreate {
 						}
 					}
 				} elseif ( ! empty( $input['siteTitle'] ) && ! empty( $input['siteName'] ) ) {
-					throw new UserError( __( 'You are trying to create a blog but blog signup is disabled.', 'wp-graphql-buddypress' ) );
+					throw new UserError( esc_html__( 'You are trying to create a blog but blog signup is disabled.', 'wp-graphql-buddypress' ) );
 				}
 			}
 
 			$password = $input['password'];
 
 			if ( empty( $password ) || false !== strpos( $password, '\\' ) ) {
-				throw new UserError( __( 'Passwords cannot be empty or contain the "\\" character.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Passwords cannot be empty or contain the "\\" character.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Hash and store the password.
@@ -220,13 +220,13 @@ class SignupCreate {
 			$id = BP_Signup::add( $signup_args );
 
 			if ( ! is_numeric( $id ) ) {
-				throw new UserError( __( 'Could not create signup.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not create signup.', 'wp-graphql-buddypress' ) );
 			}
 
 			$signup = SignupHelper::get_signup( $id );
 
 			if ( empty( $signup->id ) ) {
-				throw new UserError( __( 'Could not create signup.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not create signup.', 'wp-graphql-buddypress' ) );
 			}
 
 			if ( is_multisite() ) {
@@ -237,16 +237,14 @@ class SignupCreate {
 					/** This action is documented in wp-includes/ms-functions.php */
 					do_action( 'after_signup_user', $signup->user_login, $signup->user_email, $signup->activation_key, $signup->meta );
 				}
-			} else {
+			} elseif ( apply_filters( 'bp_core_signup_send_activation_key', true, false, $signup->user_email, $signup->activation_key, $signup->meta ) ) {
 				/** This filter is documented in bp-members/bp-members-functions.php */
-				if ( apply_filters( 'bp_core_signup_send_activation_key', true, false, $signup->user_email, $signup->activation_key, $signup->meta ) ) {
-					$salutation = $signup->user_login;
-					if ( ! empty( $signup->user_name ) ) {
-						$salutation = $signup->user_name;
-					}
-
-					bp_core_signup_send_validation_email( false, $signup->user_email, $signup->activation_key, $salutation );
+				$salutation = $signup->user_login;
+				if ( ! empty( $signup->user_name ) ) {
+					$salutation = $signup->user_name;
 				}
+
+				bp_core_signup_send_validation_email( false, $signup->user_email, $signup->activation_key, $salutation );
 			}
 
 			// Return the signup ID.

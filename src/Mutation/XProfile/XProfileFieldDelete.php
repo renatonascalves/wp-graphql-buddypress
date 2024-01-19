@@ -90,7 +90,7 @@ class XProfileFieldDelete {
 
 			// Stop now if a user isn't allowed to delete a XProfile field.
 			if ( false === XProfileFieldHelper::can_manage_xprofile_field() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get a XProfile field object before it is deleted.
@@ -98,7 +98,7 @@ class XProfileFieldDelete {
 
 			// Trying to delete the XProfile field.
 			if ( false === $xprofile_field_object->delete( $input['deleteData'] ?? false ) ) {
-				throw new UserError( __( 'Could not delete the XProfile field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted XProfile field and the previous XProfile field object.
