@@ -89,13 +89,13 @@ class NotificationUpdate {
 
 			// Bail now if a user isn't allowed to update the object.
 			if ( false === NotificationHelper::can_see( $notification->id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			$is_new = (bool) $input['isNew'];
 
 			if ( $is_new === $notification->is_new ) {
-				throw new UserError( __( 'Notification is already with the status you are trying to update into.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Notification is already with the status you are trying to update into.', 'wp-graphql-buddypress' ) );
 			}
 
 			$retval = BP_Notifications_Notification::update(
@@ -104,7 +104,7 @@ class NotificationUpdate {
 			);
 
 			if ( ! $retval ) {
-				throw new UserError( __( 'Could not update this notification.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not update this notification.', 'wp-graphql-buddypress' ) );
 			}
 
 			return [

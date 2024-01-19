@@ -86,7 +86,7 @@ class ActivityDelete {
 
 			// Bail now if a user isn't allowed to delete an activity.
 			if ( false === bp_activity_user_can_delete( $activity ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the Activity object before it is deleted.
@@ -100,7 +100,7 @@ class ActivityDelete {
 			}
 
 			if ( false === $retval ) {
-				throw new UserError( __( 'Could not delete the activity.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the activity.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted activity status and the previous activity object.

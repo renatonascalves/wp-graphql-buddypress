@@ -56,7 +56,7 @@ class Test_Friendship_friendship_Queries extends WPGraphQL_BuddyPress_UnitTestCa
 		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQueryFailed( $this->get_friendship( $friendship ) )
-			->expectedErrorMessage( 'Sorry, you don\'t have permission to see this friendship.' );
+			->expectedErrorMessage( 'Sorry, you don&#039;t have permission to see this friendship.' );
 	}
 
 	/**

@@ -83,23 +83,23 @@ class AttachmentAvatarUpload {
 
 			// Check if upload is enabled for member.
 			if ( 'user' === $object && true === bp_disable_avatar_uploads() ) {
-				throw new UserError( __( 'Sorry, member avatar upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, member avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if upload is enabled for group.
 			if ( 'group' === $object && true === bp_disable_group_avatar_uploads() ) {
-				throw new UserError( __( 'Sorry, group avatar upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, group avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if upload is enabled for blog.
 			$bp = buddypress();
 			if ( 'blog' === $object && isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
-				throw new UserError( __( 'Sorry, blog avatar upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, blog avatar upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user has access to upload it.
 			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Try to upload the avatar image file.

@@ -42,10 +42,10 @@ class Attachment extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'thumb' => function() {
+				'thumb' => function () {
 					return $this->data->thumb ?? null;
 				},
-				'full'  => function() {
+				'full'  => function () {
 					return $this->data->full ?? null;
 				},
 			];

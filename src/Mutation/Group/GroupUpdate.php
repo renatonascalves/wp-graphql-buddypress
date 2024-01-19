@@ -104,7 +104,7 @@ class GroupUpdate {
 			'group' => [
 				'type'        => 'Group',
 				'description' => __( 'The group that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -128,7 +128,7 @@ class GroupUpdate {
 
 			// Stop now if a user isn't allowed to update a group.
 			if ( false === GroupHelper::can_update_or_delete_group( $group ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update group.
@@ -138,7 +138,7 @@ class GroupUpdate {
 
 			// Throw an exception if the group failed to be updated.
 			if ( empty( $group_id ) ) {
-				throw new UserError( __( 'Could not update existing group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not update existing group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Add group type(s).
@@ -154,7 +154,7 @@ class GroupUpdate {
 			// Remove group type(s).
 			if ( ! empty( $input['removeTypes'] ) && ! empty( bp_groups_get_group_type( $group_id, false ) ) ) {
 				array_map(
-					function( $type ) use ( $group_id ) {
+					function ( $type ) use ( $group_id ) {
 						bp_groups_remove_group_type( $group_id, $type );
 					},
 					(array) $input['removeTypes']

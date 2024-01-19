@@ -77,13 +77,13 @@ class StarMessage {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 			$message = ThreadHelper::get_message_from_input( $input );
 			$user_id = bp_loggedin_user_id();
 
 			// Check if user can perform this action.
 			if ( false === ThreadHelper::can_update_or_delete_thread( $message->thread_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			$result = false;
@@ -105,7 +105,7 @@ class StarMessage {
 			);
 
 			if ( false === $result ) {
-				throw new UserError( $info );
+				throw new UserError( esc_html( $info ) );
 			}
 
 			// Return the message ID.

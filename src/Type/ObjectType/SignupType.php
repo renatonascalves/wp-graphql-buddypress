@@ -41,7 +41,7 @@ class SignupType {
 					'userName'      => [
 						'type'        => 'String',
 						'description' => __( 'The new user\'s full name.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Signup $signup ) {
+						'resolve'     => function ( Signup $signup ) {
 
 							// The user name is only available when the xProfile component is active.
 							if ( false === bp_is_active( 'xprofile' ) ) {
@@ -86,7 +86,7 @@ class SignupType {
 					'blog'          => [
 						'type'        => 'Blog',
 						'description' => __( 'Blog with some of the information.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Signup $signup ) {
+						'resolve'     => function ( Signup $signup ) {
 
 							if ( empty( $signup->blog ) || false === is_multisite() ) {
 								return null;
@@ -96,14 +96,14 @@ class SignupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_signup_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Signup ) {
 						$type = self::$type_name;
 					}

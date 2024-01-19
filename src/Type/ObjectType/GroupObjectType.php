@@ -42,14 +42,14 @@ class GroupObjectType {
 					'parent'           => [
 						'type'        => self::$type_name,
 						'description' => __( 'Parent group of the current group. This field is equivalent to the BP_Groups_Group object matching the BP_Groups_Group->parent_id ID.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+						'resolve'     => function ( Group $group, array $args, AppContext $context ) {
 							return Factory::resolve_group_object( $group->parent, $context );
 						},
 					],
 					'creator'          => [
 						'type'        => 'User',
 						'description' => __( 'The creator of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+						'resolve'     => function ( Group $group, array $args, AppContext $context ) {
 							return ! empty( $group->creator )
 								? $context->get_loader( 'user' )->load_deferred( $group->creator )
 								: null;
@@ -58,7 +58,7 @@ class GroupObjectType {
 					'admins'           => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'Administrators of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+						'resolve'     => function ( Group $group, array $args, AppContext $context ) {
 
 							// Only logged in users can see these values.
 							if ( false === is_user_logged_in() ) {
@@ -85,7 +85,7 @@ class GroupObjectType {
 
 							$context->get_loader( 'user' )->buffer( $admins );
 							return new Deferred(
-								function() use ( $context, $admins ) {
+								function () use ( $context, $admins ) {
 									return $context->get_loader( 'user' )->load_many( $admins );
 								}
 							);
@@ -94,7 +94,7 @@ class GroupObjectType {
 					'mods'             => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => esc_html__( 'Moderators of the group.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Group $group, array $args, AppContext $context ) {
+						'resolve'     => function ( Group $group, array $args, AppContext $context ) {
 
 							// Only logged users can see these values.
 							if ( false === is_user_logged_in() ) {
@@ -121,7 +121,7 @@ class GroupObjectType {
 
 							$context->get_loader( 'user' )->buffer( $mods );
 							return new Deferred(
-								function() use ( $context, $mods ) {
+								function () use ( $context, $mods ) {
 									return $context->get_loader( 'user' )->load_many( $mods );
 								}
 							);
@@ -136,7 +136,7 @@ class GroupObjectType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Group $group, array $args ) {
+						'resolve'     => function ( Group $group, array $args ) {
 							if ( empty( $group->name ) ) {
 								return null;
 							}
@@ -161,7 +161,7 @@ class GroupObjectType {
 								'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Group $group, array $args ) {
+						'resolve'     => function ( Group $group, array $args ) {
 							if ( empty( $group->description ) ) {
 								return null;
 							}
@@ -221,14 +221,14 @@ class GroupObjectType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_group_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Group ) {
 						$type = self::$type_name;
 					}

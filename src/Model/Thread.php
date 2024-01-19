@@ -68,27 +68,27 @@ class Thread extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'          => function() {
+				'id'          => function () {
 					return ! empty( $this->data->thread_id )
 						? Relay::toGlobalId( 'thread', (string) $this->data->thread_id )
 						: null;
 				},
-				'databaseId'  => function() {
+				'databaseId'  => function () {
 					return ! empty( $this->data->thread_id ) ? $this->data->thread_id : null;
 				},
-				'lastMessage' => function() {
+				'lastMessage' => function () {
 					return ! empty( $this->data->last_message_id ) ? $this->data->last_message_id : null;
 				},
-				'senderIds'   => function() {
+				'senderIds'   => function () {
 					return ! empty( $this->data->sender_ids ) ? $this->data->sender_ids : null;
 				},
-				'unreadCount' => function() {
+				'unreadCount' => function () {
 					return ! empty( $this->data->unread_count ) ? $this->data->unread_count : null;
 				},
-				'recipients'  => function() {
+				'recipients'  => function () {
 					return ! empty( $this->data->recipients ) ? $this->data->recipients : null;
 				},
-				'messages'    => function() {
+				'messages'    => function () {
 					return ! empty( $this->data->messages ) ? $this->data->messages : null;
 				},
 			];

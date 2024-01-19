@@ -87,7 +87,7 @@ class AttachmentAvatarDelete {
 
 			// Stop now if a user isn't allowed to delete the attachment.
 			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get the attachment object before it is deleted.
@@ -95,7 +95,7 @@ class AttachmentAvatarDelete {
 
 			// Check if object has an avatar to delete first.
 			if ( ! $previous_attachment instanceof Attachment ) {
-				throw new UserError( __( 'Sorry, there are no uploaded avatars to delete.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, there are no uploaded avatars to delete.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Trying to delete the attachment avatar.
@@ -108,7 +108,7 @@ class AttachmentAvatarDelete {
 
 			// Confirm deletion.
 			if ( false === $deleted ) {
-				throw new UserError( __( 'Could not delete the attachment avatar.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the attachment avatar.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted attachment avatar status and the previous object.

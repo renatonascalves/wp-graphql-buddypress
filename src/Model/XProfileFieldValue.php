@@ -60,19 +60,19 @@ class XProfileFieldValue extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'raw'            => function() {
+				'raw'            => function () {
 					return ! empty( $this->data->value ) ? $this->data->value : null;
 				},
-				'unserialized'   => function() {
+				'unserialized'   => function () {
 					return $this->get_unserialized_value( $this->data->value );
 				},
-				'rendered'       => function() {
+				'rendered'       => function () {
 					return $this->get_rendered_value( $this->data->value, $this->data->field_id );
 				},
-				'lastUpdated'    => function() {
+				'lastUpdated'    => function () {
 					return Utils::prepare_date_response( $this->data->last_updated, get_date_from_gmt( $this->data->last_updated ) );
 				},
-				'lastUpdatedGmt' => function() {
+				'lastUpdatedGmt' => function () {
 					return Utils::prepare_date_response( $this->data->last_updated );
 				},
 			];

@@ -87,7 +87,7 @@ class SignupDelete {
 
 			// Bail now if a user isn't allowed to delete a signup.
 			if ( false === SignupHelper::can_see() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the Signup object before it is deleted.
@@ -96,7 +96,7 @@ class SignupDelete {
 			$retval = BP_Signup::delete( [ $signup->id ] );
 
 			if ( ! empty( $retval['errors'] ) ) {
-				throw new UserError( __( 'Could not delete the signup.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the signup.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted signup status and the previous signup object.

@@ -32,7 +32,7 @@ class XProfileFieldHelper {
 		$xprofile_field_object = xprofile_get_field( absint( $xprofile_field_id ), $user_id );
 
 		if ( empty( $xprofile_field_object->id ) || ! $xprofile_field_object instanceof BP_XProfile_Field ) {
-			throw new UserError( __( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This XProfile field does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $xprofile_field_object;

@@ -122,7 +122,7 @@ class XProfileFieldUpdate {
 			'field' => [
 				'type'        => 'XProfileField',
 				'description' => __( 'The XProfile field that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -139,14 +139,14 @@ class XProfileFieldUpdate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			// Get the XProfile field object.
 			$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( $input );
 
 			// Check if user can update a XProfile field.
 			if ( false === XProfileFieldHelper::can_manage_xprofile_field() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Specific check to make sure the Full Name xprofile field will remain undeletable.
@@ -161,7 +161,7 @@ class XProfileFieldUpdate {
 
 			// Throw an exception if the XProfile field failed to be updated.
 			if ( ! $xprofile_field_id ) {
-				throw new UserError( __( 'Could not update XProfile field.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not update XProfile field.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Save additional information.

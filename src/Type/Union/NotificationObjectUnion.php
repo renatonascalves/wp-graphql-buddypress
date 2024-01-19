@@ -56,22 +56,22 @@ class NotificationObjectUnion {
 				[
 					'typeNames'   => $type_names,
 					'description' => __( 'Union between the user, activity, group, blog types', 'wp-graphql-buddypress' ),
-					'resolveType' => function ( $object ) use ( $type_registry ) {
+					'resolveType' => function ( $bp_object ) use ( $type_registry ) {
 						$type = null;
 
-						if ( $object instanceof Activity ) {
+						if ( $bp_object instanceof Activity ) {
 							$type = $type_registry->get_type( 'Activity' );
 						}
 
-						if ( $object instanceof Group ) {
+						if ( $bp_object instanceof Group ) {
 							$type = $type_registry->get_type( 'Group' );
 						}
 
-						if ( $object instanceof Blog ) {
+						if ( $bp_object instanceof Blog ) {
 							$type = $type_registry->get_type( 'Blog' );
 						}
 
-						if ( $object instanceof User ) {
+						if ( $bp_object instanceof User ) {
 							$type = $type_registry->get_type( 'User' );
 						}
 

@@ -44,7 +44,7 @@ class ThreadType {
 					'lastMessage' => [
 						'type'        => 'Message',
 						'description' => __( 'The last message of the thread.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
+						'resolve'     => function ( Thread $thread, array $args, AppContext $context ) {
 							return ! empty( $thread->lastMessage )
 								? $context->get_loader( 'bp_message' )->load_deferred( $thread->lastMessage )
 								: null;
@@ -53,7 +53,7 @@ class ThreadType {
 					'senders'     => [
 						'type'        => [ 'list_of' => 'User' ],
 						'description' => __( 'All users of all messages in the thread.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Thread $thread, array $args, AppContext $context ) {
+						'resolve'     => function ( Thread $thread, array $args, AppContext $context ) {
 							$user_ids = array_unique( $thread->senderIds ?? [] );
 
 							if ( empty( $user_ids ) ) {
@@ -62,21 +62,21 @@ class ThreadType {
 
 							$context->get_loader( 'user' )->buffer( $user_ids );
 							return new Deferred(
-								function() use ( $context, $user_ids ) {
+								function () use ( $context, $user_ids ) {
 									return $context->get_loader( 'user' )->load_many( $user_ids );
 								}
 							);
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_thread_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Thread ) {
 						$type = self::$type_name;
 					}

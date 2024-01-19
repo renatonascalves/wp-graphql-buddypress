@@ -51,7 +51,7 @@ class MemberType {
 				'description' => __( 'The name used for the user in @-mentions.', 'wp-graphql-buddypress' ),
 				'resolve'     => function ( User $source ) {
 					if ( ! bp_is_active( 'activity' ) ) {
-						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
 					$mention_name = bp_activity_get_user_mentionname( $source->databaseId ?? 0 );
@@ -87,9 +87,9 @@ class MemberType {
 						'description' => __( 'Format of the field output', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve'     => function( User $source, array $args ) {
+				'resolve'     => function ( User $source, array $args ) {
 					if ( ! bp_is_active( 'activity' ) ) {
-						throw new UserError( __( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'The Activity component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
 					// Get the member with BuddyPress extra data.
@@ -130,7 +130,7 @@ class MemberType {
 				'resolve'     => function ( User $source ) {
 
 					if ( ! bp_is_active( 'friends' ) ) {
-						throw new UserError( __( 'The Friends component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'The Friends component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
 					// Get the member with BuddyPress extra data.
@@ -161,7 +161,7 @@ class MemberType {
 				'resolve'     => function ( User $source ) {
 
 					if ( ! bp_is_active( 'messages' ) ) {
-						throw new UserError( __( 'The Messages component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'The Messages component needs to be active to use this field.', 'wp-graphql-buddypress' ) );
 					}
 
 					if ( empty( $source->databaseId ) ) {

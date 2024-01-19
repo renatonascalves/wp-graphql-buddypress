@@ -84,12 +84,12 @@ class FriendshipUpdate {
 
 			// Check if users are valid.
 			if ( ! $initiator || ! $friend ) {
-				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Stop now if a user isn't allowed to see this friendship.
 			if ( false === FriendshipHelper::can_update_or_delete_friendship( $initiator->ID, $friend->ID ) ) {
-				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
@@ -97,7 +97,7 @@ class FriendshipUpdate {
 
 			// Confirm status.
 			if ( false === in_array( $friendship_status, [ 'pending', 'awaiting_response' ], true ) ) {
-				throw new UserError( __( 'There is no friendship request or users are already friends.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There is no friendship request or users are already friends.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get friendship.
@@ -107,12 +107,12 @@ class FriendshipUpdate {
 
 			// Confirm if friendship exists.
 			if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
-				throw new UserError( __( 'No Friendship requested was found.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'No Friendship requested was found.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Accept friendship.
 			if ( false === friends_accept_friendship( $friendship->id ) ) {
-				throw new UserError( __( 'There was a problem accepting the friendship. Try again.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was a problem accepting the friendship. Try again.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Return the friendship id.

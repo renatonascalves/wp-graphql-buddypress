@@ -90,7 +90,7 @@ class GroupCreate {
 			'group' => [
 				'type'        => 'Group',
 				'description' => __( 'The group object that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -107,16 +107,16 @@ class GroupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			// Check empty group name.
 			if ( empty( $input['name'] ) ) {
-				throw new UserError( __( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Please, enter the name of the group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user can create a group.
 			if ( false === ( is_user_logged_in() && bp_user_can_create_groups() ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create group and return its newly created ID.
@@ -126,7 +126,7 @@ class GroupCreate {
 
 			// Throw an exception if the group failed to be created.
 			if ( empty( $group_id ) ) {
-				throw new UserError( __( 'Could not create Group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not create Group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Set group type(s).

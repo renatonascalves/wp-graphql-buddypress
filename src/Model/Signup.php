@@ -51,45 +51,45 @@ class Signup extends Model {
 	/**
 	 * Initialize the Activity object.
 	 */
-	protected function init() : void {
+	protected function init(): void {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'            => function() {
+				'id'            => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'signup', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'    => function() {
+				'databaseId'    => function () {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'userLogin'     => function() {
+				'userLogin'     => function () {
 					return ! empty( $this->data->user_login ) ? $this->data->user_login : null;
 				},
-				'userEmail'     => function() {
+				'userEmail'     => function () {
 					return ! empty( $this->data->user_email ) ? $this->data->user_email : null;
 				},
-				'userName'      => function() {
+				'userName'      => function () {
 					return ! empty( $this->data->user_name ) ? $this->data->user_name : null;
 				},
-				'blog'          => function() {
+				'blog'          => function () {
 					return $this->data;
 				},
-				'active'        => function() {
+				'active'        => function () {
 					return wp_validate_boolean( $this->data->active );
 				},
-				'registered'    => function() {
+				'registered'    => function () {
 					return Utils::prepare_date_response( $this->data->registered, get_date_from_gmt( $this->data->registered ) );
 				},
-				'registeredGmt' => function() {
+				'registeredGmt' => function () {
 					return Utils::prepare_date_response( $this->data->registered );
 				},
-				'dateSent'      => function() {
+				'dateSent'      => function () {
 					return Utils::prepare_date_response( $this->data->date_sent, get_date_from_gmt( $this->data->date_sent ) );
 				},
-				'dateSentGmt'   => function() {
+				'dateSentGmt'   => function () {
 					return Utils::prepare_date_response( $this->data->date_sent );
 				},
-				'countSent'     => function() {
+				'countSent'     => function () {
 					return ! empty( $this->data->count_sent ) ? $this->data->count_sent : null;
 				},
 			];

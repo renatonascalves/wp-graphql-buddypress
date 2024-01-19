@@ -57,7 +57,7 @@ class SignupActivate {
 			'signup' => [
 				'type'        => 'Signup',
 				'description' => __( 'The activated signup object.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -78,7 +78,7 @@ class SignupActivate {
 
 			// Check empty signup key.
 			if ( empty( $input['activationKey'] ) ) {
-				throw new UserError( __( 'The activation key is required.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'The activation key is required.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check and get the signup.
@@ -86,14 +86,14 @@ class SignupActivate {
 
 			// User is already active.
 			if ( true === $signup->active ) {
-				throw new UserError( __( 'The user is already active.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'The user is already active.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Activate signup.
 			$retval = BP_Signup::activate( [ $signup->id ] );
 
 			if ( ! empty( $retval['errors'] ) ) {
-				throw new UserError( __( 'Could not activate the signup.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not activate the signup.', 'wp-graphql-buddypress' ) );
 			}
 
 			return [

@@ -90,7 +90,7 @@ class InvitationReject {
 
 			// Stop now if user isn't allowed to reject invite.
 			if ( InvitationHelper::can_update_or_delete_invite( $user_id, $invite ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			$previous_invite = new Invitation( $invite );
@@ -132,7 +132,7 @@ class InvitationReject {
 			}
 
 			if ( false === $deleted ) {
-				throw new UserError( $error_message );
+				throw new UserError( esc_html( $error_message ) );
 			}
 
 			// The deleted invite status and the previous invite object.

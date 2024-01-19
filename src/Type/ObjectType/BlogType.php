@@ -40,7 +40,7 @@ class BlogType {
 					'admin'            => [
 						'type'        => 'User',
 						'description' => __( 'The admin of the blog.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Blog $blog, array $args, AppContext $context ) {
+						'resolve'     => function ( Blog $blog, array $args, AppContext $context ) {
 							return ! empty( $blog->admin )
 								? $context->get_loader( 'user' )->load_deferred( $blog->admin )
 								: null;
@@ -59,7 +59,7 @@ class BlogType {
 								'description' => __( 'Format of the field output.', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( Blog $blog, array $args ) {
+						'resolve'     => function ( Blog $blog, array $args ) {
 							if ( empty( $blog->description ) ) {
 								return null;
 							}
@@ -113,14 +113,14 @@ class BlogType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_blog_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Blog ) {
 						$type = self::$type_name;
 					}

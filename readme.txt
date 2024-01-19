@@ -5,8 +5,8 @@ License:           GPL-3.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP:      8.0
 Requires at least: 5.9
-Tested up to:      6.2
-Stable tag:        0.1.0
+Tested up to:      6.4.2
+Stable tag:        0.1.1
 
 == Description ==
 

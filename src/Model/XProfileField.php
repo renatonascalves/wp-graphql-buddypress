@@ -47,62 +47,62 @@ class XProfileField extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'              => function() {
+				'id'              => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'bp_xprofile_field', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'      => function() {
+				'databaseId'      => function () {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'groupId'         => function() {
+				'groupId'         => function () {
 					return ! empty( $this->data->group_id ) ? absint( $this->data->group_id ) : null;
 				},
-				'parent'          => function() {
+				'parent'          => function () {
 					return ! empty( $this->data->parent_id ) ? absint( $this->data->parent_id ) : null;
 				},
-				'name'            => function() {
+				'name'            => function () {
 					return ! empty( $this->data->name ) ? $this->data->name : null;
 				},
-				'type'            => function() {
+				'type'            => function () {
 					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
-				'canDelete'       => function() {
+				'canDelete'       => function () {
 					return wp_validate_boolean( $this->data->can_delete );
 				},
-				'isRequired'      => function() {
+				'isRequired'      => function () {
 					return wp_validate_boolean( $this->data->is_required );
 				},
-				'fieldOrder'      => function() {
+				'fieldOrder'      => function () {
 					return $this->data->field_order;
 				},
-				'optionOrder'     => function() {
+				'optionOrder'     => function () {
 					return $this->data->option_order;
 				},
-				'orderBy'         => function() {
+				'orderBy'         => function () {
 					return ! empty( $this->data->order_by ) ? $this->data->order_by : null;
 				},
-				'isDefaultOption' => function() {
+				'isDefaultOption' => function () {
 					return $this->data->is_default_option;
 				},
-				'visibilityLevel' => function() {
+				'visibilityLevel' => function () {
 					$visibility = $this->data->get_default_visibility();
 
 					return ! empty( $visibility ) ? $visibility : null;
 				},
-				'doAutolink'      => function() {
+				'doAutolink'      => function () {
 					return bp_xprofile_get_meta( $this->data->id, 'field', 'do_autolink' );
 				},
-				'description'     => function() {
+				'description'     => function () {
 					return ! empty( $this->data->description ) ? $this->data->description : null;
 				},
-				'options'         => function() {
+				'options'         => function () {
 					return $this->data;
 				},
-				'value'           => function() {
+				'value'           => function () {
 					return $this->data->data;
 				},
-				'memberTypes'     => function() {
+				'memberTypes'     => function () {
 					$types = $this->data->get_member_types();
 
 					return ! empty( $types ) ? $types : null;

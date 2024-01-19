@@ -40,7 +40,7 @@ class FriendshipType {
 					'initiator'      => [
 						'type'        => 'User',
 						'description' => __( 'The initiator of the friendship.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
+						'resolve'     => function ( Friendship $friendship, array $args, AppContext $context ) {
 							return ! empty( $friendship->initiator )
 								? $context->get_loader( 'user' )->load_deferred( $friendship->initiator )
 								: null;
@@ -49,7 +49,7 @@ class FriendshipType {
 					'friend'         => [
 						'type'        => 'User',
 						'description' => __( 'The friend, the one invited to the friendship.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Friendship $friendship, array $args, AppContext $context ) {
+						'resolve'     => function ( Friendship $friendship, array $args, AppContext $context ) {
 							return ! empty( $friendship->friend )
 								? $context->get_loader( 'user' )->load_deferred( $friendship->friend )
 								: null;
@@ -68,14 +68,14 @@ class FriendshipType {
 						'description' => __( 'The date the friendship was created, as GMT.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type ) {
+				'resolve_node'      => function ( $node, $id, string $type ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_friendship_object( $id );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Friendship ) {
 						$type = self::$type_name;
 					}
@@ -96,7 +96,7 @@ class FriendshipType {
 
 					// Require user to be logged in.
 					if ( ! is_user_logged_in() ) {
-						throw new UserError( __( 'Sorry, you need to be logged in to perform this action.', 'wp-graphql-buddypress' ) );
+						throw new UserError( esc_html__( 'Sorry, you need to be logged in to perform this action.', 'wp-graphql-buddypress' ) );
 					}
 
 					return FriendshipHelper::get_friendship_from_input( $args );

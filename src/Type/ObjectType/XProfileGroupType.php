@@ -57,7 +57,7 @@ class XProfileGroupType {
 								'description' => __( 'Format of the field output.', 'wp-graphql-buddypress' ),
 							],
 						],
-						'resolve'     => function( XProfileGroup $group, array $args ) {
+						'resolve'     => function ( XProfileGroup $group, array $args ) {
 							if ( empty( $group->description ) ) {
 								return null;
 							}
@@ -70,14 +70,14 @@ class XProfileGroupType {
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_xprofile_group_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof XProfileGroup ) {
 						$type = self::$type_name;
 					}

@@ -128,7 +128,7 @@ class Test_Messages_thread_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_thread_with_invalid_id() {
 		$this->assertQueryFailed( $this->get_a_thread( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER, 'ID' ) )
-			->expectedErrorMessage( 'The "id" is invalid.' );
+			->expectedErrorMessage( 'The &quot;id&quot; is invalid.' );
 	}
 
 	public function test_get_thread_with_invalid_thread_id() {

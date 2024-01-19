@@ -39,10 +39,6 @@
   },
   "repositories": [
     {
-      "type": "vcs",
-      "url": "https://github.com/alleyinteractive/WordPress-Coding-Standards"
-    },
-    {
       "type": "composer",
       "url": "https://wpackagist.org",
       "only": [
@@ -68,15 +64,14 @@
     "composer/installers": "^1.10.0"
   },
   "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^1.0",
-    "wp-coding-standards/wpcs": "dev-php-8-1 as 2.3.x-dev",
+    "alleyinteractive/alley-coding-standards": "^2.0",
     "buddypress/buddypress": "dev-master",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^1.8",
-    "wp-phpunit/wp-phpunit": "^6.1",
+    "wp-phpunit/wp-phpunit": "^6.0",
     "szepeviktor/phpstan-wordpress": "^1.1.6",
-    "wpackagist-plugin/wp-graphql": "^1.14.0",
-    "yoast/phpunit-polyfills": "^1.0.1"
+    "wpackagist-plugin/wp-graphql": "^1.19.0",
+    "yoast/phpunit-polyfills": "^1.1"
   },
   "scripts": {
     "phpcs": "phpcs . --basepath=.",
@@ -91,9 +86,6 @@
     ]
   },
   "config": {
-    "platform": {
-      "php": "8.0"
-    },
     "optimize-autoloader": true,
     "sort-packages": true,
     "allow-plugins": {

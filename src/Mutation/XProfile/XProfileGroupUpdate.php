@@ -76,7 +76,7 @@ class XProfileGroupUpdate {
 			'group' => [
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -100,7 +100,7 @@ class XProfileGroupUpdate {
 
 			// Stop now if a user isn't allowed to update a XProfile group.
 			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update XProfile group and return the ID.
@@ -110,7 +110,7 @@ class XProfileGroupUpdate {
 
 			// Throw an exception if the XProfile group failed to be updated.
 			if ( false === $xprofile_group ) {
-				throw new UserError( __( 'Cannot update existing XProfile field group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Cannot update existing XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Set group id.

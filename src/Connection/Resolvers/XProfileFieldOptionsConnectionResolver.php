@@ -33,7 +33,7 @@ class XProfileFieldOptionsConnectionResolver {
 		}
 
 		$fields = array_map(
-			function( $item ) use ( $context ) {
+			function ( $item ) use ( $context ) {
 				return Factory::resolve_xprofile_field_object( $item->id, $context );
 			},
 			$source->options->get_children()

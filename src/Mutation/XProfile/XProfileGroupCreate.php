@@ -64,7 +64,7 @@ class XProfileGroupCreate {
 			'group' => [
 				'type'        => 'XProfileGroup',
 				'description' => __( 'The XProfile group that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -81,11 +81,11 @@ class XProfileGroupCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			// Check if user can create a XProfile group.
 			if ( false === XProfileGroupHelper::can_manage_xprofile_group() ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Create XProfile group.
@@ -95,7 +95,7 @@ class XProfileGroupCreate {
 
 			// Throw an exception if the XProfile group failed to be created.
 			if ( false === $xprofile_group_id ) {
-				throw new UserError( __( 'Cannot create XProfile field group.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Cannot create XProfile field group.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Return the XProfile group ID.

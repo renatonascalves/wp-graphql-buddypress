@@ -30,7 +30,7 @@ class InvitationHelper {
 
 		// Check the invitation type.
 		if ( empty( $input['type'] ) ) {
-			throw new UserError( __( 'The invitation type is required.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'The invitation type is required.', 'wp-graphql-buddypress' ) );
 		}
 
 		if ( 'request' === $input['type'] ) {
@@ -43,7 +43,7 @@ class InvitationHelper {
 
 		// Confirm if invitation exists.
 		if ( empty( $invitation->id ) || ! $invitation instanceof BP_Invitation ) {
-			throw new UserError( $error_message );
+			throw new UserError( esc_html( $error_message ) );
 		}
 
 		return $invitation;
