@@ -53,36 +53,36 @@ class Notification extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'              => function() {
+				'id'              => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'notification', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'      => function() {
+				'databaseId'      => function () {
 					return ! empty( $this->data->id ) ? absint( $this->data->id ) : null;
 				},
-				'userId'          => function() {
+				'userId'          => function () {
 					return ! empty( $this->data->user_id ) ? absint( $this->data->user_id ) : null;
 				},
-				'primaryItemId'   => function() {
+				'primaryItemId'   => function () {
 					return ! empty( $this->data->item_id ) ? absint( $this->data->item_id ) : null;
 				},
-				'secondaryItemId' => function() {
+				'secondaryItemId' => function () {
 					return ! empty( $this->data->secondary_item_id ) ? absint( $this->data->secondary_item_id ) : null;
 				},
-				'componentName'   => function() {
+				'componentName'   => function () {
 					return ! empty( $this->data->component_name ) ? $this->data->component_name : null;
 				},
-				'componentAction' => function() {
+				'componentAction' => function () {
 					return ! empty( $this->data->component_action ) ? $this->data->component_action : null;
 				},
-				'date'            => function() {
+				'date'            => function () {
 					return Utils::prepare_date_response( $this->data->date_notified, get_date_from_gmt( $this->data->date_notified ) );
 				},
-				'dateGmt'         => function() {
+				'dateGmt'         => function () {
 					return Utils::prepare_date_response( $this->data->date_notified );
 				},
-				'isNew'           => function() {
+				'isNew'           => function () {
 					return wp_validate_boolean( $this->data->is_new );
 				},
 			];

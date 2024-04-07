@@ -66,7 +66,7 @@ class InvitationAccept {
 			'user' => [
 				'type'        => 'User',
 				'description' => __( 'The new member accepted.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -90,7 +90,7 @@ class InvitationAccept {
 
 			// Stop now if user isn't allowed to accept invite.
 			if ( InvitationHelper::can_update_or_delete_invite( $user_id, $invite ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			if ( 'request' === $input['type'] ) {
@@ -102,7 +102,7 @@ class InvitationAccept {
 			}
 
 			if ( false === $accept ) {
-				throw new UserError( $error_message );
+				throw new UserError( esc_html( $error_message ) );
 			}
 
 			return [

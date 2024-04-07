@@ -56,43 +56,43 @@ class Blog extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'           => function() {
+				'id'           => function () {
 					return ! empty( $this->data->blog_id )
 						? Relay::toGlobalId( 'blog', $this->data->blog_id )
 						: null;
 				},
-				'databaseId'   => function() {
+				'databaseId'   => function () {
 					return $this->data->blog_id ?? null;
 				},
-				'admin'        => function() {
+				'admin'        => function () {
 					return $this->data->admin_user_id ?? null;
 				},
-				'name'         => function() {
+				'name'         => function () {
 					return $this->data->name ?? $this->data->title ?? null;
 				},
-				'description'  => function() {
+				'description'  => function () {
 					return $this->data->description ?? null;
 				},
-				'uri'          => function() {
+				'uri'          => function () {
 					return BlogHelper::get_blog_uri( $this->data );
 				},
-				'path'         => function() {
+				'path'         => function () {
 					return $this->data->path ?? null;
 				},
-				'domain'       => function() {
+				'domain'       => function () {
 					return $this->data->domain ?? null;
 				},
-				'lastActivity' => function() {
+				'lastActivity' => function () {
 					return Utils::prepare_date_response( $this->data->last_activity );
 				},
-				'public'       => function() {
+				'public'       => function () {
 					return wp_validate_boolean( $this->data->meta['public'] );
 				},
-				'language'     => function() {
+				'language'     => function () {
 					return $this->data->meta['WPLANG'] ?? null;
 				},
 				// @todo Pending implementation.
-				'latestPostId' => function() {
+				'latestPostId' => function () {
 					return $this->data->latest_post->ID ?? null;
 				},
 			];

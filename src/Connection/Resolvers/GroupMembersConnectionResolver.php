@@ -163,7 +163,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			)
 			&& ! bp_current_user_can( 'bp_moderate' )
 		) {
-			throw new UserError( __( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'Sorry, you do not have the necessary permissions to filter with this param.', 'wp-graphql-buddypress' ) );
 		}
 
 		// Map and sanitize the input args.

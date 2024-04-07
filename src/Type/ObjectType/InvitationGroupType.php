@@ -40,19 +40,19 @@ class InvitationGroupType {
 					'group' => [
 						'type'        => 'Group',
 						'description' => __( 'The group object to which the user has been invited.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Invitation $invitation, array $args, AppContext $context ) {
+						'resolve'     => function ( Invitation $invitation, array $args, AppContext $context ) {
 							return Factory::resolve_group_object( $invitation->itemId, $context );
 						},
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_invitation_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Invitation ) {
 						$type = self::$type_name;
 					}

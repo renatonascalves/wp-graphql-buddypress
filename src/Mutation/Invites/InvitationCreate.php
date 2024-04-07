@@ -76,7 +76,7 @@ class InvitationCreate {
 			'invite' => [
 				'type'        => 'GroupInvitation',
 				'description' => __( 'The invitation object that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -93,20 +93,20 @@ class InvitationCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			$error_message    = __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' );
 			$invalid_id_error = __( 'Invalid member ID.', 'wp-graphql-buddypress' );
 
 			if ( false === is_user_logged_in() ) {
-				throw new UserError( $error_message );
+				throw new UserError( esc_html( $error_message ) );
 			}
 
 			$user  = Factory::get_user( $input['userId'] );
 			$group = bp_get_group( $input['itemId'] );
 
 			if ( empty( $group->id ) ) {
-				throw new UserError( __( 'Invalid group ID.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Invalid group ID.', 'wp-graphql-buddypress' ) );
 			}
 
 			$group_id = $group->id;
@@ -114,17 +114,17 @@ class InvitationCreate {
 			if ( 'request' === $input['type'] ) {
 
 				if ( empty( $user->ID ) ) {
-					throw new UserError( $invalid_id_error );
+					throw new UserError( esc_html( $invalid_id_error ) );
 				}
 
 				if ( false === ( bp_loggedin_user_id() === $user->ID || bp_current_user_can( 'bp_moderate' ) ) ) {
-					throw new UserError( $error_message );
+					throw new UserError( esc_html( $error_message ) );
 				}
 			} else {
 				$inviter = Factory::get_user( $input['inviterId'] );
 
 				if ( empty( $user->ID ) || empty( $inviter->ID ) || $user->ID === $inviter->ID ) {
-					throw new UserError( $invalid_id_error );
+					throw new UserError( esc_html( $invalid_id_error ) );
 				}
 
 				$can_create = (
@@ -134,7 +134,7 @@ class InvitationCreate {
 				);
 
 				if ( false === $can_create ) {
-					throw new UserError( $error_message );
+					throw new UserError( esc_html( $error_message ) );
 				}
 			}
 
@@ -143,7 +143,7 @@ class InvitationCreate {
 			if ( 'request' === $input['type'] ) {
 				// Avoid duplicate requests.
 				if ( false !== groups_check_for_membership_request( $user->ID, $group_id ) ) {
-					throw new UserError( __( 'There is already a request to this member.', 'wp-graphql-buddypress' ) );
+					throw new UserError( esc_html__( 'There is already a request to this member.', 'wp-graphql-buddypress' ) );
 				}
 
 				$invite_id     = groups_send_membership_request( $params );
@@ -154,7 +154,7 @@ class InvitationCreate {
 			}
 
 			if ( false === $invite_id ) {
-				throw new UserError( $error_message );
+				throw new UserError( esc_html( $error_message ) );
 			}
 
 			// Return the invite ID.

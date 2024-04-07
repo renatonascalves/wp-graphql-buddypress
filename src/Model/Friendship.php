@@ -49,27 +49,27 @@ class Friendship extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'             => function() {
+				'id'             => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'friendship', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'     => function() {
+				'databaseId'     => function () {
 					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
-				'initiator'      => function() {
+				'initiator'      => function () {
 					return ! empty( $this->data->initiator_user_id ) ? $this->data->initiator_user_id : null;
 				},
-				'friend'         => function() {
+				'friend'         => function () {
 					return ! empty( $this->data->friend_user_id ) ? $this->data->friend_user_id : null;
 				},
-				'isConfirmed'    => function() {
+				'isConfirmed'    => function () {
 					return wp_validate_boolean( $this->data->is_confirmed );
 				},
-				'dateCreated'    => function() {
+				'dateCreated'    => function () {
 					return Utils::prepare_date_response( $this->data->date_created, get_date_from_gmt( $this->data->date_created ) );
 				},
-				'dateCreatedGmt' => function() {
+				'dateCreatedGmt' => function () {
 					return Utils::prepare_date_response( $this->data->date_created );
 				},
 			];

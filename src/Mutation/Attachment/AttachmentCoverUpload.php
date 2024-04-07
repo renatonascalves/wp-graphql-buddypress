@@ -83,23 +83,23 @@ class AttachmentCoverUpload {
 
 			// Check if cover upload is enabled for members.
 			if ( 'members' === $object && true === bp_disable_cover_image_uploads() ) {
-				throw new UserError( __( 'Sorry, member cover upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, member cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if cover upload is enabled for groups.
 			if ( 'groups' === $object && true === bp_disable_group_cover_image_uploads() ) {
-				throw new UserError( __( 'Sorry, group cover upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, group cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if cover upload is enabled for blogs.
 			$bp = buddypress();
 			if ( 'blogs' === $object && isset( $bp->avatar->show_avatars ) && false === $bp->avatar->show_avatars ) {
-				throw new UserError( __( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, blog cover upload is disabled.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user can to upload.
 			if ( false === AttachmentHelper::can_update_or_delete_attachment( $object_id, $object, true ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Try to upload the cover image file.

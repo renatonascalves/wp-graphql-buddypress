@@ -80,7 +80,7 @@ class ActivityCreate {
 			'activity' => [
 				'type'        => 'Activity',
 				'description' => __( 'The activity object that was created.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -97,11 +97,11 @@ class ActivityCreate {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 
 			// Check empty activity content.
 			if ( empty( $input['content'] ) ) {
-				throw new UserError( __( 'Please, enter the content of the activity.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Please, enter the content of the activity.', 'wp-graphql-buddypress' ) );
 			}
 
 			$user_id   = $input['userId'] ?? 0;
@@ -109,8 +109,8 @@ class ActivityCreate {
 			$component = $input['component'];
 			$error     = __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' );
 
-			if ( false === is_user_logged_in() || ! empty( $user_id ) && (int) bp_loggedin_user_id() !== (int) $user_id ) {
-				throw new UserError( $error );
+			if ( false === is_user_logged_in() || ( ! empty( $user_id ) && (int) bp_loggedin_user_id() !== (int) $user_id ) ) {
+				throw new UserError( esc_html( $error ) );
 			}
 
 			if (
@@ -120,7 +120,7 @@ class ActivityCreate {
 				&& ! empty( $item_id )
 				&& false === ActivityHelper::show_hidden( $component, $item_id )
 			) {
-				throw new UserError( $error );
+				throw new UserError( esc_html( $error ) );
 			}
 
 			$type              = $input['type'] ?? 'activity_update';
@@ -158,7 +158,7 @@ class ActivityCreate {
 
 			// Throw an exception if the activity failed to be created.
 			if ( empty( $activity_id ) || ! is_numeric( $activity_id ) ) {
-				throw new UserError( __( 'Could not create activity.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not create activity.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update current user's last activity.

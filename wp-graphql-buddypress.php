@@ -12,14 +12,14 @@
  * Plugin URI:        https://github.com/renatonascalves/wp-graphql-buddypress
  * GitHub Plugin URI: https://github.com/renatonascalves/wp-graphql-buddypress
  * Description:       BuddyPress extension for the WPGraphQL plugin: bringing the power of GraphQL to BuddyPress!
- * Version:           0.1.0
+ * Version:           0.1.1
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
  * Domain Path:       /languages/
  * Requires PHP:      8.0
  * Requires WP:       5.9
- * Tested up to:      6.2
+ * Tested up to:      6.5
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -75,7 +75,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.
 		 */
-		public function __clone() {
+		public function __clone(): void {
 
 			// Cloning instances of the class is forbidden.
 			_doing_it_wrong(
@@ -91,7 +91,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		/**
 		 * Disable unserializing of the class.
 		 */
-		public function __wakeup() {
+		public function __wakeup(): void {
 
 			// De-serializing instances of the class is forbidden.
 			_doing_it_wrong(
@@ -222,7 +222,7 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 			 */
 			add_filter(
 				'map_meta_cap',
-				function( $caps, $cap, $user_id ) {
+				function ( $caps, $cap, $user_id ) {
 
 					// Apply to GraphQL request only.
 					if ( false === is_graphql_request() ) {
@@ -321,7 +321,7 @@ endif;
 /**
  * Function that instantiates the plugin's main class.
  */
-function wp_graphql_buddypress_init(): void {
+function wp_graphql_buddypress_init(): void { // phpcs:ignore Universal.Files.SeparateFunctionsFromOO.Mixed
 
 	// Start plugin.
 	\WP_GraphQL_BuddyPress::instance();

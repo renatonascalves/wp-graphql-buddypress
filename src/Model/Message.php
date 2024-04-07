@@ -71,33 +71,33 @@ class Message extends Model {
 	protected function init() {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'          => function() {
+				'id'          => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'message', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'  => function() {
+				'databaseId'  => function () {
 					return ! empty( $this->data->id ) ? $this->data->id : null;
 				},
-				'threadId'    => function() {
+				'threadId'    => function () {
 					return ! empty( $this->data->thread_id ) ? $this->data->thread_id : null;
 				},
-				'sender'      => function() {
+				'sender'      => function () {
 					return ! empty( $this->data->sender_id ) ? $this->data->sender_id : null;
 				},
-				'subject'     => function() {
+				'subject'     => function () {
 					return ! empty( $this->data->subject ) ? $this->data->subject : null;
 				},
-				'excerpt'     => function() {
+				'excerpt'     => function () {
 					return ! empty( $this->data->message ) ? $this->data->message : null;
 				},
-				'message'     => function() {
+				'message'     => function () {
 					return ! empty( $this->data->message ) ? $this->data->message : null;
 				},
-				'dateSent'    => function() {
+				'dateSent'    => function () {
 					return Utils::prepare_date_response( $this->data->date_sent, get_date_from_gmt( $this->data->date_sent ) );
 				},
-				'dateSentGmt' => function() {
+				'dateSentGmt' => function () {
 					return Utils::prepare_date_response( $this->data->date_sent );
 				},
 			];

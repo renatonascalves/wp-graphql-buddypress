@@ -87,7 +87,7 @@ class NotificationDelete {
 
 			// Bail now if a user isn't allowed to delete the object.
 			if ( false === NotificationHelper::can_see( $notification->id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the object before it is deleted.
@@ -97,7 +97,7 @@ class NotificationDelete {
 			$retval = BP_Notifications_Notification::delete( [ 'id' => $notification->id ] );
 
 			if ( ! $retval ) {
-				throw new UserError( __( 'Could not delete the notification.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the notification.', 'wp-graphql-buddypress' ) );
 			}
 
 			return [

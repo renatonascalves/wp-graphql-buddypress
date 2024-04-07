@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\BuddyPress\Data;
 
 use GraphQL\Error\UserError;
-use GraphQLRelay\Relay;
 use stdClass;
 
 /**
@@ -33,7 +32,7 @@ class XProfileGroupHelper {
 
 		// Confirm if it is a valid object.
 		if ( empty( $xprofile_group_object ) || ! is_object( $xprofile_group_object ) ) {
-			throw new UserError( __( 'This XProfile group does not exist.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'This XProfile group does not exist.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $xprofile_group_object;

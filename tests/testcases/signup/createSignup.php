@@ -79,7 +79,7 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 
 	public function test_create_signup_with_invalid_password() {
 		$this->assertQueryFailed( $this->create_signup( [ 'password' => '\\Antislash' ] ) )
-			->expectedErrorMessage( 'Passwords cannot be empty or contain the "\" character.' );
+			->expectedErrorMessage( 'Passwords cannot be empty or contain the &quot;\&quot; character.' );
 	}
 
 	public function test_create_signup_with_empty_user_login() {
@@ -114,7 +114,7 @@ class Test_Signup_createSignup_Mutation extends WPGraphQL_BuddyPress_UnitTestCas
 		}
 
 		$this->assertQueryFailed( $this->create_signup( [ 'userLogin' => 'user_name' ] ) )
-			->expectedErrorMessage( $error_message );
+			->expectedErrorMessage( esc_html( $error_message ) );
 	}
 
 	public function test_create_signup_with_short_login() {

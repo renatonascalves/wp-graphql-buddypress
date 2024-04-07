@@ -79,13 +79,13 @@ class ThreadDelete {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
-		return function( array $input ) {
+		return function ( array $input ) {
 			$thread  = ThreadHelper::get_thread_from_input( $input );
 			$user_id = bp_loggedin_user_id();
 
 			// Check if user can perform this action.
 			if ( false === ThreadHelper::can_update_or_delete_thread( $thread->thread_id ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get and save the Thread object before it is deleted.
@@ -93,7 +93,7 @@ class ThreadDelete {
 
 			// Delete a thread.
 			if ( false === messages_delete_thread( $thread->thread_id, $user_id ) ) {
-				throw new UserError( __( 'Could not delete the thread.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not delete the thread.', 'wp-graphql-buddypress' ) );
 			}
 
 			// The deleted thread status and the previous thread object.

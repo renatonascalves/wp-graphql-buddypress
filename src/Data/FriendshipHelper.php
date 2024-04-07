@@ -35,7 +35,7 @@ class FriendshipHelper {
 			&& ! empty( $friendship->initiator )
 			&& ! empty( $friendship->friend )
 			&& ! in_array( bp_loggedin_user_id(), [ $friendship->initiator, $friendship->friend ], true ) ) {
-			throw new UserError( __( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
+			throw new UserError( esc_html__( 'Sorry, you don\'t have permission to see this friendship.', 'wp-graphql-buddypress' ) );
 		}
 
 		return $friendship;

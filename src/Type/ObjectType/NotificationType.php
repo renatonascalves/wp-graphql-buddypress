@@ -40,7 +40,7 @@ class NotificationType {
 					'user'            => [
 						'type'        => 'User',
 						'description' => __( 'The user the notification is addressed to.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Notification $notification, array $args, AppContext $context ) {
+						'resolve'     => function ( Notification $notification, array $args, AppContext $context ) {
 							return ! empty( $notification->userId )
 								? $context->get_loader( 'user' )->load_deferred( $notification->userId )
 								: null;
@@ -65,7 +65,7 @@ class NotificationType {
 					'object'          => [
 						'type'        => 'NotificationObjectUnion',
 						'description' => __( 'The object primarily associated with this one.', 'wp-graphql-buddypress' ),
-						'resolve'     => function( Notification $notification, array $args, AppContext $context ) {
+						'resolve'     => function ( Notification $notification, array $args, AppContext $context ) {
 							$object = null;
 
 							if (
@@ -109,14 +109,14 @@ class NotificationType {
 						'description' => __( 'Whether it\'s a new notification or not.', 'wp-graphql-buddypress' ),
 					],
 				],
-				'resolve_node'      => function( $node, $id, string $type, AppContext $context ) {
+				'resolve_node'      => function ( $node, $id, string $type, AppContext $context ) {
 					if ( self::$type_name === $type ) {
 						$node = Factory::resolve_notification_object( $id, $context );
 					}
 
 					return $node;
 				},
-				'resolve_node_type' => function( $type, $node ) {
+				'resolve_node_type' => function ( $type, $node ) {
 					if ( $node instanceof Notification ) {
 						$type = self::$type_name;
 					}

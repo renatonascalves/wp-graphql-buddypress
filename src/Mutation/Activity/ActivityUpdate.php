@@ -84,7 +84,7 @@ class ActivityUpdate {
 			'activity' => [
 				'type'        => 'Activity',
 				'description' => __( 'The activity that was updated.', 'wp-graphql-buddypress' ),
-				'resolve'     => function( array $payload, array $args, AppContext $context ) {
+				'resolve'     => function ( array $payload, array $args, AppContext $context ) {
 					if ( empty( $payload['id'] ) ) {
 						return null;
 					}
@@ -108,12 +108,12 @@ class ActivityUpdate {
 
 			// Bail now if a user isn't allowed to update an activity.
 			if ( false === bp_activity_user_can_delete( $activity ) ) {
-				throw new UserError( __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check empty activity content.
 			if ( empty( $input['content'] ) ) {
-				throw new UserError( __( 'Please, enter the content of the activity.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Please, enter the content of the activity.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Update activity.
@@ -123,7 +123,7 @@ class ActivityUpdate {
 
 			// Throw an exception if the activity failed to be updated.
 			if ( empty( $activity_id ) ) {
-				throw new UserError( __( 'Could not update existing activity.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Could not update existing activity.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Return the activity ID.

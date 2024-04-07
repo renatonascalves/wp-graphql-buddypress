@@ -93,7 +93,7 @@ class Factory {
 				$id_components = Relay::fromGlobalId( $input['id'] );
 
 				if ( empty( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-					throw new UserError( __( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
+					throw new UserError( esc_html__( 'The "id" is invalid.', 'wp-graphql-buddypress' ) );
 				}
 
 				$object_id = $id_components['id'];
@@ -336,11 +336,11 @@ class Factory {
 	/**
 	 * Resolve an attachment avatar for the object.
 	 *
-	 * @param int    $id     ID of the object.
-	 * @param string $object Object (user, group, blog, etc). Default: 'user'.
+	 * @param int    $id        ID of the object.
+	 * @param string $bp_object Object (user, group, blog, etc). Default: 'user'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment( $id, string $object = 'user' ): ?Attachment {
+	public static function resolve_attachment( $id, string $bp_object = 'user' ): ?Attachment {
 		if ( empty( $id ) ) {
 			return null;
 		}
@@ -350,13 +350,13 @@ class Factory {
 		foreach ( [ 'full', 'thumb' ] as $type ) {
 			$args = [
 				'item_id' => $id,
-				'object'  => $object,
+				'object'  => $bp_object,
 				'no_grav' => true,
 				'html'    => false,
 				'type'    => $type,
 			];
 
-			if ( 'blog' === $object ) {
+			if ( 'blog' === $bp_object ) {
 
 				// Unset item ID and add correct item id key.
 				unset( $args['item_id'] );
@@ -378,11 +378,11 @@ class Factory {
 	/**
 	 * Resolve an attachment cover for a object (user, group, blog, etc).
 	 *
-	 * @param int    $id     ID of the object.
-	 * @param string $object Object (members, groups, blogs, etc). Default: 'members'.
+	 * @param int    $id        ID of the object.
+	 * @param string $bp_object Object (members, groups, blogs, etc). Default: 'members'.
 	 * @return Attachment|null
 	 */
-	public static function resolve_attachment_cover( $id, string $object = 'members' ): ?Attachment {
+	public static function resolve_attachment_cover( $id, string $bp_object = 'members' ): ?Attachment {
 		if ( empty( $id ) ) {
 			return null;
 		}
@@ -390,7 +390,7 @@ class Factory {
 		$url = bp_attachments_get_attachment(
 			'url',
 			[
-				'object_dir' => $object,
+				'object_dir' => $bp_object,
 				'item_id'    => $id,
 			]
 		);
@@ -448,7 +448,7 @@ class Factory {
 			throw new UserError(
 				sprintf(
 					// translators: %d is the friendship ID.
-					__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
+					esc_html__( 'No Friendship was found with ID: %d', 'wp-graphql-buddypress' ),
 					absint( $id )
 				)
 			);

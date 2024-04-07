@@ -189,12 +189,14 @@ class TypeRegistry {
 				}
 
 				if (
-					bp_is_active( 'activity' )
-					&& (
-						! empty( $array[1] )
-						&& 'activity' === $array[1]
-						&& ! empty( $array[3] )
-						&& is_numeric( $array[3] )
+					(
+						bp_is_active( 'activity' )
+						&& (
+							! empty( $array[1] )
+							&& 'activity' === $array[1]
+							&& ! empty( $array[3] )
+							&& is_numeric( $array[3] )
+						)
 					)
 					||
 					(
@@ -235,7 +237,7 @@ class TypeRegistry {
 		// Register the Group Type taxonomy object.
 		add_filter(
 			'register_taxonomy_args',
-			static function( $args, $taxonomy ): array {
+			static function ( $args, $taxonomy ): array {
 
 				if ( false === bp_is_active( 'groups' ) || bp_get_group_type_tax_name() !== $taxonomy ) {
 					return $args;

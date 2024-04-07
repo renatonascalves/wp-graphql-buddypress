@@ -88,12 +88,12 @@ class FriendshipCreate {
 
 			// Check if users are valid.
 			if ( ! $initiator || ! $friend ) {
-				throw new UserError( __( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was a problem confirming if user is valid.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check if user can create friendship.
 			if ( FriendshipHelper::can_create_friendship( $initiator->ID, $friend->ID ) ) {
-				throw new UserError( __( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Sorry, you do not have permission to perform this action.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Check friendship status.
@@ -101,12 +101,12 @@ class FriendshipCreate {
 
 			// Already friends.
 			if ( 'is_friend' === $friendship_status ) {
-				throw new UserError( __( 'You are already friends with this user.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'You are already friends with this user.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Already with a friendship request to this user.
 			if ( 'not_friends' !== $friendship_status ) {
-				throw new UserError( __( 'You already have a pending friendship request with this user.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'You already have a pending friendship request with this user.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Only admins can force a friendship request.
@@ -114,7 +114,7 @@ class FriendshipCreate {
 
 			// Adding friendship.
 			if ( false === friends_add_friend( $initiator->ID, $friend->ID, $force ) ) {
-				throw new UserError( __( 'There was a problem requesting the friendship.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'There was a problem requesting the friendship.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Get friendship object.
@@ -124,7 +124,7 @@ class FriendshipCreate {
 
 			// Confirm if friendship exists after creation.
 			if ( false === FriendshipHelper::friendship_exists( $friendship ) ) {
-				throw new UserError( __( 'Friendship was not requested.', 'wp-graphql-buddypress' ) );
+				throw new UserError( esc_html__( 'Friendship was not requested.', 'wp-graphql-buddypress' ) );
 			}
 
 			// Return the friendship id.

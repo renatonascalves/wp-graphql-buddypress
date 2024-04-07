@@ -54,20 +54,20 @@ class Activity extends Model {
 	/**
 	 * Initialize the Activity object.
 	 */
-	protected function init() : void {
+	protected function init(): void {
 		if ( empty( $this->fields ) ) {
 			$this->fields = [
-				'id'               => function() {
+				'id'               => function () {
 					return ! empty( $this->data->id )
 						? Relay::toGlobalId( 'activity', (string) $this->data->id )
 						: null;
 				},
-				'databaseId'       => function() {
+				'databaseId'       => function () {
 					return ! empty( $this->data->id )
 						? absint( $this->data->id )
 						: null;
 				},
-				'parentId'         => function() {
+				'parentId'         => function () {
 					$id = 'activity_comment' === $this->data->type
 						? $this->data->secondary_item_id
 						: 0;
@@ -76,49 +76,49 @@ class Activity extends Model {
 						? Relay::toGlobalId( 'activity', (string) $id )
 						: null;
 				},
-				'parentDatabaseId' => function() {
+				'parentDatabaseId' => function () {
 					return 'activity_comment' === $this->data->type
 						? absint( $this->data->secondary_item_id )
 						: 0;
 				},
-				'primaryItemId'    => function() {
+				'primaryItemId'    => function () {
 					return absint( $this->data->item_id );
 				},
-				'secondaryItemId'  => function() {
+				'secondaryItemId'  => function () {
 					return absint( $this->data->secondary_item_id );
 				},
-				'status'           => function() {
+				'status'           => function () {
 					return $this->data->is_spam ? 'spam' : 'published';
 				},
-				'title'            => function() {
+				'title'            => function () {
 					return ! empty( $this->data->action ) ? $this->data->action : null;
 				},
-				'type'             => function() {
+				'type'             => function () {
 					return ! empty( $this->data->type ) ? $this->data->type : null;
 				},
-				'hidden'           => function() {
+				'hidden'           => function () {
 					return ! empty( $this->data->hide_sitewide ) ? $this->data->hide_sitewide : null;
 				},
-				'uri'              => function() {
+				'uri'              => function () {
 					if ( empty( $this->data->id ) ) {
 						return null;
 					}
 
 					return bp_activity_get_permalink( $this->data->id, $this->data );
 				},
-				'userId'           => function() {
+				'userId'           => function () {
 					return ! empty( $this->data->user_id ) ? $this->data->user_id : null;
 				},
-				'component'        => function() {
+				'component'        => function () {
 					return ! empty( $this->data->component ) ? $this->data->component : null;
 				},
-				'data'             => function() {
+				'data'             => function () {
 					return $this->data;
 				},
-				'date'             => function() {
+				'date'             => function () {
 					return Utils::prepare_date_response( $this->data->date_recorded, get_date_from_gmt( $this->data->date_recorded ) );
 				},
-				'dateGmt'          => function() {
+				'dateGmt'          => function () {
 					return Utils::prepare_date_response( $this->data->date_recorded );
 				},
 			];
