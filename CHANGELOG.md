@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade to WPCS/VIPCS 3.0 (See https://github.com/alleyinteractive/alley-coding-standards)
 - Updated Github Action Matrix to test more variations.
-- Supports WordPress 6.4.2.
+- Supports WordPress 6.5.
 
 ### Added
 
