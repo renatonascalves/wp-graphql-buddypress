@@ -189,12 +189,14 @@ class TypeRegistry {
 				}
 
 				if (
-					bp_is_active( 'activity' )
-					&& (
-						! empty( $array[1] )
-						&& 'activity' === $array[1]
-						&& ! empty( $array[3] )
-						&& is_numeric( $array[3] )
+					(
+						bp_is_active( 'activity' )
+						&& (
+							! empty( $array[1] )
+							&& 'activity' === $array[1]
+							&& ! empty( $array[3] )
+							&& is_numeric( $array[3] )
+						)
 					)
 					||
 					(

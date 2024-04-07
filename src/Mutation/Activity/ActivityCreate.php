@@ -109,7 +109,7 @@ class ActivityCreate {
 			$component = $input['component'];
 			$error     = __( 'Sorry, you are not allowed to perform this action.', 'wp-graphql-buddypress' );
 
-			if ( false === is_user_logged_in() || ! empty( $user_id ) && (int) bp_loggedin_user_id() !== (int) $user_id ) {
+			if ( false === is_user_logged_in() || ( ! empty( $user_id ) && (int) bp_loggedin_user_id() !== (int) $user_id ) ) {
 				throw new UserError( esc_html( $error ) );
 			}
 
