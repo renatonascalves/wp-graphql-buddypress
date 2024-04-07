@@ -11,3 +11,6 @@ on:
 jobs:
   code-quality:
     uses: alleyinteractive/.github/.github/workflows/php-code-quality.yml@main
+    with:
+      - php: 8.3
+
