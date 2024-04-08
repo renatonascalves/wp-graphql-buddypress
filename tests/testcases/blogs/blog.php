@@ -14,7 +14,13 @@ class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$this->toggle_component_visibility();
 
-		$this->assertQueryFailed( $this->get_a_blog( $blog_id ) );
+		$this->assertQuerySuccessful( $this->get_a_blog( $blog_id ) )
+			->notHasField( 'databaseId' );
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->get_a_blog( $blog_id ) )
+			->hasField( 'databaseId', $blog_id );
 	}
 
 	public function test_blog_query() {
