@@ -119,7 +119,7 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			return false;
 		}
 
-		// Check if the user can view groups.
+		// If the visibility is set to members only, make the object private.
 		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'groups' ] ) ) {
 			return false;
 		}

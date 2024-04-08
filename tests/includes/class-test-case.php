@@ -796,6 +796,8 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 
 	/**
 	 * Set component visibility.
+	 *
+	 * @param bool $visibility Visibility.
 	 */
 	protected function toggle_component_visibility( bool $visibility = true ): void {
 		$visibility = $visibility ? 'members' : 'anyone';

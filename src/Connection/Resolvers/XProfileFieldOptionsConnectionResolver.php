@@ -32,7 +32,7 @@ class XProfileFieldOptionsConnectionResolver {
 			return null;
 		}
 
-		// Check if the current user can view the xprofile component.
+		// If the visibility is set to members only, return nothing.
 		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'xprofile' ] ) ) {
 			return null;
 		}
