@@ -10,10 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support BuddyPress Community Visibility, "Private Site", feature [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118)
 
-### Updated
-
-- PHPUnit: set `convertDeprecationsToExceptions="true"` to catch deprecating issues earlier.
-
 ## [0.1.1]
 
 ### Updated
