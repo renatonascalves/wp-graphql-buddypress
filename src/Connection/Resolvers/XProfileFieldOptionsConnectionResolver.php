@@ -32,6 +32,11 @@ class XProfileFieldOptionsConnectionResolver {
 			return null;
 		}
 
+		// Check if the current user can view the xprofile component.
+		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'xprofile' ] ) ) {
+			return null;
+		}
+
 		$fields = array_map(
 			function ( $item ) use ( $context ) {
 				return Factory::resolve_xprofile_field_object( $item->id, $context );

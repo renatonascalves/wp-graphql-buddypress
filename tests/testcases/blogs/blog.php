@@ -7,6 +7,16 @@
  */
 class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_get_blog_with_support_for_the_community_visibility() {
+		$this->skipWithoutMultisite();
+
+		$blog_id = $this->bp_factory->blog->create();
+
+		$this->toggle_component_visibility();
+
+		$this->assertQueryFailed( $this->get_a_blog( $blog_id ) );
+	}
+
 	public function test_blog_query() {
 		$this->skipWithoutMultisite();
 
@@ -49,8 +59,6 @@ class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_blog_query_invalid_blog_id() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->user_id );
-
 		$this->assertQueryFailed( $this->get_a_blog( GRAPHQL_TESTS_IMPOSSIBLY_HIGH_NUMBER ) )
 			->expectedErrorMessage(
 				sprintf(
@@ -64,8 +72,6 @@ class Test_Blogs_blog_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->skipWithoutMultisite();
 
 		buddypress()->avatar->show_avatars = false;
-
-		$this->bp->set_current_user( $this->user_id );
 
 		$this->assertQuerySuccessful( $this->get_a_blog( $this->bp_factory->blog->create() ) )
 			->hasField( 'attachmentAvatar', null );

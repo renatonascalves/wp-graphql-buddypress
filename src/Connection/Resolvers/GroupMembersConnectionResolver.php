@@ -119,6 +119,11 @@ class GroupMembersConnectionResolver extends AbstractConnectionResolver {
 			return false;
 		}
 
+		// Check if the user can view groups.
+		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'groups' ] ) ) {
+			return false;
+		}
+
 		// It is okay for public groups.
 		if ( 'public' === $this->source->status ) {
 			return true;

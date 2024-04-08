@@ -6,6 +6,18 @@
  */
 class Test_Member_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_get_member_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->assertQuerySuccessful( $this->get_a_member() )
+			->notHasField( 'link' );
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->get_a_member() )
+			->hasField( 'link', bp_members_get_user_url( $this->user_id ) );
+	}
+
 	public function test_get_member_with_user_query() {
 
 		// Set member type.

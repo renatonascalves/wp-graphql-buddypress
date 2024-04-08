@@ -117,7 +117,7 @@ class BlogsConnectionResolver extends AbstractConnectionResolver {
 	 * @return bool
 	 */
 	public function should_execute(): bool {
-		return true;
+		return bp_current_user_can( 'bp_view', [ 'bp_component' => 'blogs' ] );
 	}
 
 	/**

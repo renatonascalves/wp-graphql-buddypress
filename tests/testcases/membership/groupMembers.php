@@ -8,8 +8,24 @@
  */
 class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_get_public_group_members_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$response = $this->get_group_members(
+			[
+				'id'     => $this->group,
+				'idType' => 'DATABASE_ID',
+			]
+		);
+
+		$this->assertQuerySuccessful( $response )
+			->notHasField( 'databaseId' )
+			->notHasField( 'members' );
+	}
+
 	public function test_get_public_group() {
 		$u1 = $this->bp_factory->user->create();
+
 		$this->bp->add_user_to_group( $u1, $this->group );
 
 		$response = $this->get_group_members(
@@ -23,9 +39,7 @@ class Test_Group_Members_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'databaseId', $this->group )
 			->hasField(
 				'members',
-				[
-					'nodes' => [ 0 => [ 'userId' => $u1 ] ],
-				],
+				[ 'nodes' => [ 0 => [ 'userId' => $u1 ] ] ],
 			);
 	}
 

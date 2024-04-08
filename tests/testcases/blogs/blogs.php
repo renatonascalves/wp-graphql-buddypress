@@ -7,19 +7,34 @@
  */
 class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_blogs_query_with_support_for_the_community_visibility() {
+		$this->skipWithoutMultisite();
+
+		$this->toggle_component_visibility();
+
+		$this->bp_factory->blog->create();
+		$this->bp_factory->blog->create();
+
+		$this->assertQuerySuccessful( $this->blogsQuery() )
+			->notHasNodes();
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->blogsQuery() )
+			->hasNodes();
+	}
+
 	public function test_blogs_query() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->admin );
-
 		$b1 = $this->bp_factory->blog->create();
 		$b2 = $this->bp_factory->blog->create();
+
 		$this->bp_factory->blog->create_many( 2 );
 
 		$results = $this->blogsQuery();
 
-		$this->assertQuerySuccessful( $results )
-			->hasEdges();
+		$this->assertQuerySuccessful( $results )->hasEdges();
 
 		$blogs_ids = wp_list_pluck( $results['data']['blogs']['nodes'], 'databaseId' );
 
@@ -29,8 +44,6 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_first_blog() {
 		$this->skipWithoutMultisite();
-
-		$this->bp->set_current_user( $this->admin );
 
 		$b1 = $this->bp_factory->blog->create();
 
@@ -49,9 +62,8 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_blog_after() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->admin );
-
 		$b1 = $this->bp_factory->blog->create();
+
 		$this->bp_factory->blog->create();
 
 		$this->assertQuerySuccessful( $this->blogsQuery( [ 'after' => $this->key_to_cursor( $b1 ) ] ) )
@@ -62,9 +74,8 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	public function test_get_blog_before() {
 		$this->skipWithoutMultisite();
 
-		$this->bp->set_current_user( $this->admin );
-
 		$this->bp_factory->blog->create();
+
 		$b2 = $this->bp_factory->blog->create();
 
 		$this->assertQuerySuccessful(
@@ -80,8 +91,6 @@ class Test_Blogs_blogsQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 	public function test_get_blogs_using_where_include() {
 		$this->skipWithoutMultisite();
-
-		$this->bp->set_current_user( $this->admin );
 
 		$u1 = $this->bp_factory->blog->create();
 		$u2 = $this->bp_factory->blog->create();

@@ -301,7 +301,7 @@ class Factory {
 	/**
 	 * Returns a XProfile Field object.
 	 *
-	 * @param int        $id      XProfile field ID or null.
+	 * @param ?int       $id      XProfile field ID or null.
 	 * @param AppContext $context AppContext object.
 	 * @return XProfileField|null
 	 */
@@ -316,7 +316,13 @@ class Factory {
 		// Get the XProfile field object.
 		$xprofile_field_object = XProfileFieldHelper::get_xprofile_field_from_input( absint( $id ), $user_id );
 
-		return new XProfileField( $xprofile_field_object );
+		$field = new XProfileField( $xprofile_field_object );
+
+		if ( empty( $field->fields ) ) {
+			return null;
+		}
+
+		return $field;
 	}
 
 	/**
@@ -330,7 +336,13 @@ class Factory {
 			return null;
 		}
 
-		return new XProfileFieldValue( $xprofile_field->value );
+		$value = new XProfileFieldValue( $xprofile_field->value );
+
+		if ( empty( $value->fields ) ) {
+			return null;
+		}
+
+		return $value;
 	}
 
 	/**

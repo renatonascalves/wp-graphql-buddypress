@@ -7,6 +7,36 @@
  */
 class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_get_public_activities_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$a1 = $this->create_activity_id();
+		$a2 = $this->create_activity_id();
+		$a3 = $this->create_activity_id();
+
+		$results = $this->activityQuery();
+
+		$ids = wp_list_pluck( $results['data']['activities']['nodes'], 'databaseId' );
+
+		$this->assertCount( 0, $ids );
+		$this->assertQuerySuccessful( $results )
+			->notHasNodes();
+
+		$this->bp->set_current_user( $this->random_user );
+
+		$results = $this->activityQuery();
+
+		$this->assertQuerySuccessful( $results )
+			->hasNodes();
+
+		$ids = wp_list_pluck( $results['data']['activities']['nodes'], 'databaseId' );
+
+		$this->assertCount( 3, $ids );
+		$this->assertContains( $a1, $ids );
+		$this->assertContains( $a2, $ids );
+		$this->assertContains( $a3, $ids );
+	}
+
 	public function test_get_public_activities_authenticated() {
 		$a1 = $this->create_activity_id();
 		$a2 = $this->create_activity_id();
@@ -624,6 +654,40 @@ class Test_Activity_activityQuery_Query extends WPGraphQL_BuddyPress_UnitTestCas
 			->HasEdges()
 			->firstEdgeNodeField( 'databaseId', $a2 )
 			->hasNextPage();
+	}
+
+	public function test_public_activity_comments_thread_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$a = $this->create_activity_id(
+			[
+				'component' => 'activity',
+				'content'   => 'Foo',
+				'type'      => 'activity_update',
+			]
+		);
+
+		bp_activity_new_comment(
+			[
+				'type'        => 'activity_comment',
+				'user_id'     => $this->user_id,
+				'activity_id' => $a, // Root activity
+				'content'     => 'Activity comment',
+			]
+		);
+
+		bp_activity_new_comment(
+			[
+				'type'        => 'activity_comment',
+				'user_id'     => $this->random_user,
+				'activity_id' => $a, // Root activity
+				'content'     => 'Activity comment',
+			]
+		);
+
+		$this->assertQuerySuccessful( $this->activityQuery() )
+			->notHasEdges()
+			->notHasNodes();
 	}
 
 	public function test_public_activity_comments_thread() {
