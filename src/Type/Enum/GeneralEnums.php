@@ -137,7 +137,7 @@ class GeneralEnums {
 				'description' => __( 'The globally unique identifier of the object.', 'wp-graphql-buddypress' ),
 			],
 			'idType' => [
-				'type'        => "${type_name}IdTypeEnum",
+				'type'        => "{$type_name}IdTypeEnum",
 				'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'wp-graphql-buddypress' ),
 			],
 		];

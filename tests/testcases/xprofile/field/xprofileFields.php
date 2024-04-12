@@ -24,6 +24,29 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create();
 	}
 
+	public function test_get_xprofile_group_fields_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->bp_factory->xprofile_field->create(
+			[ 'field_group_id' => $this->xprofile_group_id ]
+		);
+
+		$this->bp_factory->xprofile_field->create(
+			[ 'field_group_id' => $this->xprofile_group_id ]
+		);
+
+		$response  = $this->get_xprofile_group(
+			[
+				'id'     => $this->toRelayId( 'bp_xprofile_group', (string) $this->xprofile_group_id ),
+				'idType' => 'ID',
+			]
+		);
+
+		$this->assertQuerySuccessful( $response )
+			->notHasField( 'databaseId' )
+			->notHasField( 'fields' );
+	}
+
 	public function test_get_xprofile_group_fields() {
 		$field_id_1 = $this->bp_factory->xprofile_field->create(
 			[ 'field_group_id' => $this->xprofile_group_id ]
@@ -71,7 +94,7 @@ class Test_xprofileFields_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
 		$response = $this->get_xprofile_group(
 			[
-				'id'     => $this->toRelayId( 'bp_xprofile_group', $this->xprofile_group_id ),
+				'id'     => $this->toRelayId( 'bp_xprofile_group', (string) $this->xprofile_group_id ),
 				'idType' => 'ID',
 				'where'  => [ 'excludeFields' => [ $field_id_1 ] ],
 			]

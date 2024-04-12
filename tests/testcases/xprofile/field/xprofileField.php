@@ -25,11 +25,23 @@ class Test_XProfile_xprofileFieldBy_Queries extends WPGraphQL_BuddyPress_UnitTes
 	/**
 	 * Set up.
 	 */
-	public function setUp() : void {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->xprofile_group_id = $this->bp_factory->xprofile_group->create();
 		$this->xprofile_field_id = $this->bp_factory->xprofile_field->create( [ 'field_group_id' => $this->xprofile_group_id ] );
+	}
+
+	public function test_xprofile_field_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->assertQuerySuccessful( $this->get_xprofile_field( $this->xprofile_field_id, 'DATABASE_ID' ) )
+			->notHasField( 'databaseId' );
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->get_xprofile_field( $this->xprofile_field_id, 'DATABASE_ID' ) )
+			->hasField( 'databaseId', $this->xprofile_field_id );
 	}
 
 	public function test_xprofile_field_by_query() {

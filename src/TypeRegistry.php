@@ -261,8 +261,16 @@ class TypeRegistry {
 		add_filter(
 			'graphql_object_visibility',
 			static function ( $visibility, $model_name ): string {
-				if ( 'UserObject' === $model_name && 'private' === $visibility ) {
-					return 'restricted';
+				if ( 'UserObject' === $model_name ) {
+
+					// Check if the user can view the members component.
+					if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'members' ] ) ) {
+						return 'private';
+					}
+
+					if ( 'private' === $visibility ) {
+						return 'restricted';
+					}
 				}
 
 				return $visibility;

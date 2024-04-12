@@ -105,6 +105,18 @@ class Test_Activity_activity_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 			->hasField( 'hidden', false );
 	}
 
+	public function test_activity_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->assertQueryFailed( $this->get_an_activity( $this->global_id, 'ID' ) )
+			->expectedErrorMessage( 'Sorry, you are not allowed to see this activity.' );
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->get_an_activity( $this->global_id, 'ID' ) )
+			->hasField( 'databaseId', $this->activity );
+	}
+
 	public function test_activity_by_query_with_id_param() {
 		$this->bp->set_current_user( $this->admin );
 

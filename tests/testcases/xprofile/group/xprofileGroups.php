@@ -8,6 +8,18 @@
  */
 class Test_xprofileGroups_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
+	public function test_xprofile_groups_query_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->bp_factory->xprofile_group->create();
+
+		$this->assertQuerySuccessful( $this->xprofileGroupsQuery() )->notHasNodes();
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->xprofileGroupsQuery() )->hasNodes();
+	}
+
 	public function test_xprofile_groups_query() {
 		$u1 = $this->bp_factory->xprofile_group->create();
 		$u2 = $this->bp_factory->xprofile_group->create();

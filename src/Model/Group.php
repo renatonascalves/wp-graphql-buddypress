@@ -56,6 +56,11 @@ class Group extends Model {
 	 */
 	protected function is_private(): bool {
 
+		// If the visibility is set to members only, make the object private.
+		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'groups' ] ) ) {
+			return true;
+		}
+
 		// Public groups are open.
 		if ( 'public' === $this->data->status ) {
 			return false;

@@ -18,7 +18,7 @@ class Test_xprofileGroup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 	/**
 	 * XProfile Group description.
 	 *
-	 * @var int
+	 * @var string
 	 */
 	public $desc;
 
@@ -38,6 +38,27 @@ class Test_xprofileGroup_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 		$this->name       = 'XProfile Group Name';
 		$this->field_name = 'XProfile Field name';
 		$this->desc       = 'XProfile Group Desc';
+	}
+
+	public function test_xprofile_group_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$xprofile_group_id = $this->bp_factory->xprofile_group->create(
+			[
+				'name'        => $this->name,
+				'description' => $this->desc,
+			]
+		);
+
+		$this->assertQuerySuccessful( $this->get_xprofile_group( $xprofile_group_id ) )
+			->notHasField( 'databaseId' );
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->get_xprofile_group( $xprofile_group_id ) )
+			->hasField( 'databaseId', $xprofile_group_id )
+			->hasField( 'description', $this->desc )
+			->hasField( 'name', $this->name );
 	}
 
 	public function test_xprofile_group_by_query() {

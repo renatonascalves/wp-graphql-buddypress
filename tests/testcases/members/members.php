@@ -7,9 +7,22 @@
  */
 class Test_Member_membersQuery_Queries extends WPGraphQL_BuddyPress_UnitTestCase {
 
-	public function test_members_query() {
-		$this->bp->set_current_user( $this->admin );
+	public function test_members_query_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
 
+		$this->bp_factory->user->create();
+		$this->bp_factory->user->create();
+
+		// Query members.
+		$this->assertQuerySuccessful( $this->membersQuery() )->notHasNodes();
+
+		$this->toggle_component_visibility( false );
+
+		// Query members.
+		$this->assertQuerySuccessful( $this->membersQuery() )->HasNodes();
+	}
+
+	public function test_members_query() {
 		$u1 = $this->bp_factory->user->create();
 		$u2 = $this->bp_factory->user->create();
 		$u3 = $this->bp_factory->user->create();

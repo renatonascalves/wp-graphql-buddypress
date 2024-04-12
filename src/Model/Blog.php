@@ -51,6 +51,21 @@ class Blog extends Model {
 	}
 
 	/**
+	 * Method for determining if the data should be considered private or not.
+	 *
+	 * @return bool
+	 */
+	protected function is_private(): bool {
+
+		// If the visibility is set to members only, make the object private.
+		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'blogs' ] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Initialize the Blog object.
 	 */
 	protected function init() {

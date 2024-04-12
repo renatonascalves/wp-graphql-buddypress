@@ -46,6 +46,11 @@ class XProfileFieldValue extends Model {
 			return false;
 		}
 
+		// If the visibility is set to members only, make the object private.
+		if ( ! bp_current_user_can( 'bp_view', [ 'bp_component' => 'xprofile' ] ) ) {
+			return true;
+		}
+
 		$hidden_user_fields = (array) bp_xprofile_get_hidden_fields_for_user(
 			$this->data->user_id,
 			$this->current_user->ID

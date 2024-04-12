@@ -62,6 +62,18 @@ class Test_Groups_groupsQuery_Query extends WPGraphQL_BuddyPress_UnitTestCase {
 			->firstEdgeNodeField( 'databaseId', $hidden_group_id );
 	}
 
+	public function test_groups_query_with_support_for_the_community_visibility() {
+		$this->toggle_component_visibility();
+
+		$this->create_group_id();
+
+		$this->assertQuerySuccessful( $this->groupsQuery() )->notHasNodes();
+
+		$this->toggle_component_visibility( false );
+
+		$this->assertQuerySuccessful( $this->groupsQuery() )->hasNodes();
+	}
+
 	public function test_groups_query() {
 		$g1 = $this->create_group_id();
 		$g2 = $this->create_group_id();

@@ -174,6 +174,7 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	public function assertQuerySuccessful( array $response ): self {
 		$this->response = $response;
 		$this->assertArrayHasKey( 'data', $this->response );
+		$this->assertArrayNotHasKey( 'errors', $this->response );
 
 		return $this;
 	}
@@ -791,5 +792,25 @@ class WPGraphQL_BuddyPress_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function copy_file( $return, $file, $new_file ): bool {
 		return @copy( $file['tmp_name'], $new_file );
+	}
+
+	/**
+	 * Set component visibility.
+	 *
+	 * @param bool $visibility Visibility.
+	 */
+	protected function toggle_component_visibility( bool $visibility = true ): void {
+		$visibility = $visibility ? 'members' : 'anyone';
+
+		update_option(
+			'_bp_community_visibility',
+			[
+				'global'   => $visibility,
+				'activity' => $visibility,
+				'members'  => $visibility,
+				'groups'   => $visibility,
+				'blogs'    => $visibility,
+			]
+		);
 	}
 }
