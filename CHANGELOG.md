@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support BuddyPress Community Visibility, "Private Site", feature [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118)
 - Add `resendSignupEmail` mutation to resend activation email [#127](https://github.com/renatonascalves/wp-graphql-buddypress/issues/127)
 - Added a `CHANGELOG.md` file
+- Add list of plugin dependencies [#115](https://github.com/renatonascalves/wp-graphql-buddypress/issues/115)
 
 ### Updated
 
