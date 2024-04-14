@@ -96,6 +96,7 @@ use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentCoverUpload;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarDelete;
 use WPGraphQL\Extensions\BuddyPress\Mutation\Attachment\AttachmentAvatarUpload;
+use WPGraphQL\Extensions\BuddyPress\Mutation\Signup\SignupResendEmail;
 
 /**
  * Class TypeRegistry
@@ -337,6 +338,7 @@ class TypeRegistry {
 				SignupDelete::register_mutation();
 				SignupActivate::register_mutation();
 				SignupCreate::register_mutation();
+				SignupResendEmail::register_mutation();
 			}
 		}
 
