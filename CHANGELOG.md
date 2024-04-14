@@ -10,16 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support BuddyPress Community Visibility, "Private Site", feature [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118)
 - Add `resendSignupEmail` mutation to resend activation email [#127](https://github.com/renatonascalves/wp-graphql-buddypress/issues/127)
+- Added a `CHANGELOG.md` file
 
 ### Updated
 
 - Upgrade to WPCS/VIPCS 3.0 (See https://github.com/alleyinteractive/alley-coding-standards)
 - Updated Github Action Matrix to test more variations.
 - Supports WordPress 6.5.
-
-### Added
-
-- Added a `CHANGELOG.md` file
+- Updated CI actions to support Node 20.
 
 ## [0.1.0]
 
