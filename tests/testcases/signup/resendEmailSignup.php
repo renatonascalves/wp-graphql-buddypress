@@ -31,10 +31,14 @@ class Test_Signup_resendEmailSignup_Mutation extends WPGraphQL_BuddyPress_UnitTe
 	}
 
 	public function test_resend_with_active_signup() {
+		$this->skipWithMultisite();
+
 		$a = $this->create_signup_id();
 
+		$signup = new BP_Signup( $a );
+
 		// Activate the signup.
-		BP_Signup::activate( [ $a ] );
+		bp_core_activate_signup( $signup->activation_key );
 
 		$this->assertQueryFailed( $this->resend_signup( $a ) )
 			->expectedErrorMessage( 'Your account has already been activated.' );
