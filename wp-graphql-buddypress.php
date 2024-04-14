@@ -19,7 +19,8 @@
  * Domain Path:       /languages/
  * Requires PHP:      8.0
  * Requires WP:       5.9
- * Tested up to:      6.5
+ * Tested up to:      6.5.2
+ * Requires Plugins:  wp-graphql, buddypress
  * License:           GPL-3.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -142,12 +143,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 */
 		private function includes(): bool {
 
-			// Checks if BuddyPress is installed.
-			if ( ! class_exists( 'BuddyPress' ) ) {
-				add_action( 'admin_notices', [ $this, 'buddypress_missing_notice' ] );
-				return false;
-			}
-
 			// Autoload Required Classes.
 			if ( defined( 'WPGRAPHQL_BUDDYPRESS_AUTOLOAD' ) && false !== WPGRAPHQL_BUDDYPRESS_AUTOLOAD ) {
 
@@ -184,26 +179,9 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		}
 
 		/**
-		 * BuddyPress missing notice.
-		 */
-		public function buddypress_missing_notice(): void {
-
-			if ( ! current_user_can( 'manage_options' ) ) {
-				return;
-			}
-
-			?>
-			<div class="notice notice-error">
-				<p><strong><?php esc_html_e( 'WPGraphQL BuddyPress', 'wp-graphql-buddypress' ); ?></strong> <?php esc_html_e( 'depends on the lastest version of Buddypress to work!', 'wp-graphql-buddypress' ); ?></p>
-			</div>
-			<?php
-		}
-
-		/**
 		 * Sets up actions.
 		 */
 		private function actions(): void {
-
 			\WPGraphQL\Extensions\BuddyPress\TypeRegistry::add_actions();
 		}
 
