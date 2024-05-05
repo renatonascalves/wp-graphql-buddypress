@@ -8,17 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Support BuddyPress Community Visibility, "Private Site", feature [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118)
-- Add `resendSignupEmail` mutation to resend activation email [#127](https://github.com/renatonascalves/wp-graphql-buddypress/issues/127)
-- Added a `CHANGELOG.md` file
-- Add list of plugin dependencies [#115](https://github.com/renatonascalves/wp-graphql-buddypress/issues/115)
+- [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118): feat: Support BuddyPress Community Visibility, "Private Site".
+- [#127](https://github.com/renatonascalves/wp-graphql-buddypress/issues/127): feat: Add `resendSignupEmail` mutation to resend activation email
+- [#115](https://github.com/renatonascalves/wp-graphql-buddypress/issues/115): chore: Add list of plugin dependencies
+- chore: Added a `CHANGELOG.md` file
 
 ### Updated
 
-- Upgrade to WPCS/VIPCS 3.0 (See https://github.com/alleyinteractive/alley-coding-standards)
-- Updated Github Action Matrix to test more variations.
-- Supports WordPress 6.5.
-- Updated CI actions to support Node 20.
+- chore: Upgrade to WPCS/VIPCS 3.0 (See https://github.com/alleyinteractive/alley-coding-standards)
+- chore: Supports WordPress 6.5.
+- ci: Updated Github Action Matrix to test more variations.
+- ci: Updated CI actions to support Node 20.
 
 ## [0.1.0]
 
