@@ -110,6 +110,8 @@
       "*.cache",
       ".phpcs.xml",
       ".editorconfig",
+      "CHANGELOG.md",
+      "README.md",
       ".gitignore",
       ".distignore",
       ".deployignore",
