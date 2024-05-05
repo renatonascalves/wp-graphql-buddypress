@@ -33,7 +33,7 @@
 	<config name="testVersion" value="8.0-" />
 
 	<!-- Check against minimum WP version. -->
-	<config name="minimum_supported_wp_version" value="5.9" />
+	<config name="minimum_supported_wp_version" value="6.1" />
 
 	<!-- Name our classes files however we want. -->
 	<rule ref="WordPress.Files.FileName">
