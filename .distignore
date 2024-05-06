@@ -33,6 +33,8 @@ yarn.lock
 *.zip
 .wp-env.json
 phpstan.neon.dist
+.deployignore
+CHANGELOG.md
 
 node_modules
 tests
