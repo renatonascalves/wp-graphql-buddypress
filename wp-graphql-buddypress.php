@@ -16,9 +16,8 @@
  * Author:            Renato Alves
  * Author URI:        https://ralv.es
  * Text Domain:       wp-graphql-buddypress
- * Domain Path:       /languages/
  * Requires PHP:      8.0
- * Requires WP:       5.9
+ * Requires WP:       6.1
  * Tested up to:      6.5.2
  * Requires Plugins:  wp-graphql, buddypress
  * License:           GPL-3.0-or-later
@@ -77,8 +76,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * therefore, we don't want the object to be cloned.
 		 */
 		public function __clone(): void {
-
-			// Cloning instances of the class is forbidden.
 			_doing_it_wrong(
 				__FUNCTION__,
 				esc_html__(
@@ -93,7 +90,6 @@ if ( ! class_exists( 'WP_GraphQL_BuddyPress' ) ) :
 		 * Disable unserializing of the class.
 		 */
 		public function __wakeup(): void {
-
 			// De-serializing instances of the class is forbidden.
 			_doing_it_wrong(
 				__FUNCTION__,

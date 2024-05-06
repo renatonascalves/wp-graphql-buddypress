@@ -1,12 +1,14 @@
 === WPGraphQL BuddyPress ===
 Contributors:      espellcaste
-Tags:              graphql, bp graphql, wp-graphql, rest, community, api, buddypress, social networking
+Tags:              graphql, wp-graphql, community, buddypress
 License:           GPL-3.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP:      8.0
-Requires at least: 5.9
+Requires at least: 6.1
 Tested up to:      6.5.2
 Stable tag:        0.1.1
+
+Get together safely, in your own way, in WordPress.
 
 == Description ==
 
@@ -31,6 +33,23 @@ This plugin is in active development. If you're interested in contributing to Bu
 Head over to the [BuddyPress Documentation](https://codex.buddypress.org/participate-and-contribute/) site to find out how you can pitch in or to the [WPGraphQL BuddyPress Github repo](https://github.com/renatonascalves/wp-graphql-buddypress) to contribute to this WPGraphQL extension.
 
 == Changelog ==
+
+= 0.1.1 = 2024-05-06
+
+**New Features**
+
+- [#118](https://github.com/renatonascalves/wp-graphql-buddypress/issues/118): feat: Support BuddyPress Community Visibility: "Private Site".
+- [#127](https://github.com/renatonascalves/wp-graphql-buddypress/issues/127): feat: Add `resendSignupEmail` mutation to resend activation email
+
+**Chores / Bugfixes**
+
+- [#115](https://github.com/renatonascalves/wp-graphql-buddypress/issues/115): chore: Add list of plugin dependencies
+- chore: Added a `CHANGELOG.md` file
+- chore: Upgrade to WPCS/VIPCS 3.0
+- chore: Supports WordPress 6.5.
+- ci: Updated Github Action Matrix to test more variations.
+- ci: Updated CI actions to support Node 20.
+- ci: removed Github Action `-built-branch` action.
 
 = 0.1.0 =
 
