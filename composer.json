@@ -109,6 +109,7 @@
       "*.dist",
       "*.cache",
       ".phpcs.xml",
+      "composer.lock",
       ".editorconfig",
       "CHANGELOG.md",
       "README.md",
