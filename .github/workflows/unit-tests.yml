@@ -15,7 +15,6 @@ jobs:
         php: [8.0, 8.1, 8.2, 8.3]
         multisite: [true, false]
         wp_version: ['6.1', 'latest']
-        object: ["memcached", "redis"]
     uses: alleyinteractive/.github/.github/workflows/php-tests.yml@feature/php-tests-core-suite
     with:
       multisite: ${{ matrix.multisite }}
