@@ -79,8 +79,12 @@
     "phpstan": [
       "phpstan analyze --ansi --memory-limit=1G"
     ],
-    "test": "phpunit",
-    "phpunit": "@test",
+    "phpunit": "phpunit",
+    "test": [
+      "@phpcs",
+      "@phpstan",
+      "@phpunit"
+    ],
     "setup": [
       "composer install"
     ]
