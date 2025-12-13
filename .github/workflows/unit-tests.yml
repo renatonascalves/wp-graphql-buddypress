@@ -45,6 +45,7 @@ jobs:
           wordpress-version: '${{ matrix.wordpress }}'
           wordpress-host: 'false'
           wordpress-multisite: '${{ matrix.multisite }}'
+          working-directory: 'plugins/wp-graphql-buddypress'
   # This required job ensures that all PR checks have passed before merging.
   all-pr-checks-passed:
     name: All PR checks passed
