@@ -6,7 +6,7 @@ License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 Requires PHP:      8.0
 Requires at least: 6.1
 Tested up to:      6.5.2
-Stable tag:        0.1.1
+Stable tag:        0.1.2
 
 Get together safely, in your own way, in WordPress.
 
@@ -34,7 +34,14 @@ Head over to the [BuddyPress Documentation](https://codex.buddypress.org/partici
 
 == Changelog ==
 
-= 0.1.1 = 2024-05-06
+= 0.1.2 =
+
+**Chores / Bugfixes**
+
+- chore: removing development files from SVN.
+- ci: update packages from the `deploy-to-wordpress` action.
+
+= 0.1.1 =
 
 **New Features**
 
@@ -47,9 +54,9 @@ Head over to the [BuddyPress Documentation](https://codex.buddypress.org/partici
 - chore: Added a `CHANGELOG.md` file
 - chore: Upgrade to WPCS/VIPCS 3.0
 - chore: Supports WordPress 6.5.
-- ci: Updated Github Action Matrix to test more variations.
+- ci: Updated GitHub Action Matrix to test more variations.
 - ci: Updated CI actions to support Node 20.
-- ci: removed Github Action `-built-branch` action.
+- ci: removed GitHub Action `-built-branch` action.
 
 = 0.1.0 =
 
