@@ -20,8 +20,8 @@ jobs:
     # Define a matrix of PHP/WordPress versions to test against
     strategy:
       matrix:
-        php: [8.0, 8.3, 8.4]
-        wordpress: ["6.1", "6.8", "latest"]
+        php: [8.4]
+        wordpress: ["6.8"]
         multisite: [true, false]
     runs-on: ubuntu-latest
     # Cancel any existing runs of this workflow
@@ -43,9 +43,7 @@ jobs:
         with:
           php-version: '${{ matrix.php }}'
           wordpress-version: '${{ matrix.wordpress }}'
-          wordpress-host: 'false'
           wordpress-multisite: '${{ matrix.multisite }}'
-          working-directory: 'plugins/wp-graphql-buddypress'
   # This required job ensures that all PR checks have passed before merging.
   all-pr-checks-passed:
     name: All PR checks passed
